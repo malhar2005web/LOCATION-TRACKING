@@ -1,0 +1,17 @@
+{
+  "name": "cordova-plugin-alarm-bridge",
+  "version": "1.0.0",
+  "description": "Custom Alarm Bridge Foreground Service for Android 14+",
+  "cordova": {
+    "id": "cordova-plugin-alarm-bridge",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0"
+}

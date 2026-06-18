@@ -1,0 +1,19 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+
+# Environment files (contains credentials)
+.env
+backend/.env
+cordova-app/.env
+
+# Cordova build outputs and platforms
+cordova-app/platforms/
+cordova-app/plugins/
+*.apk
+app-debug.apk
+
+# Temporary/Scratch files
+backend/scratch_db.js
+*.log
+.system_generated/

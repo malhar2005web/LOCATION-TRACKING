@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        id="cordova-plugin-alarm-bridge"
+        version="1.0.0">
+    <name>AlarmBridge</name>
+    <description>Custom Alarm Bridge Foreground Service for Android 14+</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,alarm,bridge,foreground,service</keywords>
+
+    <js-module src="www/alarmBridge.js" name="AlarmBridge">
+        <clobbers target="AlarmBridge" />
+    </js-module>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AlarmBridge">
+                <param name="android-package" value="com.fleettrackon.terminal.AlarmBridge"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+            <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <service android:name="com.fleettrackon.terminal.TripAlarmService" 
+                     android:foregroundServiceType="specialUse"
+                     android:exported="false">
+                <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" 
+                          android:value="Dispatcher incoming trip alarm alerting service for vehicle drivers." />
+            </service>
+            <service android:name="com.fleettrackon.terminal.BackgroundPollingService" 
+                     android:foregroundServiceType="specialUse"
+                     android:exported="false">
+                <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" 
+                          android:value="Dispatcher incoming trip alarm alerting service for vehicle drivers." />
+            </service>
+            <receiver android:name="com.fleettrackon.terminal.BootReceiver" android:enabled="true" android:exported="true">
+                <intent-filter>
+                    <action android:name="android.intent.action.BOOT_COMPLETED" />
+                    <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                </intent-filter>
+            </receiver>
+        </config-file>
+
+        <source-file src="src/android/AlarmBridge.java" target-dir="src/com/fleettrackon/terminal" />
+        <source-file src="src/android/TripAlarmService.java" target-dir="src/com/fleettrackon/terminal" />
+        <source-file src="src/android/BackgroundPollingService.java" target-dir="src/com/fleettrackon/terminal" />
+        <source-file src="src/android/BootReceiver.java" target-dir="src/com/fleettrackon/terminal" />
+        <resource-file src="src/android/res/raw/alarm.mp3" target="app/src/main/res/raw/alarm.mp3" />
+    </platform>
+</plugin>

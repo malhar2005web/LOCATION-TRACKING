@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.locationtracker.app" version="1.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Location Tracker</name>
+    <description>
+        Real-time GPS location tracking application with client/admin roles, 
+        background location monitoring, and admin dashboard.
+    </description>
+    <author email="dev@locationtracker.com" href="https://locationtracker.com">
+        Location Tracker Team
+    </author>
+    
+    <content src="index.html" />
+    
+    <!-- Access / Navigation -->
+    <access origin="*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="geo:*" />
+
+    <!-- Global Preferences -->
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#0f172a" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="Orientation" value="portrait" />
+    <preference name="BackgroundColor" value="#0f172a" />
+
+    <!-- ============================================ -->
+    <!-- Android Platform Configuration               -->
+    <!-- ============================================ -->
+    <platform name="android">
+        <preference name="KeepRunning" value="true" />
+        <preference name="ShowSplashScreenSpinner" value="false" />
+        <preference name="android-minSdkVersion" value="24" />
+        <preference name="android-targetSdkVersion" value="34" />
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/img/logo.png" />
+
+        <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:usesCleartextTraffic="true" />
+        </edit-config>
+
+        <!-- ── Permissions (Android 10-14) ── -->
+        <!-- Fine & Coarse Location -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        </config-file>
+
+        <!-- Background Location (Android 10+, must be requested separately) -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+        </config-file>
+
+        <!-- Foreground Service (Android 9+) -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+            <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+        </config-file>
+
+        <!-- Wake Lock (keep CPU active in background) -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+        </config-file>
+
+        <!-- Boot Complete (auto-start tracking on reboot) -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+        </config-file>
+
+        <!-- Internet Access -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        </config-file>
+
+        <!-- Post Notifications (Android 13+) -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+        </config-file>
+
+        <!-- Request battery optimization exemption -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+        </config-file>
+    </platform>
+
+</widget>

@@ -1,0 +1,39 @@
+{
+  "name": "com.locationtracker.app",
+  "displayName": "Location Tracker",
+  "version": "1.0.0",
+  "description": "Real-time GPS location tracking with client/admin roles and background monitoring",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Location Tracker Team",
+  "license": "MIT",
+  "devDependencies": {
+    "cordova-android": "^13.0.0",
+    "cordova-plugin-alarm-bridge": "file:../cordova-plugin-alarm-bridge",
+    "cordova-plugin-background-mode": "^0.7.3",
+    "cordova-plugin-device": "^3.0.0",
+    "cordova-plugin-dialogs": "^2.0.2",
+    "cordova-plugin-geolocation": "^5.0.0",
+    "cordova-plugin-x-toast": "^2.7.3"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-device": {},
+      "cordova-plugin-geolocation": {
+        "GPS_REQUIRED": "true"
+      },
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-dialogs": {},
+      "cordova-plugin-x-toast": {},
+      "cordova-plugin-alarm-bridge": {}
+    }
+  }
+}
