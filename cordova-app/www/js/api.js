@@ -8,7 +8,7 @@
 // ── Configuration ──
 // Change this to your backend server's IP address
 // For local development, use your computer's LAN IP
-let API_BASE_URL = 'http://10.50.65.195:3000';
+let API_BASE_URL = 'http://173.249.59.181:3005';
 
 // Auto-detect environment to bypass tunnel when running locally in browser
 if (typeof window !== 'undefined' && window.location) {
@@ -26,6 +26,7 @@ if (typeof window !== 'undefined' && window.location) {
 function getApiBaseUrls() {
     const urls = [
         API_BASE_URL,
+        'http://173.249.59.181:3005',
         'http://10.50.65.195:3000',
         'http://10.50.65.195:3001',
         'http://192.168.1.8:3001',
