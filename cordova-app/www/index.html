@@ -304,6 +304,27 @@
                     </div>
                 </div>
 
+                <!-- Connection & Sync Card -->
+                <div id="connectivity-card" class="info-card highlight">
+                    <h3 class="info-card-title">🌐 Connection & Sync</h3>
+                    <div class="info-row">
+                        <span class="info-label">Network Status</span>
+                        <span id="network-status-display" class="info-value" style="color: #10b981;">Online</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Sync Status</span>
+                        <span id="sync-status-display" class="info-value">Synced</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Pending Locations</span>
+                        <span id="pending-locations-count" class="info-value badge warning" style="background-color: #f59e0b; color: #fff; padding: 2px 8px; border-radius: 9999px;">0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Last Sync Time</span>
+                        <span id="last-sync-time-display" class="info-value">Never</span>
+                    </div>
+                </div>
+
                 <!-- Device Info Card -->
                 <div class="info-card">
                     <h3 class="info-card-title">📱 Device Information</h3>
@@ -450,6 +471,27 @@
                     </div>
                 </div>
 
+                <!-- Sync Statistics Card -->
+                <div class="info-card">
+                    <h3 class="info-card-title">📡 Sync & Health Statistics</h3>
+                    <div class="info-row">
+                        <span class="info-label">Last Seen</span>
+                        <span id="detail-last-seen" class="info-value">--</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Last Synced At</span>
+                        <span id="detail-last-synced" class="info-value">--</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Pending Sync Count</span>
+                        <span id="detail-pending-sync" class="info-value" style="font-weight: 700; color: #f59e0b;">0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total Locations Received</span>
+                        <span id="detail-total-locations" class="info-value badge" style="background-color: #3b82f6; color: white; padding: 2px 10px; border-radius: 9999px;">0</span>
+                    </div>
+                </div>
+
                 <!-- Location History -->
                 <div class="history-section">
                     <h3 class="section-title">📋 Location History</h3>
@@ -474,6 +516,7 @@
     
     <!-- App Scripts -->
     <script src="js/api.js"></script>
+    <script src="js/storage.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/client.js"></script>
     <script src="js/admin.js"></script>

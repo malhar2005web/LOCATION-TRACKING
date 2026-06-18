@@ -59,10 +59,17 @@ router.post('/update', async (req, res) => {
             ]
         );
 
-        // Update client activity timestamp
+        // Update client activity timestamp and sync status
+        const pendingSyncCount = req.body.pendingSyncCount !== undefined ? parseInt(req.body.pendingSyncCount) : 0;
         await db.query(
-            'UPDATE clients SET is_active = TRUE, updated_at = NOW() WHERE client_id = $1',
-            [clientId]
+            `UPDATE clients 
+             SET is_active = TRUE, 
+                 last_seen = NOW(), 
+                 last_synced_at = NOW(), 
+                 pending_sync_count = $2, 
+                 updated_at = NOW() 
+             WHERE client_id = $1`,
+            [clientId, pendingSyncCount]
         );
 
         res.json({
@@ -125,12 +132,19 @@ router.post('/batch', async (req, res) => {
                 );
             }
 
-            // Update client activity
+            // Update client activity and sync status
+            const pendingSyncCount = req.body.pendingSyncCount !== undefined ? parseInt(req.body.pendingSyncCount) : 0;
             const clientIds = [...new Set(locations.map(l => l.clientId))];
             for (const cid of clientIds) {
                 await client.query(
-                    'UPDATE clients SET is_active = TRUE, updated_at = NOW() WHERE client_id = $1',
-                    [cid]
+                    `UPDATE clients 
+                     SET is_active = TRUE, 
+                         last_seen = NOW(), 
+                         last_synced_at = NOW(), 
+                         pending_sync_count = $2, 
+                         updated_at = NOW() 
+                     WHERE client_id = $1`,
+                    [cid, pendingSyncCount]
                 );
             }
 

@@ -12,11 +12,23 @@ const pool = new Pool({
     connectionTimeoutMillis: 5000
 });
 
-// Test connection on startup
+// Test connection on startup and run self-migrations
 pool.connect()
-    .then(client => {
+    .then(async client => {
         console.log('✅ PostgreSQL connected successfully');
-        client.release();
+        try {
+            console.log('🔄 Running database migrations...');
+            await client.query(`
+                ALTER TABLE clients ADD COLUMN IF NOT EXISTS last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+                ALTER TABLE clients ADD COLUMN IF NOT EXISTS pending_sync_count INTEGER DEFAULT 0;
+                ALTER TABLE clients ADD COLUMN IF NOT EXISTS last_synced_at TIMESTAMP DEFAULT NULL;
+            `);
+            console.log('✅ Database migrations applied successfully');
+        } catch (migErr) {
+            console.error('❌ Database migrations failed:', migErr.message);
+        } finally {
+            client.release();
+        }
     })
     .catch(err => {
         console.error('❌ PostgreSQL connection failed:', err.message);

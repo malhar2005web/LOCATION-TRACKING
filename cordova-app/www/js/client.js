@@ -38,6 +38,15 @@ function initClientDashboard(clientData) {
     locationSentCount = 0;
     document.getElementById('locations-sent-count').textContent = '0';
 
+    // Network listeners
+    window.removeEventListener('online', updateNetworkStatus);
+    window.removeEventListener('offline', updateNetworkStatus);
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+
+    updateNetworkStatus();
+    updateSyncUI();
+
     // Start tracking
     startLocationTracking(clientData.clientId, clientData.deviceId);
 }
@@ -80,16 +89,7 @@ function startBgGeolocation(clientId, deviceId) {
     bgGeo.onLocation(
         (location) => {
             console.log('[BgGeo] Location:', location.coords.latitude, location.coords.longitude);
-            sendLocationToServer(
-                clientId,
-                deviceId,
-                location.coords.latitude,
-                location.coords.longitude,
-                location.coords.accuracy,
-                location.coords.speed,
-                location.coords.heading,
-                location.battery ? location.battery.level : null
-            );
+            handleCapturedLocation(clientId, deviceId, location.coords, location.battery ? location.battery.level : null);
             updateLocationUI(location.coords.latitude, location.coords.longitude);
         },
         (error) => {
@@ -126,8 +126,8 @@ function startBgGeolocation(clientId, deviceId) {
 
         // Notification (Android foreground service)
         notification: {
-            title: 'Location Tracker',
-            text: 'Tracking your location in background',
+            title: 'Location Tracking Active',
+            text: 'Location is being tracked every 60 seconds.',
             color: '#3b82f6',
             channelName: 'Location Tracking',
             smallIcon: 'drawable/ic_notification',
@@ -188,8 +188,8 @@ function startFallbackTracking(clientId, deviceId) {
             bgMode.enable();
 
             bgMode.setDefaults({
-                title: 'Location Tracker',
-                text: 'Tracking location in background',
+                title: 'Location Tracking Active',
+                text: 'Location is being tracked every 60 seconds.',
                 icon: 'ic_notification',
                 color: '#3b82f6',
                 resume: true,
@@ -230,7 +230,7 @@ function startFallbackTracking(clientId, deviceId) {
                 const { latitude, longitude, accuracy, speed, heading } = position.coords;
                 console.log('[Fallback] Location:', latitude, longitude);
 
-                sendLocationToServer(clientId, deviceId, latitude, longitude, accuracy, speed, heading, null);
+                handleCapturedLocation(clientId, deviceId, position.coords, null);
                 updateLocationUI(latitude, longitude);
             },
             (error) => {
@@ -251,34 +251,208 @@ function startFallbackTracking(clientId, deviceId) {
 }
 
 /**
- * Send location data to the backend
+ * Handle captured location (Save locally, upload attempt, status/notification updates)
  */
-async function sendLocationToServer(clientId, deviceId, lat, lng, accuracy, speed, bearing, battery) {
+async function handleCapturedLocation(clientId, deviceId, coords, battery) {
+    const timestamp = new Date().toISOString();
+
+    // 1. Save locally immediately
+    const record = StorageService.saveLocation({
+        clientId: clientId,
+        deviceId: deviceId,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        accuracy: coords.accuracy,
+        speed: coords.speed,
+        bearing: coords.heading || coords.bearing,
+        batteryLevel: battery,
+        timestamp: timestamp
+    });
+
+    updateSyncUI();
+
+    // Check if network is online
+    if (!navigator.onLine) {
+        console.log('[Tracking] Device is offline, location queued.');
+        updateSyncStatusText(`Offline Mode – ${StorageService.getPendingCount()} locations pending sync`);
+        return;
+    }
+
+    // 2. Attempt API upload
     try {
-        await apiRequest('/api/location/update', 'POST', {
+        const remainingCount = StorageService.getPendingCount();
+        const response = await apiRequest('/api/location/update', 'POST', {
             clientId: clientId,
             deviceId: deviceId,
-            latitude: lat,
-            longitude: lng,
-            accuracy: accuracy || null,
-            speed: speed || null,
-            bearing: bearing || null,
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            accuracy: coords.accuracy,
+            speed: coords.speed,
+            bearing: coords.heading || coords.bearing || null,
             batteryLevel: battery || null,
-            timestamp: new Date().toISOString()
+            timestamp: timestamp,
+            pendingSyncCount: remainingCount
         });
 
-        locationSentCount++;
-        const countEl = document.getElementById('locations-sent-count');
-        if (countEl) countEl.textContent = locationSentCount.toString();
+        if (response.success) {
+            // 3. Mark as synced
+            StorageService.markAsSynced([timestamp]);
+            locationSentCount++;
+            const countEl = document.getElementById('locations-sent-count');
+            if (countEl) countEl.textContent = locationSentCount.toString();
 
-        console.log(`[Tracking] Location #${locationSentCount} sent successfully`);
+            console.log(`[Tracking] Location #${locationSentCount} uploaded successfully.`);
+            showNativeToast("your location is being tracked/sent to admin");
 
-        // Show native toast (so the user knows their location is sent even when in background)
-        showNativeToast("your location is being tracked/sent to admin");
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            updateSyncStatusText(`Last Location Sent: ${timeStr}`);
+
+            // Automatically sync other pending locations
+            syncPendingLocations();
+        } else {
+            throw new Error(response.message || 'Server rejected request');
+        }
+    } catch (err) {
+        console.error('[Tracking] API update error:', err.message);
+        const pendingCount = StorageService.getPendingCount();
+        updateSyncStatusText(`Offline Mode – ${pendingCount} locations pending sync`);
+    }
+}
+
+/**
+ * Network connectivity monitoring handlers
+ */
+function updateNetworkStatus() {
+    const isOnline = navigator.onLine;
+    const netDisplay = document.getElementById('network-status-display');
+
+    if (isOnline) {
+        if (netDisplay) {
+            netDisplay.textContent = 'Online';
+            netDisplay.style.color = '#10b981';
+        }
+        console.log('[Network] Connection restored. Triggering sync...');
+        syncPendingLocations();
+    } else {
+        if (netDisplay) {
+            netDisplay.textContent = 'Offline';
+            netDisplay.style.color = '#ef4444';
+        }
+        updateSyncStatusText(`Offline Mode – ${StorageService.getPendingCount()} locations pending sync`);
+    }
+}
+
+function updateSyncUI() {
+    const pendingCount = StorageService.getPendingCount();
+    const countEl = document.getElementById('pending-locations-count');
+    if (countEl) {
+        countEl.textContent = pendingCount.toString();
+        if (pendingCount > 0) {
+            countEl.style.backgroundColor = '#f59e0b';
+        } else {
+            countEl.style.backgroundColor = '#10b981';
+        }
+    }
+
+    const lastSyncEl = document.getElementById('last-sync-time-display');
+    if (lastSyncEl) {
+        const lastSync = StorageService.getLastSyncTime();
+        lastSyncEl.textContent = lastSync !== 'Never' ? new Date(lastSync).toLocaleTimeString() : 'Never';
+    }
+}
+
+function updateSyncStatusText(statusText) {
+    const syncDisplay = document.getElementById('sync-status-display');
+    if (syncDisplay) {
+        syncDisplay.textContent = statusText;
+    }
+    updateBackgroundNotification(statusText);
+}
+
+function updateBackgroundNotification(text) {
+    if (window.cordova && window.cordova.plugins && window.cordova.plugins.backgroundMode) {
+        const bgMode = cordova.plugins.backgroundMode;
+        if (bgMode.isActive()) {
+            bgMode.configure({
+                title: 'Location Tracking Active',
+                text: text
+            });
+        }
+    }
+}
+
+/**
+ * Sync offline pending locations in batch
+ */
+let isSyncing = false;
+
+async function syncPendingLocations() {
+    if (isSyncing) return;
+
+    const pending = StorageService.getPendingLocations();
+    if (pending.length === 0) {
+        updateSyncUI();
+        return;
+    }
+
+    if (!navigator.onLine) {
+        console.log('[Sync] Network is offline, skipping sync.');
+        updateSyncUI();
+        return;
+    }
+
+    isSyncing = true;
+    console.log(`[Sync] Found ${pending.length} pending locations. Syncing...`);
+    updateSyncStatusText("Connection Restored – Syncing locations");
+
+    const batchSize = 50;
+    let successCount = 0;
+
+    try {
+        // Sort chronologically
+        pending.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+        for (let i = 0; i < pending.length; i += batchSize) {
+            const chunk = pending.slice(i, i + batchSize);
+            const remainingCount = pending.length - (i + chunk.length);
+
+            const response = await apiRequest('/api/location/batch', 'POST', {
+                locations: chunk.map(loc => ({
+                    clientId: loc.clientId,
+                    deviceId: loc.deviceId,
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                    accuracy: loc.accuracy,
+                    speed: loc.speed,
+                    bearing: loc.bearing,
+                    batteryLevel: loc.batteryLevel,
+                    timestamp: loc.timestamp
+                })),
+                pendingSyncCount: remainingCount
+            });
+
+            if (response.success) {
+                const syncedTimestamps = chunk.map(c => c.timestamp);
+                StorageService.markAsSynced(syncedTimestamps);
+                successCount += chunk.length;
+            } else {
+                throw new Error(response.message || 'Batch upload failed');
+            }
+        }
+
+        console.log(`[Sync] Successfully synced ${successCount} locations.`);
+        showNativeToast(`Synced ${successCount} offline locations`);
+        
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        updateSyncStatusText(`Last Location Sent: ${timeStr}`);
 
     } catch (err) {
-        console.error('[Tracking] Failed to send location:', err.message);
-        // Don't show toast for every failed send — too noisy
+        console.error('[Sync] Sync failed:', err.message);
+        const pendingCount = StorageService.getPendingCount();
+        updateSyncStatusText(`Offline Mode – ${pendingCount} locations pending sync`);
+    } finally {
+        isSyncing = false;
+        updateSyncUI();
     }
 }
 

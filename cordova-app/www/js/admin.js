@@ -79,29 +79,41 @@ function renderClientsList(clients) {
     let html = '';
 
     clients.forEach(client => {
-        const isActive = client.is_active === 1;
         const hasLocation = client.last_latitude !== null && client.last_longitude !== null;
-        const lastTime = client.last_location_time
-            ? formatTimeAgo(new Date(client.last_location_time))
-            : 'Never';
         const coords = hasLocation
             ? `${parseFloat(client.last_latitude).toFixed(5)}, ${parseFloat(client.last_longitude).toFixed(5)}`
             : 'No data';
 
-        // Consider active if location received in last 5 minutes
-        const recentlyActive = client.last_location_time &&
-            (Date.now() - new Date(client.last_location_time).getTime()) < 5 * 60 * 1000;
+        // Consider online if last_seen is within 3 minutes
+        const isOnline = client.last_seen && 
+            (Date.now() - new Date(client.last_seen).getTime()) < 3 * 60 * 1000;
+        
+        const lastSeenTime = client.last_seen
+            ? formatTimeAgo(new Date(client.last_seen))
+            : 'Never';
+
+        const pendingCount = parseInt(client.pending_sync_count) || 0;
+        const totalLocs = parseInt(client.total_locations) || 0;
 
         html += `
             <div class="client-card" onclick="viewClientDetail('${client.client_id}')">
-                <div class="client-card-status ${recentlyActive ? 'active' : 'inactive'}"></div>
+                <div class="client-card-status ${isOnline ? 'active' : 'inactive'}"></div>
                 <div class="client-card-info">
-                    <div class="client-card-id">${escapeHtml(client.client_id)}</div>
-                    <div class="client-card-device">${escapeHtml(client.device_id)}</div>
+                    <div class="client-card-id">
+                        ${escapeHtml(client.client_id)} 
+                        ${isOnline ? '<span style="font-size: 0.65rem; color: #10b981; margin-left: 5px; font-weight: 800;">ONLINE</span>' : '<span style="font-size: 0.65rem; color: #94a3b8; margin-left: 5px; font-weight: 800;">OFFLINE</span>'}
+                    </div>
+                    <div class="client-card-device" style="margin-top: 3px;">
+                        Device: ${escapeHtml(client.device_id)}
+                    </div>
+                    <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 4px; display: flex; gap: 10px;">
+                        <span>📍 Total: <b>${totalLocs}</b></span>
+                        ${pendingCount > 0 ? `<span style="color: #fbbf24; font-weight: 600;">⚠️ Sync Pending: ${pendingCount}</span>` : `<span style="color: #10b981; font-weight: 600;">✔ Synced</span>`}
+                    </div>
                 </div>
-                <div class="client-card-meta">
+                <div class="client-card-meta" style="display: flex; flex-direction: column; align-items: flex-end;">
                     <div class="client-card-coords">${coords}</div>
-                    <div class="client-card-time">${lastTime}</div>
+                    <div class="client-card-time" style="font-size: 0.65rem; color: #94a3b8; margin-top: 3px;">Seen: ${lastSeenTime}</div>
                 </div>
                 <span class="client-card-arrow">›</span>
             </div>
@@ -117,8 +129,8 @@ function renderClientsList(clients) {
 function updateAdminStats(clients) {
     const total = clients.length;
     const active = clients.filter(c => {
-        if (!c.last_location_time) return false;
-        return (Date.now() - new Date(c.last_location_time).getTime()) < 5 * 60 * 1000;
+        if (!c.last_seen) return false;
+        return (Date.now() - new Date(c.last_seen).getTime()) < 3 * 60 * 1000;
     }).length;
 
     document.getElementById('total-clients-count').textContent = total;
@@ -184,14 +196,17 @@ function renderClientDetail(client, locations) {
     document.getElementById('detail-client-id').textContent = client.clientId;
     document.getElementById('detail-device-id').textContent = client.deviceId;
 
-    // Status
+    // Status (Online/Offline)
     const badge = document.getElementById('detail-status-badge');
-    if (client.isActive) {
+    const isOnline = client.lastSeen && 
+        (Date.now() - new Date(client.lastSeen).getTime()) < 3 * 60 * 1000;
+
+    if (isOnline) {
         badge.className = 'status-badge active';
-        badge.textContent = '● Active';
+        badge.textContent = '● Online';
     } else {
         badge.className = 'status-badge inactive';
-        badge.textContent = '● Inactive';
+        badge.textContent = '● Offline';
     }
 
     // Latest location
@@ -206,6 +221,25 @@ function renderClientDetail(client, locations) {
         document.getElementById('detail-lng').textContent = 'No data';
         document.getElementById('detail-last-update').textContent = 'Never';
     }
+
+    // Sync Statistics
+    document.getElementById('detail-last-seen').textContent = client.lastSeen 
+        ? new Date(client.lastSeen).toLocaleString() 
+        : 'Never';
+    document.getElementById('detail-last-synced').textContent = client.lastSyncedAt 
+        ? new Date(client.lastSyncedAt).toLocaleString() 
+        : 'Never';
+    
+    const pendingEl = document.getElementById('detail-pending-sync');
+    const pendingCount = parseInt(client.pendingSyncCount) || 0;
+    pendingEl.textContent = pendingCount.toString();
+    if (pendingCount > 0) {
+        pendingEl.style.color = '#fbbf24';
+    } else {
+        pendingEl.style.color = '#10b981';
+    }
+
+    document.getElementById('detail-total-locations').textContent = client.totalLocations || '0';
 
     // Location history
     renderLocationHistory(locations);

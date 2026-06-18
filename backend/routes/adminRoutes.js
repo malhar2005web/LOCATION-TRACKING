@@ -82,6 +82,10 @@ router.get('/clients', verifyAdmin, async (req, res) => {
                 c.device_id,
                 c.name,
                 c.is_active,
+                c.last_seen,
+                c.pending_sync_count,
+                c.last_synced_at,
+                (SELECT COUNT(*) FROM locations WHERE client_id = c.client_id) AS total_locations,
                 c.created_at,
                 l.latitude AS last_latitude,
                 l.longitude AS last_longitude,
@@ -97,7 +101,7 @@ router.get('/clients', verifyAdmin, async (req, res) => {
                 ORDER BY timestamp DESC
                 LIMIT 1
             ) l ON TRUE
-            ORDER BY c.is_active DESC, l.timestamp DESC NULLS LAST
+            ORDER BY c.last_seen DESC NULLS LAST, c.client_id
         `);
 
         res.json({
@@ -149,6 +153,9 @@ router.get('/client/:id', verifyAdmin, async (req, res) => {
             [clientId]
         );
 
+        const totalCountResult = await db.query('SELECT COUNT(*) FROM locations WHERE client_id = $1', [clientId]);
+        const totalLocations = parseInt(totalCountResult.rows[0].count) || 0;
+
         res.json({
             success: true,
             client: {
@@ -156,6 +163,10 @@ router.get('/client/:id', verifyAdmin, async (req, res) => {
                 deviceId: client.device_id,
                 name: client.name,
                 isActive: client.is_active,
+                lastSeen: client.last_seen,
+                pendingSyncCount: client.pending_sync_count,
+                lastSyncedAt: client.last_synced_at,
+                totalLocations: totalLocations,
                 createdAt: client.created_at
             },
             locations: locResult.rows,
