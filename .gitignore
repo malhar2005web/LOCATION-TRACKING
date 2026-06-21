@@ -17,3 +17,4 @@ app-debug.apk
 backend/scratch_db.js
 *.log
 .system_generated/
+\n# Local build and asset files\napp-debug.zip\nDiaryApiLinks_Malhar.txt\nSkyway new logo ready mix concrete 13-01-2026 01.png
