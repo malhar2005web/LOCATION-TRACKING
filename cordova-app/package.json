@@ -19,7 +19,8 @@
     "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-dialogs": "^2.0.2",
     "cordova-plugin-geolocation": "^5.0.0",
-    "cordova-plugin-x-toast": "^2.7.3"
+    "cordova-plugin-x-toast": "^2.7.3",
+    "cordova-sqlite-storage": "^7.0.0"
   },
   "cordova": {
     "platforms": [
@@ -33,7 +34,8 @@
       "cordova-plugin-background-mode": {},
       "cordova-plugin-dialogs": {},
       "cordova-plugin-x-toast": {},
-      "cordova-plugin-alarm-bridge": {}
+      "cordova-plugin-alarm-bridge": {},
+      "cordova-sqlite-storage": {}
     }
   }
 }

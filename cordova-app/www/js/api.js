@@ -158,10 +158,10 @@ function showToast(message, type = 'info', duration = 3000) {
     toast.className = `toast ${type}`;
 
     const icons = {
-        success: '✅',
-        error: '❌',
-        info: 'ℹ️',
-        warning: '⚠️'
+        success: 'OK',
+        error: 'ERR',
+        info: 'INFO',
+        warning: 'Warning'
     };
 
     toast.innerHTML = `<span>${icons[type] || ''}</span> ${message}`;

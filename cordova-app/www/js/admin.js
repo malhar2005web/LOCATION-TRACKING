@@ -69,7 +69,7 @@ function renderClientsList(clients) {
     if (!clients || clients.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
-                <span class="empty-icon">📭</span>
+                <span class="empty-icon">No data</span>
                 <p>No clients registered yet</p>
             </div>
         `;
@@ -107,8 +107,8 @@ function renderClientsList(clients) {
                         Device: ${escapeHtml(client.device_id)}
                     </div>
                     <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 4px; display: flex; gap: 10px;">
-                        <span>📍 Total: <b>${totalLocs}</b></span>
-                        ${pendingCount > 0 ? `<span style="color: #fbbf24; font-weight: 600;">⚠️ Sync Pending: ${pendingCount}</span>` : `<span style="color: #10b981; font-weight: 600;">✔ Synced</span>`}
+                        <span>Total: <b>${totalLocs}</b></span>
+                        ${pendingCount > 0 ? `<span style="color: #fbbf24; font-weight: 600;">Sync Pending: ${pendingCount}</span>` : `<span style="color: #10b981; font-weight: 600;">Synced</span>`}
                     </div>
                 </div>
                 <div class="client-card-meta" style="display: flex; flex-direction: column; align-items: flex-end;">
@@ -254,7 +254,7 @@ function renderLocationHistory(locations) {
     if (!locations || locations.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
-                <span class="empty-icon">📭</span>
+                <span class="empty-icon">No data</span>
                 <p>No location data yet</p>
             </div>
         `;

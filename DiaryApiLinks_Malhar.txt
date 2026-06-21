@@ -1,0 +1,200 @@
+
+base url "https://fleettrackon.co.in/skywaydia/"
+
+1) To Register Device Post Method
+	https://fleettrackon.co.in/skywaydia/RegisterDiaDevice
+	
+	Body
+	{
+		"UserId" : "11",
+		"GuId" : "a057d027fed7bace"
+	}
+
+	Response
+	{
+		"output": [
+			{
+				"resstatus": "Already Registered",
+				"id": 11,
+				"userid": 11,
+				"userloginid": "a057d027fed7bace",
+				"userpassword": "1234",
+				"userfullname": "demo admin2",
+				"usertype": "admin",
+				"imeinumber": "a057d027fed7bace",
+				"clusters": "",
+				"clientid": 27
+			}
+		]
+	}
+	
+2) To Get DSR Update Client List Post Method
+
+	https://fleettrackon.co.in/skywaydia/getclientlistbygroup	
+	
+	Body
+	{
+		"userid" : "demo admin2",
+		"gemptype" : "admin",
+		"leadnametosearch" : "",
+		"groupnametosearch" : "",
+		"gempcluster" : ""
+	}
+
+	Note : In Body We Have To Pass User Name In UserId and Emp Type in gemptype  
+	
+	Response
+	{
+		"trackerid": [
+			{
+				"leadno": 965,
+				"currentdate": "2026-02-28 14:42:00.771196+05:30",
+				"intime": "00:00:00",
+				"outtime": "00:00:00",
+				"leadname": "PETROL PUMP - CHEMBUR",
+				"leadsitename": "",
+				"contactperson": "",
+				"contactno": "",
+				"mailid": "",
+				"ocos": "",
+				"ncns": "",
+				"address": "",
+				"leadfrom": "18",
+				"fromuserid": "",
+				"leaddatetime": "2026-02-28 14:42:00.771196+05:30",
+				"assignedto": "All",
+				"userid": "",
+				"cause": "",
+				"causeinbrife": "",
+				"nextfollowup": "2026/02/23 00:00",
+				"leadatstage": "open",
+				"leadstatus": "",
+				"remark": "",
+				"followupevent": "",
+				"pannumber": "",
+				"gstnumber": "",
+				"reserved1": "PETROL PUMP"
+			}
+		]
+	}
+	
+
+3)	To Send Tracking Data At Regular Inter Val 
+
+	https://fleettrackon.co.in/skywaydia/receiveddata
+	{
+		"useruniqeid"  : 11, 
+		"imeino"  : "a057d027fed7bace", 
+		"deviceid"  : "GPS FIX", 
+		"gpsLatitude"  : "17.7012028", 
+		"gpsLongitude"  : "73.982616", 
+		"gpsAccuracy"  : "13.741999626159668", 
+		"gpsSpeed"  : "0.24834390878677368", 
+		"gpsTimestamp" : "2026-06-20 13:08", 
+		"calbaering"  : 90
+	}
+	
+	Note : All Above add_ Data Will Come From Dsr Update Form
+
+	Response
+	{
+		"trackerid": [
+        {
+            "status": "ok"
+        }
+    ]
+}
+
+4)	To Send Last Activity for User Post Method, Send When New Activity Is Call Like Start Day,End Day, DSR Update etc
+
+	https://fleettrackon.co.in/skywaydia/iamatevent
+	
+	body
+	{
+		"gotiamatdate" : "2026-06-20 12:55:38", 
+		"gotempname" : "demo admin2", 
+		"gotempid" : "11",
+		"gotinoutstatus" : "CHECKOUT",
+		"gotiamatclient" : "",
+		"gotiamatlat" : 17.7012001,
+		"gotiamatlong": 73.9826115,
+		"gimeinumber": "a057d027fed7bace"
+	}
+
+	Response
+	{
+		"trackerid": [
+			{
+				"status": "ok",
+				"gotinoutstatus": "CHECKOUT"
+			}
+		]
+	}
+
+5)	To Start and End Day Post Method
+	
+	https://fleettrackon.co.in/skywaydia/startendday
+	
+	To Start
+	body
+	{
+		"gcdatetime" : "2026-06-20 14:30",
+		"glaststatus" : "START",
+		"empid" : "demo admin2", 
+		"imeino" : "a057d027fed7bace",
+		"gpsLatitude" : 17.7012001,
+		"gpsLongitude" : 73.9826115
+	}
+	
+	To End
+	body
+	{
+		"gcdatetime" : "2026-06-20 14:30",
+		"glaststatus" : "END",
+		"empid" : "demo admin2", 
+		"imeino" : "a057d027fed7bace",
+		"gpsLatitude" : 17.7012001,
+		"gpsLongitude" : 73.9826115
+	}
+	
+	Response
+	{
+		"trackerid": [
+			{
+				"status": "ok"
+			}
+		]
+	}
+	
+6)	To Send Update DSR Post Method
+	
+	https://fleettrackon.co.in/skywaydia/updateleaddeatils_sky
+	
+	Body
+	{
+		"userid" : "add_useruniqeid",
+		"gemptype" : "add_gemptype",
+		"currentdatetime" : "add_currentdatetime",
+		"intime" : "add_intime",
+		"outtime" : "add_outtime",
+		"outletname" : "add_outletname",
+		"nleadname" : "add_nleadname",
+		"ncontact" : "add_ncontact",
+		"nremark" : "add_n_nremark",
+		"nfollowup" : "add_nfollowup",
+		"nfollowuptime" : "add_nfollowuptime",
+		"assignedemp" : "add_assignedemp",
+		"gpsLatitude" : "add_gpsLatitude",
+		"gpsLongitude" : "add_gpsLongitude",
+		"l_nremark" : "add_l_nremark",
+		"n_nremark" : "add_n_nremark",
+		"leaddatetime" : "add_cdatetime",
+		"officeaddres" : "add_officeaddres",
+		"contactperson" : "add_contactperson",
+		"gempname" : "add_gempname",
+		"follow_rem" : "add_follow_rem",
+		"lleadno" : "add_lleadno
+	}
+
+	Note : All Above add_ Data Will Come From Dsr Update Form
+

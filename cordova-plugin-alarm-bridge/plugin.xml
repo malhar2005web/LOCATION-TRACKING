@@ -50,12 +50,14 @@
                     <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 </intent-filter>
             </receiver>
+            <receiver android:name="com.fleettrackon.terminal.ReminderReceiver" android:enabled="true" android:exported="false" />
         </config-file>
 
         <source-file src="src/android/AlarmBridge.java" target-dir="src/com/fleettrackon/terminal" />
         <source-file src="src/android/TripAlarmService.java" target-dir="src/com/fleettrackon/terminal" />
         <source-file src="src/android/BackgroundPollingService.java" target-dir="src/com/fleettrackon/terminal" />
         <source-file src="src/android/BootReceiver.java" target-dir="src/com/fleettrackon/terminal" />
+        <source-file src="src/android/ReminderReceiver.java" target-dir="src/com/fleettrackon/terminal" />
         <resource-file src="src/android/res/raw/alarm.mp3" target="app/src/main/res/raw/alarm.mp3" />
     </platform>
 </plugin>

@@ -182,4 +182,30 @@ router.get('/client/:id', verifyAdmin, async (req, res) => {
     }
 });
 
+/**
+ * GET /api/admin/leaves
+ * Get leave requests for all clients.
+ * Protected: admin only
+ */
+router.get('/leaves', verifyAdmin, async (req, res) => {
+    try {
+        const result = await db.query(`
+            SELECT
+                l.*,
+                COALESCE(c.name, l.employee_name, l.client_id) AS employee_name
+            FROM leaves l
+            LEFT JOIN clients c ON c.client_id = l.client_id
+            ORDER BY l.created_at DESC
+        `);
+
+        res.json({ success: true, leaves: result.rows });
+    } catch (err) {
+        console.error('Get admin leaves error:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Server error fetching leave requests.'
+        });
+    }
+});
+
 module.exports = router;

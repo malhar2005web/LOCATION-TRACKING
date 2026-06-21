@@ -45,6 +45,11 @@ document.addEventListener('deviceready', () => {
 
 // Fallback for browser testing
 document.addEventListener('DOMContentLoaded', () => {
+    try {
+        if (typeof initTheme === 'function') initTheme();
+    } catch(e) {
+        console.error(e);
+    }
     if (!window.cordova) {
         console.log('[App] Running in browser mode (no Cordova)');
         onDeviceReady('browser');
@@ -65,6 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
 function onDeviceReady(source) {
     if (appReadyStarted) return;
     appReadyStarted = true;
+
+    try {
+        if (typeof initTheme === 'function') initTheme();
+    } catch(e) {
+        console.error(e);
+    }
 
     console.log('[App] Device ready');
     console.log('[App] Ready source:', source || 'unknown');
@@ -137,6 +148,27 @@ document.addEventListener('backbutton', (e) => {
     if (!activeView) return;
 
     switch (activeView.id) {
+        case 'checkin-view':
+        case 'leave-view':
+        case 'reports-view':
+            showView('client-view');
+            break;
+        case 'start-end-day-report-view':
+        case 'dsr-summary-report-view':
+        case 'dsr-updated-list-view':
+            if (typeof goBackFromReport === 'function') {
+                goBackFromReport();
+            } else {
+                showView('reports-view');
+            }
+            break;
+        case 'leave-status-view':
+            if (typeof goBackFromLeaveStatus === 'function') {
+                goBackFromLeaveStatus();
+            } else {
+                showView('leave-view');
+            }
+            break;
         case 'client-detail-view':
             showView('admin-view');
             break;

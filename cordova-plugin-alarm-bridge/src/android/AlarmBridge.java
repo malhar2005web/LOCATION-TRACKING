@@ -229,6 +229,72 @@ public class AlarmBridge extends CordovaPlugin {
             }
             callbackContext.success();
             return true;
+        } else if ("scheduleReminderNotification".equals(action)) {
+            try {
+                String reminderId = args.getString(0);
+                String clientName = args.getString(1);
+                String reminderType = args.getString(2);
+                String remark = args.getString(3);
+                String time = args.getString(4);
+                long epochMs = args.getLong(5);
+
+                Log.d(TAG, "scheduleReminderNotification ID=" + reminderId + " epoch=" + epochMs);
+
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                if (alarmManager != null) {
+                    Intent alarmIntent = new Intent(context, ReminderReceiver.class);
+                    alarmIntent.setAction(ReminderReceiver.ACTION_TRIGGER_REMINDER);
+                    alarmIntent.putExtra("id", reminderId);
+                    alarmIntent.putExtra("clientName", clientName);
+                    alarmIntent.putExtra("reminderType", reminderType);
+                    alarmIntent.putExtra("remark", remark);
+                    alarmIntent.putExtra("time", time);
+
+                    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        flags |= PendingIntent.FLAG_IMMUTABLE;
+                    }
+                    PendingIntent pi = PendingIntent.getBroadcast(context, reminderId.hashCode(), alarmIntent, flags);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, epochMs, pi);
+                    } else {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, epochMs, pi);
+                    }
+                    Log.d(TAG, "Alarm set exact for: " + epochMs);
+                }
+            } catch (Throwable t) {
+                Log.e(TAG, "Failed to schedule reminder notification", t);
+                callbackContext.error("Failed to schedule: " + t.getMessage());
+                return true;
+            }
+            callbackContext.success();
+            return true;
+
+        } else if ("cancelReminderNotification".equals(action)) {
+            try {
+                String reminderId = args.getString(0);
+                Log.d(TAG, "cancelReminderNotification ID=" + reminderId);
+
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                if (alarmManager != null) {
+                    Intent alarmIntent = new Intent(context, ReminderReceiver.class);
+                    alarmIntent.setAction(ReminderReceiver.ACTION_TRIGGER_REMINDER);
+
+                    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        flags |= PendingIntent.FLAG_IMMUTABLE;
+                    }
+                    PendingIntent pi = PendingIntent.getBroadcast(context, reminderId.hashCode(), alarmIntent, flags);
+                    alarmManager.cancel(pi);
+                }
+            } catch (Throwable t) {
+                Log.e(TAG, "Failed to cancel reminder notification", t);
+                callbackContext.error("Failed to cancel: " + t.getMessage());
+                return true;
+            }
+            callbackContext.success();
+            return true;
         }
 
         Log.w(TAG, "Action not matched: '" + action + "'");

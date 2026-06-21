@@ -11,7 +11,7 @@
     <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#F5F1E8">
 
     <title>Location Tracker</title>
 
@@ -22,6 +22,24 @@
 
     <!-- App Styles -->
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Theme pre-initialization -->
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('theme-preference');
+                var hour = new Date().getHours();
+                var isNight = (hour >= 18 || hour < 6);
+                if (theme === 'dark' || (!theme && isNight)) {
+                    document.documentElement.classList.add('dark-mode');
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        })();
+    </script>
 </head>
 <body>
 
@@ -31,24 +49,7 @@
     <div id="splash-view" class="view active">
         <div class="splash-container">
             <div class="splash-logo-wrapper">
-                <div class="splash-icon">
-                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="40" cy="40" r="38" stroke="url(#grad1)" stroke-width="3" opacity="0.3"/>
-                        <circle cx="40" cy="40" r="28" stroke="url(#grad1)" stroke-width="2" opacity="0.5"/>
-                        <circle cx="40" cy="40" r="8" fill="url(#grad1)"/>
-                        <circle cx="40" cy="40" r="4" fill="#ffffff"/>
-                        <path d="M40 12 L40 8" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M40 72 L40 68" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M12 40 L8 40" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M72 40 L68 40" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/>
-                        <defs>
-                            <linearGradient id="grad1" x1="0" y1="0" x2="80" y2="80">
-                                <stop offset="0%" stop-color="#3b82f6"/>
-                                <stop offset="100%" stop-color="#10b981"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
+                <img src="img/skyway-logo.png" class="splash-icon" alt="Skyway Logo">
                 <div class="splash-pulse-ring"></div>
                 <div class="splash-pulse-ring delay-1"></div>
                 <div class="splash-pulse-ring delay-2"></div>
@@ -67,24 +68,12 @@
     <div id="login-view" class="view">
         <div class="login-container">
             <!-- Decorative background -->
-            <div class="login-bg-gradient"></div>
-            <div class="login-bg-orb orb-1"></div>
-            <div class="login-bg-orb orb-2"></div>
+            <!-- Clean background, no decorative elements -->
 
             <div class="login-content">
                 <div class="login-header">
                     <div class="login-logo">
-                        <svg viewBox="0 0 48 48" fill="none">
-                            <circle cx="24" cy="24" r="22" stroke="url(#lgrad)" stroke-width="2.5" opacity="0.4"/>
-                            <circle cx="24" cy="24" r="6" fill="url(#lgrad)"/>
-                            <circle cx="24" cy="24" r="3" fill="#fff"/>
-                            <defs>
-                                <linearGradient id="lgrad" x1="0" y1="0" x2="48" y2="48">
-                                    <stop offset="0%" stop-color="#3b82f6"/>
-                                    <stop offset="100%" stop-color="#10b981"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
+                        <img src="img/skyway-logo.png" alt="Skyway Logo" style="height: 80px; object-fit: contain;">
                     </div>
                     <h1 class="login-title">Location Tracker</h1>
                     <p class="login-subtitle-text">Select your role to continue</p>
@@ -93,11 +82,11 @@
                 <!-- Role Selection Tabs -->
                 <div class="role-tabs">
                     <button id="tab-client" class="role-tab active" onclick="switchLoginTab('client')">
-                        <span class="tab-icon">👤</span>
+                        <span class="tab-icon">Client</span>
                         <span class="tab-label">Client</span>
                     </button>
                     <button id="tab-admin" class="role-tab" onclick="switchLoginTab('admin')">
-                        <span class="tab-icon">🛡️</span>
+                        <span class="tab-icon">Admin</span>
                         <span class="tab-label">Admin</span>
                     </button>
                     <div class="tab-indicator"></div>
@@ -109,7 +98,7 @@
                         <div class="input-group">
                             <label class="input-label">Client ID</label>
                             <div class="input-wrapper">
-                                <span class="input-icon">🆔</span>
+                                <span class="input-icon">ID</span>
                                 <input type="text" id="client-id-input" 
                                        placeholder="e.g. CLT-A1B2C3" 
                                        class="form-input" 
@@ -121,7 +110,7 @@
                         <div class="input-group">
                             <label class="input-label">Device ID</label>
                             <div class="input-wrapper">
-                                <span class="input-icon">📱</span>
+                                <span class="input-icon">DEV</span>
                                 <input type="text" id="client-device-id-input" 
                                        placeholder="Auto-detected from device" 
                                        class="form-input">
@@ -151,7 +140,7 @@
                         <div class="input-group">
                             <label class="input-label">Admin ID</label>
                             <div class="input-wrapper">
-                                <span class="input-icon">🛡️</span>
+                                <span class="input-icon">ADM</span>
                                 <input type="text" id="admin-id-input" 
                                        placeholder="Enter admin ID" 
                                        class="form-input" 
@@ -162,12 +151,12 @@
                         <div class="input-group">
                             <label class="input-label">Password</label>
                             <div class="input-wrapper">
-                                <span class="input-icon">🔒</span>
+                                <span class="input-icon">PWD</span>
                                 <input type="password" id="admin-password-input" 
                                        placeholder="Enter password" 
                                        class="form-input">
                                 <button class="toggle-password" onclick="togglePassword('admin-password-input', this)">
-                                    <span>👁️</span>
+                                    <span>VIEW</span>
                                 </button>
                             </div>
                         </div>
@@ -199,7 +188,7 @@
             <div class="page-content">
                 <div class="form-card">
                     <div class="register-icon-wrapper">
-                        <div class="register-icon">👤</div>
+                        <div class="register-icon">NEW</div>
                     </div>
                     <h3 class="form-card-title">Create New Account</h3>
                     <p class="form-card-desc">Register your device to start location tracking</p>
@@ -207,7 +196,7 @@
                     <div class="input-group">
                         <label class="input-label">Your Name (Optional)</label>
                         <div class="input-wrapper">
-                            <span class="input-icon">✏️</span>
+                            <span class="input-icon">NAME</span>
                             <input type="text" id="reg-name-input" 
                                    placeholder="Enter your name" 
                                    class="form-input">
@@ -217,7 +206,7 @@
                     <div class="input-group">
                         <label class="input-label">Device ID</label>
                         <div class="input-wrapper">
-                            <span class="input-icon">📱</span>
+                            <span class="input-icon">DEV</span>
                             <input type="text" id="reg-device-id-input" 
                                    placeholder="Auto-detected" 
                                    class="form-input">
@@ -234,13 +223,13 @@
 
                 <!-- Registration Success Card (hidden by default) -->
                 <div id="register-success" class="success-card hidden">
-                    <div class="success-icon">✅</div>
+                    <div class="success-icon">OK</div>
                     <h3 class="success-title">Registration Successful!</h3>
                     <div class="success-detail">
                         <span class="detail-label">Your Client ID</span>
                         <span id="generated-client-id" class="detail-value-large">CLT-XXXXXX</span>
                     </div>
-                    <p class="success-hint">⚠️ Save this ID! You'll need it to login.</p>
+                    <p class="success-hint">Save this ID. You'll need it to login.</p>
                     <button class="primary-btn" onclick="showView('login-view')">
                         <span class="btn-text">Go to Login</span>
                         <span class="btn-arrow">→</span>
@@ -254,105 +243,1511 @@
     <!-- VIEW: Client Dashboard                       -->
     <!-- ============================================ -->
     <div id="client-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header">
-                <div class="header-left">
-                    <div class="client-avatar">
-                        <span>👤</span>
+        <div class="dashboard-layout">
+            <!-- Main Panel Content (Full Width, No Sidebar) -->
+            <main class="main-panel">
+                <!-- Dashboard Header -->
+                <header class="dashboard-header">
+                    <div class="header-left-group">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo" style="height: 54px; margin-right: 14px; object-fit: contain;">
+                        <div class="header-avatar-container" onclick="toggleProfileDropdown()">
+                            <div class="client-avatar" id="client-avatar-initials">
+                                <span>DA</span>
+                            </div>
+                        </div>
+                        <div class="header-user-info">
+                            <div class="user-name-row">
+                                <span class="user-name" id="client-welcome-name">demo admin2</span>
+                                <div class="checked-in-pill">
+                                    <span class="pill-dot" id="client-status-dot"></span>
+                                    <span class="pill-text" id="client-status-indicator">Checked In</span>
+                                </div>
+                            </div>
+                            <p class="employee-id" id="client-id-display">Employee ID: 11</p>
+                        </div>
                     </div>
-                    <div>
-                        <h2 class="page-title">Welcome Client</h2>
-                        <p id="client-id-display" class="header-subtitle">CLT-XXXXXX</p>
+                    <div class="header-right-group">
+                        <button class="icon-action-btn" id="btn-notifications" onclick="alert('No new notifications')" title="Notifications">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <span class="bell-badge" id="notification-badge" style="display: none;">0</span>
+                        </button>
+                        <div class="profile-dropdown-container">
+                            <button class="profile-dropdown-btn" onclick="toggleProfileDropdown()" title="Profile settings">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                <svg class="dropdown-chevron-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="profile-dropdown-menu" id="profile-dropdown-menu">
+                                <a href="#" onclick="event.preventDefault(); alert('My Profile');" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    <span>My Profile</span>
+                                </a>
+                                <a href="#" onclick="event.preventDefault(); event.stopPropagation(); toggleThemeMode();" class="dropdown-item theme-toggle-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                    <span>Theme: <strong id="current-theme-label">Light</strong></span>
+                                    <div class="switch-control">
+                                        <div class="switch-handle"></div>
+                                    </div>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="event.preventDefault(); handleLogout();" class="dropdown-item logout-link" style="color: var(--color-red) !important;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                    <span>Logout</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Page content container -->
+                <div class="dashboard-content">
+                    
+                    <!-- Row 1: Welcome message and Stats Row -->
+                    <div class="welcome-stats-row">
+                        <!-- Welcome message card -->
+                        <div class="welcome-msg-card" onclick="handleReminders()">
+                            <div class="welcome-orb"></div>
+                            <div class="welcome-msg-content">
+                                <span class="welcome-subtitle" id="client-welcome-greeting">Good Morning,</span>
+                                <h2 class="welcome-title"><span id="client-welcome-name-banner">demo admin2</span>,</h2>
+                                <p class="welcome-desc">Let's make today productive.</p>
+                            </div>
+                        </div>
+
+                        <!-- 4 Stat Bubbles -->
+                        <div class="stat-bubbles-grid">
+                            <div class="stat-bubble-card">
+                                <div class="stat-icon-container" style="background: var(--color-green-bg); color: var(--color-green);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                </div>
+                                <div class="stat-bubble-info">
+                                    <span class="stat-number" id="stat-visits-count">0</span>
+                                    <span class="stat-label">Total Visits <span class="stat-label-sub">Today</span></span>
+                                </div>
+                            </div>
+                            <div class="stat-bubble-card">
+                                <div class="stat-icon-container" style="background: var(--color-orange-bg); color: var(--color-orange);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                </div>
+                                <div class="stat-bubble-info">
+                                    <span class="stat-number" id="stat-dsr-count">0</span>
+                                    <span class="stat-label">DSR Updates <span class="stat-label-sub">Today</span></span>
+                                </div>
+                            </div>
+                            <div class="stat-bubble-card">
+                                <div class="stat-icon-container" style="background: var(--color-blue-bg); color: #8C9EFF;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                </div>
+                                <div class="stat-bubble-info">
+                                    <span class="stat-number" id="stat-pending-tasks-count">0</span>
+                                    <span class="stat-label">Pending Tasks <span class="stat-label-sub">Today</span></span>
+                                </div>
+                            </div>
+                            <div class="stat-bubble-card">
+                                <div class="stat-icon-container" style="background: var(--color-amber-bg); color: #D4B44A;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                </div>
+                                <div class="stat-bubble-info">
+                                    <span class="stat-number" id="stat-duration-count">00:00 <span class="stat-unit">hrs</span></span>
+                                    <span class="stat-label">Work Duration <span class="stat-label-sub">Today</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Action Cards Grid (6 cards) -->
+                    <div class="dashboard-action-grid">
+                        
+                        <!-- Day Start Card -->
+                        <div class="action-card-premium" id="card-day-start" onclick="handleDayStart()">
+                            <div class="card-premium-top">
+                                <div class="card-premium-icon" style="background: rgba(242, 140, 82, 0.15); color: #F28C52;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                </div>
+                                <span class="card-premium-status-pill status-inactive" id="badge-day-start">Pending</span>
+                            </div>
+                            <div class="card-premium-bottom">
+                                <div class="card-premium-text">
+                                    <h3 class="card-premium-title">Day Start</h3>
+                                    <p class="card-premium-desc">Begin your workday and tracking</p>
+                                </div>
+                                <button class="card-premium-arrow-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Check In Card -->
+                        <div class="action-card-premium" id="card-check-in" onclick="handleCheckIn()">
+                            <div class="card-premium-top">
+                                <div class="card-premium-icon" style="background: rgba(216, 204, 255, 0.45); color: #8A70FF;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </div>
+                                <span class="card-premium-status-pill status-inactive" id="badge-check-in">Pending</span>
+                            </div>
+                            <div class="card-premium-bottom">
+                                <div class="card-premium-text">
+                                    <h3 class="card-premium-title">Check In</h3>
+                                    <p class="card-premium-desc">Mark daily branch attendance</p>
+                                </div>
+                                <button class="card-premium-arrow-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Leave Management Card -->
+                        <div class="action-card-premium" id="card-leave-page" onclick="handleLeavePage()">
+                            <div class="card-premium-top">
+                                <div class="card-premium-icon" style="background: rgba(138, 191, 154, 0.15); color: #8ABF9A;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                </div>
+                                <span class="card-premium-status-pill status-new">New</span>
+                            </div>
+                            <div class="card-premium-bottom">
+                                <div class="card-premium-text">
+                                    <h3 class="card-premium-title">Leave Management</h3>
+                                    <p class="card-premium-desc">Apply for leave and check status</p>
+                                </div>
+                                <button class="card-premium-arrow-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Reports Card -->
+                        <div class="action-card-premium" id="card-reports" onclick="handleReports()">
+                            <div class="card-premium-top">
+                                <div class="card-premium-icon" style="background: rgba(220, 238, 255, 0.5); color: #5B8CFF;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                                </div>
+                            </div>
+                            <div class="card-premium-bottom">
+                                <div class="card-premium-text">
+                                    <h3 class="card-premium-title">Reports</h3>
+                                    <p class="card-premium-desc">View location history and logs</p>
+                                </div>
+                                <button class="card-premium-arrow-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Today's Reminders Card -->
+                        <div class="action-card-premium reminders-highlight" id="card-reminders" onclick="handleReminders()">
+                            <div class="card-premium-top">
+                                <div class="card-premium-icon" style="background: rgba(244, 208, 111, 0.18); color: #E5C15F;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                </div>
+                                <span class="card-premium-counter" id="badge-reminders-count">0</span>
+                            </div>
+                            <div class="card-premium-bottom">
+                                <div class="card-premium-text">
+                                    <h3 class="card-premium-title" id="badge-reminders-title">Today's Reminders</h3>
+                                    <p class="card-premium-desc" id="badge-reminders-desc">Check tasks and reminders</p>
+                                </div>
+                                <button class="card-premium-arrow-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Day End Card -->
+                        <div class="action-card-premium" id="card-day-end" onclick="handleDayEnd()">
+                            <div class="card-premium-top">
+                                <div class="card-premium-icon" style="background: rgba(229, 115, 115, 0.15); color: #E57373;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+                                </div>
+                            </div>
+                            <div class="card-premium-bottom">
+                                <div class="card-premium-text">
+                                    <h3 class="card-premium-title">Day End</h3>
+                                    <p class="card-premium-desc">Complete your workday and tracking</p>
+                                </div>
+                                <button class="card-premium-arrow-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Collapsible System Status / Diagnostics Drawer (horizontal bar style) -->
+                    <div class="diagnostics-drawer-container-horizontal">
+                        <button class="diagnostics-drawer-trigger-horizontal" id="btn-toggle-diagnostics" onclick="toggleDiagnostics()">
+                            <div class="trigger-left">
+                                <span class="trigger-icon-circle" style="background: linear-gradient(135deg, rgba(242,140,82,0.15), rgba(242,140,82,0.08)); color: #E67E22;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                </span>
+                                <span class="trigger-label">System Status &amp; Tracking</span>
+                            </div>
+                            
+                            <div class="trigger-middle-badges">
+                                <div class="status-badge-inline diag-badge-gps">
+                                    <span class="badge-dot-pulse"></span>
+                                    <span>GPS Active</span>
+                                </div>
+                                <div class="status-badge-inline diag-badge-network" id="network-status-display-badge">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                                    Connected
+                                </div>
+                                <div class="status-badge-inline diag-badge-sync" id="sync-status-display-badge">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    Synced
+                                </div>
+                                <div class="status-badge-inline" id="last-sync-time-display-badge" style="display: none;">Never</div>
+                            </div>
+
+                            <div class="trigger-right">
+                                <span class="trigger-chevron" id="chevron-diagnostics">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </span>
+                            </div>
+                        </button>
+                        
+                        <div class="diagnostics-drawer-content-horizontal collapsed" id="diagnostics-drawer-panel">
+                            <div class="diagnostics-drawer-inner-horizontal">
+                                
+                                <!-- Connection & Sync Card -->
+                                <div id="connectivity-card" class="info-card-horizontal">
+                                    <div class="info-card-header-row">
+                                        <span class="info-card-icon-circle" style="background: linear-gradient(135deg, rgba(56,178,172,0.15), rgba(56,178,172,0.06)); color: #38B2AC;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                                        </span>
+                                        <h4 class="info-card-title-sub">Connection &amp; Sync</h4>
+                                    </div>
+                                    <div class="info-rows-wrapper">
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Network Status</span>
+                                            <span id="network-status-display" class="info-value diag-status-active">
+                                                <span class="diag-dot diag-dot-green"></span>
+                                                Online
+                                            </span>
+                                        </div>
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Sync Status</span>
+                                            <span id="sync-status-display" class="info-value diag-status-active">
+                                                <span class="diag-dot diag-dot-green"></span>
+                                                Synced
+                                            </span>
+                                        </div>
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Pending Locations</span>
+                                            <span id="pending-locations-count" class="info-value diag-count-badge">0</span>
+                                        </div>
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Last Sync Time</span>
+                                            <span id="last-sync-time-display" class="info-value diag-mono-value">Never</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tracking Status Card -->
+                                <div id="tracking-card" class="status-card-horizontal">
+                                    <div class="info-card-header-row">
+                                        <span class="info-card-icon-circle" style="background: linear-gradient(135deg, rgba(72,187,120,0.15), rgba(72,187,120,0.06)); color: #48BB78;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"></circle><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"></path></svg>
+                                        </span>
+                                        <h4 class="info-card-title-sub">GPS Tracking</h4>
+                                        <span id="tracking-status-text" class="diag-active-pill">Active</span>
+                                    </div>
+                                    <div class="info-rows-wrapper">
+                                        <div class="pulse-bar" style="display:none;"><div class="pulse-bar-fill"></div></div>
+                                        <div class="coord-display-horizontal">
+                                            <div class="coord-row-horizontal">
+                                                <span class="coord-label">Latitude</span>
+                                                <span id="current-lat" class="coord-value diag-mono-value">Fetching...</span>
+                                            </div>
+                                            <div class="coord-row-horizontal">
+                                                <span class="coord-label">Longitude</span>
+                                                <span id="current-lng" class="coord-value diag-mono-value">Fetching...</span>
+                                            </div>
+                                            <div class="coord-row-horizontal">
+                                                <span class="coord-label">Last Updated</span>
+                                                <span id="last-update-time" class="coord-value diag-mono-value">--:--:--</span>
+                                            </div>
+                                        </div>
+                                        <div class="tracking-btn-container">
+                                            <button id="btn-toggle-tracking" class="tracking-btn active" onclick="toggleTracking()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>
+                                                <span id="tracking-btn-text" class="tracking-btn-text">Pause Tracking</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Device Info Card -->
+                                <div class="info-card-horizontal">
+                                    <div class="info-card-header-row">
+                                        <span class="info-card-icon-circle" style="background: linear-gradient(135deg, rgba(102,126,234,0.15), rgba(102,126,234,0.06)); color: #667EEA;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                                        </span>
+                                        <h4 class="info-card-title-sub">Device Info</h4>
+                                    </div>
+                                    <div class="info-rows-wrapper">
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Device ID</span>
+                                            <span id="client-device-display" class="info-value diag-mono-value">Loading...</span>
+                                        </div>
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Device Badge</span>
+                                            <span id="client-device-display-badge" class="info-value">--</span>
+                                        </div>
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Platform</span>
+                                            <span id="client-platform-display" class="info-value">--</span>
+                                        </div>
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Model</span>
+                                            <span id="client-model-display" class="info-value">--</span>
+                                        </div>
+                                        <div class="info-row-horizontal">
+                                            <span class="info-label">Locations Sent</span>
+                                            <span id="locations-sent-count" class="info-value diag-count-badge diag-count-accent">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+        <script>
+            function toggleProfileDropdown() {
+                const dropdownMenu = document.getElementById('profile-dropdown-menu');
+                if (dropdownMenu) {
+                    dropdownMenu.classList.toggle('show');
+                }
+            }
+            window.addEventListener('click', function(event) {
+                const dropdownContainer = document.querySelector('.profile-dropdown-container');
+                const dropdownMenu = document.getElementById('profile-dropdown-menu');
+                if (dropdownContainer && dropdownMenu && !dropdownContainer.contains(event.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        </script>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Check In Submenu                       -->
+    <!-- ============================================ -->
+    <div id="checkin-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('client-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Check In Dashboard</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                            <div class="status-dot checked-in"></div>
+                            <span id="checkin-status-indicator">Checked In</span>
+                        </div>
                     </div>
                 </div>
-                <button class="icon-btn danger" onclick="handleLogout()">
-                    <span>🚪</span>
-                </button>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
             </header>
 
             <div class="page-content">
-                <!-- Tracking Status Card -->
-                <div id="tracking-card" class="status-card tracking-active">
-                    <div class="status-card-header">
-                        <div class="status-indicator-wrapper">
-                            <div class="status-dot active"></div>
-                            <span class="status-label">Tracking Status</span>
+                <div class="submenu-cards-container">
+                    
+                    <div class="action-card-submenu" onclick="handleUpdateDSR()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-blue">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                            </div>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">Update DSR</h3>
+                                <p class="action-card-submenu-desc">Create and update daily sales reports</p>
+                            </div>
                         </div>
-                        <span id="tracking-status-text" class="status-value">Active</span>
+                        <span class="action-card-submenu-arrow">›</span>
                     </div>
-                    <div class="status-card-body">
-                        <div class="location-display">
-                            <div class="coord-row">
-                                <span class="coord-label">Latitude</span>
-                                <span id="current-lat" class="coord-value">Fetching...</span>
+
+                    <div class="action-card-submenu" onclick="handleNewClient()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-mint">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
                             </div>
-                            <div class="coord-row">
-                                <span class="coord-label">Longitude</span>
-                                <span id="current-lng" class="coord-value">Fetching...</span>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">New Client</h3>
+                                <p class="action-card-submenu-desc">Add and manage new client visits</p>
                             </div>
-                            <div class="coord-row">
-                                <span class="coord-label">Last Updated</span>
-                                <span id="last-update-time" class="coord-value">--:--:--</span>
+                        </div>
+                        <span class="action-card-submenu-arrow">›</span>
+                    </div>
+
+                    <div class="action-card-submenu" onclick="handleOthersCheckIn()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-purple">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
                             </div>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">Others</h3>
+                                <p class="action-card-submenu-desc">Additional field activities and actions</p>
+                            </div>
+                        </div>
+                        <span class="action-card-submenu-arrow">›</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Leave Submenu                          -->
+    <!-- ============================================ -->
+    <div id="leave-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('client-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Leave Management</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                            <div class="status-dot active" id="leave-status-dot"></div>
+                            <span id="leave-status-indicator">Online</span>
                         </div>
                     </div>
-                    <div class="status-card-footer">
-                        <div class="pulse-bar">
-                            <div class="pulse-bar-fill"></div>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="submenu-cards-container">
+                    
+                    <div class="action-card-submenu" onclick="handleLeaveApplication()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-coral">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            </div>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">Leave Application</h3>
+                                <p class="action-card-submenu-desc">Submit new leave requests</p>
+                            </div>
                         </div>
-                        <span class="footer-text">📡 Sending location every 60 seconds</span>
+                        <span class="action-card-submenu-arrow">›</span>
+                    </div>
+
+                    <div class="action-card-submenu" onclick="handleLeaveStatus()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-yellow">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                            </div>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">Leave Status</h3>
+                                <p class="action-card-submenu-desc">View approved, pending and rejected leaves</p>
+                            </div>
+                        </div>
+                        <span class="action-card-submenu-arrow">›</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Reports Submenu                        -->
+    <!-- ============================================ -->
+    <div id="reports-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('client-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Reports Dashboard</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                            <div class="status-dot active" id="reports-status-dot"></div>
+                            <span id="reports-status-indicator">Online</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="submenu-cards-container">
+                    
+                    <div class="action-card-submenu" onclick="handleDSRSummaryReport()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-blue">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                            </div>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">DSR Summary Report</h3>
+                                <p class="action-card-submenu-desc">View overall DSR performance summary</p>
+                            </div>
+                        </div>
+                        <span class="action-card-submenu-arrow">›</span>
+                    </div>
+
+                    <div class="action-card-submenu" onclick="handleDSRUpdatedList()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-mint">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                            </div>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">DSR Updated List</h3>
+                                <p class="action-card-submenu-desc">View submitted DSR records</p>
+                            </div>
+                        </div>
+                        <span class="action-card-submenu-arrow">›</span>
+                    </div>
+
+                    <div class="action-card-submenu" onclick="handleStartEndDayReport()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-purple">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            </div>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">Start End Day</h3>
+                                <p class="action-card-submenu-desc">Review daily attendance and activity summary</p>
+                            </div>
+                        </div>
+                        <span class="action-card-submenu-arrow">›</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Start End Day Report                   -->
+    <!-- ============================================ -->
+    <div id="start-end-day-report-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="goBackFromReport()">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Start End Day</h2>
+                        <span class="submenu-client-name">Attendance Summary</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 16px; margin-bottom: 16px;">
+                    <div class="filter-row-layout">
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">Select User</label>
+                            <select id="start-end-user" class="glass-select filter-select">
+                                <option value="All">All</option>
+                            </select>
+                        </div>
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">From</label>
+                            <input type="date" id="start-end-from" class="glass-input filter-input">
+                        </div>
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">Till</label>
+                            <input type="date" id="start-end-till" class="glass-input filter-input">
+                        </div>
+                        <button class="btn-primary filter-btn" onclick="fetchStartEndDayReportData()">Get Data</button>
                     </div>
                 </div>
 
-                <!-- Connection & Sync Card -->
-                <div id="connectivity-card" class="info-card highlight">
-                    <h3 class="info-card-title">🌐 Connection & Sync</h3>
-                    <div class="info-row">
-                        <span class="info-label">Network Status</span>
-                        <span id="network-status-display" class="info-value" style="color: #10b981;">Online</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Sync Status</span>
-                        <span id="sync-status-display" class="info-value">Synced</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Pending Locations</span>
-                        <span id="pending-locations-count" class="info-value badge warning" style="background-color: #f59e0b; color: #fff; padding: 2px 8px; border-radius: 9999px;">0</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Last Sync Time</span>
-                        <span id="last-sync-time-display" class="info-value">Never</span>
-                    </div>
-                </div>
-
-                <!-- Device Info Card -->
-                <div class="info-card">
-                    <h3 class="info-card-title">📱 Device Information</h3>
-                    <div class="info-row">
-                        <span class="info-label">Device ID</span>
-                        <span id="client-device-display" class="info-value">Loading...</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Platform</span>
-                        <span id="client-platform-display" class="info-value">--</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Model</span>
-                        <span id="client-model-display" class="info-value">--</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Locations Sent</span>
-                        <span id="locations-sent-count" class="info-value badge">0</span>
+                <div class="glass-table-container">
+                    <div class="table-responsive">
+                        <table class="report-table" id="start-end-day-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">NO</th>
+                                    <th>EMP NAME</th>
+                                    <th>START TIME</th>
+                                    <th>START</th>
+                                    <th>END TIME</th>
+                                    <th>END</th>
+                                    <th>DURATION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="table-empty">No records found. Click Get Data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- Tracking Control -->
-                <button id="btn-toggle-tracking" class="tracking-btn active" onclick="toggleTracking()">
-                    <div class="tracking-btn-inner">
-                        <span id="tracking-btn-icon" class="tracking-btn-icon">⏸️</span>
-                        <span id="tracking-btn-text" class="tracking-btn-text">Pause Tracking</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: DSR Summary Report                     -->
+    <!-- ============================================ -->
+    <div id="dsr-summary-report-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="goBackFromReport()">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">DSR Summary Report</h2>
+                        <span class="submenu-client-name">Performance Summary</span>
                     </div>
-                </button>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 16px; margin-bottom: 16px;">
+                    <div class="filter-row-layout">
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">Select User</label>
+                            <select id="dsr-summary-user" class="glass-select filter-select">
+                                <option value="All">All</option>
+                            </select>
+                        </div>
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">From</label>
+                            <input type="date" id="dsr-summary-from" class="glass-input filter-input">
+                        </div>
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">Till</label>
+                            <input type="date" id="dsr-summary-till" class="glass-input filter-input">
+                        </div>
+                        <button class="btn-primary filter-btn" onclick="fetchDSRSummaryReportData()">Get Data</button>
+                    </div>
+                </div>
+
+                <div class="glass-table-container">
+                    <div class="table-responsive">
+                        <table class="report-table" id="dsr-summary-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">SR NO</th>
+                                    <th>CLIENT NAME</th>
+                                    <th>SITE NAME</th>
+                                    <th>VISITED FOR</th>
+                                    <th>ASSIGNED TO</th>
+                                    <th>NO OF VISIT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="6" class="table-empty">No records found. Click Get Data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: DSR Updated List                       -->
+    <!-- ============================================ -->
+    <div id="dsr-updated-list-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="goBackFromReport()">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Updated DSR List</h2>
+                        <span class="submenu-client-name">DSR Submissions</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 16px; margin-bottom: 16px;">
+                    <div class="filter-row-layout">
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">Select User</label>
+                            <select id="dsr-list-user" class="glass-select filter-select">
+                                <option value="All">All</option>
+                            </select>
+                        </div>
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">From</label>
+                            <input type="date" id="dsr-list-from" class="glass-input filter-input">
+                        </div>
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">Till</label>
+                            <input type="date" id="dsr-list-till" class="glass-input filter-input">
+                        </div>
+                        <button class="btn-primary filter-btn" onclick="fetchDSRListReportData()">Get Data</button>
+                    </div>
+                </div>
+
+                <div class="glass-table-container">
+                    <div class="table-responsive">
+                        <table class="report-table" id="dsr-updated-list-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">SR NO</th>
+                                    <th>VISITED BY</th>
+                                    <th>VISITED ON</th>
+                                    <th>CLIENT</th>
+                                    <th>OFFICE ADDRESS</th>
+                                    <th>SITE NAME</th>
+                                    <th>CONTACT PERSON</th>
+                                    <th>CONTACT NO</th>
+                                    <th>LAST REMARK</th>
+                                    <th>VISITED FOR</th>
+                                    <th>FOLLOWUP</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="11" class="table-empty">No records found. Click Get Data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: DSR Client List                        -->
+    <!-- ============================================ -->
+    <div id="dsr-client-list-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('checkin-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Client List</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                            <div class="status-dot active" id="dsrlist-status-dot"></div>
+                            <span id="dsrlist-status-indicator">Online</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="margin-bottom: 16px; padding: 16px;">
+                    <div class="search-flex-row" style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <div class="search-input-group" style="flex: 1; min-width: 150px;">
+                            <input type="text" id="search-client-input" placeholder="Search Client..." class="glass-input" style="width: 100%;">
+                        </div>
+                        <button class="search-action-btn" onclick="filterClientList()">GO</button>
+                        
+                        <div class="search-input-group" style="flex: 1; min-width: 150px;">
+                            <input type="text" id="search-group-input" placeholder="Search Group..." class="glass-input" style="width: 100%;">
+                        </div>
+                        <button class="search-action-btn" onclick="filterClientList()">GO</button>
+                    </div>
+                    
+                    <div class="filter-actions-row" style="display: flex; gap: 12px;">
+                        <button class="secondary-btn-small" onclick="clearClientListFilters()" style="flex: 1;">CLEAR FIELD</button>
+                        <button class="primary-btn-small" onclick="fetchClientList()" style="flex: 1;">REFRESH</button>
+                    </div>
+                </div>
+
+                <div class="table-container-card">
+                    <table class="premium-table" id="client-list-table">
+                        <thead>
+                            <tr>
+                                <th>SR NO</th>
+                                <th>CLIENT NAME</th>
+                                <th>REGISTERED ADDRESS</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="client-list-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Booking Form                           -->
+    <!-- ============================================ -->
+    <div id="booking-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('dsr-client-list-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Booking Page</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 20px;">
+                    <h3 class="form-title">BOOKING PAGE</h3>
+                    <div class="input-group">
+                        <label class="input-label">Client Name</label>
+                        <input type="text" id="booking-client-name" class="glass-input disabled" readonly>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Site Name</label>
+                        <input type="text" id="booking-site-name" class="glass-input" placeholder="Site Name">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Office Address</label>
+                        <input type="text" id="booking-office-address" class="glass-input" placeholder="Office Address">
+                    </div>
+                    <div class="input-row-flex" style="display: flex; gap: 12px; align-items: flex-end;">
+                        <div class="input-group" style="flex: 1;">
+                            <label class="input-label">Quantity</label>
+                            <input type="text" id="booking-quantity" class="glass-input" placeholder="Quantity">
+                        </div>
+                        <div class="quantity-label-m3" style="padding-bottom: 12px; font-weight: 700; color: var(--color-text-primary);">M3</div>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Grade</label>
+                        <select id="booking-grade" class="glass-select">
+                            <option value="">0 selected</option>
+                            <option value="M10">M10</option>
+                            <option value="M15">M15</option>
+                            <option value="M20">M20</option>
+                            <option value="M25">M25</option>
+                            <option value="M30">M30</option>
+                            <option value="M35">M35</option>
+                            <option value="M40">M40</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="booking-grade-other" class="glass-input" placeholder="Other Grade">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Remark</label>
+                        <input type="text" id="booking-remark" class="glass-input" placeholder="Remark">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Schedule Date</label>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 0.8rem; color: var(--color-text-secondary); width: 45px; flex-shrink: 0;">From:</span>
+                                <input type="date" id="booking-schedule-from" class="glass-input" style="flex: 1;">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 0.8rem; color: var(--color-text-secondary); width: 45px; flex-shrink: 0;">Till:</span>
+                                <input type="date" id="booking-schedule-till" class="glass-input" style="flex: 1;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Dispatch Time</label>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Hrs:</span>
+                            <select id="booking-dispatch-hours" class="glass-select" style="flex: 1;"></select>
+                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Min:</span>
+                            <select id="booking-dispatch-minutes" class="glass-select" style="flex: 1;"></select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button class="primary-btn" onclick="submitBooking()" style="flex: 1;">GENERATE</button>
+                        <button class="secondary-btn" onclick="showView('dsr-client-list-view')" style="flex: 1;">BACK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Existing Client DSR Form               -->
+    <!-- ============================================ -->
+    <div id="existing-client-dsr-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('dsr-client-list-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Existing Client</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 20px;">
+                    <h3 class="form-title">EXISTING CLIENT</h3>
+                    <div class="input-group">
+                        <label class="input-label">Customer Name</label>
+                        <input type="text" id="dsr-customer-name" class="glass-input disabled" readonly>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Office Address</label>
+                        <textarea id="dsr-office-address" class="glass-textarea" placeholder="Office Address" rows="3"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Site Details</label>
+                        <input type="text" id="dsr-site-details" class="glass-input" placeholder="Site Details">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Contact Person</label>
+                        <input type="text" id="dsr-contact-person" class="glass-input" placeholder="Contact Person">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Contact No</label>
+                        <input type="tel" id="dsr-contact-number" class="glass-input" placeholder="Contact No">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Today Status</label>
+                        <select id="dsr-today-status" class="glass-select">
+                            <option value="">Please Select</option>
+                            <option value="Follow Up">Follow Up</option>
+                            <option value="Document Submission">Document Submission</option>
+                            <option value="Bill Submission">Bill Submission</option>
+                            <option value="Payment Collection">Payment Collection</option>
+                            <option value="Document Collection">Document Collection</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Remark</label>
+                        <input type="text" id="dsr-remark" class="glass-input" placeholder="Remark">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Followup Date</label>
+                        <input type="date" id="dsr-followup-date" class="glass-input">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Followup Time</label>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Hrs:</span>
+                            <select id="dsr-followup-hours" class="glass-select" style="flex: 1;"></select>
+                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Min:</span>
+                            <select id="dsr-followup-minutes" class="glass-select" style="flex: 1;"></select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button class="primary-btn" onclick="submitDSR()" style="flex: 1;">SUBMIT</button>
+                        <button class="secondary-btn" onclick="showView('dsr-client-list-view')" style="flex: 1;">BACK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: New Client Registration Form           -->
+    <!-- ============================================ -->
+    <div id="new-client-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('checkin-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">New Client</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 20px;">
+                    <h3 class="form-title">NEW CLIENT REGISTRATION</h3>
+                    
+                    <!-- Progress Bar -->
+                    <div class="registration-progress-container">
+                        <div class="progress-bar-header">
+                            <span class="progress-label">Registration Progress</span>
+                            <span class="progress-percentage" id="reg-progress-percent">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="reg-progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Inputs for GPS Lat/Lng -->
+                    <input type="hidden" id="new-client-lat" value="0.0">
+                    <input type="hidden" id="new-client-lng" value="0.0">
+
+                    <!-- Section 1: Client Information -->
+                    <div class="form-section-accordion">
+                        <div class="accordion-header active" id="accordion-header-1" onclick="toggleAccordionSection(1)">
+                            <div class="accordion-title">
+                                <span class="accordion-icon icon-coral">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                </span>
+                                <span>1. Client Information</span>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-content open" id="section-1-content">
+                            <div class="input-group">
+                                <label class="input-label">Client Name <span style="color:#ef4444;">*</span></label>
+                                <input type="text" id="new-client-name" class="glass-input" placeholder="Client Name">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">PAN Number</label>
+                                <input type="text" id="new-client-pan" class="glass-input" placeholder="PAN Number">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">PAN Document Upload</label>
+                                <div class="upload-card" onclick="triggerNewClientFileInput('new-client-pan-file')">
+                                    <input type="file" id="new-client-pan-file" class="file-input-hidden" onchange="handleNewClientFileUpload(this, 'pan')">
+                                    <div class="upload-content" id="pan-upload-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-svg" style="color: var(--color-orange); margin-bottom: 6px;">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                                        </svg>
+                                        <span class="upload-text">Upload PAN Document</span>
+                                        <span class="upload-hint" style="margin-top: 2px;">Support PDF, PNG, JPG (Max 5MB)</span>
+                                    </div>
+                                    <div class="upload-preview hidden" id="pan-upload-preview"></div>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">GST Number</label>
+                                <input type="text" id="new-client-gst" class="glass-input" placeholder="GST Number">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">GST Document Upload</label>
+                                <div class="upload-card" onclick="triggerNewClientFileInput('new-client-gst-file')">
+                                    <input type="file" id="new-client-gst-file" class="file-input-hidden" onchange="handleNewClientFileUpload(this, 'gst')">
+                                    <div class="upload-content" id="gst-upload-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-svg" style="color: var(--color-orange); margin-bottom: 6px;">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="17 8 12 3 7 8"></polyline>
+                                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                                        </svg>
+                                        <span class="upload-text">Upload GST Document</span>
+                                        <span class="upload-hint" style="margin-top: 2px;">Support PDF, PNG, JPG (Max 5MB)</span>
+                                    </div>
+                                    <div class="upload-preview hidden" id="gst-upload-preview"></div>
+                                </div>
+                            </div>
+                            <button class="primary-btn-small" style="margin-top:8px; align-self: flex-end;" onclick="toggleAccordionSection(2)">Next: Business Info</button>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Business Information -->
+                    <div class="form-section-accordion">
+                        <div class="accordion-header" id="accordion-header-2" onclick="toggleAccordionSection(2)">
+                            <div class="accordion-title">
+                                <span class="accordion-icon icon-blue">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                </span>
+                                <span>2. Business Information</span>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-content" id="section-2-content">
+                            <div class="input-group">
+                                <label class="input-label">Office Address <span style="color:#ef4444;">*</span></label>
+                                <textarea id="new-client-address" class="glass-textarea" placeholder="Office Address" rows="3"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Mobile Number</label>
+                                <input type="tel" id="new-client-mobile" class="glass-input" placeholder="Mobile Number">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Landline Number</label>
+                                <input type="tel" id="new-client-landline" class="glass-input" placeholder="Landline Number">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Email Address</label>
+                                <input type="email" id="new-client-email" class="glass-input" placeholder="Email Address">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Name of Directors / Partners / Proprietor</label>
+                                <input type="text" id="new-client-directors" class="glass-input" placeholder="Name of Directors / Partners / Proprietor">
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                                <button class="secondary-btn-small" onclick="toggleAccordionSection(1)">Back</button>
+                                <button class="primary-btn-small" onclick="toggleAccordionSection(3)">Next: Site Info</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Site Information -->
+                    <div class="form-section-accordion">
+                        <div class="accordion-header" id="accordion-header-3" onclick="toggleAccordionSection(3)">
+                            <div class="accordion-title">
+                                <span class="accordion-icon icon-mint">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+                                </span>
+                                <span>3. Site Information</span>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-content" id="section-3-content">
+                            <div class="input-group">
+                                <label class="input-label">Site Details <span style="color:#ef4444;">*</span></label>
+                                <input type="text" id="new-client-site-details" class="glass-input" placeholder="Site Details">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Contact Person <span style="color:#ef4444;">*</span></label>
+                                <input type="text" id="new-client-contact-person" class="glass-input" placeholder="Contact Person">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Contact Number <span style="color:#ef4444;">*</span></label>
+                                <input type="tel" id="new-client-contact-number" class="glass-input" placeholder="Contact Number">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Landline Number</label>
+                                <input type="tel" id="new-client-site-landline" class="glass-input" placeholder="Landline Number">
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                                <button class="secondary-btn-small" onclick="toggleAccordionSection(2)">Back</button>
+                                <button class="primary-btn-small" onclick="toggleAccordionSection(4)">Next: Bank Info</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Bank Information -->
+                    <div class="form-section-accordion">
+                        <div class="accordion-header" id="accordion-header-4" onclick="toggleAccordionSection(4)">
+                            <div class="accordion-title">
+                                <span class="accordion-icon icon-purple">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                                </span>
+                                <span>4. Bank Information</span>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-content" id="section-4-content">
+                            <div class="input-group">
+                                <label class="input-label">Bank Account Number</label>
+                                <input type="text" id="new-client-bank-acc" class="glass-input" placeholder="Bank Account Number">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Bank Name</label>
+                                <input type="text" id="new-client-bank-name" class="glass-input" placeholder="Bank Name">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Bank Address</label>
+                                <input type="text" id="new-client-bank-address" class="glass-input" placeholder="Bank Address">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">IFSC Code</label>
+                                <input type="text" id="new-client-bank-ifsc" class="glass-input" placeholder="IFSC Code">
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                                <button class="secondary-btn-small" onclick="toggleAccordionSection(3)">Back</button>
+                                <button class="primary-btn-small" onclick="toggleAccordionSection(5)">Next: References</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Reference Information -->
+                    <div class="form-section-accordion">
+                        <div class="accordion-header" id="accordion-header-5" onclick="toggleAccordionSection(5)">
+                            <div class="accordion-title">
+                                <span class="accordion-icon icon-yellow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                </span>
+                                <span>5. Reference Information</span>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-content" id="section-5-content">
+                            <div class="input-group">
+                                <label class="input-label">Reference 1</label>
+                                <input type="text" id="new-client-ref1" class="glass-input" placeholder="Reference 1 Details (Name, Contact)">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Reference 2</label>
+                                <input type="text" id="new-client-ref2" class="glass-input" placeholder="Reference 2 Details (Name, Contact)">
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+                                <button class="secondary-btn-small" onclick="toggleAccordionSection(4)">Back</button>
+                                <button class="primary-btn-small" onclick="toggleAccordionSection(6)">Next: Follow-up</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 6: Follow-up Information -->
+                    <div class="form-section-accordion">
+                        <div class="accordion-header" id="accordion-header-6" onclick="toggleAccordionSection(6)">
+                            <div class="accordion-title">
+                                <span class="accordion-icon icon-red">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                </span>
+                                <span>6. Follow-up Information</span>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-content" id="section-6-content">
+                            <div class="input-group">
+                                <label class="input-label">Remark</label>
+                                <input type="text" id="new-client-remark" class="glass-input" placeholder="Remark">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Followup Date</label>
+                                <input type="date" id="new-client-followup-date" class="glass-input">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Followup Time</label>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Hrs:</span>
+                                    <select id="new-client-followup-hours" class="glass-select" style="flex: 1;"></select>
+                                    <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Min:</span>
+                                    <select id="new-client-followup-minutes" class="glass-select" style="flex: 1;"></select>
+                                </div>
+                            </div>
+                            <div style="display:flex; margin-top:8px;">
+                                <button class="secondary-btn-small" onclick="toggleAccordionSection(5)">Back</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Register / Cancel Buttons -->
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button class="primary-btn" onclick="submitNewClient()" style="flex: 1;">REGISTER CLIENT</button>
+                        <button class="secondary-btn" onclick="showView('checkin-view')" style="flex: 1;">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Others Workflow Form                   -->
+    <!-- ============================================ -->
+    <div id="others-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('checkin-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Others</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                            <div class="status-dot active" id="others-status-dot"></div>
+                            <span id="others-status-indicator">Online</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 20px;">
+                    <h3 class="form-title">ADDITIONAL FIELD ACTIVITY</h3>
+                    
+                    <!-- Section 1: Client Information -->
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                            <span>Client</span> Client Information
+                        </h4>
+                        <div class="input-group">
+                            <label class="input-label">Customer Name <span style="color:#ef4444;">*</span></label>
+                            <input type="text" id="others-customer-name" class="glass-input" placeholder="Customer Name">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Office Address</label>
+                            <textarea id="others-office-address" class="glass-textarea" placeholder="Office Address" rows="3"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Site Details</label>
+                            <input type="text" id="others-site-details" class="glass-input" placeholder="Site Details">
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Contact Information -->
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                            <span>Contact</span> Contact Information
+                        </h4>
+                        <div class="input-group">
+                            <label class="input-label">Contact Person</label>
+                            <input type="text" id="others-contact-person" class="glass-input" placeholder="Contact Person">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Contact Number</label>
+                            <input type="tel" id="others-contact-number" class="glass-input" placeholder="Contact Number">
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Activity Information -->
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                            <span>Activity</span> Activity Information
+                        </h4>
+                        <div class="input-group">
+                            <label class="input-label">Today's Status <span style="color:#ef4444;">*</span></label>
+                            <select id="others-today-status" class="glass-select">
+                                <option value="">Please Select</option>
+                                <option value="Follow Up">Follow Up</option>
+                                <option value="Document Submission">Document Submission</option>
+                                <option value="Bill Submission">Bill Submission</option>
+                                <option value="Payment Collection">Payment Collection</option>
+                                <option value="Document Collection">Document Collection</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Remark</label>
+                            <input type="text" id="others-remark" class="glass-input" placeholder="Remark">
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Follow-Up Information -->
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                            <span>Follow-up</span> Follow-Up Information
+                        </h4>
+                        <div class="input-group">
+                            <label class="input-label">Followup Date</label>
+                            <input type="date" id="others-followup-date" class="glass-input">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Followup Time</label>
+                            <div style="display: flex; gap: 12px; align-items: center;">
+                                <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Hrs:</span>
+                                <select id="others-followup-hours" class="glass-select" style="flex: 1;"></select>
+                                <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Min:</span>
+                                <select id="others-followup-minutes" class="glass-select" style="flex: 1;"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit / Cancel Buttons -->
+                    <div style="display: flex; gap: 12px; margin-top: 24px;">
+                        <button class="primary-btn" onclick="submitOthers()" style="flex: 1;">SUBMIT</button>
+                        <button class="secondary-btn" onclick="showView('checkin-view')" style="flex: 1;">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Reminders Dashboard                   -->
+    <!-- ============================================ -->
+    <div id="reminders-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('client-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Reminders Dashboard</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="margin-bottom: 16px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                    <input type="text" id="reminders-search" placeholder="Search Client Name..." class="glass-input" oninput="applyRemindersFilter()">
+                    
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <select id="reminders-filter-type" class="glass-select" style="flex: 1; min-width: 120px;" onchange="applyRemindersFilter()">
+                            <option value="">All Types</option>
+                            <option value="Follow Up">Follow Up</option>
+                            <option value="Document Submission">Document Submission</option>
+                            <option value="Bill Submission">Bill Submission</option>
+                            <option value="Payment Collection">Payment Collection</option>
+                            <option value="Document Collection">Document Collection</option>
+                            <option value="Booking Dispatch">Booking Dispatch</option>
+                            <option value="General Reminder">General Reminder</option>
+                        </select>
+                        
+                        <select id="reminders-filter-status" class="glass-select" style="flex: 1; min-width: 120px;" onchange="applyRemindersFilter()">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Overdue">Overdue</option>
+                        </select>
+
+                        <select id="reminders-sort" class="glass-select" style="flex: 1; min-width: 120px;" onchange="applyRemindersFilter()">
+                            <option value="date">Sort by Date</option>
+                            <option value="time">Sort by Time</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="reminders-list-container" class="submenu-cards-container">
+                    <!-- Populated dynamically -->
+                    <div class="empty-state">
+                        <span class="empty-icon">No data</span>
+                        <p>No reminders found</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -365,7 +1760,7 @@
             <header class="page-header admin-header">
                 <div class="header-left">
                     <div class="admin-avatar">
-                        <span>🛡️</span>
+                        <span>Admin</span>
                     </div>
                     <div>
                         <h2 class="page-title">Admin Dashboard</h2>
@@ -374,10 +1769,10 @@
                 </div>
                 <div class="header-actions">
                     <button class="icon-btn" onclick="refreshClients()">
-                        <span id="refresh-icon">🔄</span>
+                        <span id="refresh-icon">Refresh</span>
                     </button>
                     <button class="icon-btn danger" onclick="handleLogout()">
-                        <span>🚪</span>
+                        <span>Logout</span>
                     </button>
                 </div>
             </header>
@@ -386,17 +1781,17 @@
                 <!-- Stats Overview -->
                 <div class="admin-stats-row">
                     <div class="admin-stat-card">
-                        <span class="admin-stat-icon">👥</span>
+                        <span class="admin-stat-icon">Users</span>
                         <span id="total-clients-count" class="admin-stat-value">0</span>
                         <span class="admin-stat-label">Total Clients</span>
                     </div>
                     <div class="admin-stat-card">
-                        <span class="admin-stat-icon">🟢</span>
+                        <span class="admin-stat-icon">Active</span>
                         <span id="active-clients-count" class="admin-stat-value">0</span>
                         <span class="admin-stat-label">Active Now</span>
                     </div>
                     <div class="admin-stat-card">
-                        <span class="admin-stat-icon">📍</span>
+                        <span class="admin-stat-icon">Loc</span>
                         <span id="total-locations-count" class="admin-stat-value">--</span>
                         <span class="admin-stat-label">Locations</span>
                     </div>
@@ -410,13 +1805,79 @@
                     <span class="refresh-text">Auto-refresh every 60s</span>
                 </div>
 
+                <!-- Reports Section -->
+                <div class="reports-section" style="margin-bottom: 24px;">
+                    <h3 class="section-title">Reports</h3>
+                    <div class="submenu-cards-container" style="margin-top: 10px;">
+                        
+                        <div class="action-card-submenu" onclick="handleDSRSummaryReportAdmin()">
+                            <div class="action-card-submenu-left">
+                                <div class="action-card-icon-wrapper icon-blue">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                                </div>
+                                <div class="action-card-submenu-details">
+                                    <h3 class="action-card-submenu-title">DSR Summary Report</h3>
+                                    <p class="action-card-submenu-desc">View overall DSR performance summary</p>
+                                </div>
+                            </div>
+                            <span class="action-card-submenu-arrow">›</span>
+                        </div>
+
+                        <div class="action-card-submenu" onclick="handleDSRUpdatedListAdmin()">
+                            <div class="action-card-submenu-left">
+                                <div class="action-card-icon-wrapper icon-mint">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                                </div>
+                                <div class="action-card-submenu-details">
+                                    <h3 class="action-card-submenu-title">DSR Updated List</h3>
+                                    <p class="action-card-submenu-desc">View submitted DSR records</p>
+                                </div>
+                            </div>
+                            <span class="action-card-submenu-arrow">›</span>
+                        </div>
+
+                        <div class="action-card-submenu" onclick="handleStartEndDayReportAdmin()">
+                            <div class="action-card-submenu-left">
+                                <div class="action-card-icon-wrapper icon-purple">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                </div>
+                                <div class="action-card-submenu-details">
+                                    <h3 class="action-card-submenu-title">Start End Day</h3>
+                                    <p class="action-card-submenu-desc">Review daily attendance and activity summary</p>
+                                </div>
+                            </div>
+                            <span class="action-card-submenu-arrow">›</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Leave Management Section -->
+                <div class="reports-section" style="margin-bottom: 24px;">
+                    <h3 class="section-title">Leave Management</h3>
+                    <div class="submenu-cards-container" style="margin-top: 10px;">
+                        <div class="action-card-submenu" onclick="handleLeaveStatusAdmin()">
+                            <div class="action-card-submenu-left">
+                                <div class="action-card-icon-wrapper icon-mint">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>
+                                </div>
+                                <div class="action-card-submenu-details">
+                                    <h3 class="action-card-submenu-title">Leave Status</h3>
+                                    <p class="action-card-submenu-desc">Review applied, approved, pending and rejected leaves</p>
+                                </div>
+                            </div>
+                            <span class="action-card-submenu-arrow">â€º</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Active Clients List -->
                 <div class="clients-section">
                     <h3 class="section-title">Active Clients</h3>
                     <div id="clients-list" class="clients-list">
                         <!-- Client cards rendered dynamically -->
                         <div class="empty-state">
-                            <span class="empty-icon">📭</span>
+                            <span class="empty-icon">No data</span>
                             <p>No clients registered yet</p>
                         </div>
                     </div>
@@ -436,7 +1897,7 @@
                 </button>
                 <h2 class="page-title">Client Details</h2>
                 <button class="icon-btn" onclick="refreshClientDetail()">
-                    <span>🔄</span>
+                    <span>Refresh</span>
                 </button>
             </header>
 
@@ -444,7 +1905,7 @@
                 <!-- Client Info Card -->
                 <div class="detail-header-card">
                     <div class="detail-avatar">
-                        <span>👤</span>
+                        <span>User</span>
                     </div>
                     <h3 id="detail-client-id" class="detail-name">CLT-XXXXXX</h3>
                     <span id="detail-status-badge" class="status-badge active">● Active</span>
@@ -452,7 +1913,7 @@
 
                 <!-- Current Location Card -->
                 <div class="info-card highlight">
-                    <h3 class="info-card-title">📍 Current Location</h3>
+                    <h3 class="info-card-title">Current Location</h3>
                     <div class="info-row">
                         <span class="info-label">Latitude</span>
                         <span id="detail-lat" class="info-value">--</span>
@@ -473,7 +1934,7 @@
 
                 <!-- Sync Statistics Card -->
                 <div class="info-card">
-                    <h3 class="info-card-title">📡 Sync & Health Statistics</h3>
+                    <h3 class="info-card-title">Sync & Health Statistics</h3>
                     <div class="info-row">
                         <span class="info-label">Last Seen</span>
                         <span id="detail-last-seen" class="info-value">--</span>
@@ -494,13 +1955,231 @@
 
                 <!-- Location History -->
                 <div class="history-section">
-                    <h3 class="section-title">📋 Location History</h3>
+                    <h3 class="section-title">Location History</h3>
                     <div id="location-history-list" class="history-list">
                         <div class="empty-state">
-                            <span class="empty-icon">📭</span>
+                            <span class="empty-icon">No data</span>
                             <p>No location data yet</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Leave Application Screen               -->
+    <!-- ============================================ -->
+    <div id="leave-application-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="goBackFromLeaveStatus()">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Leave Management</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                            <div class="status-dot active" id="leave-app-status-dot"></div>
+                            <span id="leave-app-status-indicator">Online</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="company-logo-small">
+                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 20px;">
+                    <h3 class="form-title">LEAVE APPLICATION</h3>
+
+                    <!-- Section 1: Leave Details -->
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                            <span>Leave</span> Leave Details
+                        </h4>
+                        <div class="input-group">
+                            <label class="input-label">Leave Type <span style="color:#ef4444;">*</span></label>
+                            <select id="leave-type" class="glass-select" onchange="calculateTotalLeaveDays()">
+                                <option value="">Please Select</option>
+                                <option value="Casual Leave">Casual Leave (CL)</option>
+                                <option value="Sick Leave">Sick Leave (SL)</option>
+                                <option value="Privilege Leave">Privilege Leave (PL)</option>
+                                <option value="Leave Without Pay">Leave Without Pay (LWP)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Full/Half Day <span style="color:#ef4444;">*</span></label>
+                            <select id="leave-full-half" class="glass-select" onchange="calculateTotalLeaveDays()">
+                                <option value="">Please Select</option>
+                                <option value="Full Day">Full Day</option>
+                                <option value="Half Day">Half Day</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Duration -->
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                            <span>Time</span> Duration
+                        </h4>
+                        <div class="input-group">
+                            <label class="input-label">Leave Required From <span style="color:#ef4444;">*</span></label>
+                            <input type="date" id="leave-from-date" class="glass-input" onchange="calculateTotalLeaveDays()">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Leave Required Till <span style="color:#ef4444;">*</span></label>
+                            <input type="date" id="leave-till-date" class="glass-input" onchange="calculateTotalLeaveDays()">
+                        </div>
+                        
+                        <!-- Dynamic Calculation Display -->
+                        <div class="calc-display-card" style="margin-top: 14px; padding: 10px 14px; background: rgba(46, 125, 50, 0.06); border: 1px dashed rgba(46, 125, 50, 0.25); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-secondary);">Calculated Leave Required:</span>
+                            <span id="leave-total-display" style="font-size: 1rem; font-weight: 700; color: #2E7D32;">0.0 Days</span>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Reason -->
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                            <span>Reason</span> Reason
+                        </h4>
+                        <div class="input-group">
+                            <label class="input-label">Reason for Leave <span style="color:#ef4444;">*</span></label>
+                            <textarea id="leave-reason" class="glass-textarea" placeholder="Describe the reason for applying leave..." rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Delegation -->
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                            <span>Delegate</span> Delegation
+                        </h4>
+                        <div class="input-group">
+                            <label class="input-label">In Absence Responsible Person <span style="color:#ef4444;">*</span></label>
+                            <input type="text" id="leave-absence-person" class="glass-input" placeholder="Name of colleague handling duties">
+                        </div>
+                    </div>
+
+                    <!-- Summary Card before submission -->
+                    <div id="leave-summary-card" class="form-section-card hidden" style="margin-bottom: 24px; padding: 14px; border-radius: 12px; background: rgba(230, 126, 34, 0.06); border: 1px solid rgba(230, 126, 34, 0.2);">
+                        <h4 style="margin-top: 0; margin-bottom: 8px; color: var(--color-text-primary); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;">Leave Request Summary</h4>
+                        <div style="font-size: 0.825rem; display: flex; flex-direction: column; gap: 4px;">
+                            <div><strong style="color: var(--color-text-secondary);">Type:</strong> <span id="summary-leave-type">--</span></div>
+                            <div><strong style="color: var(--color-text-secondary);">Duration:</strong> <span id="summary-leave-duration">--</span></div>
+                            <div><strong style="color: var(--color-text-secondary);">Total Days:</strong> <span id="summary-leave-days">--</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Submit / Cancel Buttons -->
+                    <div style="display: flex; gap: 12px;">
+                        <button class="primary-btn" onclick="submitLeave()" style="flex: 2;">SUBMIT LEAVE REQUEST</button>
+                        <button class="secondary-btn" onclick="showView('client-view')" style="flex: 1;">RETURN TO DASHBOARD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: Applied Leave Status                   -->
+    <!-- ============================================ -->
+    <div id="leave-status-view" class="view">
+        <div class="page-container">
+            <header class="page-header client-header submenu-header">
+                <div class="header-left">
+                    <button class="back-btn-header" onclick="showView('leave-view')">
+                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+                    </button>
+                    <div class="header-title-block">
+                        <h2 class="page-title">Applied Leave Status</h2>
+                        <span class="submenu-client-name">Welcome Client</span>
+                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+                            <div class="status-dot active" id="leave-status-status-dot"></div>
+                            <span id="leave-status-status-indicator">Online</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Leave Statistics Dashboard -->
+                <div class="leave-stats-row" style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <div class="leave-stat-card">
+                        <div class="stat-label">Applied</div>
+                        <div id="stat-leaves-applied" class="stat-value">0</div>
+                    </div>
+                    <div class="leave-stat-card">
+                        <div class="stat-label">Approved</div>
+                        <div id="stat-leaves-approved" class="stat-value">0</div>
+                    </div>
+                    <div class="leave-stat-card">
+                        <div class="stat-label">Pending</div>
+                        <div id="stat-leaves-pending" class="stat-value">0</div>
+                    </div>
+                    <div class="leave-stat-card">
+                        <div class="stat-label">Rejected</div>
+                        <div id="stat-leaves-rejected" class="stat-value">0</div>
+                    </div>
+                </div>
+
+                <!-- Search & Filters -->
+                <div class="glass-form-card" style="margin-bottom: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+                    <input type="text" id="leaves-search" placeholder="Search leaves (reason, substitute...)" class="glass-input" oninput="applyLeavesFilters()">
+                    
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        <select id="leaves-filter-status" class="glass-select" style="flex: 1; min-width: 100px;" onchange="applyLeavesFilters()">
+                            <option value="">All Statuses</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                        
+                        <select id="leaves-filter-type" class="glass-select" style="flex: 1; min-width: 100px;" onchange="applyLeavesFilters()">
+                            <option value="">All Types</option>
+                            <option value="Casual Leave">Casual Leave</option>
+                            <option value="Sick Leave">Sick Leave</option>
+                            <option value="Privilege Leave">Privilege Leave</option>
+                            <option value="Leave Without Pay">Leave Without Pay</option>
+                        </select>
+
+                        <select id="leaves-sort" class="glass-select" style="flex: 1; min-width: 100px;" onchange="applyLeavesFilters()">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Responsive Layout: Desktop Table & Mobile Cards -->
+                <div class="table-container-card desktop-only-table" style="margin-bottom: 24px;">
+                    <table class="premium-table" id="leaves-desktop-table">
+                        <thead>
+                            <tr>
+                                <th>SR NO</th>
+                                <th>APPLIED ON</th>
+                                <th>LEAVE TYPE</th>
+                                <th>DURATION</th>
+                                <th>DAYS</th>
+                                <th>REASON</th>
+                                <th>IN ABSENCE</th>
+                                <th>STATUS</th>
+                                <th>DEL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaves-desktop-tbody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile cards container -->
+                <div id="leaves-mobile-cards" class="mobile-only-cards submenu-cards-container" style="display: none;">
+                    <!-- Populated dynamically -->
                 </div>
             </div>
         </div>
@@ -517,6 +2196,8 @@
     <!-- App Scripts -->
     <script src="js/api.js"></script>
     <script src="js/storage.js"></script>
+    <script src="js/reminderDb.js"></script>
+    <script src="js/leaveDb.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/client.js"></script>
     <script src="js/admin.js"></script>

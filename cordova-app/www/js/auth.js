@@ -140,6 +140,35 @@ async function handleClientLogin() {
             // Save session
             saveSession(response.token, 'client', response.client);
 
+            // Register device with Skyway API
+            if (navigator.onLine) {
+                try {
+                    console.log('[Auth] Registering device with third-party Skyway API...');
+                    const skywayResponse = await fetch('https://fleettrackon.co.in/skywaydia/RegisterDiaDevice', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            UserId: clientId,
+                            GuId: deviceId
+                        })
+                    });
+                    const skywayData = await skywayResponse.json();
+                    console.log('[Auth] Skyway registration response:', skywayData);
+                    if (skywayData && skywayData.output && skywayData.output[0]) {
+                        const info = skywayData.output[0];
+                        const updatedClient = {
+                            ...response.client,
+                            skywayInfo: info
+                        };
+                        saveSession(response.token, 'client', updatedClient);
+                    }
+                } catch (skywayErr) {
+                    console.error('[Auth] Skyway registration failed:', skywayErr);
+                }
+            }
+
             // Show success alert
             showToast('Client has logged in successfully', 'success', 4000);
 
@@ -264,6 +293,10 @@ async function handleLogout() {
     if (session && session.role === 'client') {
         stopLocationTracking();
 
+        // Clear workday state from localStorage on logout
+        localStorage.removeItem('isDayStarted');
+        localStorage.removeItem('isCheckedIn');
+
         try {
             await apiRequest('/api/client/logout', 'POST', {
                 clientId: session.userData?.clientId
@@ -298,10 +331,10 @@ function togglePassword(inputId, btn) {
     const input = document.getElementById(inputId);
     if (input.type === 'password') {
         input.type = 'text';
-        btn.querySelector('span').textContent = '🙈';
+        btn.querySelector('span').textContent = 'HIDE';
     } else {
         input.type = 'password';
-        btn.querySelector('span').textContent = '👁️';
+        btn.querySelector('span').textContent = 'VIEW';
     }
 }
 

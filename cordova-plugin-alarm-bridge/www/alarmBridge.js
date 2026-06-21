@@ -209,6 +209,38 @@ var AlarmBridge = {
       "showFreeNotification",
       [reason]
     );
+  },
+  scheduleReminderNotification: function (id, clientName, reminderType, remark, time, epochMs, successCallback, errorCallback) {
+    console.log("alarmBridge.js: scheduleReminderNotification called for " + id + " at " + epochMs);
+    exec(
+      function(res) {
+        console.log("alarmBridge.js: scheduleReminderNotification success", res);
+        if (successCallback) successCallback(res);
+      },
+      function(err) {
+        console.error("alarmBridge.js: scheduleReminderNotification error", err);
+        if (errorCallback) errorCallback(err);
+      },
+      "AlarmBridge",
+      "scheduleReminderNotification",
+      [id, clientName, reminderType, remark, time, epochMs]
+    );
+  },
+  cancelReminderNotification: function (id, successCallback, errorCallback) {
+    console.log("alarmBridge.js: cancelReminderNotification called for " + id);
+    exec(
+      function(res) {
+        console.log("alarmBridge.js: cancelReminderNotification success", res);
+        if (successCallback) successCallback(res);
+      },
+      function(err) {
+        console.error("alarmBridge.js: cancelReminderNotification error", err);
+        if (errorCallback) errorCallback(err);
+      },
+      "AlarmBridge",
+      "cancelReminderNotification",
+      [id]
+    );
   }
 };
 
