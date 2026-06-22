@@ -4355,3 +4355,48 @@ body.dark-mode {
 .dark-mode .accordion-header.active {
     background: var(--color-orange-bg) !important;
 }
+
+/* Collapsible client stats layout & header dropdown fixes */
+.profile-dropdown-container .profile-dropdown-menu {
+    left: 0 !important;
+    right: auto !important;
+    transform-origin: top left !important;
+}
+
+.welcome-msg-card.collapsible-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    cursor: pointer;
+    padding: 20px 24px !important;
+    transition: transform 300ms ease, box-shadow 300ms ease, max-height 0.4s ease !important;
+}
+
+.welcome-msg-card.collapsible-card .welcome-msg-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+
+.collapsible-stats-container {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    opacity: 0;
+    width: 100%;
+}
+
+.collapsible-stats-container.expanded {
+    max-height: 1000px; /* High max-height to handle full stats grid on mobile stacking */
+    opacity: 1;
+}
+
+@media (max-width: 992px) {
+    .welcome-msg-card.collapsible-card .stat-bubbles-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-msg-card.collapsible-card .stat-bubbles-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
