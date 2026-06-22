@@ -10,30 +10,9 @@
 // For local development, use your computer's LAN IP
 let API_BASE_URL = 'http://173.249.59.181:3005';
 
-// Auto-detect environment to bypass tunnel when running locally in browser
-if (typeof window !== 'undefined' && window.location) {
-    const hostname = window.location.hostname;
-    const isCordova = !!window.cordova;
-    // If opened via localhost or 127.0.0.1 on your PC, talk directly to local backend (only if not running inside native Cordova app)
-    if ((hostname === 'localhost' || hostname === '127.0.0.1') && !isCordova) {
-        API_BASE_URL = `http://localhost:${window.location.port === '8081' ? '3001' : '3000'}`;
-    } else if (/^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/.test(hostname)) {
-        const apiPort = window.location.port === '8081' ? '3001' : '3000';
-        API_BASE_URL = `${window.location.protocol}//${hostname}:${apiPort}`;
-    }
-}
-
 function getApiBaseUrls() {
     const urls = [
-        API_BASE_URL,
-        'http://173.249.59.181:3005',
-        'http://10.50.65.195:3000',
-        'http://10.50.65.195:3001',
-        'http://192.168.1.8:3001',
-        'http://192.168.1.8:3000',
-        'http://localhost:3001',
-        'http://localhost:3000',
-        'https://locationtracker-malhar.loca.lt'
+        API_BASE_URL
     ];
 
     return [...new Set(urls)];
@@ -84,6 +63,14 @@ async function apiRequestOnce(baseUrl, endpoint, method = 'GET', body = null) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
+    const publicEndpoints = ['/api/client/login', '/api/client/register', '/api/admin/login', '/api/health'];
+    if (!token && !publicEndpoints.includes(endpoint)) {
+        console.warn('[API] Missing auth token for protected request:', endpoint);
+        throw new ApiError('No auth token provided. Please login first.', 401, null);
+    }
+
+    console.log('[API] Request', method, url, 'tokenPresent=', !!token);
+
     const options = {
         method: method,
         headers: headers
@@ -114,6 +101,9 @@ async function apiRequestOnce(baseUrl, endpoint, method = 'GET', body = null) {
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('user_role');
                 localStorage.removeItem('user_data');
+                if (typeof stopAdminAutoRefresh === 'function') {
+                    stopAdminAutoRefresh();
+                }
                 showToast('Session expired. Please login again.', 'warning');
                 showView('login-view');
             }

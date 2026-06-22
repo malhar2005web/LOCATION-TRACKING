@@ -307,9 +307,8 @@ async function handleLogout() {
     }
 
     // Stop admin auto-refresh
-    if (adminRefreshInterval) {
-        clearInterval(adminRefreshInterval);
-        adminRefreshInterval = null;
+    if (typeof stopAdminAutoRefresh === 'function') {
+        stopAdminAutoRefresh();
     }
 
     // Clear session

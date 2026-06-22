@@ -138,6 +138,20 @@ function updateAdminStats(clients) {
 }
 
 /**
+ * Stop auto-refresh with progress bar
+ */
+function stopAdminAutoRefresh() {
+    if (adminRefreshInterval) {
+        clearInterval(adminRefreshInterval);
+        adminRefreshInterval = null;
+    }
+    if (refreshProgressInterval) {
+        clearInterval(refreshProgressInterval);
+        refreshProgressInterval = null;
+    }
+}
+
+/**
  * Start auto-refresh with progress bar
  */
 function startAutoRefresh() {

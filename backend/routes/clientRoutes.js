@@ -664,7 +664,25 @@ router.get('/reports/start-end', verifyAuth, async (req, res) => {
 router.get('/reports/dsr-summary', verifyAuth, async (req, res) => {
     try {
         const { clientId, fromDate, tillDate } = req.query;
-        let query = `
+        let filterSql = '';
+        const params = [];
+
+        if (clientId && clientId !== 'All') {
+            params.push(clientId);
+            filterSql += ` AND client_id = $${params.length}`;
+        }
+
+        if (fromDate) {
+            params.push(fromDate + ' 00:00:00');
+            filterSql += ` AND created_at >= $${params.length}`;
+        }
+
+        if (tillDate) {
+            params.push(tillDate + ' 23:59:59');
+            filterSql += ` AND created_at <= $${params.length}`;
+        }
+
+        const recordsQuery = `
             SELECT 
                 customer_name AS client_name, 
                 site_name, 
@@ -673,28 +691,46 @@ router.get('/reports/dsr-summary', verifyAuth, async (req, res) => {
                 COUNT(*) AS no_of_visit
             FROM dsr_updates
             WHERE 1=1
+            ${filterSql}
+            GROUP BY customer_name, site_name, visited_for, client_name 
+            ORDER BY customer_name ASC
         `;
-        const params = [];
 
-        if (clientId && clientId !== 'All') {
-            params.push(clientId);
-            query += ` AND client_id = $${params.length}`;
-        }
+        const statsQuery = `
+            SELECT 
+                COUNT(*) AS total_visits, 
+                COUNT(*) AS total_dsr_updates, 
+                COUNT(CASE WHEN followup IS NOT NULL AND followup != '' AND followup != 'null' THEN 1 END) AS total_followups 
+            FROM dsr_updates 
+            WHERE 1=1
+            ${filterSql}
+        `;
 
-        if (fromDate) {
-            params.push(fromDate + ' 00:00:00');
-            query += ` AND created_at >= $${params.length}`;
-        }
+        const statusQuery = `
+            SELECT visited_for, COUNT(*) AS count 
+            FROM dsr_updates 
+            WHERE 1=1
+            ${filterSql}
+            GROUP BY visited_for
+        `;
 
-        if (tillDate) {
-            params.push(tillDate + ' 23:59:59');
-            query += ` AND created_at <= $${params.length}`;
-        }
+        const [recordsRes, statsRes, statusRes] = await Promise.all([
+            db.query(recordsQuery, params),
+            db.query(statsQuery, params),
+            db.query(statusQuery, params)
+        ]);
 
-        query += ` GROUP BY customer_name, site_name, visited_for, client_name ORDER BY customer_name ASC`;
-
-        const result = await db.query(query, params);
-        res.json({ success: true, records: result.rows });
+        const stats = statsRes.rows[0] || { total_visits: 0, total_dsr_updates: 0, total_followups: 0 };
+        res.json({
+            success: true,
+            records: recordsRes.rows,
+            stats: {
+                total_visits: parseInt(stats.total_visits) || 0,
+                total_dsr_updates: parseInt(stats.total_dsr_updates) || 0,
+                total_followups: parseInt(stats.total_followups) || 0
+            },
+            statusCounts: statusRes.rows
+        });
     } catch (err) {
         console.error('Get DSR summary report error:', err);
         res.status(500).json({ success: false, message: 'Server error fetching DSR summary report.' });

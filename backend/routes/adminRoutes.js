@@ -208,4 +208,24 @@ router.get('/leaves', verifyAdmin, async (req, res) => {
     }
 });
 
+/**
+ * GET /api/admin/dsr-recent
+ * Debug endpoint: return recent DSR updates (admin only)
+ * Query: ?limit=20
+ */
+router.get('/dsr-recent', verifyAdmin, async (req, res) => {
+    try {
+        const limit = Math.min(100, parseInt(req.query.limit, 10) || 20);
+        const result = await db.query(
+            'SELECT id, client_id, client_name, customer_name, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, created_at FROM dsr_updates ORDER BY created_at DESC LIMIT $1',
+            [limit]
+        );
+
+        res.json({ success: true, count: result.rows.length, records: result.rows });
+    } catch (err) {
+        console.error('Get dsr-recent error:', err);
+        res.status(500).json({ success: false, message: 'Server error fetching recent DSR updates.' });
+    }
+});
+
 module.exports = router;

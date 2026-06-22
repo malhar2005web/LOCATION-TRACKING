@@ -20,7 +20,7 @@ function initTheme() {
     try {
         const theme = localStorage.getItem('theme-preference');
         const hour = new Date().getHours();
-        const isNight = (hour >= 18 || hour < 6);
+        const isNight = (hour >= 21 || hour < 5);
         
         if (theme === 'dark' || (!theme && isNight)) {
             document.documentElement.classList.add('dark-mode');
@@ -72,10 +72,12 @@ function updateGreeting() {
         if (!greetingEl) return;
         
         const hour = new Date().getHours();
-        let greeting = 'Good Morning,';
-        if (hour >= 12 && hour < 17) {
+        let greeting = '';
+        if (hour >= 5 && hour < 12) {
+            greeting = 'Good Morning,';
+        } else if (hour >= 12 && hour < 17) {
             greeting = 'Good Afternoon,';
-        } else if (hour >= 17 && hour < 22) {
+        } else if (hour >= 17 && hour < 21) {
             greeting = 'Good Evening,';
         } else {
             greeting = 'Good Night,';
@@ -146,6 +148,11 @@ function initClientDashboard(clientData) {
     LeaveDb.init(() => {
         syncLeaves();
     });
+    if (typeof DsrDb !== 'undefined') {
+        DsrDb.init(() => {
+            syncDSRs();
+        });
+    }
 
     // Set Avatar initials
     let initials = 'CL';
@@ -523,6 +530,9 @@ function updateNetworkStatus() {
         syncPendingLocations();
         syncReminders();
         syncLeaves();
+        if (typeof syncDSRs === 'function') {
+            syncDSRs();
+        }
     } else {
         if (netDisplay) {
             netDisplay.textContent = 'Offline';
@@ -1253,9 +1263,15 @@ async function submitOthers() {
                 })
             });
         } catch (e) {}
+    } else {
+        showToast('Offline Mode: Activity saved locally.', 'info');
+    }
 
-        // Save DSR record locally
-        apiRequest('/api/client/dsr-update', 'POST', {
+    // Save DSR record locally (offline-first)
+    if (typeof DsrDb !== 'undefined') {
+        const localDsr = {
+            client_id: userid,
+            client_name: gempname,
             customer_name: customerName,
             office_address: officeAddress,
             site_name: siteDetails,
@@ -1264,12 +1280,16 @@ async function submitOthers() {
             last_remark: remark,
             visited_for: todayStatus,
             followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
-            latitude: parseFloat(dsrBody.gpsLatitude),
-            longitude: parseFloat(dsrBody.gpsLongitude),
-            client_name: gempname
-        }).catch(err => console.error('[API] Local DSR update error:', err));
-    } else {
-        showToast('Offline Mode: Activity saved locally.', 'info');
+            latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
+            longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
+            sync_status: 'Pending',
+            created_timestamp: new Date().toISOString()
+        };
+
+        DsrDb.saveDsr(localDsr, (saved) => {
+            console.log('[Others] DSR saved locally:', saved);
+            syncDSRs();
+        });
     }
 
     if (todayStatus && followupDate && hours && minutes) {
@@ -1994,6 +2014,11 @@ async function populateReportUsers(reportType) {
     } catch (err) {
         console.error('[Reports] Failed to populate users:', err);
         select.innerHTML = '<option value="All">All</option>';
+        if (err.status === 401 || err.status === 403) {
+            clearSession();
+            showToast('Session expired or unauthorized. Please login again.', 'warning');
+            showView('login-view');
+        }
     }
 }
 
@@ -2019,23 +2044,210 @@ async function fetchReportData(reportType) {
     const tbody = document.querySelector(`#${config.tableId} tbody`);
     if (!tbody) return;
 
+    const selectedUserId = userEl && userEl.value ? userEl.value : 'All';
+    const selectedFromDate = fromEl ? fromEl.value : '';
+    const selectedTillDate = tillEl ? tillEl.value : '';
+
     const params = new URLSearchParams({
-        clientId: userEl && userEl.value ? userEl.value : 'All',
-        fromDate: fromEl ? fromEl.value : '',
-        tillDate: tillEl ? tillEl.value : ''
+        clientId: selectedUserId,
+        fromDate: selectedFromDate,
+        tillDate: selectedTillDate
     });
 
     tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading report data...</td></tr>`;
 
-    try {
-        const response = await apiRequest(`${config.endpoint}?${params.toString()}`, 'GET');
-        const records = response && response.success && Array.isArray(response.records) ? response.records : [];
-        config.render(tbody, records);
-    } catch (err) {
-        console.error(`[Reports] Failed to fetch ${reportType}:`, err);
-        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to load report data.</td></tr>`;
-        showToast('Unable to load report data.', 'error');
+    let serverRecords = [];
+    let serverSuccess = false;
+    let serverResponseObj = null;
+
+    if (navigator.onLine) {
+        try {
+            const response = await apiRequest(`${config.endpoint}?${params.toString()}`, 'GET');
+            if (response && response.success) {
+                serverRecords = Array.isArray(response.records) ? response.records : [];
+                serverSuccess = true;
+                serverResponseObj = response;
+            }
+        } catch (err) {
+            console.error(`[Reports] Failed to fetch server data for ${reportType}:`, err);
+            if (err.status === 401 || err.status === 403) {
+                clearSession();
+                showToast('Session expired or unauthorized. Please login again.', 'warning');
+                showView('login-view');
+                return;
+            }
+        }
     }
+
+    if (reportType === 'start-end') {
+        if (serverSuccess) {
+            config.render(tbody, serverRecords, serverResponseObj);
+        } else {
+            tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Offline: Attendance data unavailable.</td></tr>`;
+        }
+        return;
+    }
+
+    // For DSR reports (dsr-list or dsr-summary)
+    if (typeof DsrDb === 'undefined') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Error: Local database is unavailable.</td></tr>`;
+        return;
+    }
+
+    DsrDb.getDsrs((localList) => {
+        // Filter local list based on selectedUserId, selectedFromDate, selectedTillDate
+        const filteredLocal = localList.filter(rec => {
+            if (selectedUserId && selectedUserId !== 'All') {
+                if (String(rec.client_id) !== String(selectedUserId)) {
+                    return false;
+                }
+            }
+            if (rec.created_timestamp) {
+                const recDateStr = rec.created_timestamp.substring(0, 10); // YYYY-MM-DD
+                if (selectedFromDate && recDateStr < selectedFromDate) {
+                    return false;
+                }
+                if (selectedTillDate && recDateStr > selectedTillDate) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        // Determine which local records to merge
+        // If server success: we only merge local 'Pending' sync records (so we don't duplicate already synced records)
+        // If offline: we merge all local records (both 'Synced' and 'Pending')
+        const localToMerge = serverSuccess 
+            ? filteredLocal.filter(rec => rec.sync_status === 'Pending')
+            : filteredLocal;
+
+        // Map local records to server report format
+        const mappedLocal = localToMerge.map(local => ({
+            visited_by: local.client_name || local.client_id || '--',
+            visited_on: local.created_timestamp,
+            client: local.customer_name || '--',
+            office_address: local.office_address || '--',
+            site_name: local.site_name || '--',
+            contact_person: local.contact_person || '--',
+            contact_no: local.contact_no || '--',
+            last_remark: local.last_remark || '--',
+            visited_for: local.visited_for || '--',
+            followup: local.followup || ''
+        }));
+
+        if (reportType === 'dsr-list') {
+            const combinedList = [...mappedLocal, ...serverRecords];
+            combinedList.sort((a, b) => new Date(b.visited_on) - new Date(a.visited_on));
+            config.render(tbody, combinedList, null);
+        } else if (reportType === 'dsr-summary') {
+            let finalRecords = [];
+            let finalStats = { total_visits: 0, total_dsr_updates: 0, total_followups: 0 };
+            let finalStatusCounts = [];
+
+            if (serverSuccess && serverResponseObj) {
+                finalRecords = serverRecords;
+                finalStats = serverResponseObj.stats || { total_visits: 0, total_dsr_updates: 0, total_followups: 0 };
+                finalStatusCounts = serverResponseObj.statusCounts || [];
+
+                mappedLocal.forEach(local => {
+                    finalStats.total_visits++;
+                    finalStats.total_dsr_updates++;
+                    if (local.followup && local.followup !== 'null' && local.followup !== '') {
+                        finalStats.total_followups++;
+                    }
+
+                    const status = local.visited_for || 'Others';
+                    const statusObj = finalStatusCounts.find(s => s.visited_for === status);
+                    if (statusObj) {
+                        statusObj.count = (parseInt(statusObj.count) || 0) + 1;
+                    } else {
+                        finalStatusCounts.push({ visited_for: status, count: 1 });
+                    }
+
+                    const match = finalRecords.find(r => 
+                        r.client_name === local.client && 
+                        r.site_name === local.site_name && 
+                        r.visited_for === local.visited_for && 
+                        r.assigned_to === local.visited_by
+                    );
+
+                    if (match) {
+                        match.no_of_visit = (parseInt(match.no_of_visit) || 0) + 1;
+                    } else {
+                        finalRecords.push({
+                            client_name: local.client,
+                            site_name: local.site_name,
+                            visited_for: local.visited_for,
+                            assigned_to: local.visited_by,
+                            no_of_visit: 1
+                        });
+                    }
+                });
+
+                finalRecords.sort((a, b) => (a.client_name || '').localeCompare(b.client_name || ''));
+            } else {
+                const agg = aggregateLocalDsrs(mappedLocal);
+                finalRecords = agg.records;
+                finalStats = agg.stats;
+                finalStatusCounts = agg.statusCounts;
+            }
+
+            const customResponse = {
+                success: true,
+                stats: finalStats,
+                statusCounts: finalStatusCounts
+            };
+
+            config.render(tbody, finalRecords, customResponse);
+        }
+    });
+}
+
+function aggregateLocalDsrs(mappedList) {
+    const groups = {};
+    let totalVisits = 0;
+    let totalDsrUpdates = 0;
+    let totalFollowups = 0;
+    const statusCountsMap = {};
+
+    mappedList.forEach(rec => {
+        totalVisits++;
+        totalDsrUpdates++;
+        if (rec.followup && rec.followup !== 'null' && rec.followup !== '') {
+            totalFollowups++;
+        }
+
+        const status = rec.visited_for || 'Others';
+        statusCountsMap[status] = (statusCountsMap[status] || 0) + 1;
+
+        const key = `${rec.client}||${rec.site_name}||${rec.visited_for}||${rec.visited_by}`;
+        if (!groups[key]) {
+            groups[key] = {
+                client_name: rec.client,
+                site_name: rec.site_name,
+                visited_for: rec.visited_for,
+                assigned_to: rec.visited_by,
+                no_of_visit: 0
+            };
+        }
+        groups[key].no_of_visit++;
+    });
+
+    const records = Object.values(groups).sort((a, b) => (a.client_name || '').localeCompare(b.client_name || ''));
+    const statusCounts = Object.keys(statusCountsMap).map(status => ({
+        visited_for: status,
+        count: statusCountsMap[status]
+    }));
+
+    return {
+        records,
+        stats: {
+            total_visits: totalVisits,
+            total_dsr_updates: totalDsrUpdates,
+            total_followups: totalFollowups
+        },
+        statusCounts
+    };
 }
 
 function getReportConfig(reportType) {
@@ -2084,22 +2296,62 @@ function renderStartEndReportRows(tbody, records) {
     `).join('');
 }
 
-function renderDsrSummaryReportRows(tbody, records) {
+function renderDsrSummaryReportRows(tbody, records, response) {
+    const statsContainer = document.getElementById('dsr-summary-stats');
+    const countsCard = document.getElementById('dsr-summary-status-counts-card');
+    const countsContainer = document.getElementById('dsr-summary-status-counts');
+    
+    if (response && response.stats) {
+        document.getElementById('dsr-summary-total-visits').textContent = response.stats.total_visits || 0;
+        document.getElementById('dsr-summary-total-updates').textContent = response.stats.total_dsr_updates || 0;
+        document.getElementById('dsr-summary-total-followups').textContent = response.stats.total_followups || 0;
+        if (statsContainer) statsContainer.style.display = 'flex';
+    } else {
+        if (statsContainer) statsContainer.style.display = 'none';
+    }
+
+    if (response && Array.isArray(response.statusCounts) && response.statusCounts.length > 0) {
+        if (countsContainer) {
+            countsContainer.innerHTML = response.statusCounts.map(item => `
+                <span class="badge" style="background-color: rgba(59, 130, 246, 0.12); color: var(--color-text-primary); border: 1px solid rgba(59, 130, 246, 0.25); padding: 4px 10px; border-radius: 9999px; font-weight: 600;">
+                    ${reportEscape(item.visited_for)}: <strong style="color: #3b82f6; margin-left: 3px;">${item.count}</strong>
+                </span>
+            `).join('');
+        }
+        if (countsCard) countsCard.style.display = 'block';
+    } else {
+        if (countsCard) countsCard.style.display = 'none';
+    }
+
     if (!records.length) {
         tbody.innerHTML = '<tr><td colspan="6" class="table-empty">No DSR summary records found.</td></tr>';
         return;
     }
 
-    tbody.innerHTML = records.map((row, index) => `
-        <tr>
-            <td>${index + 1}</td>
-            <td>${reportEscape(row.client_name || '--')}</td>
-            <td>${reportEscape(row.site_name || '--')}</td>
-            <td>${reportEscape(row.visited_for || '--')}</td>
-            <td>${reportEscape(row.assigned_to || '--')}</td>
-            <td>${reportEscape(String(row.no_of_visit || 0))}</td>
+    let totalVisits = 0;
+    const rowsHtml = records.map((row, index) => {
+        const count = parseInt(row.no_of_visit) || 0;
+        totalVisits += count;
+        return `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${reportEscape(row.client_name || '--')}</td>
+                <td>${reportEscape(row.site_name || '--')}</td>
+                <td>${reportEscape(row.visited_for || '--')}</td>
+                <td>${reportEscape(row.assigned_to || '--')}</td>
+                <td>${reportEscape(String(count))}</td>
+            </tr>
+        `;
+    }).join('');
+
+    const totalRowHtml = `
+        <tr style="font-weight: bold; background-color: rgba(59, 130, 246, 0.08); border-top: 2px solid rgba(59, 130, 246, 0.25);">
+            <td colspan="5" style="text-align: right; padding-right: 20px;">Total Visits:</td>
+            <td>${totalVisits}</td>
         </tr>
-    `).join('');
+    `;
+
+    tbody.innerHTML = rowsHtml + totalRowHtml;
 }
 
 function renderDsrListReportRows(tbody, records) {
@@ -2519,9 +2771,15 @@ async function submitDSR() {
                 })
             });
         } catch (e) {}
+    } else {
+        showToast('Offline Mode: DSR saved locally.', 'info');
+    }
 
-        // Save DSR record locally
-        apiRequest('/api/client/dsr-update', 'POST', {
+    // Save DSR record locally
+    if (typeof DsrDb !== 'undefined') {
+        const localDsr = {
+            client_id: userid,
+            client_name: gempname,
             customer_name: name,
             office_address: address,
             site_name: siteDetails,
@@ -2530,12 +2788,16 @@ async function submitDSR() {
             last_remark: remark,
             visited_for: status,
             followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
-            latitude: parseFloat(dsrBody.gpsLatitude),
-            longitude: parseFloat(dsrBody.gpsLongitude),
-            client_name: gempname
-        }).catch(err => console.error('[API] Local DSR update error:', err));
-    } else {
-        showToast('Offline Mode: DSR saved locally.', 'info');
+            latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
+            longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
+            sync_status: 'Pending',
+            created_timestamp: new Date().toISOString()
+        };
+
+        DsrDb.saveDsr(localDsr, (saved) => {
+            console.log('[DSR] DSR saved locally:', saved);
+            syncDSRs();
+        });
     }
 
     if (status && followupDate && hours && minutes) {
@@ -2744,6 +3006,56 @@ async function syncReminders() {
         } finally {
             isRemindersSyncing = false;
         }
+    });
+}
+
+/**
+ * DSR Sync logic
+ */
+let isDsrSyncing = false;
+async function syncDSRs() {
+    if (isDsrSyncing) return;
+    if (!navigator.onLine) return;
+
+    if (typeof DsrDb === 'undefined') return;
+
+    DsrDb.getPendingSync(async (pendingList) => {
+        if (!pendingList || pendingList.length === 0) return;
+
+        isDsrSyncing = true;
+        console.log(`[SyncDsr] Found ${pendingList.length} DSR records to sync.`);
+
+        let successIds = [];
+        for (const dsr of pendingList) {
+            try {
+                const response = await apiRequest('/api/client/dsr-update', 'POST', {
+                    customer_name: dsr.customer_name,
+                    office_address: dsr.office_address,
+                    site_name: dsr.site_name,
+                    contact_person: dsr.contact_person,
+                    contact_no: dsr.contact_no,
+                    last_remark: dsr.last_remark,
+                    visited_for: dsr.visited_for,
+                    followup: dsr.followup,
+                    latitude: dsr.latitude,
+                    longitude: dsr.longitude,
+                    client_name: dsr.client_name
+                });
+                if (response && response.success) {
+                    successIds.push(dsr.id);
+                }
+            } catch (err) {
+                console.error('[SyncDsr] Failed to sync individual DSR:', dsr.id, err);
+            }
+        }
+
+        if (successIds.length > 0) {
+            DsrDb.markAsSynced(successIds, () => {
+                console.log(`[SyncDsr] Synced ${successIds.length} DSRs.`);
+                showNativeToast(`Synced ${successIds.length} offline DSRs`);
+            });
+        }
+        isDsrSyncing = false;
     });
 }
 
@@ -3454,9 +3766,15 @@ async function submitNewClient() {
                 })
             });
         } catch (e) {}
+    } else {
+        showToast('Offline Mode: DSR saved locally.', 'info');
+    }
 
-        // Save DSR record locally
-        apiRequest('/api/client/dsr-update', 'POST', {
+    // Save DSR record locally
+    if (typeof DsrDb !== 'undefined') {
+        const localDsr = {
+            client_id: userid,
+            client_name: gempname,
             customer_name: clientName,
             office_address: officeAddress,
             site_name: siteDetails,
@@ -3465,10 +3783,16 @@ async function submitNewClient() {
             last_remark: remark,
             visited_for: 'New Registration',
             followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
-            latitude: parseFloat(dsrBody.gpsLatitude),
-            longitude: parseFloat(dsrBody.gpsLongitude),
-            client_name: gempname
-        }).catch(err => console.error('[API] Local DSR update error:', err));
+            latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
+            longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
+            sync_status: 'Pending',
+            created_timestamp: new Date().toISOString()
+        };
+
+        DsrDb.saveDsr(localDsr, (saved) => {
+            console.log('[NewClient] DSR saved locally:', saved);
+            syncDSRs();
+        });
     }
 
     // 2. Automatically create Follow-up Reminder if date is entered
