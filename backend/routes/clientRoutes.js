@@ -84,7 +84,19 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        // Validate client credentials
+        // 1. Check if this device is already claimed by a different client ID
+        const deviceCheck = await db.query(
+            'SELECT * FROM clients WHERE device_id = $1 AND client_id != $2',
+            [deviceId, clientId]
+        );
+        if (deviceCheck.rows.length > 0) {
+            return res.status(409).json({
+                success: false,
+                message: 'This device is already registered to another user.'
+            });
+        }
+
+        // 2. Validate client credentials
         let result = await db.query(
             'SELECT * FROM clients WHERE client_id = $1',
             [clientId]
@@ -102,18 +114,13 @@ router.post('/login', async (req, res) => {
                 [clientId, deviceId]
             );
         } else {
-            // If they exist but device ID has changed, let's update it to allow easy logging in from different devices
+            // If they exist but device ID is different, reject login
             const existingClient = result.rows[0];
             if (existingClient.device_id !== deviceId) {
-                console.log(`[Login] Updating device ID for client ${clientId} from ${existingClient.device_id} to ${deviceId}`);
-                await db.query(
-                    'UPDATE clients SET device_id = $2, updated_at = NOW() WHERE client_id = $1',
-                    [clientId, deviceId]
-                );
-                result = await db.query(
-                    'SELECT * FROM clients WHERE client_id = $1 AND device_id = $2',
-                    [clientId, deviceId]
-                );
+                return res.status(409).json({
+                    success: false,
+                    message: 'This user is already logged in from another device.'
+                });
             }
         }
 
