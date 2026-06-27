@@ -131,52 +131,49 @@ async function handleClientLogin() {
     setButtonLoading(btn, true);
 
     try {
-        const response = await apiRequest('/api/client/login', 'POST', {
-            clientId: clientId,
-            deviceId: deviceId
-        });
+        // ── LOGIN DIRECTLY VIA SKYWAY RegisterDiaDevice API ──
+        // No custom backend needed. Skyway validates UserId + GuId and returns user info.
+        console.log('[Auth] Logging in via Skyway RegisterDiaDevice...');
+        const rawText = await fetch(`${API_BASE_URL}/RegisterDiaDevice`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ UserId: clientId, GuId: deviceId })
+        }).then(r => r.text());
 
-        if (response.success) {
-            // Save session
-            saveSession(response.token, 'client', response.client);
+        console.log('[Auth] Skyway login raw response:', rawText);
 
-            // Register device with Skyway API
-            if (navigator.onLine) {
-                try {
-                    console.log('[Auth] Registering device with third-party Skyway API...');
-                    const skywayResponse = await fetch('https://fleettrackon.co.in/skywaydia/RegisterDiaDevice', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            UserId: clientId,
-                            GuId: deviceId
-                        })
-                    });
-                    const skywayData = await skywayResponse.json();
-                    console.log('[Auth] Skyway registration response:', skywayData);
-                    if (skywayData && skywayData.output && skywayData.output[0]) {
-                        const info = skywayData.output[0];
-                        const updatedClient = {
-                            ...response.client,
-                            skywayInfo: info
-                        };
-                        saveSession(response.token, 'client', updatedClient);
-                    }
-                } catch (skywayErr) {
-                    console.error('[Auth] Skyway registration failed:', skywayErr);
-                }
-            }
-
-            // Show success alert
-            showToast('Client has logged in successfully', 'success', 4000);
-
-            // Navigate to client dashboard
-            setTimeout(() => {
-                enterClientSession(response.client);
-            }, 500);
+        let skywayData = null;
+        try {
+            skywayData = JSON.parse(rawText);
+        } catch (e) {
+            if (rawText) skywayData = { output: [{ resstatus: rawText.trim() }] };
         }
+
+        if (!skywayData || !skywayData.output || !skywayData.output[0]) {
+            throw new Error('No response from server. Please check your internet connection.');
+        }
+
+        const info = skywayData.output[0];
+
+        if (info.resstatus === 'Not Valid') {
+            throw new Error('Invalid User ID or Device ID. Please contact your administrator.');
+        }
+
+        // Build client object from Skyway response
+        const clientData = {
+            clientId:   String(info.userid  || clientId),
+            deviceId:   String(info.imeinumber || deviceId),
+            name:       info.userfullname || `Client ${clientId}`,
+            userType:   info.usertype     || 'client',
+            clusters:   info.clusters     || '',
+            skywayInfo: info
+        };
+
+        // Save session locally (token not needed from custom backend)
+        saveSession('skyway-direct', 'client', clientData);
+
+        showToast('Logged in successfully!', 'success', 4000);
+        setTimeout(() => { enterClientSession(clientData); }, 500);
 
     } catch (err) {
         showToast(err.message || 'Login failed. Please check your credentials.', 'error');
