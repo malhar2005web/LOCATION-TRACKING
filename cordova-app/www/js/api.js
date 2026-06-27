@@ -8,7 +8,7 @@
 // ── Configuration ──
 // Change this to your backend server's IP address
 // For local development, use your computer's LAN IP
-let API_BASE_URL = 'http://173.249.59.181:3005';
+let API_BASE_URL = 'https://fleettrackon.co.in/skywaydia';
 
 function getApiBaseUrls() {
     const urls = [
