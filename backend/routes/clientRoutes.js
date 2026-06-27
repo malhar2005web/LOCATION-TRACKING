@@ -84,19 +84,7 @@ router.post('/login', async (req, res) => {
             });
         }
 
-        // 1. Check if this device is already claimed by a different client ID
-        const deviceCheck = await db.query(
-            'SELECT * FROM clients WHERE device_id = $1 AND client_id != $2',
-            [deviceId, clientId]
-        );
-        if (deviceCheck.rows.length > 0) {
-            return res.status(409).json({
-                success: false,
-                message: 'This device is already registered to another user.'
-            });
-        }
-
-        // 2. Validate client credentials
+        // 1. Validate client credentials
         let result = await db.query(
             'SELECT * FROM clients WHERE client_id = $1',
             [clientId]
@@ -114,13 +102,27 @@ router.post('/login', async (req, res) => {
                 [clientId, deviceId]
             );
         } else {
-            // If they exist but device ID is different, reject login
             const existingClient = result.rows[0];
-            if (existingClient.device_id !== deviceId) {
+            // Only reject login if the user is ALREADY active (logged in) on a different device
+            if (existingClient.is_active && existingClient.device_id !== deviceId) {
                 return res.status(409).json({
                     success: false,
                     message: 'This user is already logged in from another device.'
                 });
+            }
+
+            // If they are not active (logged out), allow login on the new device and update their device_id
+            if (existingClient.device_id !== deviceId) {
+                console.log(`[Login] Updating device ID for client ${clientId} from ${existingClient.device_id} to ${deviceId}`);
+                await db.query(
+                    'UPDATE clients SET device_id = $2, updated_at = NOW() WHERE client_id = $1',
+                    [clientId, deviceId]
+                );
+                // Refresh the query result
+                result = await db.query(
+                    'SELECT * FROM clients WHERE client_id = $1',
+                    [clientId]
+                );
             }
         }
 
