@@ -6,7 +6,7 @@
     <title>LOCATION-TRACKING</title>
     <base href="/" />
     <script>
-        // Global error diagnostics overlay
+        
         (function() {
             function showOverlay(title, message, details) {
                 var overlay = document.createElement('div');
@@ -40,7 +40,7 @@
                 overlay.innerHTML = html;
                 document.documentElement.appendChild(overlay);
 
-                // Setup actions
+                
                 setTimeout(function() {
                     var copyBtn = document.getElementById('btn-copy-err');
                     var dismissBtn = document.getElementById('btn-dismiss-err');
@@ -80,7 +80,7 @@
                 showOverlay('Unhandled Promise Rejection', msg, details);
             });
 
-            // Check for previous native exception once DotNet initializes
+            
             var checkInterval = setInterval(function() {
                 if (typeof DotNet !== 'undefined') {
                     try {
@@ -93,13 +93,13 @@
                             })
                             .catch(function(e) {
                                 if (e && e.message && e.message.indexOf('dispatcher') !== -1) {
-                                    return; // retry next tick
+                                    return; 
                                 }
                                 clearInterval(checkInterval);
                                 console.error('[Diagnostic] Failed to fetch last C# exception:', e);
                             });
                     } catch (e) {
-                        // Dispatcher not ready yet, retry next tick
+                        
                     }
                 }
             }, 500);
@@ -113,7 +113,7 @@
     <link rel="icon" href="data:,">
     
     <script>
-        // Theme pre-initialization (from Cordova index.html)
+        
         (function() {
             try {
                 var theme = localStorage.getItem('theme-preference');
@@ -144,7 +144,7 @@
     <script src="_framework/blazor.webview.js" autostart="false"></script>
 
     <script>
-        // Queue/Retry helper for C# invocations until DotNet and its call dispatcher are ready
+        
         function invokeCSharp(methodName, ...args) {
             if (typeof DotNet !== 'undefined') {
                 try {
@@ -176,18 +176,18 @@
                                 })
                                 .catch(err => {
                                     if (err && err.message && err.message.indexOf('dispatcher') !== -1) {
-                                        return; // retry next tick
+                                        return; 
                                     }
                                     clearInterval(checkInterval);
                                     console.error(`[Bridge] Error calling C# method ${methodName} after init:`, err);
                                     resolve(null);
                                 });
                         } catch (e) {
-                            // dispatcher sync error, retry next tick
+                            
                         }
                     }
                 }, 100);
-                // timeout after 10 seconds
+                
                 setTimeout(() => {
                     clearInterval(checkInterval);
                     console.warn(`[Bridge] DotNet initialization timed out for method: ${methodName}`);
@@ -196,7 +196,7 @@
             });
         }
 
-        // Intercept localStorage setItem/removeItem to synchronize with C# Preferences
+        
         const originalSetItem = localStorage.setItem;
         localStorage.setItem = function(key, value) {
             originalSetItem.apply(this, arguments);
@@ -221,7 +221,7 @@
             }
         };
 
-        // Mock AlarmBridge native plugin, routing calls to JSInvokable C# methods
+        
         window.AlarmBridge = {
             requestLocationPermission: function() {
                 invokeCSharp('RequestLocationPermission');

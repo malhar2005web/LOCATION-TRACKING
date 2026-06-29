@@ -1,10 +1,10 @@
-# 📍 Location Tracker — Complete Build Guide
+#  Location Tracker — Complete Build Guide
 
 A full-stack mobile application using **Apache Cordova** + **Node.js** + **MySQL** for real-time GPS location tracking with client/admin roles.
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 1. [Prerequisites](#prerequisites)
 2. [Backend Setup](#backend-setup)
@@ -96,7 +96,7 @@ npm start
 You should see:
 ```
 ╔════════════════════════════════════════════════╗
-║       📍 Location Tracker API Server          ║
+║        Location Tracker API Server          ║
 ╠════════════════════════════════════════════════╣
 ║  Running on:  http://0.0.0.0:3000            ║
 ╚════════════════════════════════════════════════╝
@@ -139,7 +139,7 @@ cordova plugin add cordova-plugin-dialogs
 cordova plugin add @transistorsoft/cordova-background-geolocation
 ```
 
-> ⚠️ **Note**: `@transistorsoft/cordova-background-geolocation` is free for development/testing. Production use requires a license ($299 one-time). If you want a completely free alternative:
+> ️ **Note**: `@transistorsoft/cordova-background-geolocation` is free for development/testing. Production use requires a license ($299 one-time). If you want a completely free alternative:
 > ```bash
 > cordova plugin add cordova-plugin-mauron85-background-geolocation
 > ```
@@ -165,7 +165,7 @@ const API_BASE_URL = 'http://YOUR_COMPUTER_IP:3000';
 const API_BASE_URL = 'http://192.168.1.50:3000';
 ```
 
-> ⚠️ Do NOT use `localhost` — the phone can't reach `localhost` on your PC. Use the LAN IP.
+> ️ Do NOT use `localhost` — the phone can't reach `localhost` on your PC. Use the LAN IP.
 
 ---
 
