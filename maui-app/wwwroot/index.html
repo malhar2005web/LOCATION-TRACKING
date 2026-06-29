@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>LOCATION-TRACKING</title>
+    <base href="/" />
+    <script>
+        // Global error diagnostics overlay
+        (function() {
+            function showOverlay(title, message, details) {
+                var overlay = document.createElement('div');
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100vw';
+                overlay.style.height = '100vh';
+                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
+                overlay.style.color = '#ff6b6b';
+                overlay.style.padding = '20px';
+                overlay.style.boxSizing = 'border-box';
+                overlay.style.zIndex = '9999999';
+                overlay.style.fontFamily = 'monospace';
+                overlay.style.fontSize = '14px';
+                overlay.style.overflowY = 'auto';
+                overlay.style.whiteSpace = 'pre-wrap';
+                overlay.style.lineHeight = '1.5';
+
+                var html = '<h3 style="color: #ff4d4d; margin-top: 0; font-size: 18px; border-bottom: 2px solid #ff4d4d; padding-bottom: 8px;"> ' + title + '</h3>';
+                html += '<p><strong>Message:</strong> ' + message + '</p>';
+                if (details) {
+                    html += '<p><strong>Details:</strong></p>';
+                    html += '<pre style="background: #222; color: #eee; padding: 12px; border-radius: 6px; border: 1px solid #444; font-size: 12px; overflow-x: auto;">' + details + '</pre>';
+                }
+                html += '<div style="margin-top: 20px; display: flex; gap: 10px;">';
+                html += '<button id="btn-copy-err" style="background: #ff4d4d; color: white; border: none; padding: 10px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">Copy Error Info</button>';
+                html += '<button id="btn-dismiss-err" style="background: #444; color: white; border: none; padding: 10px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">Dismiss</button>';
+                html += '</div>';
+
+                overlay.innerHTML = html;
+                document.documentElement.appendChild(overlay);
+
+                // Setup actions
+                setTimeout(function() {
+                    var copyBtn = document.getElementById('btn-copy-err');
+                    var dismissBtn = document.getElementById('btn-dismiss-err');
+                    
+                    if (copyBtn) {
+                        copyBtn.onclick = function() {
+                            var textToCopy = title + '\nMessage: ' + message + '\nDetails: ' + (details || '');
+                            navigator.clipboard.writeText(textToCopy)
+                                .then(function() { alert('Error copied to clipboard!'); })
+                                .catch(function() { alert('Failed to copy. Please screenshot.'); });
+                        };
+                    }
+                    if (dismissBtn) {
+                        dismissBtn.onclick = function() {
+                            overlay.remove();
+                        };
+                    }
+                }, 100);
+            }
+
+            window.onerror = function(msg, src, line, col, err) {
+                var details = 'Source: ' + src + '\nLine: ' + line + ', Col: ' + col;
+                if (err && err.stack) {
+                    details += '\nStack Trace:\n' + err.stack;
+                }
+                showOverlay('JavaScript Runtime Error', msg, details);
+                return false;
+            };
+
+            window.addEventListener('unhandledrejection', function(event) {
+                var reason = event.reason;
+                var msg = reason ? (reason.message || String(reason)) : 'Unknown rejection reason';
+                var details = '';
+                if (reason && reason.stack) {
+                    details += 'Stack Trace:\n' + reason.stack;
+                }
+                showOverlay('Unhandled Promise Rejection', msg, details);
+            });
+
+            // Check for previous native exception once DotNet initializes
+            var checkInterval = setInterval(function() {
+                if (typeof DotNet !== 'undefined') {
+                    try {
+                        DotNet.invokeMethodAsync('LOCATION_TRACKING', 'GetLastException')
+                            .then(function(errStr) {
+                                clearInterval(checkInterval);
+                                if (errStr) {
+                                    showOverlay('Previous Session Native Crash (C# Exception)', 'App crashed in the previous session.', errStr);
+                                }
+                            })
+                            .catch(function(e) {
+                                if (e && e.message && e.message.indexOf('dispatcher') !== -1) {
+                                    return; // retry next tick
+                                }
+                                clearInterval(checkInterval);
+                                console.error('[Diagnostic] Failed to fetch last C# exception:', e);
+                            });
+                    } catch (e) {
+                        // Dispatcher not ready yet, retry next tick
+                    }
+                }
+            }, 500);
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="LOCATION_TRACKING.styles.css" />
+    <link rel="icon" href="data:,">
+    
+    <script>
+        // Theme pre-initialization (from Cordova index.html)
+        (function() {
+            try {
+                var theme = localStorage.getItem('theme-preference');
+                var hour = new Date().getHours();
+                var isNight = (hour >= 18 || hour < 6);
+                if (theme === 'dark' || (!theme && isNight)) {
+                    document.documentElement.classList.add('dark-mode');
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        })();
+    </script>
+</head>
+
+<body>
+
+    <div id="app">Loading...</div>
+
+    <div id="blazor-error-ui" data-nosnippet>
+        An unhandled error has occurred.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss"></span>
+    </div>
+
+    <script src="_framework/blazor.webview.js" autostart="false"></script>
+
+    <script>
+        // Queue/Retry helper for C# invocations until DotNet and its call dispatcher are ready
+        function invokeCSharp(methodName, ...args) {
+            if (typeof DotNet !== 'undefined') {
+                try {
+                    return DotNet.invokeMethodAsync('LOCATION_TRACKING', methodName, ...args)
+                        .catch(err => {
+                            if (err && err.message && err.message.indexOf('dispatcher') !== -1) {
+                                return retryInvokeCSharp(methodName, args);
+                            }
+                            console.error(`[Bridge] Error calling C# method ${methodName}:`, err);
+                        });
+                } catch (e) {
+                    return retryInvokeCSharp(methodName, args);
+                }
+            } else {
+                return retryInvokeCSharp(methodName, args);
+            }
+        }
+
+        function retryInvokeCSharp(methodName, args) {
+            console.warn(`[Bridge] DotNet or dispatcher not ready. Queuing call: ${methodName}`);
+            return new Promise((resolve) => {
+                const checkInterval = setInterval(() => {
+                    if (typeof DotNet !== 'undefined') {
+                        try {
+                            DotNet.invokeMethodAsync('LOCATION_TRACKING', methodName, ...args)
+                                .then((val) => {
+                                    clearInterval(checkInterval);
+                                    resolve(val);
+                                })
+                                .catch(err => {
+                                    if (err && err.message && err.message.indexOf('dispatcher') !== -1) {
+                                        return; // retry next tick
+                                    }
+                                    clearInterval(checkInterval);
+                                    console.error(`[Bridge] Error calling C# method ${methodName} after init:`, err);
+                                    resolve(null);
+                                });
+                        } catch (e) {
+                            // dispatcher sync error, retry next tick
+                        }
+                    }
+                }, 100);
+                // timeout after 10 seconds
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    console.warn(`[Bridge] DotNet initialization timed out for method: ${methodName}`);
+                    resolve(null);
+                }, 10000);
+            });
+        }
+
+        // Intercept localStorage setItem/removeItem to synchronize with C# Preferences
+        const originalSetItem = localStorage.setItem;
+        localStorage.setItem = function(key, value) {
+            originalSetItem.apply(this, arguments);
+            if (key === 'isDayStarted' || key === 'isCheckedIn' || key === 'client_id' || key === 'auth_token' || key === 'client_name' || key === 'employee_id') {
+                try {
+                    invokeCSharp('OnLocalStorageChanged', key, value);
+                } catch (e) {
+                    console.error('Failed to notify C#:', e);
+                }
+            }
+        };
+
+        const originalRemoveItem = localStorage.removeItem;
+        localStorage.removeItem = function(key) {
+            originalRemoveItem.apply(this, arguments);
+            if (key === 'isDayStarted' || key === 'isCheckedIn' || key === 'client_id' || key === 'auth_token' || key === 'client_name' || key === 'employee_id') {
+                try {
+                    invokeCSharp('OnLocalStorageChanged', key, null);
+                } catch (e) {
+                    console.error('Failed to notify C#:', e);
+                }
+            }
+        };
+
+        // Mock AlarmBridge native plugin, routing calls to JSInvokable C# methods
+        window.AlarmBridge = {
+            requestLocationPermission: function() {
+                invokeCSharp('RequestLocationPermission');
+            },
+            requestNotificationPermission: function() {
+                invokeCSharp('RequestNotificationPermission');
+            },
+            requestFullScreenIntentPermission: function() {
+                invokeCSharp('RequestFullScreenIntentPermission');
+            },
+            requestOverlayPermission: function() {
+                invokeCSharp('RequestOverlayPermission');
+            },
+            requestBatteryOptimizationExemption: function() {
+                invokeCSharp('RequestBatteryOptimizationExemption');
+            },
+            getDeviceId: function(successCallback, errorCallback) {
+                invokeCSharp('GetDeviceId')
+                    .then(id => {
+                        if (successCallback) successCallback(id);
+                    })
+                    .catch(err => {
+                        if (errorCallback) errorCallback(err);
+                    });
+            }
+        };
+
+        window.callNativePermission = function(action) {
+            if (window.AlarmBridge[action]) {
+                window.AlarmBridge[action]();
+            } else {
+                console.warn('Unknown AlarmBridge action:', action);
+            }
+        };
+    </script>
+
+    <script src="js/api.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/reminderDb.js"></script>
+    <script src="js/leaveDb.js"></script>
+    <script src="js/dsrDb.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>

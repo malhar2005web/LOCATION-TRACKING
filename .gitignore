@@ -1,0 +1,32 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+
+# Environment files
+.env
+backend/.env
+*.env
+
+# .NET / MAUI build outputs and user settings
+**/bin/
+**/obj/
+**/.vs/
+**/*.user
+**/*.suo
+**/*.userosscache
+**/*.sln.docstates
+
+# Android build outputs and packages
+*.apk
+app-debug.apk
+app-debug.zip
+apk-contents/
+
+# Temp and logs
+*.log
+.system_generated/
+backend/scratch_db.js
+backend/scratch_api_test.js
+DiaryApiLinks_Malhar.txt
+DiaryApiLinks_Malhar*.txt
+Skyway new logo*.png
