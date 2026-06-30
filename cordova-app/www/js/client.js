@@ -194,7 +194,7 @@ function initClientDashboard(clientData) {
     updateGreeting();
     updateThemeToggleUI();
 
-    // Start location tracking immediately upon login/session entry
+    // Start tracking immediately upon entering the session (regardless of workday status)
     startLocationTracking(clientData.clientId, clientData.deviceId);
     if (!window.durationInterval) {
         window.durationInterval = setInterval(updateMetricsUI, 10000);
@@ -3448,15 +3448,14 @@ function handleDayEnd() {
     }
     localStorage.removeItem('dayStartTime');
 
-    // Stop tracking
-    stopLocationTracking();
-    setTrackingUI(false);
+    // Keep tracking active even after day ends
+    // Stop tracking section removed
 
     // Update UI
     updateWorkdayUI();
     updateMetricsUI();
 
-    showToast('Workday ended. Location tracking is stopped.', 'warning');
+    showToast('Workday ended. Location tracking remains active.', 'warning');
 }
 
 /**

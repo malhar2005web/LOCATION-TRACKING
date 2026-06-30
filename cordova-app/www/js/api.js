@@ -171,6 +171,9 @@ function saveSession(token, role, userData) {
     localStorage.setItem('auth_token', token);
     localStorage.setItem('user_role', role);
     localStorage.setItem('user_data', JSON.stringify(userData));
+    if (userData && userData.clientId) {
+        localStorage.setItem('client_id', userData.clientId);
+    }
 }
 
 /**
@@ -203,4 +206,5 @@ function clearSession() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_role');
     localStorage.removeItem('user_data');
+    localStorage.removeItem('client_id');
 }
