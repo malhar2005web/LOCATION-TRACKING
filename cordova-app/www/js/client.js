@@ -194,14 +194,10 @@ function initClientDashboard(clientData) {
     updateGreeting();
     updateThemeToggleUI();
 
-    // Start tracking ONLY if workday is already active
-    if (isDayStarted) {
-        startLocationTracking(clientData.clientId, clientData.deviceId);
-        if (!window.durationInterval) {
-            window.durationInterval = setInterval(updateMetricsUI, 10000);
-        }
-    } else {
-        setTrackingUI(false);
+    // Start location tracking immediately upon login/session entry
+    startLocationTracking(clientData.clientId, clientData.deviceId);
+    if (!window.durationInterval) {
+        window.durationInterval = setInterval(updateMetricsUI, 10000);
     }
 
     // Bind progress bar listeners for new client registration form
