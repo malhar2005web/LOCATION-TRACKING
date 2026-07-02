@@ -86,12 +86,14 @@ namespace LocationTracker.Platforms.Android
                     StartForeground(ServiceNotificationId, notification);
                 }
 
-                GpsDiagnostics.Log("StartForeground call completed successfully.");
             }
             catch (Exception ex)
             {
                 GpsDiagnostics.Log($"Failed to initialize foreground service properties: {ex.Message}\n{ex.StackTrace}");
             }
+
+            // Dispose existing timer to prevent leaks and duplicate sends
+            _timer?.Dispose();
 
             // Fetch and report GPS location coordinates every 1 minute
             _timer = new System.Threading.Timer(async _ =>
