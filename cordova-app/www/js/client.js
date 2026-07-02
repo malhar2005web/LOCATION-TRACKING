@@ -424,17 +424,15 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
         return;
     }
 
-    // Call third-party tracking API in parallel
+    // 2. Send to Skyway /receiveddata API
     try {
-        console.log('[Tracking] Sending location to third-party Skyway API...');
+        console.log('[Tracking] Sending location to Skyway API...');
         const numericUserId = parseInt(clientId, 10);
         const useruniqeid = isNaN(numericUserId) ? clientId : numericUserId;
 
-        fetch(`${API_BASE_URL}/receiveddata`, {
+        const res = await fetch(`${API_BASE_URL}/receiveddata`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 useruniqeid: useruniqeid,
                 imeino: deviceId,
@@ -446,40 +444,21 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
                 gpsTimestamp: new Date().toISOString().replace('T', ' ').slice(0, 16),
                 calbaering: Math.round(coords.heading || coords.bearing || 0)
             })
-        }).then(async (res) => {
-            const rawText = await res.text();
-            let rData = null;
-            try {
-                rData = JSON.parse(rawText);
-            } catch (e) {
-                rData = { status: rawText.trim() };
-            }
-            console.log('[Tracking] Skyway tracking response:', rData);
-        }).catch(err => {
-            console.error('[Tracking] Skyway tracking failed:', err);
-        });
-    } catch (skywayErr) {
-        console.error('[Tracking] Skyway tracking setup error:', skywayErr);
-    }
-
-    // 2. Attempt API upload
-    try {
-        const remainingCount = StorageService.getPendingCount();
-        const response = await apiRequest('/api/location/update', 'POST', {
-            clientId: clientId,
-            deviceId: deviceId,
-            latitude: coords.latitude,
-            longitude: coords.longitude,
-            accuracy: coords.accuracy,
-            speed: coords.speed,
-            bearing: coords.heading || coords.bearing || null,
-            batteryLevel: battery || null,
-            timestamp: timestamp,
-            pendingSyncCount: remainingCount
         });
 
-        if (response.success) {
-            // 3. Mark as synced
+        const rawText = await res.text();
+        let rData = null;
+        try {
+            rData = JSON.parse(rawText);
+        } catch (e) {
+            rData = { trackerid: [{ status: rawText.trim() }] };
+        }
+        console.log('[Tracking] Skyway response:', rData);
+
+        // Check for successful response
+        const status = rData?.trackerid?.[0]?.status;
+        if (status === 'ok' || res.ok) {
+            // Mark as synced
             StorageService.markAsSynced([timestamp]);
             locationSentCount++;
             const countEl = document.getElementById('locations-sent-count');
@@ -494,10 +473,10 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
             // Automatically sync other pending locations
             syncPendingLocations();
         } else {
-            throw new Error(response.message || 'Server rejected request');
+            throw new Error('Server returned unexpected response');
         }
     } catch (err) {
-        console.error('[Tracking] API update error:', err.message);
+        console.error('[Tracking] Skyway API error:', err.message);
         const pendingCount = StorageService.getPendingCount();
         updateSyncStatusText(`Offline Mode – ${pendingCount} locations pending sync`);
     }
@@ -621,49 +600,57 @@ async function syncPendingLocations() {
     }
 
     isSyncing = true;
-    console.log(`[Sync] Found ${pending.length} pending locations. Syncing...`);
+    console.log(`[Sync] Found ${pending.length} pending locations. Syncing via Skyway API...`);
     updateSyncStatusText("Connection Restored – Syncing locations");
 
-    const batchSize = 50;
     let successCount = 0;
 
     try {
         // Sort chronologically
         pending.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-        for (let i = 0; i < pending.length; i += batchSize) {
-            const chunk = pending.slice(i, i + batchSize);
-            const remainingCount = pending.length - (i + chunk.length);
+        for (const loc of pending) {
+            try {
+                const numericUserId = parseInt(loc.clientId, 10);
+                const useruniqeid = isNaN(numericUserId) ? loc.clientId : numericUserId;
 
-            const response = await apiRequest('/api/location/batch', 'POST', {
-                locations: chunk.map(loc => ({
-                    clientId: loc.clientId,
-                    deviceId: loc.deviceId,
-                    latitude: loc.latitude,
-                    longitude: loc.longitude,
-                    accuracy: loc.accuracy,
-                    speed: loc.speed,
-                    bearing: loc.bearing,
-                    batteryLevel: loc.batteryLevel,
-                    timestamp: loc.timestamp
-                })),
-                pendingSyncCount: remainingCount
-            });
+                const res = await fetch(`${API_BASE_URL}/receiveddata`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        useruniqeid: useruniqeid,
+                        imeino: loc.deviceId,
+                        deviceid: "GPS FIX",
+                        gpsLatitude: loc.latitude.toString(),
+                        gpsLongitude: loc.longitude.toString(),
+                        gpsAccuracy: (loc.accuracy || 0).toString(),
+                        gpsSpeed: (loc.speed || 0).toString(),
+                        gpsTimestamp: new Date(loc.timestamp).toISOString().replace('T', ' ').slice(0, 16),
+                        calbaering: Math.round(loc.bearing || 0)
+                    })
+                });
 
-            if (response.success) {
-                const syncedTimestamps = chunk.map(c => c.timestamp);
-                StorageService.markAsSynced(syncedTimestamps);
-                successCount += chunk.length;
-            } else {
-                throw new Error(response.message || 'Batch upload failed');
+                if (res.ok) {
+                    StorageService.markAsSynced([loc.timestamp]);
+                    successCount++;
+                    locationSentCount++;
+                }
+            } catch (locErr) {
+                console.error('[Sync] Failed to sync location:', locErr.message);
+                // Continue with next location
             }
         }
 
-        console.log(`[Sync] Successfully synced ${successCount} locations.`);
-        showNativeToast(`Synced ${successCount} offline locations`);
+        if (successCount > 0) {
+            const countEl = document.getElementById('locations-sent-count');
+            if (countEl) countEl.textContent = locationSentCount.toString();
 
-        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        updateSyncStatusText(`Last Location Sent: ${timeStr}`);
+            console.log(`[Sync] Successfully synced ${successCount} locations.`);
+            showNativeToast(`Synced ${successCount} offline locations`);
+
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            updateSyncStatusText(`Last Location Sent: ${timeStr}`);
+        }
 
     } catch (err) {
         console.error('[Sync] Sync failed:', err.message);
