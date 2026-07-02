@@ -12,7 +12,7 @@ using Microsoft.Maui.Devices.Sensors;
 
 namespace LocationTracker.Platforms.Android
 {
-    [Service(ForegroundServiceType = global::Android.Content.PM.ForegroundService.TypeLocation)]
+    [Service(Name = "com.locationtracker.app.AndroidBackgroundService", ForegroundServiceType = global::Android.Content.PM.ForegroundService.TypeLocation)]
     public class AndroidBackgroundService : Service
     {
         private const int ServiceNotificationId = 1001;
@@ -28,7 +28,7 @@ namespace LocationTracker.Platforms.Android
             var notification = new NotificationCompat.Builder(this, ChannelId)
                 .SetContentTitle("Location Tracking Active")
                 .SetContentText("your location is being tracked/sent to admin")
-                .SetSmallIcon(global::LOCATION_TRACKING.Resource.Mipmap.appicon) // Maps to app logo
+                .SetSmallIcon(global::Android.Resource.Drawable.IcMenuMyLocation) // Maps to system monochrome location icon
                 .SetOngoing(true)
                 .SetCategory(NotificationCompat.CategoryService)
                 .SetPriority(NotificationCompat.PriorityHigh) // Elevated priority so it remains visible and alerts the user

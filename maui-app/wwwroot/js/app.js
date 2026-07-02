@@ -31,6 +31,18 @@ function showView(viewId) {
         }
     });
 
+    // Reset window scroll to top on transition
+    window.scrollTo(0, 0);
+
+    // Sync device ID fields on transitions to login/register views
+    if (typeof populateDeviceIdFields === 'function') {
+        try {
+            populateDeviceIdFields();
+        } catch(e) {
+            console.error('[App] Failed to populate device ID fields on view show:', e);
+        }
+    }
+
     console.log('[App] View:', viewId);
 }
 
@@ -127,11 +139,9 @@ function onDeviceReady(source) {
                     showView('admin-view');
                 } else {
                     showView('login-view');
-                    scheduleStartupPermissions();
                 }
             } else {
                 showView('login-view');
-                scheduleStartupPermissions();
             }
         } catch (err) {
             console.error('[App] Exception in routing session, showing login:', err);
@@ -264,35 +274,55 @@ function scheduleStartupPermissions() {
     setTimeout(() => {
         requestLocationPermissionPrompt();
     }, 800);
-
-    setTimeout(() => {
-        try {
-            requestBackgroundPermissions();
-        } catch (err) {
-            console.error('[Permissions] Startup permission flow failed:', err);
-        }
-    }, 1800);
 }
 
 function requestLocationPermissionPrompt() {
-    if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== 'function') {
-        console.warn('[Permissions] Geolocation API unavailable.');
-        return;
+    // Proactively call native C# prompt first to ensure native system permission runs
+    if (window.AlarmBridge && typeof window.AlarmBridge.requestLocationPermission === 'function') {
+        window.AlarmBridge.requestLocationPermission();
     }
 
-    navigator.geolocation.getCurrentPosition(
-        () => console.log('[Permissions] Location permission granted.'),
-        (err) => console.warn('[Permissions] Location permission not granted:', err && err.message ? err.message : err),
-        {
-            enableHighAccuracy: true,
-            timeout: 8000,
-            maximumAge: 0
-        }
-    );
+    if (typeof invokeCSharp === 'function') {
+        invokeCSharp('GetCurrentLocation')
+            .then(locJson => {
+                if (locJson) {
+                    const loc = JSON.parse(locJson);
+                    console.log('[Permissions] Pre-fetched native coordinates:', loc);
+                    if (typeof updateLocationUI === 'function') {
+                        updateLocationUI(loc.latitude, loc.longitude);
+                    }
+                }
+            })
+            .catch(err => console.warn('[Permissions] Pre-fetch native location failed:', err));
+    } else if (navigator.geolocation && typeof navigator.geolocation.getCurrentPosition === 'function') {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log('[Permissions] Location permission granted.');
+                if (position && position.coords && typeof updateLocationUI === 'function') {
+                    updateLocationUI(position.coords.latitude, position.coords.longitude);
+                }
+            },
+            (err) => console.warn('[Permissions] Location permission not granted:', err && err.message ? err.message : err),
+            {
+                enableHighAccuracy: true,
+                timeout: 8000,
+                maximumAge: 0
+            }
+        );
+    }
 }
 
 function enterClientSession(clientData) {
     showView('client-view');
+
+    // Request location permissions safely after dashboard view is shown
+    setTimeout(() => {
+        try {
+            requestLocationPermissionPrompt();
+        } catch (err) {
+            console.error('[Permissions] Location permission request failed:', err);
+        }
+    }, 800);
 
     setTimeout(() => {
         try {
@@ -309,7 +339,7 @@ function enterClientSession(clientData) {
         } catch (err) {
             console.error('[Permissions] Permission request flow failed:', err);
         }
-    }, 1200);
+    }, 1500);
 }
 
 function callNativePermission(methodName) {
@@ -327,3 +357,34 @@ function callNativePermission(methodName) {
         console.error(`[Permissions] ${methodName} threw:`, err);
     }
 }
+
+// ── Layout helpers from original Cordova index.html inline script ──
+function toggleProfileDropdown() {
+    const dropdownMenu = document.getElementById('profile-dropdown-menu');
+    if (dropdownMenu) {
+        dropdownMenu.classList.toggle('show');
+    }
+}
+
+function toggleClientStats(event) {
+    const container = document.getElementById('client-stats-container');
+    const arrow = document.getElementById('stats-toggle-arrow');
+    if (container) {
+        const isExpanded = container.classList.toggle('expanded');
+        if (arrow) {
+            if (isExpanded) {
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+    }
+}
+
+window.addEventListener('click', function(event) {
+    const dropdownContainer = document.querySelector('.profile-dropdown-container');
+    const dropdownMenu = document.getElementById('profile-dropdown-menu');
+    if (dropdownContainer && dropdownMenu && !dropdownContainer.contains(event.target)) {
+        dropdownMenu.classList.remove('show');
+    }
+});

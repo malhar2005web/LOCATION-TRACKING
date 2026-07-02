@@ -6,7 +6,7 @@ using LocationTracker.Services.Storage;
 
 namespace LocationTracker.Platforms.Android
 {
-    [BroadcastReceiver(Enabled = true, Exported = true)]
+    [BroadcastReceiver(Name = "com.locationtracker.app.BootReceiver", Enabled = true, Exported = true)]
     [IntentFilter(new[] { Intent.ActionBootCompleted, "android.intent.action.QUICKBOOT_POWERON" })]
     public class BootReceiver : BroadcastReceiver
     {
