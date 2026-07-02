@@ -189,6 +189,14 @@ namespace LOCATION_TRACKING
                 var path = Path.Combine(FileSystem.AppDataDirectory, "unhandled_errors.txt");
                 if (File.Exists(path))
                 {
+                    // Silently discard crash reports older than 2 hours (e.g. restored by backup)
+                    var fileAge = DateTime.Now - File.GetLastWriteTime(path);
+                    if (fileAge.TotalHours > 2)
+                    {
+                        File.Delete(path);
+                        return Task.FromResult(string.Empty);
+                    }
+
                     var content = File.ReadAllText(path);
                     File.Delete(path); // Clear it after reading
                     return Task.FromResult(content);
