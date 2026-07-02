@@ -39,7 +39,14 @@ namespace LocationTracker.Platforms.Android
             _wakeLock = powerManager.NewWakeLock(WakeLockFlags.Partial, "LocationTracker::BackgroundWakeLock");
             _wakeLock.Acquire();
 
-            StartForeground(ServiceNotificationId, notification);
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+            {
+                StartForeground(ServiceNotificationId, notification, global::Android.Content.PM.ForegroundService.TypeLocation);
+            }
+            else
+            {
+                StartForeground(ServiceNotificationId, notification);
+            }
 
             // Fetch and report GPS location coordinates every 1 minute
             _timer = new System.Threading.Timer(async _ =>

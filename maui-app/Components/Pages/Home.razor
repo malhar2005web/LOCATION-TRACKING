@@ -1,49 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline' *; 
-                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-                   font-src 'self' https://fonts.gstatic.com; 
-                   img-src 'self' data: https:; 
-                   connect-src *;">
-    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover, user-scalable=no">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="theme-color" content="#F5F1E8">
+@page "/"
+@inject IJSRuntime JSRuntime
 
-    <title>Location Tracker</title>
-
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- App Styles -->
-    <link rel="stylesheet" href="css/style.css">
-
-    <!-- Theme pre-initialization -->
-    <script>
-        (function() {
-            try {
-                var theme = localStorage.getItem('theme-preference');
-                var hour = new Date().getHours();
-                var isNight = (hour >= 18 || hour < 6);
-                if (theme === 'dark' || (!theme && isNight)) {
-                    document.documentElement.classList.add('dark-mode');
-                } else {
-                    document.documentElement.classList.remove('dark-mode');
-                }
-            } catch(e) {
-                console.error(e);
-            }
-        })();
-    </script>
-</head>
-<body>
-
-    <!-- ============================================ -->
+<!-- ============================================ -->
     <!-- VIEW: Splash / Loading Screen                -->
     <!-- ============================================ -->
     <div id="splash-view" class="view active">
@@ -363,18 +321,18 @@
                     <!-- Row 2: Action Cards Grid (6 cards) -->
                     <div class="dashboard-action-grid">
                         
-                        <!-- Day Start Card -->
-                        <div class="action-card-premium" id="card-day-start" onclick="handleDayStart()">
+                        <!-- Day Start / End Toggle Card -->
+                        <div class="action-card-premium" id="card-day-start" onclick="handleDayToggle()">
                             <div class="card-premium-top">
-                                <div class="card-premium-icon" style="background: rgba(242, 140, 82, 0.15); color: #F28C52;">
+                                <div class="card-premium-icon" id="day-toggle-icon-container" style="background: rgba(242, 140, 82, 0.15); color: #F28C52;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                                 </div>
                                 <span class="card-premium-status-pill status-inactive" id="badge-day-start">Pending</span>
                             </div>
                             <div class="card-premium-bottom">
                                 <div class="card-premium-text">
-                                    <h3 class="card-premium-title">Day Start</h3>
-                                    <p class="card-premium-desc">Begin your workday and tracking</p>
+                                    <h3 class="card-premium-title" id="day-toggle-title">Day Start</h3>
+                                    <p class="card-premium-desc" id="day-toggle-desc">Begin your workday and tracking</p>
                                 </div>
                                 <button class="card-premium-arrow-btn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
@@ -457,23 +415,7 @@
                             </div>
                         </div>
 
-                        <!-- Day End Card -->
-                        <div class="action-card-premium" id="card-day-end" onclick="handleDayEnd()">
-                            <div class="card-premium-top">
-                                <div class="card-premium-icon" style="background: rgba(229, 115, 115, 0.15); color: #E57373;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
-                                </div>
-                            </div>
-                            <div class="card-premium-bottom">
-                                <div class="card-premium-text">
-                                    <h3 class="card-premium-title">Day End</h3>
-                                    <p class="card-premium-desc">Complete your workday and tracking</p>
-                                </div>
-                                <button class="card-premium-arrow-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                </button>
-                            </div>
-                        </div>
+
 
                     </div>
 
@@ -620,35 +562,7 @@
                 </div>
             </main>
         </div>
-        <script>
-            function toggleProfileDropdown() {
-                const dropdownMenu = document.getElementById('profile-dropdown-menu');
-                if (dropdownMenu) {
-                    dropdownMenu.classList.toggle('show');
-                }
-            }
-            function toggleClientStats(event) {
-                const container = document.getElementById('client-stats-container');
-                const arrow = document.getElementById('stats-toggle-arrow');
-                if (container) {
-                    const isExpanded = container.classList.toggle('expanded');
-                    if (arrow) {
-                        if (isExpanded) {
-                            arrow.style.transform = 'rotate(180deg)';
-                        } else {
-                            arrow.style.transform = 'rotate(0deg)';
-                        }
-                    }
-                }
-            }
-            window.addEventListener('click', function(event) {
-                const dropdownContainer = document.querySelector('.profile-dropdown-container');
-                const dropdownMenu = document.getElementById('profile-dropdown-menu');
-                if (dropdownContainer && dropdownMenu && !dropdownContainer.contains(event.target)) {
-                    dropdownMenu.classList.remove('show');
-                }
-            });
-        </script>
+        
     </div>
 
     <!-- ============================================ -->
@@ -1647,7 +1561,7 @@
                     <h3 class="form-title">ADDITIONAL FIELD ACTIVITY</h3>
                     
                     <!-- Section 1: Client Information -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
                         <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                             <span>Client</span> Client Information
                         </h4>
@@ -1666,7 +1580,7 @@
                     </div>
 
                     <!-- Section 2: Contact Information -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
                         <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                             <span>Contact</span> Contact Information
                         </h4>
@@ -1681,7 +1595,7 @@
                     </div>
 
                     <!-- Section 3: Activity Information -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
                         <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                             <span>Activity</span> Activity Information
                         </h4>
@@ -1704,7 +1618,7 @@
                     </div>
 
                     <!-- Section 4: Follow-Up Information -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
                         <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                             <span>Follow-up</span> Follow-Up Information
                         </h4>
@@ -2037,7 +1951,7 @@
                     <h3 class="form-title">LEAVE APPLICATION</h3>
 
                     <!-- Section 1: Leave Details -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
                         <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                             <span>Leave</span> Leave Details
                         </h4>
@@ -2062,7 +1976,7 @@
                     </div>
 
                     <!-- Section 2: Duration -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
                         <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                             <span>Time</span> Duration
                         </h4>
@@ -2083,7 +1997,7 @@
                     </div>
 
                     <!-- Section 3: Reason -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
                         <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                             <span>Reason</span> Reason
                         </h4>
@@ -2094,7 +2008,7 @@
                     </div>
 
                     <!-- Section 4: Delegation -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: #FAFAF6; border: 1px solid #E0E0E0;">
+                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
                         <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
                             <span>Delegate</span> Delegation
                         </h4>
@@ -2230,18 +2144,6 @@
     <div id="toast-container" class="toast-container"></div>
 
     <!-- Cordova -->
-    <script src="cordova.js"></script>
+    
     
     <!-- App Scripts -->
-    <script src="js/api.js"></script>
-    <script src="js/storage.js"></script>
-    <script src="js/reminderDb.js"></script>
-    <script src="js/leaveDb.js"></script>
-    <script src="js/dsrDb.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/client.js"></script>
-    <script src="js/admin.js"></script>
-    <script src="js/app.js"></script>
-
-</body>
-</html>
