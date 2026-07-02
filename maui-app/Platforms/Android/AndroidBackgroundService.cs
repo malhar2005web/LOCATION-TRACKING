@@ -53,8 +53,7 @@ namespace LocationTracker.Platforms.Android
                     // Track location continuously if user is logged in
                     if (!string.IsNullOrEmpty(clientId))
                     {
-                        var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(10));
-                        var location = await Geolocation.Default.GetLocationAsync(request);
+                        var location = await GetNativeLocationAsync(context);
 
                         if (location != null)
                         {
@@ -74,10 +73,10 @@ namespace LocationTracker.Platforms.Android
                                     deviceid = "GPS FIX",
                                     gpsLatitude = location.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                     gpsLongitude = location.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                                    gpsAccuracy = (location.Accuracy ?? 0).ToString(System.Globalization.CultureInfo.InvariantCulture),
-                                    gpsSpeed = (location.Speed ?? 0).ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                    gpsAccuracy = location.Accuracy.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                    gpsSpeed = location.Speed.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                     gpsTimestamp = timestampStr,
-                                    calbaering = Math.Round(location.Course ?? 0)
+                                    calbaering = Math.Round(location.Bearing)
                                 };
 
                                 var response = await client.PostAsJsonAsync("https://fleettrackon.co.in/skywaydia/receiveddata", payload);
@@ -102,11 +101,71 @@ namespace LocationTracker.Platforms.Android
             return StartCommandResult.Sticky;
         }
 
+        private async Task<global::Android.Locations.Location> GetNativeLocationAsync(Context context)
+        {
+            try
+            {
+                var locationManager = (global::Android.Locations.LocationManager)context.GetSystemService(Context.LocationService);
+                if (locationManager == null) return null;
+
+                var isGpsEnabled = locationManager.IsProviderEnabled(global::Android.Locations.LocationManager.GpsProvider);
+                var isNetworkEnabled = locationManager.IsProviderEnabled(global::Android.Locations.LocationManager.NetworkProvider);
+
+                if (!isGpsEnabled && !isNetworkEnabled) return null;
+
+                var provider = isGpsEnabled ? global::Android.Locations.LocationManager.GpsProvider : global::Android.Locations.LocationManager.NetworkProvider;
+                var lastKnown = locationManager.GetLastKnownLocation(provider);
+
+                var tcs = new TaskCompletionSource<global::Android.Locations.Location>();
+                var listener = new ActiveLocationListener(tcs);
+
+                locationManager.RequestLocationUpdates(provider, 0, 0, listener, context.MainLooper);
+
+                var delayTask = Task.Delay(10000); // 10 seconds timeout
+                var completedTask = await Task.WhenAny(tcs.Task, delayTask);
+
+                locationManager.RemoveUpdates(listener);
+
+                if (completedTask == tcs.Task)
+                {
+                    return await tcs.Task;
+                }
+                else
+                {
+                    return lastKnown;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Background Service] GetNativeLocationAsync failed: {ex.Message}");
+                return null;
+            }
+        }
+
+        private class ActiveLocationListener : Java.Lang.Object, global::Android.Locations.ILocationListener
+        {
+            private readonly TaskCompletionSource<global::Android.Locations.Location> _tcs;
+
+            public ActiveLocationListener(TaskCompletionSource<global::Android.Locations.Location> tcs)
+            {
+                _tcs = tcs;
+            }
+
+            public void OnLocationChanged(global::Android.Locations.Location location)
+            {
+                _tcs.TrySetResult(location);
+            }
+
+            public void OnProviderDisabled(string provider) {}
+            public void OnProviderEnabled(string provider) {}
+            public void OnStatusChanged(string provider, global::Android.Locations.Availability status, Bundle extras) {}
+        }
+
         private void CreateNotificationChannel()
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                var channel = new NotificationChannel(ChannelId, "Location Services", NotificationImportance.Low)
+                var channel = new NotificationChannel(ChannelId, "Location Services", NotificationImportance.High)
                 {
                     Description = "Background location tracking foreground service updates"
                 };

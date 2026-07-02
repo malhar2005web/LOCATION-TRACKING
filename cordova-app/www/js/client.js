@@ -122,9 +122,8 @@ function initClientDashboard(clientData) {
             device.model || device.manufacturer || '--';
     }
 
-    // Reset counter
-    locationSentCount = 0;
-    document.getElementById('locations-sent-count').textContent = '0';
+    // Load total database location count on dashboard initialize
+    refreshDatabaseLocationCount();
 
     // Network listeners
     window.removeEventListener('online', updateNetworkStatus);
@@ -473,11 +472,9 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
         if (statusOk) {
             // Mark as synced locally
             StorageService.markAsSynced([timestamp]);
-            locationSentCount++;
-            const countEl = document.getElementById('locations-sent-count');
-            if (countEl) countEl.textContent = locationSentCount.toString();
+            refreshDatabaseLocationCount();
 
-            console.log(`[Tracking] Location #${locationSentCount} uploaded successfully.`);
+            console.log('[Tracking] Location uploaded successfully.');
             showNativeToast("your location is being tracked/sent to admin");
 
             const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -492,6 +489,40 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
         console.error('[Tracking] Skyway tracking failed:', skywayErr.message);
         const pendingCount = StorageService.getPendingCount();
         updateSyncStatusText(`Offline Mode – ${pendingCount} locations pending sync`);
+    }
+}
+
+/**
+ * Fetch total locations count from Skyway getusertracking API and update UI count badge.
+ */
+async function refreshDatabaseLocationCount() {
+    const session = getSession();
+    if (!session || !session.userData) return;
+
+    const username = session.userData.name || 'demo admin2';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/getusertracking`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                startdatetime: "2026-06-01",
+                enddatetime: "2027-12-31",
+                username: username
+            })
+        });
+
+        const data = await response.json();
+        if (data && data.trackerid) {
+            const count = data.trackerid.length;
+            console.log(`[Tracking] Database location count retrieved: ${count}`);
+            const countEl = document.getElementById('locations-sent-count');
+            if (countEl) {
+                countEl.textContent = count.toString();
+            }
+        }
+    } catch (err) {
+        console.error('[Tracking] Failed to fetch database location count:', err);
     }
 }
 
