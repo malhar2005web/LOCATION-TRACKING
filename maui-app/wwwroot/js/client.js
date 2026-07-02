@@ -213,13 +213,51 @@ function startLocationTracking(clientId, deviceId) {
     console.log('[Tracking] Starting location tracking...');
 
     try {
-        // Try Background Geolocation plugin (production-grade)
-        if (window.BackgroundGeolocation) {
-            startBgGeolocation(clientId, deviceId);
+        if (typeof invokeCSharp === 'function') {
+            console.log('[Tracking] MAUI Environment: Starting C# Native Foreground Service...');
+            // 1. Tell C# to launch the native background foreground service
+            invokeCSharp('StartBackgroundService');
+            
+            // 2. Set up a UI-only poller to retrieve coordinates and counts from C#
+            if (window.trackingInterval) {
+                clearInterval(window.trackingInterval);
+            }
+            
+            async function pollNativeTrackingData() {
+                try {
+                    const dataJson = await invokeCSharp('GetLatestLocationData');
+                    if (dataJson) {
+                        const data = JSON.parse(dataJson);
+                        if (data.latitude && data.longitude) {
+                            updateLocationUI(data.latitude, data.longitude);
+                        }
+                        
+                        // Update Locations Sent counter
+                        locationSentCount = data.sentCount;
+                        const countEl = document.getElementById('locations-sent-count');
+                        if (countEl) countEl.textContent = locationSentCount.toString();
+                        
+                        // Update last sync time
+                        if (data.lastSync && data.lastSync !== 'Never') {
+                            updateSyncStatusText(`Last Location Sent: ${data.lastSync}`);
+                        }
+                    }
+                } catch (e) {
+                    console.error('[Tracking] Failed to poll native tracking data:', e);
+                }
+            }
+            
+            pollNativeTrackingData();
+            window.trackingInterval = setInterval(pollNativeTrackingData, 3000);
         } else {
-            // Fallback to basic geolocation + interval
-            console.log('[Tracking] BackgroundGeolocation not available, using fallback');
-            startFallbackTracking(clientId, deviceId);
+            // Try Background Geolocation plugin (production-grade)
+            if (window.BackgroundGeolocation) {
+                startBgGeolocation(clientId, deviceId);
+            } else {
+                // Fallback to basic geolocation + interval
+                console.log('[Tracking] BackgroundGeolocation not available, using fallback');
+                startFallbackTracking(clientId, deviceId);
+            }
         }
     } catch (err) {
         console.error('[Tracking] Failed to start location tracking:', err);

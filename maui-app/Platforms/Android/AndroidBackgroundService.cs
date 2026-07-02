@@ -21,6 +21,11 @@ namespace LocationTracker.Platforms.Android
         private PowerManager.WakeLock _wakeLock;
         private int _locationsSentCount = 0;
 
+        public static int LocationsSentCount { get; set; } = 0;
+        public static double LastLatitude { get; set; } = 0.0;
+        public static double LastLongitude { get; set; } = 0.0;
+        public static string LastSyncTime { get; set; } = "Never";
+
         public override IBinder OnBind(Intent intent) => null;
 
         private void UpdateNotification(string text)
@@ -95,10 +100,9 @@ namespace LocationTracker.Platforms.Android
                 {
                     GpsDiagnostics.Log("Timer tick triggered.");
                     var context = global::Android.App.Application.Context;
-                    var sharedPref = context.GetSharedPreferences("com.locationtracker.app.microsoft.maui.essentials.preferences", global::Android.Content.FileCreationMode.Private);
-                    var clientId = sharedPref.GetString("client_id", "");
+                    var clientId = Microsoft.Maui.Storage.Preferences.Default.Get("client_id", "");
 
-                    GpsDiagnostics.Log($"Timer tick: Client ID read from shared preference = '{clientId}'");
+                    GpsDiagnostics.Log($"Timer tick: Client ID read from Maui Preferences = '{clientId}'");
 
                     // Track location continuously if user is logged in
                     if (!string.IsNullOrEmpty(clientId))
@@ -113,6 +117,10 @@ namespace LocationTracker.Platforms.Android
 
                             int.TryParse(clientId, out int numericUserId);
                             var timestampStr = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm");
+
+                            // Update coordinates for local UI consumption
+                            LastLatitude = location.Latitude;
+                            LastLongitude = location.Longitude;
 
                             using (var client = new HttpClient())
                             {
@@ -136,7 +144,9 @@ namespace LocationTracker.Platforms.Android
                                 if (response.IsSuccessStatusCode)
                                 {
                                     _locationsSentCount++;
+                                    LocationsSentCount = _locationsSentCount;
                                     var localTime = DateTime.Now.ToString("h:mm:ss tt");
+                                    LastSyncTime = localTime;
                                     GpsDiagnostics.Log($"[Background Service] Sent coordinates natively: Lat={location.Latitude}, Lng={location.Longitude}");
                                     UpdateNotification($"✅ Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
                                 }

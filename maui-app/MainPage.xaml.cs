@@ -210,6 +210,24 @@ namespace LOCATION_TRACKING
         }
 
         [JSInvokable]
+        public static Task<string> GetLatestLocationData()
+        {
+#if ANDROID
+            var data = new
+            {
+                latitude = LocationTracker.Platforms.Android.AndroidBackgroundService.LastLatitude,
+                longitude = LocationTracker.Platforms.Android.AndroidBackgroundService.LastLongitude,
+                sentCount = LocationTracker.Platforms.Android.AndroidBackgroundService.LocationsSentCount,
+                lastSync = LocationTracker.Platforms.Android.AndroidBackgroundService.LastSyncTime
+            };
+            return Task.FromResult(System.Text.Json.JsonSerializer.Serialize(data));
+#else
+            var data = new { latitude = 0.0, longitude = 0.0, sentCount = 0, lastSync = "Never" };
+            return Task.FromResult(System.Text.Json.JsonSerializer.Serialize(data));
+#endif
+        }
+
+        [JSInvokable]
         public static Task<string> GetDeviceId()
         {
 #if ANDROID
