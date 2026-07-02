@@ -63,6 +63,19 @@ function populateDeviceIdFields() {
     });
 }
 
+// Polling helper to ensure fields are populated and bound once Blazor renders the inputs
+(function startupPopulate() {
+    let attempts = 0;
+    const interval = setInterval(() => {
+        populateDeviceIdFields();
+        bindDeviceIdInputs();
+        attempts++;
+        if (attempts > 50) {
+            clearInterval(interval);
+        }
+    }, 200);
+})();
+
 function bindDeviceIdInputs() {
     const fields = [
         'client-device-id-input',
@@ -175,7 +188,7 @@ async function handleClientLogin() {
             skywayInfo: info
         };
 
-        // Save session locally (token not needed from custom backend)
+        // Save session locally (token not needed from our custom backend)
         saveSession('skyway-direct', 'client', clientData);
 
         // Permanently lock the device to this client ID (cleared only via app data wipe in system settings)

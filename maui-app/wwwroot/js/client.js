@@ -368,36 +368,29 @@ function startFallbackTracking(clientId, deviceId) {
         console.log('[BgMode] Enabled');
     }
 
-    if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== 'function') {
-        console.warn('[Tracking] navigator.geolocation is unavailable.');
+    if (!navigator.geolocation && typeof invokeCSharp !== 'function') {
+        console.warn('[Tracking] Geolocation services are unavailable.');
         showToast('Location service is unavailable on this device.', 'warning', 5000);
         isTracking = false;
         return;
     }
 
     // Get location every 60 seconds
-    function fetchAndSendLocation() {
-        const geoOptions = {
-            enableHighAccuracy: true,
-            timeout: 30000,
-            maximumAge: 0
-        };
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude, accuracy, speed, heading } = position.coords;
-                console.log('[Fallback] Location:', latitude, longitude);
-
-                handleCapturedLocation(clientId, deviceId, position.coords, null);
-                updateLocationUI(latitude, longitude);
-            },
-            (error) => {
-                const message = error && error.message ? error.message : 'Permission denied or GPS unavailable';
-                console.error('[Fallback] Geolocation error:', message);
-                showToast('GPS error: ' + message, 'warning');
-            },
-            geoOptions
-        );
+    async function fetchAndSendLocation() {
+        try {
+            const coords = await getCurrentLocationPromise();
+            if (coords) {
+                console.log('[Fallback] Location fetched successfully:', coords.latitude, coords.longitude);
+                handleCapturedLocation(clientId, deviceId, coords, null);
+                updateLocationUI(coords.latitude, coords.longitude);
+            } else {
+                console.error('[Fallback] Geolocation fetched null coordinates.');
+                showToast('GPS error: Could not fetch location details.', 'warning');
+            }
+        } catch (err) {
+            console.error('[Fallback] fetchAndSendLocation error:', err);
+            showToast('GPS error: ' + (err.message || err), 'warning');
+        }
     }
 
     // Fetch immediately
@@ -716,6 +709,57 @@ function updateLocationUI(lat, lng) {
 }
 
 /**
+ * Helper to fetch the current location as a Promise
+ */
+async function getCurrentLocationPromise() {
+    // 1. Try native MAUI Geolocation via C# bridge first
+    try {
+        console.log('[GPS] Attempting to fetch native location via C#...');
+        if (typeof invokeCSharp === 'function') {
+            const locJson = await invokeCSharp('GetCurrentLocation');
+            if (locJson) {
+                const loc = JSON.parse(locJson);
+                console.log('[GPS] Native location success:', loc);
+                return {
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                    accuracy: loc.accuracy,
+                    speed: loc.speed,
+                    heading: loc.bearing
+                };
+            }
+            console.warn('[GPS] Native location returned null, falling back to HTML5 geolocation...');
+        }
+    } catch (err) {
+        console.error('[GPS] Native location fetch error:', err);
+    }
+
+    // 2. Fallback to HTML5 Geolocation API
+    return new Promise((resolve) => {
+        if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== 'function') {
+            console.warn('[GPS] Geolocation API unavailable.');
+            resolve(null);
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                console.log('[GPS] HTML5 location success:', position.coords);
+                resolve(position.coords);
+            },
+            (error) => {
+                console.warn('[GPS] HTML5 geolocation failed:', error);
+                resolve(null);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 8000,
+                maximumAge: 0
+            }
+        );
+    });
+}
+
+/**
  * Toggle tracking on/off
  */
 function toggleTracking() {
@@ -918,20 +962,103 @@ function updateWorkdayUI() {
     if (othersDot) {
         othersDot.className = statusClass;
     }
+
+    // Update disabled/enabled classes on premium dashboard cards
+    const cardDayStart = document.getElementById('card-day-start');
+    const cardCheckIn = document.getElementById('card-check-in');
+    
+    // Day Start / End Toggle Elements
+    const dayToggleTitle = document.getElementById('day-toggle-title');
+    const dayToggleDesc = document.getElementById('day-toggle-desc');
+    const dayToggleIconContainer = document.getElementById('day-toggle-icon-container');
+
+    if (cardDayStart) {
+        // Toggle card should NEVER have "disabled" class because it's always clickable!
+        cardDayStart.classList.remove('disabled');
+
+        if (isDayStarted) {
+            cardDayStart.classList.add('day-end-active');
+            if (dayToggleTitle) dayToggleTitle.textContent = 'Day End';
+            if (dayToggleDesc) dayToggleDesc.textContent = 'Complete your workday and tracking';
+            if (dayToggleIconContainer) {
+                dayToggleIconContainer.style.background = 'rgba(229, 115, 115, 0.15)';
+                dayToggleIconContainer.style.color = '#E57373';
+                dayToggleIconContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>`;
+            }
+        } else {
+            cardDayStart.classList.remove('day-end-active');
+            if (dayToggleTitle) dayToggleTitle.textContent = 'Day Start';
+            if (dayToggleDesc) dayToggleDesc.textContent = 'Begin your workday and tracking';
+            if (dayToggleIconContainer) {
+                dayToggleIconContainer.style.background = 'rgba(242, 140, 82, 0.15)';
+                dayToggleIconContainer.style.color = '#F28C52';
+                dayToggleIconContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+            }
+        }
+    }
+
+    if (cardCheckIn) {
+        if (isDayStarted) {
+            cardCheckIn.classList.remove('disabled');
+        } else {
+            cardCheckIn.classList.add('disabled');
+        }
+    }
+}
+
+/**
+ * Handle "Day Start / Day End" Toggle button action
+ */
+async function handleDayToggle() {
+    if (isDayStarted) {
+        const confirmEnd = confirm("Do you want to end your workday?");
+        if (confirmEnd) {
+            await handleDayEnd();
+        }
+    } else {
+        const confirmStart = confirm("Do you want to start your workday?");
+        if (confirmStart) {
+            await handleDayStart();
+        }
+    }
 }
 
 /**
  * Handle "Day Start" button action
  */
-/**
- * Handle "Day Start" button action
- */
-function handleDayStart() {
+async function handleDayStart() {
     const session = getSession();
     if (!session || !session.userData) return;
 
     if (isDayStarted) {
         showToast('Workday has already been started.', 'info');
+        return;
+    }
+
+    showToast('Fetching current location...', 'info');
+    let coords = await getCurrentLocationPromise();
+    let latVal = 0.0;
+    let lngVal = 0.0;
+
+    if (coords) {
+        latVal = coords.latitude;
+        lngVal = coords.longitude;
+        updateLocationUI(latVal, lngVal);
+    } else {
+        const curLatEl = document.getElementById('current-lat');
+        const curLngEl = document.getElementById('current-lng');
+        if (curLatEl && curLngEl) {
+            const latText = curLatEl.textContent.trim();
+            const lngText = curLngEl.textContent.trim();
+            if (latText !== '--' && lngText !== '--' && latText !== 'Fetching...' && lngText !== 'Fetching...') {
+                latVal = parseFloat(latText);
+                lngVal = parseFloat(lngText);
+            }
+        }
+    }
+
+    if (latVal === 0.0 || lngVal === 0.0) {
+        showToast('Could not fetch location. Please ensure GPS is enabled and try again.', 'error');
         return;
     }
 
@@ -953,25 +1080,12 @@ function handleDayStart() {
 
     // Call Skyway APIs if online
     if (navigator.onLine) {
-        let latVal = 0.0;
-        let lngVal = 0.0;
-        const curLatEl = document.getElementById('current-lat');
-        const curLngEl = document.getElementById('current-lng');
-        if (curLatEl && curLngEl) {
-            const latText = curLatEl.textContent.trim();
-            const lngText = curLngEl.textContent.trim();
-            if (latText !== '--' && lngText !== '--') {
-                latVal = parseFloat(latText);
-                lngVal = parseFloat(lngText);
-            }
-        }
-
         const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
         const empid = (session.userData.name) || 'demo admin2';
         const imeino = session.userData.deviceId || '';
 
         // Call startendday
-        fetch('https://fleettrackon.co.in/skywaydia/startendday', {
+        fetch(`${API_BASE_URL}/startendday`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -985,7 +1099,7 @@ function handleDayStart() {
         }).catch(err => console.error('startendday START error:', err));
 
         // Call iamatevent
-        fetch('https://fleettrackon.co.in/skywaydia/iamatevent', {
+        fetch(`${API_BASE_URL}/iamatevent`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1047,7 +1161,7 @@ function handleCheckIn() {
                 }
             }
 
-            fetch('https://fleettrackon.co.in/skywaydia/iamatevent', {
+            fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1242,7 +1356,7 @@ async function submitOthers() {
     if (navigator.onLine) {
         try {
             console.log('[Others] Submitting to third-party API...');
-            await fetch('https://fleettrackon.co.in/skywaydia/updateleaddeatils_sky', {
+            await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dsrBody)
@@ -1253,7 +1367,7 @@ async function submitOthers() {
         }
 
         try {
-            await fetch('https://fleettrackon.co.in/skywaydia/iamatevent', {
+            await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -2485,7 +2599,7 @@ async function fetchClientList() {
     if (navigator.onLine) {
         try {
             console.log('[ClientList] Fetching from API with search:', clientSearch, groupSearch);
-            let response = await fetch('https://fleettrackon.co.in/skywaydia/getclientlistbygroup', {
+            let response = await fetch(`${API_BASE_URL}/getclientlistbygroup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -2508,7 +2622,7 @@ async function fetchClientList() {
             } else {
                 // FALLBACK: Query with "demo admin2" and "admin" if empty
                 console.log('[ClientList] Empty response for user. Falling back to demo admin2...');
-                response = await fetch('https://fleettrackon.co.in/skywaydia/getclientlistbygroup', {
+                response = await fetch(`${API_BASE_URL}/getclientlistbygroup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2750,7 +2864,7 @@ async function submitDSR() {
     if (navigator.onLine) {
         try {
             console.log('[DSR] Submitting to third-party API...');
-            await fetch('https://fleettrackon.co.in/skywaydia/updateleaddeatils_sky', {
+            await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dsrBody)
@@ -2761,7 +2875,7 @@ async function submitDSR() {
         }
 
         try {
-            await fetch('https://fleettrackon.co.in/skywaydia/iamatevent', {
+            await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -2953,7 +3067,7 @@ async function submitBooking() {
                 }
             }
 
-            await fetch('https://fleettrackon.co.in/skywaydia/iamatevent', {
+            await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -3030,9 +3144,17 @@ async function syncDSRs() {
         isDsrSyncing = true;
         console.log(`[SyncDsr] Found ${pendingList.length} DSR records to sync.`);
 
+        const session = getSession();
+        const defaultUserid = (session && session.userData && session.userData.clientId) || '';
+        const defaultGempType = (session && session.role) || 'client';
+        const defaultGempName = (session && session.userData && session.userData.name) || '';
+        const defaultDeviceId = (session && session.userData && session.userData.deviceId) || '';
+        const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+
         let successIds = [];
         for (const dsr of pendingList) {
             try {
+                // 1. Sync to local backend
                 const response = await apiRequest('/api/client/dsr-update', 'POST', {
                     customer_name: dsr.customer_name,
                     office_address: dsr.office_address,
@@ -3046,7 +3168,70 @@ async function syncDSRs() {
                     longitude: dsr.longitude,
                     client_name: dsr.client_name
                 });
+
                 if (response && response.success) {
+                    // 2. Sync to third-party fleettrackon API (updateleaddeatils_sky)
+                    const followupParts = dsr.followup ? dsr.followup.split(' ') : [];
+                    const followupDate = followupParts[0] || '';
+                    const followupTime = followupParts[1] ? followupParts[1].substring(0, 5) : '';
+                    
+                    const clientNameText = dsr.client_name || defaultGempName;
+                    const useridVal = dsr.client_id || defaultUserid;
+
+                    const thirdPartyBody = {
+                        userid: useridVal,
+                        gemptype: defaultGempType,
+                        leaddatetime: dsr.created_timestamp ? dsr.created_timestamp.replace('T', ' ').slice(0, 19) : currentDateTime,
+                        officeaddres: dsr.office_address || '',
+                        nleadname: dsr.customer_name,
+                        contactperson: dsr.contact_person || '',
+                        ncontact: dsr.contact_no || '',
+                        currentdatetime: dsr.created_timestamp ? dsr.created_timestamp.replace('T', ' ').slice(0, 19) : currentDateTime,
+                        intime: "00:00:00",
+                        outtime: "00:00:00",
+                        follow_rem: dsr.last_remark || '',
+                        n_nremark: dsr.last_remark || '',
+                        nremark: dsr.last_remark || '',
+                        nfollowup: followupDate,
+                        nfollowuptime: followupTime,
+                        assignedemp: "All",
+                        gpsLatitude: String(dsr.latitude || 0.0),
+                        gpsLongitude: String(dsr.longitude || 0.0),
+                        outletname: dsr.customer_name,
+                        lleadno: dsr.leadno || '',
+                        l_nremark: dsr.last_remark || '',
+                        gempname: clientNameText
+                    };
+
+                    try {
+                        console.log('[SyncDsr] Posting to third-party updateleaddeatils_sky...');
+                        await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(thirdPartyBody)
+                        });
+                    } catch (tpErr) {
+                        console.error('[SyncDsr] Third-party API updateleaddeatils_sky failed:', tpErr);
+                    }
+
+                    // 3. Sync to iamatevent
+                    try {
+                        await fetch(`${API_BASE_URL}/iamatevent`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                gotiamatdate: thirdPartyBody.currentdatetime,
+                                gotempname: thirdPartyBody.gempname,
+                                gotempid: thirdPartyBody.userid,
+                                gotinoutstatus: "DSR_UPDATE",
+                                gotiamatclient: dsr.customer_name,
+                                gotiamatlat: parseFloat(thirdPartyBody.gpsLatitude),
+                                gotiamatlong: parseFloat(thirdPartyBody.gpsLongitude),
+                                gimeinumber: defaultDeviceId
+                            })
+                        });
+                    } catch (tpErr) {}
+
                     successIds.push(dsr.id);
                 }
             } catch (err) {
@@ -3352,7 +3537,7 @@ function renderRemindersList(list) {
 /**
  * Handle "Day End" button action
  */
-function handleDayEnd() {
+async function handleDayEnd() {
     if (!isDayStarted) {
         showToast('Please start your workday first by tapping "Day Start".', 'warning');
         return;
@@ -3360,16 +3545,25 @@ function handleDayEnd() {
 
     const session = getSession();
 
+    showToast('Fetching current location...', 'info');
+    let coords = await getCurrentLocationPromise();
     let latVal = 0.0;
     let lngVal = 0.0;
-    const curLatEl = document.getElementById('current-lat');
-    const curLngEl = document.getElementById('current-lng');
-    if (curLatEl && curLngEl) {
-        const latText = curLatEl.textContent.trim();
-        const lngText = curLngEl.textContent.trim();
-        if (latText !== '--' && lngText !== '--') {
-            latVal = parseFloat(latText);
-            lngVal = parseFloat(lngText);
+
+    if (coords) {
+        latVal = coords.latitude;
+        lngVal = coords.longitude;
+        updateLocationUI(latVal, lngVal);
+    } else {
+        const curLatEl = document.getElementById('current-lat');
+        const curLngEl = document.getElementById('current-lng');
+        if (curLatEl && curLngEl) {
+            const latText = curLatEl.textContent.trim();
+            const lngText = curLngEl.textContent.trim();
+            if (latText !== '--' && lngText !== '--' && latText !== 'Fetching...' && lngText !== 'Fetching...') {
+                latVal = parseFloat(latText);
+                lngVal = parseFloat(lngText);
+            }
         }
     }
 
@@ -3379,7 +3573,7 @@ function handleDayEnd() {
         const imeino = session.userData.deviceId || '';
 
         // Call startendday
-        fetch('https://fleettrackon.co.in/skywaydia/startendday', {
+        fetch(`${API_BASE_URL}/startendday`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -3393,7 +3587,7 @@ function handleDayEnd() {
         }).catch(err => console.error('startendday END error:', err));
 
         // Call iamatevent
-        fetch('https://fleettrackon.co.in/skywaydia/iamatevent', {
+        fetch(`${API_BASE_URL}/iamatevent`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -3744,7 +3938,7 @@ async function submitNewClient() {
     if (navigator.onLine) {
         try {
             console.log('[NewClient] Submitting to third-party API...');
-            await fetch('https://fleettrackon.co.in/skywaydia/updateleaddeatils_sky', {
+            await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dsrBody)
@@ -3755,7 +3949,7 @@ async function submitNewClient() {
         }
 
         try {
-            await fetch('https://fleettrackon.co.in/skywaydia/iamatevent', {
+            await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
