@@ -746,7 +746,7 @@ async function getCurrentLocationPromise() {
     // 1. Try native MAUI Geolocation via C# bridge first
     try {
         console.log('[GPS] Attempting to fetch native location via C#...');
-        if (typeof invokeCSharp === 'function') {
+        if (typeof invokeCSharp === 'function' && !document.hidden) {
             const locJson = await invokeCSharp('GetCurrentLocation');
             if (locJson) {
                 const loc = JSON.parse(locJson);

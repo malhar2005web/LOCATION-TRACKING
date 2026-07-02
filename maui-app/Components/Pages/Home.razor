@@ -2160,3 +2160,21 @@
     
     
     <!-- App Scripts -->
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                var exceptionText = await LOCATION_TRACKING.MainPage.GetLastException();
+                if (!string.IsNullOrEmpty(exceptionText))
+                {
+                    await JSRuntime.InvokeVoidAsync("window.showOverlay", "Previous Session Native Crash (C# Exception)", "App crashed in the previous session.", exceptionText);
+                }
+            }
+            catch {}
+        }
+    }
+}
