@@ -3641,6 +3641,7 @@ async function handleDayEnd() {
         const mins = Math.floor((diffSecs % 3600) / 60).toString().padStart(2, '0');
         finalDuration = `${hrs}:${mins}`;
         localStorage.setItem('lastWorkDuration', finalDuration);
+    }
     localStorage.removeItem('dayStartTime');
 
     // Update UI
