@@ -27,10 +27,11 @@ namespace LocationTracker.Platforms.Android
         {
             try
             {
+                var iconId = ApplicationContext.ApplicationInfo.Icon;
                 var notification = new NotificationCompat.Builder(this, ChannelId)
                     .SetContentTitle("Location Tracking Active")
                     .SetContentText(text)
-                    .SetSmallIcon(global::Android.Resource.Drawable.IcMenuMyLocation)
+                    .SetSmallIcon(iconId)
                     .SetOngoing(true)
                     .SetCategory(NotificationCompat.CategoryService)
                     .SetPriority(NotificationCompat.PriorityHigh)
@@ -52,10 +53,11 @@ namespace LocationTracker.Platforms.Android
             try
             {
                 CreateNotificationChannel();
+                var iconId = ApplicationContext.ApplicationInfo.Icon;
                 var notification = new NotificationCompat.Builder(this, ChannelId)
                     .SetContentTitle("Location Tracking Active")
                     .SetContentText("Starting location tracking...")
-                    .SetSmallIcon(global::Android.Resource.Drawable.IcMenuMyLocation)
+                    .SetSmallIcon(iconId)
                     .SetOngoing(true)
                     .SetCategory(NotificationCompat.CategoryService)
                     .SetPriority(NotificationCompat.PriorityHigh)

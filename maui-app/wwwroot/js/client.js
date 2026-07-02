@@ -465,7 +465,6 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
             if (countEl) countEl.textContent = locationSentCount.toString();
 
             console.log(`[Tracking] Location #${locationSentCount} uploaded successfully.`);
-            showNativeToast("your location is being tracked/sent to admin");
 
             const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             updateSyncStatusText(`Last Location Sent: ${timeStr}`);
