@@ -24,28 +24,42 @@ namespace LocationTracker.Platforms.Android
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
-            CreateNotificationChannel();
-            var notification = new NotificationCompat.Builder(this, ChannelId)
-                .SetContentTitle("Location Tracking Active")
-                .SetContentText("your location is being tracked/sent to admin")
-                .SetSmallIcon(global::Android.Resource.Drawable.IcMenuMyLocation) // Maps to system monochrome location icon
-                .SetOngoing(true)
-                .SetCategory(NotificationCompat.CategoryService)
-                .SetPriority(NotificationCompat.PriorityHigh) // Elevated priority so it remains visible and alerts the user
-                .Build();
-
-            // Acquire CPU wake lock to ensure background execution continues during sleep
-            var powerManager = (PowerManager)GetSystemService(PowerService);
-            _wakeLock = powerManager.NewWakeLock(WakeLockFlags.Partial, "LocationTracker::BackgroundWakeLock");
-            _wakeLock.Acquire();
-
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+            GpsDiagnostics.Log("OnStartCommand invoked.");
+            try
             {
-                StartForeground(ServiceNotificationId, notification, global::Android.Content.PM.ForegroundService.TypeLocation);
+                CreateNotificationChannel();
+                var notification = new NotificationCompat.Builder(this, ChannelId)
+                    .SetContentTitle("Location Tracking Active")
+                    .SetContentText("your location is being tracked/sent to admin")
+                    .SetSmallIcon(global::Android.Resource.Drawable.IcMenuMyLocation) // Maps to system monochrome location icon
+                    .SetOngoing(true)
+                    .SetCategory(NotificationCompat.CategoryService)
+                    .SetPriority(NotificationCompat.PriorityHigh) // Elevated priority so it remains visible and alerts the user
+                    .Build();
+
+                GpsDiagnostics.Log("Notification object built. Acquiring wake lock...");
+
+                // Acquire CPU wake lock to ensure background execution continues during sleep
+                var powerManager = (PowerManager)GetSystemService(PowerService);
+                _wakeLock = powerManager.NewWakeLock(WakeLockFlags.Partial, "LocationTracker::BackgroundWakeLock");
+                _wakeLock.Acquire();
+
+                GpsDiagnostics.Log("Wake lock acquired. Calling StartForeground...");
+
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+                {
+                    StartForeground(ServiceNotificationId, notification, global::Android.Content.PM.ForegroundService.TypeLocation);
+                }
+                else
+                {
+                    StartForeground(ServiceNotificationId, notification);
+                }
+
+                GpsDiagnostics.Log("StartForeground call completed successfully.");
             }
-            else
+            catch (Exception ex)
             {
-                StartForeground(ServiceNotificationId, notification);
+                GpsDiagnostics.Log($"Failed to initialize foreground service properties: {ex.Message}\n{ex.StackTrace}");
             }
 
             // Fetch and report GPS location coordinates every 1 minute
@@ -53,17 +67,22 @@ namespace LocationTracker.Platforms.Android
             {
                 try
                 {
+                    GpsDiagnostics.Log("Timer tick triggered.");
                     var context = global::Android.App.Application.Context;
                     var sharedPref = context.GetSharedPreferences("com.locationtracker.app.microsoft.maui.essentials.preferences", global::Android.Content.FileCreationMode.Private);
                     var clientId = sharedPref.GetString("client_id", "");
 
+                    GpsDiagnostics.Log($"Timer tick: Client ID read from shared preference = '{clientId}'");
+
                     // Track location continuously if user is logged in
                     if (!string.IsNullOrEmpty(clientId))
                     {
+                        GpsDiagnostics.Log("Fetching native location...");
                         var location = await GetNativeLocationAsync(context);
 
                         if (location != null)
                         {
+                            GpsDiagnostics.Log($"Native location resolved: Lat={location.Latitude}, Lng={location.Longitude}, Accuracy={location.Accuracy}");
                             var deviceId = global::Android.Provider.Settings.Secure.GetString(context.ContentResolver, global::Android.Provider.Settings.Secure.AndroidId) ?? "Unknown";
 
                             int.TryParse(clientId, out int numericUserId);
@@ -86,22 +105,27 @@ namespace LocationTracker.Platforms.Android
                                     calbaering = Math.Round(location.Bearing)
                                 };
 
+                                GpsDiagnostics.Log("Posting native coordinates payload to Skyway...");
                                 var response = await client.PostAsJsonAsync("https://fleettrackon.co.in/skywaydia/receiveddata", payload);
                                 if (response.IsSuccessStatusCode)
                                 {
-                                    System.Diagnostics.Debug.WriteLine($"[Background Service] Sent coordinates natively to Skyway: Lat={location.Latitude}, Lng={location.Longitude}");
+                                    GpsDiagnostics.Log($"[Background Service] Sent coordinates natively: Lat={location.Latitude}, Lng={location.Longitude}");
                                 }
                                 else
                                 {
-                                    System.Diagnostics.Debug.WriteLine($"[Background Service] Failed to send natively: {response.StatusCode}");
+                                    GpsDiagnostics.Log($"[Background Service] Failed to send natively: {response.StatusCode} {response.ReasonPhrase}");
                                 }
                             }
+                        }
+                        else
+                        {
+                            GpsDiagnostics.Log("Native location resolved to null.");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Background Service] Native tracking timer execution failed: {ex.Message}");
+                    GpsDiagnostics.Log($"Native tracking timer execution failed: {ex.Message}\n{ex.StackTrace}");
                 }
             }, null, TimeSpan.Zero, TimeSpan.FromMinutes(1));
 
@@ -113,19 +137,31 @@ namespace LocationTracker.Platforms.Android
             try
             {
                 var locationManager = (global::Android.Locations.LocationManager)context.GetSystemService(Context.LocationService);
-                if (locationManager == null) return null;
+                if (locationManager == null)
+                {
+                    GpsDiagnostics.Log("LocationManager is null.");
+                    return null;
+                }
 
                 var isGpsEnabled = locationManager.IsProviderEnabled(global::Android.Locations.LocationManager.GpsProvider);
                 var isNetworkEnabled = locationManager.IsProviderEnabled(global::Android.Locations.LocationManager.NetworkProvider);
 
-                if (!isGpsEnabled && !isNetworkEnabled) return null;
+                GpsDiagnostics.Log($"Provider status: GPS={isGpsEnabled}, Network={isNetworkEnabled}");
+
+                if (!isGpsEnabled && !isNetworkEnabled)
+                {
+                    GpsDiagnostics.Log("Both GPS and Network location providers are disabled on device settings!");
+                    return null;
+                }
 
                 var provider = isGpsEnabled ? global::Android.Locations.LocationManager.GpsProvider : global::Android.Locations.LocationManager.NetworkProvider;
                 var lastKnown = locationManager.GetLastKnownLocation(provider);
+                GpsDiagnostics.Log($"Last known location read from '{provider}': " + (lastKnown != null ? $"Lat={lastKnown.Latitude}, Lng={lastKnown.Longitude}" : "null"));
 
                 var tcs = new TaskCompletionSource<global::Android.Locations.Location>();
                 var listener = new ActiveLocationListener(tcs);
 
+                GpsDiagnostics.Log($"Requesting single location update from provider '{provider}'...");
                 locationManager.RequestLocationUpdates(provider, 0, 0, listener, context.MainLooper);
 
                 var delayTask = Task.Delay(10000); // 10 seconds timeout
@@ -135,16 +171,19 @@ namespace LocationTracker.Platforms.Android
 
                 if (completedTask == tcs.Task)
                 {
-                    return await tcs.Task;
+                    var freshLocation = await tcs.Task;
+                    GpsDiagnostics.Log("Successfully obtained fresh native coordinates.");
+                    return freshLocation;
                 }
                 else
                 {
+                    GpsDiagnostics.Log("Fresh location update request timed out (10s limit exceeded). Falling back to last known location.");
                     return lastKnown;
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Background Service] GetNativeLocationAsync failed: {ex.Message}");
+                GpsDiagnostics.Log($"GetNativeLocationAsync failed: {ex.Message}\n{ex.StackTrace}");
                 return null;
             }
         }

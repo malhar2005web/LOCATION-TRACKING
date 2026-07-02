@@ -3505,9 +3505,50 @@ function toggleDiagnostics() {
         if (panel.classList.contains('collapsed')) {
             panel.classList.remove('collapsed');
             if (chevron) chevron.classList.add('rotated');
+            
+            // Fetch logs immediately and set up interval
+            loadNativeLogs();
+            if (!window.logsInterval) {
+                window.logsInterval = setInterval(loadNativeLogs, 3000);
+            }
         } else {
             panel.classList.add('collapsed');
             if (chevron) chevron.classList.remove('rotated');
+            
+            if (window.logsInterval) {
+                clearInterval(window.logsInterval);
+                window.logsInterval = null;
+            }
+        }
+    }
+}
+
+async function loadNativeLogs() {
+    const logEl = document.getElementById('gps-diagnostics-text');
+    if (!logEl) return;
+    
+    if (typeof invokeCSharp === 'function') {
+        try {
+            const logs = await invokeCSharp('ReadGpsDiagnostics');
+            logEl.textContent = logs || 'No logs recorded yet.';
+        } catch (err) {
+            logEl.textContent = 'Error reading native logs: ' + err.message;
+        }
+    } else {
+        logEl.textContent = 'Native bridge not available (Non-MAUI environment).';
+    }
+}
+
+async function clearNativeLogs() {
+    const logEl = document.getElementById('gps-diagnostics-text');
+    if (logEl) logEl.textContent = 'Clearing logs...';
+    
+    if (typeof invokeCSharp === 'function') {
+        try {
+            await invokeCSharp('ClearGpsDiagnostics');
+            if (logEl) logEl.textContent = 'Logs cleared.';
+        } catch (err) {
+            if (logEl) logEl.textContent = 'Error clearing logs: ' + err.message;
         }
     }
 }

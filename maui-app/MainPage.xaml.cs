@@ -24,12 +24,21 @@ namespace LOCATION_TRACKING
                     if (!string.IsNullOrEmpty(clientId))
                     {
 #if ANDROID
-                        var context = Android.App.Application.Context;
+                        var context = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity ?? Microsoft.Maui.ApplicationModel.Platform.AppContext;
+                        LocationTracker.Platforms.Android.GpsDiagnostics.Log($"Starting background service from OnAppearing. Client ID={clientId}");
                         var intent = new Android.Content.Intent(context, typeof(LocationTracker.Platforms.Android.AndroidBackgroundService));
-                        if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
-                            context.StartForegroundService(intent);
-                        else
-                            context.StartService(intent);
+                        try
+                        {
+                            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
+                                context.StartForegroundService(intent);
+                            else
+                                context.StartService(intent);
+                            LocationTracker.Platforms.Android.GpsDiagnostics.Log("StartForegroundService call completed successfully.");
+                        }
+                        catch (Exception startEx)
+                        {
+                            LocationTracker.Platforms.Android.GpsDiagnostics.Log($"Failed to start foreground service: {startEx.Message}");
+                        }
 #endif
                     }
                 }
@@ -82,18 +91,28 @@ namespace LOCATION_TRACKING
                     if (key == "client_id" && !string.IsNullOrEmpty(value))
                     {
 #if ANDROID
-                        var context = Android.App.Application.Context;
+                        var context = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity ?? Microsoft.Maui.ApplicationModel.Platform.AppContext;
+                        LocationTracker.Platforms.Android.GpsDiagnostics.Log($"Starting background service from OnLocalStorageChanged. Client ID={value}");
                         var intent = new Android.Content.Intent(context, typeof(LocationTracker.Platforms.Android.AndroidBackgroundService));
-                        if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
-                            context.StartForegroundService(intent);
-                        else
-                            context.StartService(intent);
+                        try
+                        {
+                            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
+                                context.StartForegroundService(intent);
+                            else
+                                context.StartService(intent);
+                            LocationTracker.Platforms.Android.GpsDiagnostics.Log("StartForegroundService call from storage change completed.");
+                        }
+                        catch (Exception startEx)
+                        {
+                            LocationTracker.Platforms.Android.GpsDiagnostics.Log($"Failed to start from storage change: {startEx.Message}");
+                        }
 #endif
                     }
                     else if (key == "client_id" && string.IsNullOrEmpty(value))
                     {
 #if ANDROID
-                        var context = Android.App.Application.Context;
+                        var context = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity ?? Microsoft.Maui.ApplicationModel.Platform.AppContext;
+                        LocationTracker.Platforms.Android.GpsDiagnostics.Log("Stopping background service (client_id cleared).");
                         var intent = new Android.Content.Intent(context, typeof(LocationTracker.Platforms.Android.AndroidBackgroundService));
                         context.StopService(intent);
 #endif
@@ -118,12 +137,21 @@ namespace LOCATION_TRACKING
                     if (!string.IsNullOrEmpty(clientId))
                     {
 #if ANDROID
-                        var context = Android.App.Application.Context;
+                        var context = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity ?? Microsoft.Maui.ApplicationModel.Platform.AppContext;
+                        LocationTracker.Platforms.Android.GpsDiagnostics.Log($"Starting background service from JS StartBackgroundService. Client ID={clientId}");
                         var intent = new Android.Content.Intent(context, typeof(LocationTracker.Platforms.Android.AndroidBackgroundService));
-                        if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
-                            context.StartForegroundService(intent);
-                        else
-                            context.StartService(intent);
+                        try
+                        {
+                            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
+                                context.StartForegroundService(intent);
+                            else
+                                context.StartService(intent);
+                            LocationTracker.Platforms.Android.GpsDiagnostics.Log("StartForegroundService call from JS completed.");
+                        }
+                        catch (Exception startEx)
+                        {
+                            LocationTracker.Platforms.Android.GpsDiagnostics.Log($"Failed to start from JS: {startEx.Message}");
+                        }
 #endif
                     }
                 }
@@ -132,6 +160,25 @@ namespace LOCATION_TRACKING
             {
                 System.Diagnostics.Debug.WriteLine($"[Bridge] StartBackgroundService failed: {ex.Message}");
             }
+        }
+
+        [JSInvokable]
+        public static Task<string> ReadGpsDiagnostics()
+        {
+#if ANDROID
+            return Task.FromResult(LocationTracker.Platforms.Android.GpsDiagnostics.ReadLogs());
+#else
+            return Task.FromResult("Not Android platform");
+#endif
+        }
+
+        [JSInvokable]
+        public static Task ClearGpsDiagnostics()
+        {
+#if ANDROID
+            LocationTracker.Platforms.Android.GpsDiagnostics.ClearLogs();
+#endif
+            return Task.CompletedTask;
         }
 
         [JSInvokable]
