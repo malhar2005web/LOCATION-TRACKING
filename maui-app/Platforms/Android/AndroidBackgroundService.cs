@@ -19,8 +19,32 @@ namespace LocationTracker.Platforms.Android
         private const string ChannelId = "LocationTrackingChannel";
         private System.Threading.Timer _timer;
         private PowerManager.WakeLock _wakeLock;
+        private int _locationsSentCount = 0;
 
         public override IBinder OnBind(Intent intent) => null;
+
+        private void UpdateNotification(string text)
+        {
+            try
+            {
+                var notification = new NotificationCompat.Builder(this, ChannelId)
+                    .SetContentTitle("Location Tracking Active")
+                    .SetContentText(text)
+                    .SetSmallIcon(global::Android.Resource.Drawable.IcMenuMyLocation)
+                    .SetOngoing(true)
+                    .SetCategory(NotificationCompat.CategoryService)
+                    .SetPriority(NotificationCompat.PriorityHigh)
+                    .SetStyle(new NotificationCompat.BigTextStyle().BigText(text))
+                    .Build();
+
+                var manager = GetSystemService(NotificationService) as NotificationManager;
+                manager?.Notify(ServiceNotificationId, notification);
+            }
+            catch (Exception ex)
+            {
+                GpsDiagnostics.Log($"UpdateNotification failed: {ex.Message}");
+            }
+        }
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
@@ -30,11 +54,11 @@ namespace LocationTracker.Platforms.Android
                 CreateNotificationChannel();
                 var notification = new NotificationCompat.Builder(this, ChannelId)
                     .SetContentTitle("Location Tracking Active")
-                    .SetContentText("your location is being tracked/sent to admin")
-                    .SetSmallIcon(global::Android.Resource.Drawable.IcMenuMyLocation) // Maps to system monochrome location icon
+                    .SetContentText("Starting location tracking...")
+                    .SetSmallIcon(global::Android.Resource.Drawable.IcMenuMyLocation)
                     .SetOngoing(true)
                     .SetCategory(NotificationCompat.CategoryService)
-                    .SetPriority(NotificationCompat.PriorityHigh) // Elevated priority so it remains visible and alerts the user
+                    .SetPriority(NotificationCompat.PriorityHigh)
                     .Build();
 
                 GpsDiagnostics.Log("Notification object built. Acquiring wake lock...");
@@ -109,17 +133,22 @@ namespace LocationTracker.Platforms.Android
                                 var response = await client.PostAsJsonAsync("https://fleettrackon.co.in/skywaydia/receiveddata", payload);
                                 if (response.IsSuccessStatusCode)
                                 {
+                                    _locationsSentCount++;
+                                    var localTime = DateTime.Now.ToString("h:mm:ss tt");
                                     GpsDiagnostics.Log($"[Background Service] Sent coordinates natively: Lat={location.Latitude}, Lng={location.Longitude}");
+                                    UpdateNotification($"✅ Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
                                 }
                                 else
                                 {
                                     GpsDiagnostics.Log($"[Background Service] Failed to send natively: {response.StatusCode} {response.ReasonPhrase}");
+                                    UpdateNotification($"⚠️ Send failed ({response.StatusCode}) • Total sent: {_locationsSentCount}");
                                 }
                             }
                         }
                         else
                         {
                             GpsDiagnostics.Log("Native location resolved to null.");
+                            UpdateNotification($"📡 Waiting for GPS fix... • Total sent: {_locationsSentCount}");
                         }
                     }
                 }
