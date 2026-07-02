@@ -21,7 +21,7 @@ function initTheme() {
         const theme = localStorage.getItem('theme-preference');
         const hour = new Date().getHours();
         const isNight = (hour >= 21 || hour < 5);
-        
+
         if (theme === 'dark' || (!theme && isNight)) {
             document.documentElement.classList.add('dark-mode');
             document.body.classList.add('dark-mode');
@@ -30,7 +30,7 @@ function initTheme() {
             document.body.classList.remove('dark-mode');
         }
         updateThemeToggleUI();
-    } catch(e) {
+    } catch (e) {
         console.error('[Theme] Failed to init theme:', e);
     }
 }
@@ -48,7 +48,7 @@ function toggleThemeMode() {
             localStorage.setItem('theme-preference', 'dark');
         }
         updateThemeToggleUI();
-    } catch(e) {
+    } catch (e) {
         console.error('[Theme] Failed to toggle theme:', e);
     }
 }
@@ -60,7 +60,7 @@ function updateThemeToggleUI() {
         if (labelEl) {
             labelEl.textContent = isDark ? 'Dark' : 'Light';
         }
-    } catch(e) {
+    } catch (e) {
         console.error('[Theme] Failed to update toggle UI:', e);
     }
 }
@@ -70,7 +70,7 @@ function updateGreeting() {
     try {
         const greetingEl = document.getElementById('client-welcome-greeting');
         if (!greetingEl) return;
-        
+
         const hour = new Date().getHours();
         let greeting = '';
         if (hour >= 5 && hour < 12) {
@@ -83,7 +83,7 @@ function updateGreeting() {
             greeting = 'Good Night,';
         }
         greetingEl.textContent = greeting;
-    } catch(e) {
+    } catch (e) {
         console.error('[Greeting] Failed to update greeting:', e);
     }
 }
@@ -122,8 +122,9 @@ function initClientDashboard(clientData) {
             device.model || device.manufacturer || '--';
     }
 
-    // Load total database location count on dashboard initialize
-    refreshDatabaseLocationCount();
+    // Reset counter
+    locationSentCount = 0;
+    document.getElementById('locations-sent-count').textContent = '0';
 
     // Network listeners
     window.removeEventListener('online', updateNetworkStatus);
@@ -187,13 +188,13 @@ function initClientDashboard(clientData) {
     // Update workday buttons/badges and status header pill
     updateWorkdayUI();
     updateMetricsUI();
-    
+
     // Update theme and greetings
     initTheme();
     updateGreeting();
     updateThemeToggleUI();
 
-    // Start tracking immediately upon entering the session (regardless of workday status)
+    // Start tracking immediately upon login, day start or not
     startLocationTracking(clientData.clientId, clientData.deviceId);
     if (!window.durationInterval) {
         window.durationInterval = setInterval(updateMetricsUI, 10000);
@@ -219,11 +220,6 @@ function startLocationTracking(clientId, deviceId) {
             // Fallback to basic geolocation + interval
             console.log('[Tracking] BackgroundGeolocation not available, using fallback');
             startFallbackTracking(clientId, deviceId);
-        }
-
-        // Trigger native C# Android background service if running inside MAUI context
-        if (typeof invokeCSharp === 'function') {
-            invokeCSharp('StartBackgroundService');
         }
     } catch (err) {
         console.error('[Tracking] Failed to start location tracking:', err);
@@ -400,6 +396,9 @@ function startFallbackTracking(clientId, deviceId) {
     isTracking = true;
 }
 
+/**
+ * Handle captured location (Save locally, upload attempt, status/notification updates)
+ */
 async function handleCapturedLocation(clientId, deviceId, coords, battery) {
     const timestamp = new Date().toISOString();
 
@@ -425,13 +424,13 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
         return;
     }
 
-    // Call third-party tracking API directly as the primary upload channel
+    // Call third-party tracking API in parallel
     try {
         console.log('[Tracking] Sending location to third-party Skyway API...');
         const numericUserId = parseInt(clientId, 10);
         const useruniqeid = isNaN(numericUserId) ? clientId : numericUserId;
 
-        const response = await fetch(`${API_BASE_URL}/receiveddata`, {
+        fetch(`${API_BASE_URL}/receiveddata`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -444,30 +443,49 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
                 gpsLongitude: coords.longitude.toString(),
                 gpsAccuracy: coords.accuracy.toString(),
                 gpsSpeed: (coords.speed || 0).toString(),
-                gpsTimestamp: new Date(timestamp).toISOString().replace('T', ' ').slice(0, 16),
+                gpsTimestamp: new Date().toISOString().replace('T', ' ').slice(0, 16),
                 calbaering: Math.round(coords.heading || coords.bearing || 0)
             })
+        }).then(async (res) => {
+            const rawText = await res.text();
+            let rData = null;
+            try {
+                rData = JSON.parse(rawText);
+            } catch (e) {
+                rData = { status: rawText.trim() };
+            }
+            console.log('[Tracking] Skyway tracking response:', rData);
+        }).catch(err => {
+            console.error('[Tracking] Skyway tracking failed:', err);
+        });
+    } catch (skywayErr) {
+        console.error('[Tracking] Skyway tracking setup error:', skywayErr);
+    }
+
+    // 2. Attempt API upload
+    try {
+        const remainingCount = StorageService.getPendingCount();
+        const response = await apiRequest('/api/location/update', 'POST', {
+            clientId: clientId,
+            deviceId: deviceId,
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+            accuracy: coords.accuracy,
+            speed: coords.speed,
+            bearing: coords.heading || coords.bearing || null,
+            batteryLevel: battery || null,
+            timestamp: timestamp,
+            pendingSyncCount: remainingCount
         });
 
-        const rawText = await response.text();
-        let rData = null;
-        try {
-            rData = JSON.parse(rawText);
-        } catch (e) {
-            rData = { status: rawText.trim() };
-        }
-        console.log('[Tracking] Skyway tracking response:', rData);
-
-        const statusOk = (rData && rData.trackerid && rData.trackerid[0] && rData.trackerid[0].status === 'ok') ||
-                         (rData && rData.status === 'ok') ||
-                         rawText.toLowerCase().includes('ok');
-
-        if (statusOk) {
-            // Mark as synced locally
+        if (response.success) {
+            // 3. Mark as synced
             StorageService.markAsSynced([timestamp]);
-            refreshDatabaseLocationCount();
+            locationSentCount++;
+            const countEl = document.getElementById('locations-sent-count');
+            if (countEl) countEl.textContent = locationSentCount.toString();
 
-            console.log('[Tracking] Location uploaded successfully.');
+            console.log(`[Tracking] Location #${locationSentCount} uploaded successfully.`);
             showNativeToast("your location is being tracked/sent to admin");
 
             const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -476,46 +494,12 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
             // Automatically sync other pending locations
             syncPendingLocations();
         } else {
-            throw new Error(rData?.status || 'Skyway server rejected location');
-        }
-    } catch (skywayErr) {
-        console.error('[Tracking] Skyway tracking failed:', skywayErr.message);
-        const pendingCount = StorageService.getPendingCount();
-        updateSyncStatusText(`Offline Mode – ${pendingCount} locations pending sync`);
-    }
-}
-
-/**
- * Fetch total locations count from Skyway getusertracking API and update UI count badge.
- */
-async function refreshDatabaseLocationCount() {
-    const session = getSession();
-    if (!session || !session.userData) return;
-
-    const username = session.userData.name || 'demo admin2';
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/getusertracking`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                startdatetime: "2026-06-01",
-                enddatetime: "2027-12-31",
-                username: username
-            })
-        });
-
-        const data = await response.json();
-        if (data && data.trackerid) {
-            const count = data.trackerid.length;
-            console.log(`[Tracking] Database location count retrieved: ${count}`);
-            const countEl = document.getElementById('locations-sent-count');
-            if (countEl) {
-                countEl.textContent = count.toString();
-            }
+            throw new Error(response.message || 'Server rejected request');
         }
     } catch (err) {
-        console.error('[Tracking] Failed to fetch database location count:', err);
+        console.error('[Tracking] API update error:', err.message);
+        const pendingCount = StorageService.getPendingCount();
+        updateSyncStatusText(`Offline Mode – ${pendingCount} locations pending sync`);
     }
 }
 
@@ -574,7 +558,7 @@ function updateSyncUI() {
     const lastSyncBadge = document.getElementById('last-sync-time-display-badge');
     const lastSync = StorageService.getLastSyncTime();
     const formattedSyncTime = lastSync !== 'Never' ? new Date(lastSync).toLocaleTimeString() : 'Never';
-    
+
     if (lastSyncEl) {
         lastSyncEl.textContent = formattedSyncTime;
     }
@@ -640,69 +624,51 @@ async function syncPendingLocations() {
     console.log(`[Sync] Found ${pending.length} pending locations. Syncing...`);
     updateSyncStatusText("Connection Restored – Syncing locations");
 
+    const batchSize = 50;
     let successCount = 0;
 
     try {
         // Sort chronologically
         pending.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
-        for (const loc of pending) {
-            const numericUserId = parseInt(loc.clientId, 10);
-            const useruniqeid = isNaN(numericUserId) ? loc.clientId : numericUserId;
+        for (let i = 0; i < pending.length; i += batchSize) {
+            const chunk = pending.slice(i, i + batchSize);
+            const remainingCount = pending.length - (i + chunk.length);
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/receiveddata`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        useruniqeid: useruniqeid,
-                        imeino: loc.deviceId,
-                        deviceid: "GPS FIX",
-                        gpsLatitude: loc.latitude.toString(),
-                        gpsLongitude: loc.longitude.toString(),
-                        gpsAccuracy: (loc.accuracy || 0).toString(),
-                        gpsSpeed: (loc.speed || 0).toString(),
-                        gpsTimestamp: new Date(loc.timestamp).toISOString().replace('T', ' ').slice(0, 16),
-                        calbaering: Math.round(loc.bearing || 0)
-                      })
-                });
+            const response = await apiRequest('/api/location/batch', 'POST', {
+                locations: chunk.map(loc => ({
+                    clientId: loc.clientId,
+                    deviceId: loc.deviceId,
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                    accuracy: loc.accuracy,
+                    speed: loc.speed,
+                    bearing: loc.bearing,
+                    batteryLevel: loc.batteryLevel,
+                    timestamp: loc.timestamp
+                })),
+                pendingSyncCount: remainingCount
+            });
 
-                const rawText = await response.text();
-                let rData = null;
-                try {
-                    rData = JSON.parse(rawText);
-                } catch (e) {
-                    rData = { status: rawText.trim() };
-                }
-
-                const statusOk = (rData && rData.trackerid && rData.trackerid[0] && rData.trackerid[0].status === 'ok') ||
-                                 (rData && rData.status === 'ok') ||
-                                 rawText.toLowerCase().includes('ok');
-
-                if (statusOk) {
-                    StorageService.markAsSynced([loc.timestamp]);
-                    successCount++;
-                } else {
-                    console.warn(`[Sync] Failed to sync location timestamp ${loc.timestamp}:`, rData);
-                }
-            } catch (locErr) {
-                console.error(`[Sync] Error syncing location timestamp ${loc.timestamp}:`, locErr.message);
-                break; // Exit the loop on network error to prevent endless failures
+            if (response.success) {
+                const syncedTimestamps = chunk.map(c => c.timestamp);
+                StorageService.markAsSynced(syncedTimestamps);
+                successCount += chunk.length;
+            } else {
+                throw new Error(response.message || 'Batch upload failed');
             }
         }
 
-        if (successCount > 0) {
-            console.log(`[Sync] Successfully synced ${successCount} locations.`);
-            showNativeToast(`Synced ${successCount} offline locations`);
-            
-            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            updateSyncStatusText(`Last Location Sent: ${timeStr}`);
-        }
+        console.log(`[Sync] Successfully synced ${successCount} locations.`);
+        showNativeToast(`Synced ${successCount} offline locations`);
+
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        updateSyncStatusText(`Last Location Sent: ${timeStr}`);
 
     } catch (err) {
         console.error('[Sync] Sync failed:', err.message);
+        const pendingCount = StorageService.getPendingCount();
+        updateSyncStatusText(`Offline Mode – ${pendingCount} locations pending sync`);
     } finally {
         isSyncing = false;
         updateSyncUI();
@@ -746,7 +712,7 @@ async function getCurrentLocationPromise() {
     // 1. Try native MAUI Geolocation via C# bridge first
     try {
         console.log('[GPS] Attempting to fetch native location via C#...');
-        if (typeof invokeCSharp === 'function' && !document.hidden) {
+        if (typeof invokeCSharp === 'function') {
             const locJson = await invokeCSharp('GetCurrentLocation');
             if (locJson) {
                 const loc = JSON.parse(locJson);
@@ -880,7 +846,7 @@ function setTrackingUI(active) {
 function updateWorkdayUI() {
     const statusIndicator = document.getElementById('client-status-indicator');
     const statusDot = document.getElementById('client-status-dot');
-    
+
     const badgeDayStart = document.getElementById('badge-day-start');
     const badgeCheckIn = document.getElementById('badge-check-in');
 
@@ -904,7 +870,7 @@ function updateWorkdayUI() {
             badgeDayStart.textContent = 'Pending';
         }
     }
-    
+
     if (badgeCheckIn) {
         if (isCheckedIn) {
             badgeCheckIn.className = 'card-premium-status-pill status-checkedin';
@@ -997,7 +963,7 @@ function updateWorkdayUI() {
     // Update disabled/enabled classes on premium dashboard cards
     const cardDayStart = document.getElementById('card-day-start');
     const cardCheckIn = document.getElementById('card-check-in');
-    
+
     // Day Start / End Toggle Elements
     const dayToggleTitle = document.getElementById('day-toggle-title');
     const dayToggleDesc = document.getElementById('day-toggle-desc');
@@ -1244,7 +1210,7 @@ function handleNewClient() {
     showView('new-client-view');
     toggleAccordionSection(1);
     updateRegistrationProgress();
-    
+
     // Auto-detect location for GPS values
     const curLatEl = document.getElementById('current-lat');
     const curLngEl = document.getElementById('current-lng');
@@ -1295,16 +1261,16 @@ function resetOthersForm() {
 }
 
 function populateOthersTimeSelectors() {
-    const hoursHtml = Array.from({length: 24}, (_, i) => {
+    const hoursHtml = Array.from({ length: 24 }, (_, i) => {
         const val = i.toString().padStart(2, '0');
         return `<option value="${val}">${val}</option>`;
     }).join('');
-    
-    const minutesHtml = Array.from({length: 60}, (_, i) => {
+
+    const minutesHtml = Array.from({ length: 60 }, (_, i) => {
         const val = i.toString().padStart(2, '0');
         return `<option value="${val}">${val}</option>`;
     }).join('');
-    
+
     const bh = document.getElementById('others-followup-hours');
     const bm = document.getElementById('others-followup-minutes');
     if (bh) bh.innerHTML = hoursHtml;
@@ -1412,7 +1378,7 @@ async function submitOthers() {
                     gimeinumber: (session && session.userData && session.userData.deviceId) || ""
                 })
             });
-        } catch (e) {}
+        } catch (e) { }
     } else {
         showToast('Offline Mode: Activity saved locally.', 'info');
     }
@@ -1523,7 +1489,7 @@ function resetLeaveForm() {
     document.getElementById('leave-absence-person').value = '';
     document.getElementById('leave-total-display').textContent = '0.0 Days';
     document.getElementById('leave-total-display').style.color = '#10b981';
-    
+
     const summaryCard = document.getElementById('leave-summary-card');
     if (summaryCard) summaryCard.classList.add('hidden');
 }
@@ -1658,7 +1624,7 @@ function submitLeave() {
     LeaveDb.saveLeave(leave, () => {
         showToast('Leave request saved successfully.', 'success');
         resetLeaveForm();
-        
+
         // Go back to the leave menu view
         showView('leave-view');
 
@@ -1763,7 +1729,7 @@ function applyLeavesFilters() {
     let list = [...currentLeavesList];
 
     if (searchVal) {
-        list = list.filter(r => 
+        list = list.filter(r =>
             (r.reason && r.reason.toLowerCase().includes(searchVal)) ||
             (r.employee_name && r.employee_name.toLowerCase().includes(searchVal)) ||
             (r.in_absence && r.in_absence.toLowerCase().includes(searchVal)) ||
@@ -1850,7 +1816,7 @@ function renderLeavesList(list) {
         else if (status === 'Cancelled') badgeClass = 'status-cancelled';
 
         const canCancel = (leaveStatusSource === 'client' && status === 'Pending');
-        const cancelBtnHtml = canCancel 
+        const cancelBtnHtml = canCancel
             ? `<button class="remove-file-btn" onclick="cancelLeave('${leave.id}')" title="Cancel Leave Request">X</button>`
             : `<span style="color:var(--color-text-muted); font-size:0.8rem;">--</span>`;
 
@@ -2267,7 +2233,7 @@ async function fetchReportData(reportType) {
         // Determine which local records to merge
         // If server success: we only merge local 'Pending' sync records (so we don't duplicate already synced records)
         // If offline: we merge all local records (both 'Synced' and 'Pending')
-        const localToMerge = serverSuccess 
+        const localToMerge = serverSuccess
             ? filteredLocal.filter(rec => rec.sync_status === 'Pending')
             : filteredLocal;
 
@@ -2314,10 +2280,10 @@ async function fetchReportData(reportType) {
                         finalStatusCounts.push({ visited_for: status, count: 1 });
                     }
 
-                    const match = finalRecords.find(r => 
-                        r.client_name === local.client && 
-                        r.site_name === local.site_name && 
-                        r.visited_for === local.visited_for && 
+                    const match = finalRecords.find(r =>
+                        r.client_name === local.client &&
+                        r.site_name === local.site_name &&
+                        r.visited_for === local.visited_for &&
                         r.assigned_to === local.visited_by
                     );
 
@@ -2450,7 +2416,7 @@ function renderDsrSummaryReportRows(tbody, records, response) {
     const statsContainer = document.getElementById('dsr-summary-stats');
     const countsCard = document.getElementById('dsr-summary-status-counts-card');
     const countsContainer = document.getElementById('dsr-summary-status-counts');
-    
+
     if (response && response.stats) {
         document.getElementById('dsr-summary-total-visits').textContent = response.stats.total_visits || 0;
         document.getElementById('dsr-summary-total-updates').textContent = response.stats.total_dsr_updates || 0;
@@ -2569,21 +2535,21 @@ function handleReminders() {
  * Time selector population helper
  */
 function populateTimeSelectors() {
-    const hoursHtml = Array.from({length: 24}, (_, i) => {
+    const hoursHtml = Array.from({ length: 24 }, (_, i) => {
         const val = i.toString().padStart(2, '0');
         return `<option value="${val}">${val}</option>`;
     }).join('');
-    
-    const minutesHtml = Array.from({length: 60}, (_, i) => {
+
+    const minutesHtml = Array.from({ length: 60 }, (_, i) => {
         const val = i.toString().padStart(2, '0');
         return `<option value="${val}">${val}</option>`;
     }).join('');
-    
+
     const bh = document.getElementById('booking-dispatch-hours');
     const bm = document.getElementById('booking-dispatch-minutes');
     const dh = document.getElementById('dsr-followup-hours');
     const dm = document.getElementById('dsr-followup-minutes');
-    
+
     if (bh) bh.innerHTML = hoursHtml;
     if (bm) bm.innerHTML = minutesHtml;
     if (dh) dh.innerHTML = hoursHtml;
@@ -2686,7 +2652,7 @@ async function fetchClientList() {
                 resolve();
             });
         });
-        
+
         // If local SQLite is empty, fall back to default mock list
         if (!list || list.length === 0) {
             console.log('[ClientList] Local cache empty. Loading default mock clients...');
@@ -2719,7 +2685,7 @@ async function fetchClientList() {
                     reserved1: "CONSTRUCTION"
                 }
             ];
-            
+
             // Filter locally if search params entered
             list = defaultMockList.filter(c => {
                 let match = true;
@@ -2755,7 +2721,7 @@ function renderClientList(list) {
         const leadname = c.leadname || '';
         const address = c.address || '';
         const leadno = c.leadno || '';
-        
+
         const escapedName = leadname.replace(/'/g, "\\'");
         const escapedAddress = address.replace(/'/g, "\\'");
         const escapedContactPerson = (c.contactperson || '').replace(/'/g, "\\'");
@@ -2792,7 +2758,7 @@ function clearClientListFilters() {
 
 function openBookingForm(name, siteName, address, leadno) {
     selectedClient = { name, siteName, address, leadno };
-    
+
     document.getElementById('booking-client-name').value = name;
     document.getElementById('booking-site-name').value = siteName || '';
     document.getElementById('booking-office-address').value = address || '';
@@ -2801,11 +2767,11 @@ function openBookingForm(name, siteName, address, leadno) {
     document.getElementById('booking-grade-other').value = '';
     document.getElementById('booking-grade-other').style.display = 'none';
     document.getElementById('booking-remark').value = '';
-    
+
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('booking-schedule-from').value = today;
     document.getElementById('booking-schedule-till').value = today;
-    
+
     document.getElementById('booking-dispatch-hours').value = '00';
     document.getElementById('booking-dispatch-minutes').value = '00';
 
@@ -2814,7 +2780,7 @@ function openBookingForm(name, siteName, address, leadno) {
 
 function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadno) {
     selectedClient = { name, address, siteDetails, contactPerson, contactNo, leadno };
-    
+
     document.getElementById('dsr-customer-name').value = name;
     document.getElementById('dsr-office-address').value = address || '';
     document.getElementById('dsr-site-details').value = siteDetails || '';
@@ -2822,10 +2788,10 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     document.getElementById('dsr-contact-number').value = contactNo || '';
     document.getElementById('dsr-today-status').value = '';
     document.getElementById('dsr-remark').value = '';
-    
+
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('dsr-followup-date').value = today;
-    
+
     document.getElementById('dsr-followup-hours').value = '00';
     document.getElementById('dsr-followup-minutes').value = '00';
 
@@ -2920,7 +2886,7 @@ async function submitDSR() {
                     gimeinumber: (session && session.userData && session.userData.deviceId) || ""
                 })
             });
-        } catch (e) {}
+        } catch (e) { }
     } else {
         showToast('Offline Mode: DSR saved locally.', 'info');
     }
@@ -2979,7 +2945,7 @@ async function submitDSR() {
 
         ReminderDb.saveReminder(newReminder, (saved) => {
             console.log('[DSR] Reminder created locally:', saved);
-            
+
             const dateParts = followupDate.split('-');
             const dateObj = new Date(
                 parseInt(dateParts[0], 10),
@@ -2989,7 +2955,7 @@ async function submitDSR() {
                 parseInt(minutes, 10),
                 0
             );
-            
+
             if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
                 window.AlarmBridge.scheduleReminderNotification(
                     remId, name, reminderType, remark, reminderTime, dateObj.getTime()
@@ -3112,7 +3078,7 @@ async function submitBooking() {
                     gimeinumber: session.userData.deviceId || ""
                 })
             });
-        } catch (e) {}
+        } catch (e) { }
     }
 
     const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
@@ -3205,7 +3171,7 @@ async function syncDSRs() {
                     const followupParts = dsr.followup ? dsr.followup.split(' ') : [];
                     const followupDate = followupParts[0] || '';
                     const followupTime = followupParts[1] ? followupParts[1].substring(0, 5) : '';
-                    
+
                     const clientNameText = dsr.client_name || defaultGempName;
                     const useridVal = dsr.client_id || defaultUserid;
 
@@ -3261,7 +3227,7 @@ async function syncDSRs() {
                                 gimeinumber: defaultDeviceId
                             })
                         });
-                    } catch (tpErr) {}
+                    } catch (tpErr) { }
 
                     successIds.push(dsr.id);
                 }
@@ -3292,7 +3258,7 @@ function completeReminder(id) {
         showToast('Reminder marked as completed.', 'success');
         refreshRemindersCount();
         applyRemindersFilter();
-        
+
         if (navigator.onLine) {
             apiRequest(`/api/client/reminder/${id}/status`, 'PUT', { status: 'Completed' })
                 .then(() => {
@@ -3312,12 +3278,12 @@ function snoozeReminder(id, name, type, remark, oldTime, oldDate) {
 
     const now = new Date();
     const snoozeTime = new Date(now.getTime() + 10 * 60 * 1000);
-    
-    const newDateStr = snoozeTime.getFullYear() + '-' + 
-        String(snoozeTime.getMonth() + 1).padStart(2, '0') + '-' + 
+
+    const newDateStr = snoozeTime.getFullYear() + '-' +
+        String(snoozeTime.getMonth() + 1).padStart(2, '0') + '-' +
         String(snoozeTime.getDate()).padStart(2, '0');
-        
-    const newTimeStr = String(snoozeTime.getHours()).padStart(2, '0') + ':' + 
+
+    const newTimeStr = String(snoozeTime.getHours()).padStart(2, '0') + ':' +
         String(snoozeTime.getMinutes()).padStart(2, '0');
 
     const updated = {
@@ -3335,7 +3301,7 @@ function snoozeReminder(id, name, type, remark, oldTime, oldDate) {
 
     ReminderDb.saveReminder(updated, () => {
         showToast('Reminder snoozed for 10 minutes.', 'info');
-        
+
         if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
             window.AlarmBridge.scheduleReminderNotification(
                 id, name, type, remark, newTimeStr, snoozeTime.getTime()
@@ -3350,10 +3316,10 @@ function snoozeReminder(id, name, type, remark, oldTime, oldDate) {
 
 function refreshRemindersCount() {
     if (typeof ReminderDb === 'undefined') return;
-    
+
     ReminderDb.getReminders((list) => {
         const todayStr = new Date().toISOString().split('T')[0];
-        
+
         const todayReminders = list.filter(r => {
             let rDate = r.reminder_date || '';
             if (rDate.includes('T')) rDate = rDate.split('T')[0];
@@ -3416,7 +3382,7 @@ function refreshRemindersCount() {
                 }
             }
         }
-        
+
         // Update welcome banner alerts
         const bannerCountEl = document.getElementById('banner-reminders-count-text');
         if (bannerCountEl) {
@@ -3436,7 +3402,7 @@ function refreshRemindersCount() {
         if (statPendingTasks) {
             statPendingTasks.textContent = count.toString();
         }
-        
+
         const dbNextTime = document.getElementById('dashboard-reminders-next-time');
         const dbNextDesc = document.getElementById('dashboard-reminders-next-desc');
         if (dbNextTime && dbNextDesc) {
@@ -3496,9 +3462,9 @@ function renderRemindersList(list) {
         let status = r.status || 'Pending';
         let rDate = r.reminder_date || '';
         if (rDate.includes('T')) rDate = rDate.split('T')[0];
-        
+
         const rTime = r.reminder_time || '00:00';
-        
+
         if (status === 'Pending') {
             const dateParts = rDate.split('-');
             const timeParts = rTime.split(':');
@@ -3658,7 +3624,7 @@ async function handleDayEnd() {
 
     isDayStarted = false;
     isCheckedIn = false;
-    
+
     localStorage.setItem('isDayStarted', 'false');
     localStorage.setItem('isCheckedIn', 'false');
 
@@ -3675,16 +3641,13 @@ async function handleDayEnd() {
         const mins = Math.floor((diffSecs % 3600) / 60).toString().padStart(2, '0');
         finalDuration = `${hrs}:${mins}`;
         localStorage.setItem('lastWorkDuration', finalDuration);
-    }
     localStorage.removeItem('dayStartTime');
-
-    // Keep tracking active even after day ends
-    // Stop tracking section removed
 
     // Update UI
     updateWorkdayUI();
     updateMetricsUI();
 
+    // Location tracking remains active even when workday is ended
     showToast('Workday ended. Location tracking remains active.', 'warning');
 }
 
@@ -3694,55 +3657,14 @@ async function handleDayEnd() {
 function toggleDiagnostics() {
     const panel = document.getElementById('diagnostics-drawer-panel');
     const chevron = document.getElementById('chevron-diagnostics');
-    
+
     if (panel) {
         if (panel.classList.contains('collapsed')) {
             panel.classList.remove('collapsed');
             if (chevron) chevron.classList.add('rotated');
-            
-            // Fetch logs immediately and set up interval
-            loadNativeLogs();
-            if (!window.logsInterval) {
-                window.logsInterval = setInterval(loadNativeLogs, 3000);
-            }
         } else {
             panel.classList.add('collapsed');
             if (chevron) chevron.classList.remove('rotated');
-            
-            if (window.logsInterval) {
-                clearInterval(window.logsInterval);
-                window.logsInterval = null;
-            }
-        }
-    }
-}
-
-async function loadNativeLogs() {
-    const logEl = document.getElementById('gps-diagnostics-text');
-    if (!logEl) return;
-    
-    if (typeof invokeCSharp === 'function') {
-        try {
-            const logs = await invokeCSharp('ReadGpsDiagnostics');
-            logEl.textContent = logs || 'No logs recorded yet.';
-        } catch (err) {
-            logEl.textContent = 'Error reading native logs: ' + err.message;
-        }
-    } else {
-        logEl.textContent = 'Native bridge not available (Non-MAUI environment).';
-    }
-}
-
-async function clearNativeLogs() {
-    const logEl = document.getElementById('gps-diagnostics-text');
-    if (logEl) logEl.textContent = 'Clearing logs...';
-    
-    if (typeof invokeCSharp === 'function') {
-        try {
-            await invokeCSharp('ClearGpsDiagnostics');
-            if (logEl) logEl.textContent = 'Logs cleared.';
-        } catch (err) {
-            if (logEl) logEl.textContent = 'Error clearing logs: ' + err.message;
         }
     }
 }
@@ -3772,22 +3694,22 @@ function resetNewClientForm() {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
-    
+
     removeNewClientUploadedFile(null, 'pan');
     removeNewClientUploadedFile(null, 'gst');
 }
 
 function populateNewClientTimeSelectors() {
-    const hoursHtml = Array.from({length: 24}, (_, i) => {
+    const hoursHtml = Array.from({ length: 24 }, (_, i) => {
         const val = i.toString().padStart(2, '0');
         return `<option value="${val}">${val}</option>`;
     }).join('');
-    
-    const minutesHtml = Array.from({length: 60}, (_, i) => {
+
+    const minutesHtml = Array.from({ length: 60 }, (_, i) => {
         const val = i.toString().padStart(2, '0');
         return `<option value="${val}">${val}</option>`;
     }).join('');
-    
+
     const bh = document.getElementById('new-client-followup-hours');
     const bm = document.getElementById('new-client-followup-minutes');
     if (bh) bh.innerHTML = hoursHtml;
@@ -3825,10 +3747,10 @@ function updateRegistrationProgress() {
             filled++;
         }
     });
-    
+
     if (newClientUploadedFiles.pan) filled++;
     if (newClientUploadedFiles.gst) filled++;
-    
+
     const percent = Math.round((filled / (fields.length + 2)) * 100);
     const fillEl = document.getElementById('reg-progress-fill');
     const percentEl = document.getElementById('reg-progress-percent');
@@ -3844,16 +3766,16 @@ function triggerNewClientFileInput(id) {
 function handleNewClientFileUpload(input, type) {
     const file = input.files[0];
     if (!file) return;
-    
+
     newClientUploadedFiles[type] = file;
-    
+
     const uploadContent = document.getElementById(`${type}-upload-content`);
     const uploadPreview = document.getElementById(`${type}-upload-preview`);
-    
+
     if (uploadContent && uploadPreview) {
         uploadContent.style.display = 'none';
         uploadPreview.classList.remove('hidden');
-        
+
         let previewHtml = `
             <div class="file-info-bar">
                 <span class="file-name">${file.name}</span>
@@ -3861,7 +3783,7 @@ function handleNewClientFileUpload(input, type) {
                 <div class="remove-file-btn" onclick="removeNewClientUploadedFile(event, '${type}')">×</div>
             </div>
         `;
-        
+
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -3877,14 +3799,14 @@ function handleNewClientFileUpload(input, type) {
 
 function removeNewClientUploadedFile(event, type) {
     if (event) event.stopPropagation();
-    
+
     newClientUploadedFiles[type] = null;
     const fileInput = document.getElementById(`new-client-${type}-file`);
     if (fileInput) fileInput.value = '';
-    
+
     const uploadContent = document.getElementById(`${type}-upload-content`);
     const uploadPreview = document.getElementById(`${type}-upload-preview`);
-    
+
     if (uploadContent && uploadPreview) {
         uploadContent.style.display = 'flex';
         uploadPreview.classList.add('hidden');
@@ -3918,15 +3840,15 @@ async function submitNewClient() {
 
     const clientName = document.getElementById('new-client-name').value.trim();
     const officeAddress = document.getElementById('new-client-address').value.trim();
-    
+
     const siteDetails = document.getElementById('new-client-site-details').value.trim();
     const contactPerson = document.getElementById('new-client-contact-person').value.trim();
     const contactNumber = document.getElementById('new-client-contact-number').value.trim();
-    
+
     const email = document.getElementById('new-client-email').value.trim();
     const remark = document.getElementById('new-client-remark').value.trim();
     const followupDate = document.getElementById('new-client-followup-date').value.trim();
-    
+
     // Validations
     if (!clientName) {
         showToast('Client Name is required.', 'error');
@@ -3971,7 +3893,7 @@ async function submitNewClient() {
     const gempname = (session && session.userData && session.userData.name) || '';
 
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
-    
+
     let hours = '00';
     let minutes = '00';
     const hourEl = document.getElementById('new-client-followup-hours');
@@ -4035,7 +3957,7 @@ async function submitNewClient() {
                     gimeinumber: (session && session.userData && session.userData.deviceId) || ""
                 })
             });
-        } catch (e) {}
+        } catch (e) { }
     } else {
         showToast('Offline Mode: DSR saved locally.', 'info');
     }
@@ -4090,7 +4012,7 @@ async function submitNewClient() {
 
         ReminderDb.saveReminder(newReminder, (saved) => {
             console.log('[NewClient] Reminder created locally:', saved);
-            
+
             const dateParts = followupDate.split('-');
             const dateObj = new Date(
                 parseInt(dateParts[0], 10),
@@ -4100,7 +4022,7 @@ async function submitNewClient() {
                 parseInt(minutes, 10),
                 0
             );
-            
+
             if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
                 window.AlarmBridge.scheduleReminderNotification(
                     remId, clientName, reminderType, remark, reminderTime, dateObj.getTime()
@@ -4128,14 +4050,14 @@ async function submitNewClient() {
 function updateMetricsUI() {
     const visits = parseInt(localStorage.getItem('visitsToday') || '0', 10);
     const dsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10);
-    
+
     const visitsEl = document.getElementById('stat-visits-count');
     const dsrEl = document.getElementById('stat-dsr-count');
     const durationEl = document.getElementById('stat-duration-count');
-    
+
     if (visitsEl) visitsEl.textContent = visits.toString();
     if (dsrEl) dsrEl.textContent = dsrs.toString();
-    
+
     if (isDayStarted) {
         let startTime = localStorage.getItem('dayStartTime');
         if (!startTime) {
@@ -4146,7 +4068,7 @@ function updateMetricsUI() {
         const diffSecs = Math.floor(diffMs / 1000);
         const hrs = Math.floor(diffSecs / 3600).toString().padStart(2, '0');
         const mins = Math.floor((diffSecs % 3600) / 60).toString().padStart(2, '0');
-        
+
         if (durationEl) {
             durationEl.innerHTML = `${hrs}:${mins} <span class="stat-unit">hrs</span>`;
         }
