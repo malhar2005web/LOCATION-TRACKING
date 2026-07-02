@@ -240,6 +240,15 @@ function startLocationTracking(clientId, deviceId) {
                         // Update last sync time
                         if (data.lastSync && data.lastSync !== 'Never') {
                             updateSyncStatusText(`Last Location Sent: ${data.lastSync}`);
+                            
+                            const lastSyncEl = document.getElementById('last-sync-time-display');
+                            if (lastSyncEl) {
+                                lastSyncEl.textContent = data.lastSync;
+                            }
+                            const lastSyncBadge = document.getElementById('last-sync-time-display-badge');
+                            if (lastSyncBadge) {
+                                lastSyncBadge.textContent = data.lastSync;
+                            }
                         }
                     }
                 } catch (e) {
