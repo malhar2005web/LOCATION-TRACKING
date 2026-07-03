@@ -150,7 +150,7 @@ namespace LocationTracker.Platforms.Android
                                     var localTime = DateTime.Now.ToString("h:mm:ss tt");
                                     LastSyncTime = localTime;
                                     GpsDiagnostics.Log($"[Background Service] Sent coordinates natively: Lat={location.Latitude}, Lng={location.Longitude}");
-                                    UpdateNotification($"Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
+                                    UpdateNotification($"✅ Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
                                 }
                                 else
                                 {
@@ -197,15 +197,34 @@ namespace LocationTracker.Platforms.Android
                     return null;
                 }
 
-                var provider = isGpsEnabled ? global::Android.Locations.LocationManager.GpsProvider : global::Android.Locations.LocationManager.NetworkProvider;
-                var lastKnown = locationManager.GetLastKnownLocation(provider);
-                GpsDiagnostics.Log($"Last known location read from '{provider}': " + (lastKnown != null ? $"Lat={lastKnown.Latitude}, Lng={lastKnown.Longitude}" : "null"));
+                // Get the best last known location from both providers
+                global::Android.Locations.Location lastKnownGps = isGpsEnabled ? locationManager.GetLastKnownLocation(global::Android.Locations.LocationManager.GpsProvider) : null;
+                global::Android.Locations.Location lastKnownNetwork = isNetworkEnabled ? locationManager.GetLastKnownLocation(global::Android.Locations.LocationManager.NetworkProvider) : null;
+                global::Android.Locations.Location bestLastKnown = null;
+
+                if (lastKnownGps != null && lastKnownNetwork != null)
+                {
+                    bestLastKnown = lastKnownGps.Time > lastKnownNetwork.Time ? lastKnownGps : lastKnownNetwork;
+                }
+                else
+                {
+                    bestLastKnown = lastKnownGps ?? lastKnownNetwork;
+                }
+
+                GpsDiagnostics.Log($"Best last known location: " + (bestLastKnown != null ? $"Lat={bestLastKnown.Latitude}, Lng={bestLastKnown.Longitude}" : "null"));
 
                 var tcs = new TaskCompletionSource<global::Android.Locations.Location>();
                 var listener = new ActiveLocationListener(tcs);
 
-                GpsDiagnostics.Log($"Requesting single location update from provider '{provider}'...");
-                locationManager.RequestLocationUpdates(provider, 0, 0, listener, context.MainLooper);
+                GpsDiagnostics.Log($"Requesting single location update from active providers...");
+                if (isGpsEnabled)
+                {
+                    locationManager.RequestLocationUpdates(global::Android.Locations.LocationManager.GpsProvider, 0, 0, listener, context.MainLooper);
+                }
+                if (isNetworkEnabled)
+                {
+                    locationManager.RequestLocationUpdates(global::Android.Locations.LocationManager.NetworkProvider, 0, 0, listener, context.MainLooper);
+                }
 
                 var delayTask = Task.Delay(10000); // 10 seconds timeout
                 var completedTask = await Task.WhenAny(tcs.Task, delayTask);
@@ -215,13 +234,13 @@ namespace LocationTracker.Platforms.Android
                 if (completedTask == tcs.Task)
                 {
                     var freshLocation = await tcs.Task;
-                    GpsDiagnostics.Log("Successfully obtained fresh native coordinates.");
+                    GpsDiagnostics.Log($"Successfully obtained fresh native coordinates: Lat={freshLocation.Latitude}, Lng={freshLocation.Longitude}");
                     return freshLocation;
                 }
                 else
                 {
-                    GpsDiagnostics.Log("Fresh location update request timed out (10s limit exceeded). Falling back to last known location.");
-                    return lastKnown;
+                    GpsDiagnostics.Log("Fresh location update request timed out (10s limit exceeded). Falling back to best last known location.");
+                    return bestLastKnown;
                 }
             }
             catch (Exception ex)
