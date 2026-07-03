@@ -150,7 +150,7 @@ namespace LocationTracker.Platforms.Android
                                     var localTime = DateTime.Now.ToString("h:mm:ss tt");
                                     LastSyncTime = localTime;
                                     GpsDiagnostics.Log($"[Background Service] Sent coordinates natively: Lat={location.Latitude}, Lng={location.Longitude}");
-                                    UpdateNotification($"✅ Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
+                                    UpdateNotification($"Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
                                 }
                                 else
                                 {
