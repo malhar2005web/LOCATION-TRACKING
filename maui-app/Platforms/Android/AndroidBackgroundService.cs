@@ -33,6 +33,15 @@ namespace LocationTracker.Platforms.Android
             try
             {
                 var iconId = ApplicationContext.ApplicationInfo.Icon;
+                
+                // Add Intent to open the app when the notification is clicked
+                var intent = new Intent(this, typeof(LOCATION_TRACKING.MainActivity));
+                intent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop);
+                var flags = Build.VERSION.SdkInt >= BuildVersionCodes.M 
+                    ? PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable 
+                    : PendingIntentFlags.UpdateCurrent;
+                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, flags);
+
                 var notification = new NotificationCompat.Builder(this, ChannelId)
                     .SetContentTitle("Location Tracking Active")
                     .SetContentText(text)
@@ -40,6 +49,7 @@ namespace LocationTracker.Platforms.Android
                     .SetOngoing(true)
                     .SetCategory(NotificationCompat.CategoryService)
                     .SetPriority(NotificationCompat.PriorityHigh)
+                    .SetContentIntent(pendingIntent)
                     .SetStyle(new NotificationCompat.BigTextStyle().BigText(text))
                     .Build();
 
@@ -59,6 +69,15 @@ namespace LocationTracker.Platforms.Android
             {
                 CreateNotificationChannel();
                 var iconId = ApplicationContext.ApplicationInfo.Icon;
+
+                // Add Intent to open the app when the notification is clicked
+                var clickIntent = new Intent(this, typeof(LOCATION_TRACKING.MainActivity));
+                clickIntent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop);
+                var clickFlags = Build.VERSION.SdkInt >= BuildVersionCodes.M 
+                    ? PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable 
+                    : PendingIntentFlags.UpdateCurrent;
+                var pendingIntent = PendingIntent.GetActivity(this, 0, clickIntent, clickFlags);
+
                 var notification = new NotificationCompat.Builder(this, ChannelId)
                     .SetContentTitle("Location Tracking Active")
                     .SetContentText("Starting location tracking...")
@@ -66,6 +85,7 @@ namespace LocationTracker.Platforms.Android
                     .SetOngoing(true)
                     .SetCategory(NotificationCompat.CategoryService)
                     .SetPriority(NotificationCompat.PriorityHigh)
+                    .SetContentIntent(pendingIntent)
                     .Build();
 
                 GpsDiagnostics.Log("Notification object built. Acquiring wake lock...");
@@ -150,19 +170,19 @@ namespace LocationTracker.Platforms.Android
                                     var localTime = DateTime.Now.ToString("h:mm:ss tt");
                                     LastSyncTime = localTime;
                                     GpsDiagnostics.Log($"[Background Service] Sent coordinates natively: Lat={location.Latitude}, Lng={location.Longitude}");
-                                    UpdateNotification($"✅ Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
+                                    UpdateNotification($"Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
                                 }
                                 else
                                 {
                                     GpsDiagnostics.Log($"[Background Service] Failed to send natively: {response.StatusCode} {response.ReasonPhrase}");
-                                    UpdateNotification($"⚠️ Send failed ({response.StatusCode}) • Total sent: {_locationsSentCount}");
+                                    UpdateNotification($"Send failed ({response.StatusCode}) • Total sent: {_locationsSentCount}");
                                 }
                             }
                         }
                         else
                         {
                             GpsDiagnostics.Log("Native location resolved to null.");
-                            UpdateNotification($"📡 Waiting for GPS fix... • Total sent: {_locationsSentCount}");
+                            UpdateNotification($"Waiting for GPS fix... • Total sent: {_locationsSentCount}");
                         }
                     }
                 }
