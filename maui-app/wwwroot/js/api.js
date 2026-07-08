@@ -5,9 +5,7 @@
  * ============================================
  */
 
-// ── Configuration ──
-// Change this to your backend server's IP address
-// For local development, use your computer's LAN IP
+// Skyway Production API URL
 let API_BASE_URL = 'https://fleettrackon.co.in/skywaydia';
 
 function getApiBaseUrls() {
