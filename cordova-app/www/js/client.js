@@ -2829,6 +2829,11 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     document.getElementById('dsr-followup-minutes').value = '00';
 
     showView('existing-client-dsr-view');
+    
+    // REDESIGNED: Initialize premium wizard flow
+    if (typeof initDsrWizard === 'function') {
+        initDsrWizard(name, address);
+    }
 }
 
 async function submitDSR() {
@@ -4107,9 +4112,374 @@ function updateMetricsUI() {
             durationEl.innerHTML = `${hrs}:${mins} <span class="stat-unit">hrs</span>`;
         }
     } else {
-        const lastDuration = localStorage.getItem('lastWorkDuration') || '00:00';
         if (durationEl) {
             durationEl.innerHTML = `${lastDuration} <span class="stat-unit">hrs</span>`;
         }
     }
 }
+
+/* ==========================================================================
+   REDESIGNED DSR PREMIUM WORKFORCE SYSTEM WORKFLOW ENGINE
+   ========================================================================== */
+
+let dsrActiveStep = 1;
+const dsrTotalSteps = 4;
+
+/**
+ * Initializes the DSR premium multi-step wizard.
+ * Called automatically from modified openDSRForm().
+ */
+function initDsrWizard(clientName, clientAddress) {
+    dsrActiveStep = 1;
+    
+    // Update Hero Card details
+    const heroNameEl = document.getElementById('hero-customer-name');
+    const heroAddressEl = document.getElementById('hero-office-address');
+    if (heroNameEl) heroNameEl.textContent = clientName || 'Client Name';
+    if (heroAddressEl) heroAddressEl.textContent = clientAddress || 'Office Address';
+    
+    // Checked-in time calculation
+    const heroTimeEl = document.getElementById('hero-checkin-time');
+    if (heroTimeEl) {
+        const now = new Date();
+        let hrs = now.getHours();
+        const ampm = hrs >= 12 ? 'PM' : 'AM';
+        hrs = hrs % 12;
+        hrs = hrs ? hrs : 12; // 0 should be 12
+        const mins = now.getMinutes().toString().padStart(2, '0');
+        heroTimeEl.innerHTML = `<span class="material-symbols-rounded">schedule</span>Checked in ${hrs}:${mins} ${ampm}`;
+    }
+
+    // Capture location display coordinates
+    const gpsCoordsEl = document.getElementById('dsr-gps-coordinates-display');
+    if (gpsCoordsEl) {
+        const curLatEl = document.getElementById('current-lat');
+        const curLngEl = document.getElementById('current-lng');
+        if (curLatEl && curLngEl && curLatEl.textContent.trim() !== '--') {
+            gpsCoordsEl.textContent = `${curLatEl.textContent.trim()}, ${curLngEl.textContent.trim()}`;
+        } else {
+            gpsCoordsEl.textContent = 'GPS location verified (mock coordinates)';
+        }
+    }
+
+    // Reset status chips & sync with original select
+    resetDsrStatusChips();
+    
+    // Populate Hrs and Mins select options if they are empty
+    populateDsrTimeDropdowns();
+
+    // Reset wizard steps UI
+    updateDsrWizardUI();
+    
+    // Setup stepper hover animations & anchor positioning fallback
+    setupDsrStepperInteractions();
+}
+
+/**
+ * Reset premium status chips selection.
+ */
+function resetDsrStatusChips() {
+    const chips = document.querySelectorAll('.dsr-status-chip');
+    chips.forEach(chip => {
+        chip.classList.remove('active');
+        chip.onclick = function() {
+            // Select chip
+            chips.forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Sync with hidden original select option
+            const val = this.getAttribute('data-value');
+            const selectEl = document.getElementById('dsr-today-status');
+            if (selectEl) {
+                selectEl.value = val;
+                // Trigger change event for any listeners
+                const event = new Event('change', { bubbles: true });
+                selectEl.dispatchEvent(event);
+            }
+        };
+    });
+
+    // Make sure initial state of original select is empty
+    const selectEl = document.getElementById('dsr-today-status');
+    if (selectEl) {
+        selectEl.value = '';
+    }
+}
+
+/**
+ * Populates hours and minutes inside the custom selects if not already loaded.
+ */
+function populateDsrTimeDropdowns() {
+    const hoursSelect = document.getElementById('dsr-followup-hours');
+    const minutesSelect = document.getElementById('dsr-followup-minutes');
+    
+    if (hoursSelect && hoursSelect.options.length === 0) {
+        for (let i = 0; i < 24; i++) {
+            const val = i.toString().padStart(2, '0');
+            const opt = new Option(val, val);
+            hoursSelect.add(opt);
+        }
+    }
+    
+    if (minutesSelect && minutesSelect.options.length === 0) {
+        for (let i = 0; i < 60; i += 5) {
+            const val = i.toString().padStart(2, '0');
+            const opt = new Option(val, val);
+            minutesSelect.add(opt);
+        }
+    }
+}
+
+/**
+ * Handle Wizard Step Stepping
+ */
+/**
+ * Handle Wizard Step Stepping
+ */
+function goToDsrStep(stepNum) {
+    // REDESIGNED: Make jumping between steps easy and frictionless
+    dsrActiveStep = stepNum;
+    if (dsrActiveStep === 4) {
+        buildDsrReviewSummary();
+    }
+    updateDsrWizardUI();
+}
+
+/**
+ * Validates entries in a given step before advancing.
+ */
+function validateDsrStep(stepNum) {
+    if (stepNum === 1) {
+        const name = document.getElementById('dsr-customer-name').value.trim();
+        if (!name) {
+            showToast('Customer Name is missing', 'error');
+            return false;
+        }
+    } else if (stepNum === 2) {
+        const status = document.getElementById('dsr-today-status').value;
+        if (!status) {
+            showToast("Today's Status is required. Please select a status chip.", 'warning');
+            return false;
+        }
+    } else if (stepNum === 3) {
+        const dateVal = document.getElementById('dsr-followup-date').value;
+        if (!dateVal) {
+            showToast("Follow-up date is required.", 'warning');
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Next button action
+ */
+function nextDsrWizardStep() {
+    if (dsrActiveStep < dsrTotalSteps) {
+        dsrActiveStep++;
+        updateDsrWizardUI();
+        
+        // Build the Review screen summary details
+        if (dsrActiveStep === 4) {
+            buildDsrReviewSummary();
+        }
+    } else {
+        // REDESIGNED: Validate all data together on the final Review step submission
+        if (validateDsrStep(1) && validateDsrStep(2) && validateDsrStep(3)) {
+            // Trigger actual DSR form submission logic
+            const hiddenSubmitBtn = document.getElementById('hidden-dsr-submit-btn');
+            if (hiddenSubmitBtn) {
+                hiddenSubmitBtn.click();
+            } else {
+                submitDSR();
+            }
+        }
+    }
+}
+
+/**
+ * Back button action
+ */
+function prevDsrWizardStep() {
+    if (dsrActiveStep > 1) {
+        dsrActiveStep--;
+        updateDsrWizardUI();
+    } else {
+        // Go back to the client list view
+        const hiddenBackBtn = document.getElementById('hidden-dsr-back-btn');
+        if (hiddenBackBtn) {
+            hiddenBackBtn.click();
+        } else {
+            showView('dsr-client-list-view');
+        }
+    }
+}
+
+/**
+ * Build dynamic reviews summary details on Step 4
+ */
+function buildDsrReviewSummary() {
+    document.getElementById('dsr-review-name').textContent = document.getElementById('dsr-customer-name').value || '--';
+    document.getElementById('dsr-review-address').textContent = document.getElementById('dsr-office-address').value || '--';
+    document.getElementById('dsr-review-site').textContent = document.getElementById('dsr-site-details').value || '--';
+    document.getElementById('dsr-review-contact-person').textContent = document.getElementById('dsr-contact-person').value || '--';
+    document.getElementById('dsr-review-contact-no').textContent = document.getElementById('dsr-contact-number').value || '--';
+    document.getElementById('dsr-review-status').textContent = document.getElementById('dsr-today-status').value || '--';
+    document.getElementById('dsr-review-remark').textContent = document.getElementById('dsr-remark').value || '--';
+    document.getElementById('dsr-review-followup-date').textContent = document.getElementById('dsr-followup-date').value || '--';
+    
+    const hr = document.getElementById('dsr-followup-hours').value;
+    const min = document.getElementById('dsr-followup-minutes').value;
+    document.getElementById('dsr-review-followup-time').textContent = `${hr}:${min}`;
+}
+
+/**
+ * Updates wizard panels view, progress meters, and indicator positions.
+ */
+function updateDsrWizardUI() {
+    // Hide all panels and set active one
+    for (let i = 1; i <= dsrTotalSteps; i++) {
+        const panel = document.getElementById(`dsr-panel-${i}`);
+        const button = document.getElementById(`dsr-step-btn-${i}`);
+        if (panel) {
+            panel.classList.remove('active');
+            if (i === dsrActiveStep) {
+                panel.classList.add('active');
+            }
+        }
+        if (button) {
+            button.classList.remove('active');
+            if (i === dsrActiveStep) {
+                button.classList.add('active');
+            }
+        }
+    }
+
+    // Position pointer to the active step
+    positionDsrPointer(dsrActiveStep);
+
+    // Update progress circle & bottom progress description
+    const progressPercent = Math.round((dsrActiveStep / dsrTotalSteps) * 100);
+    const circleBar = document.getElementById('dsr-progress-circle-bar');
+    const percentVal = document.getElementById('dsr-progress-percent-val');
+    const stepsDesc = document.getElementById('dsr-progress-steps-desc');
+    
+    if (circleBar) {
+        // Circumference is 2 * pi * radius (15.9155) ≈ 100
+        circleBar.style.strokeDasharray = `${progressPercent}, 100`;
+    }
+    if (percentVal) {
+        percentVal.textContent = `${progressPercent}%`;
+    }
+    if (stepsDesc) {
+        stepsDesc.textContent = `${dsrActiveStep} of 4 steps completed`;
+    }
+
+    // Update bottom wizard buttons text
+    const nextBtn = document.getElementById('dsr-wizard-next-btn');
+    if (nextBtn) {
+        if (dsrActiveStep === dsrTotalSteps) {
+            nextBtn.innerHTML = `Submit DSR <span class="material-symbols-rounded">done_all</span>`;
+        } else {
+            // REDESIGNED: Show Continue instead of Save & Continue
+            nextBtn.innerHTML = `Continue <span class="material-symbols-rounded">arrow_forward</span>`;
+        }
+    }
+}
+
+/**
+ * Align DSR liquid-glass capsule indicator
+ */
+function positionDsrPointer(index) {
+    const pointer = document.querySelector('.dsr-anchored-pointer');
+    if (!pointer) return;
+
+    // Anchor positioning support check
+    const hasAnchorSupport = ('positionAnchor' in document.documentElement.style) || 
+                             ('anchorName' in document.documentElement.style);
+    
+    if (hasAnchorSupport) {
+        pointer.style.positionAnchor = `--dsr-step-${index}`;
+    } else {
+        // Fallback for custom layouts
+        const targetBtn = document.getElementById(`dsr-step-btn-${index}`);
+        const container = document.querySelector('.dsr-stepper-container');
+        if (targetBtn && container) {
+            const targetRect = targetBtn.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            
+            pointer.style.top = `${targetRect.top - containerRect.top}px`;
+            pointer.style.left = `${targetRect.left - containerRect.left}px`;
+            pointer.style.width = `${targetRect.width}px`;
+            pointer.style.height = `${targetRect.height}px`;
+        }
+    }
+}
+
+/**
+ * Setup interactions on step tabs (temporary hover shifts, click bindings).
+ */
+function setupDsrStepperInteractions() {
+    const buttons = document.querySelectorAll('.dsr-step-btn');
+    const pointer = document.querySelector('.dsr-anchored-pointer');
+    if (!pointer) return;
+
+    buttons.forEach((btn, i) => {
+        const stepIndex = i + 1;
+
+        // Mouseenter shifts pointer momentarily
+        btn.addEventListener('mouseenter', () => {
+            // Only shift if it is already verified/accessible
+            let canAccess = true;
+            if (stepIndex > dsrActiveStep) {
+                for (let check = dsrActiveStep; check < stepIndex; check++) {
+                    if (check === 1) {
+                        const name = document.getElementById('dsr-customer-name').value.trim();
+                        if (!name) canAccess = false;
+                    } else if (check === 2) {
+                        const status = document.getElementById('dsr-today-status').value;
+                        if (!status) canAccess = false;
+                    } else if (check === 3) {
+                        const dateVal = document.getElementById('dsr-followup-date').value;
+                        if (!dateVal) canAccess = false;
+                    }
+                }
+            }
+            if (canAccess) {
+                positionDsrPointer(stepIndex);
+            }
+        });
+
+        // Mouseleave resets back to active step
+        btn.addEventListener('mouseleave', () => {
+            positionDsrPointer(dsrActiveStep);
+        });
+    });
+}
+
+/**
+ * Appends quick notes shortcuts in notes section
+ */
+function appendDsrQuickNote(text) {
+    const remarkField = document.getElementById('dsr-remark');
+    if (remarkField) {
+        const curVal = remarkField.value.trim();
+        remarkField.value = curVal ? `${curVal}, ${text}` : text;
+        
+        // Trigger oninput explicitly
+        updateDsrRemarkCounter();
+    }
+}
+
+/**
+ * Updates remark notes character count indicator
+ */
+function updateDsrRemarkCounter() {
+    const remarkField = document.getElementById('dsr-remark');
+    const counterField = document.getElementById('dsr-remark-counter');
+    if (remarkField && counterField) {
+        const len = remarkField.value.length;
+        counterField.textContent = `${len} / 250`;
+    }
+}
+

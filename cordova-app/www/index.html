@@ -22,6 +22,8 @@
 
     <!-- App Styles -->
     <link rel="stylesheet" href="css/style.css">
+    <!-- Google Material Symbols Rounded -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet">
 
     <!-- Theme pre-initialization -->
     <script>
@@ -1267,82 +1269,383 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- VIEW: Existing Client DSR Form               -->
+    <!-- VIEW: Existing Client DSR Form (Redesigned Premium Space View) -->
     <!-- ============================================ -->
-    <div id="existing-client-dsr-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('dsr-client-list-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
+    <div id="existing-client-dsr-view" class="view dsr-premium-space-view">
+        <div class="page-container dsr-page-container">
+            <!-- Redesigned Glass Sticky Header -->
+            <header class="dsr-glass-header">
+                <div class="dsr-header-left">
+                    <button class="dsr-back-btn" onclick="showView('dsr-client-list-view')">
+                        <span class="material-symbols-rounded">arrow_back</span>
+                        <span class="dsr-back-text">Back</span>
                     </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Existing Client</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
+                    <div class="dsr-header-title-block">
+                        <h2 class="dsr-page-title">Existing Client</h2>
+                        <span class="submenu-client-name dsr-welcome-name">Welcome demo admin2</span>
                     </div>
+                </div>
+                <div class="dsr-header-right">
+                    <button class="dsr-more-btn">
+                        <span class="material-symbols-rounded">more_vert</span>
+                    </button>
                 </div>
             </header>
 
-            <div class="page-content">
-                <div class="glass-form-card" style="padding: 20px;">
-                    <h3 class="form-title">EXISTING CLIENT</h3>
-                    <div class="input-group">
-                        <label class="input-label">Customer Name</label>
-                        <input type="text" id="dsr-customer-name" class="glass-input disabled" readonly>
+            <div class="page-content dsr-page-content">
+                <!-- Floating Liquid Glass Hero Card -->
+                <div class="dsr-hero-card">
+                    <div class="dsr-hero-header">
+                        <div class="dsr-hero-icon-box">
+                            <span class="material-symbols-rounded">domain</span>
+                        </div>
+                        <div class="dsr-hero-title-box">
+                            <h3 id="hero-customer-name">Customer Name</h3>
+                            <p id="hero-office-address" class="dsr-hero-address">Office Address</p>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label class="input-label">Office Address</label>
-                        <textarea id="dsr-office-address" class="glass-textarea" placeholder="Office Address" rows="3"></textarea>
+                    <div class="dsr-hero-badges">
+                        <span class="dsr-badge dsr-badge-orange">
+                            <span class="dsr-badge-dot"></span>
+                            Existing Client
+                        </span>
+                        <span class="dsr-badge dsr-badge-gray" id="hero-checkin-time">
+                            <span class="material-symbols-rounded">schedule</span>
+                            Checked in 10:24 AM
+                        </span>
+                        <span class="dsr-badge dsr-badge-green">
+                            <span class="material-symbols-rounded">gps_fixed</span>
+                            GPS Verified
+                        </span>
                     </div>
-                    <div class="input-group">
-                        <label class="input-label">Site Details</label>
-                        <input type="text" id="dsr-site-details" class="glass-input" placeholder="Site Details">
+                </div>
+
+                <!-- Liquid Glass Step Stepper/Navigation -->
+                <div class="dsr-stepper-container">
+                    <div class="dsr-stepper-track-bg"></div>
+                    <div class="dsr-stepper-steps">
+                        <button type="button" class="dsr-step-btn active" id="dsr-step-btn-1" onclick="goToDsrStep(1)" interestfor="dsr-tip-1">
+                            <span class="material-symbols-rounded">person</span>
+                            <span class="dsr-step-label">Client</span>
+                        </button>
+                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-2" onclick="goToDsrStep(2)" interestfor="dsr-tip-2">
+                            <span class="material-symbols-rounded">calendar_today</span>
+                            <span class="dsr-step-label">Visit</span>
+                        </button>
+                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-3" onclick="goToDsrStep(3)" interestfor="dsr-tip-3">
+                            <span class="material-symbols-rounded">assignment</span>
+                            <span class="dsr-step-label">Follow-up</span>
+                        </button>
+                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-4" onclick="goToDsrStep(4)" interestfor="dsr-tip-4">
+                            <span class="material-symbols-rounded">done_all</span>
+                            <span class="dsr-step-label">Review</span>
+                        </button>
                     </div>
-                    <div class="input-group">
-                        <label class="input-label">Contact Person</label>
-                        <input type="text" id="dsr-contact-person" class="glass-input" placeholder="Contact Person">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Contact No</label>
-                        <input type="tel" id="dsr-contact-number" class="glass-input" placeholder="Contact No">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Today Status</label>
-                        <select id="dsr-today-status" class="glass-select">
-                            <option value="">Please Select</option>
-                            <option value="Follow Up">Follow Up</option>
-                            <option value="Document Submission">Document Submission</option>
-                            <option value="Bill Submission">Bill Submission</option>
-                            <option value="Payment Collection">Payment Collection</option>
-                            <option value="Document Collection">Document Collection</option>
-                            <option value="Others">Others</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Remark</label>
-                        <input type="text" id="dsr-remark" class="glass-input" placeholder="Remark">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Followup Date</label>
-                        <input type="date" id="dsr-followup-date" class="glass-input">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Followup Time</label>
-                        <div style="display: flex; gap: 12px; align-items: center;">
-                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Hrs:</span>
-                            <select id="dsr-followup-hours" class="glass-select" style="flex: 1;"></select>
-                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Min:</span>
-                            <select id="dsr-followup-minutes" class="glass-select" style="flex: 1;"></select>
+                    <!-- The Anchored Liquid-Glass Capsule Indicator -->
+                    <div class="dsr-anchored-pointer"></div>
+                </div>
+
+                <!-- Dynamic Step Panels -->
+                <div class="dsr-wizard-panels">
+                    
+                    <!-- STEP 1: CLIENT DETAILS -->
+                    <div class="dsr-wizard-panel active" id="dsr-panel-1">
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">domain</span>
+                            <h4>Client Details</h4>
+                        </div>
+                        
+                        <div class="dsr-input-group">
+                            <div class="dsr-input-wrapper readonly">
+                                <span class="material-symbols-rounded dsr-input-icon">domain</span>
+                                <div class="input-content-box">
+                                    <label class="dsr-input-label">Customer Name</label>
+                                    <input type="text" id="dsr-customer-name" class="glass-input disabled" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dsr-input-group">
+                            <div class="dsr-input-wrapper textarea-wrapper">
+                                <span class="material-symbols-rounded dsr-input-icon">location_on</span>
+                                <div class="input-content-box">
+                                    <label class="dsr-input-label">Office Address</label>
+                                    <textarea id="dsr-office-address" class="glass-textarea" placeholder="Office Address" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dsr-input-group">
+                            <div class="dsr-input-wrapper">
+                                <span class="material-symbols-rounded dsr-input-icon">map</span>
+                                <div class="input-content-box">
+                                    <label class="dsr-input-label">Site Details</label>
+                                    <input type="text" id="dsr-site-details" class="glass-input" placeholder="Site Details">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">badge</span>
+                            <h4>Contact Details</h4>
+                        </div>
+
+                        <div class="dsr-input-group">
+                            <div class="dsr-input-wrapper">
+                                <span class="material-symbols-rounded dsr-input-icon">person</span>
+                                <div class="input-content-box">
+                                    <label class="dsr-input-label">Contact Person</label>
+                                    <input type="text" id="dsr-contact-person" class="glass-input" placeholder="Contact Person">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dsr-input-group">
+                            <div class="dsr-input-wrapper">
+                                <span class="material-symbols-rounded dsr-input-icon">phone</span>
+                                <div class="input-content-box">
+                                    <label class="dsr-input-label">Contact Number</label>
+                                    <input type="tel" id="dsr-contact-number" class="glass-input" placeholder="Contact No">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button class="primary-btn" onclick="submitDSR()" style="flex: 1;">SUBMIT</button>
-                        <button class="secondary-btn" onclick="showView('dsr-client-list-view')" style="flex: 1;">BACK</button>
+                    <!-- STEP 2: VISIT DETAILS -->
+                    <div class="dsr-wizard-panel" id="dsr-panel-2">
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">fact_check</span>
+                            <h4>Visit Details</h4>
+                        </div>
+
+                        <div class="dsr-input-group status-input-group">
+                            <label class="dsr-input-label-standalone">Today's Status</label>
+                            
+                            <!-- Kept exact select field hidden for API/Validation compatibility -->
+                            <select id="dsr-today-status" class="glass-select" style="display: none;">
+                                <option value="">Please Select</option>
+                                <option value="Follow Up">Follow Up</option>
+                                <option value="Document Submission">Document Submission</option>
+                                <option value="Bill Submission">Bill Submission</option>
+                                <option value="Payment Collection">Payment Collection</option>
+                                <option value="Document Collection">Document Collection</option>
+                                <option value="Others">Others</option>
+                            </select>
+
+                            <!-- Redesigned Premium Chips -->
+                            <div class="dsr-chips-container" id="dsr-status-chips">
+                                <button type="button" class="dsr-status-chip" data-value="Follow Up">
+                                    <span class="chip-dot"></span>
+                                    <span class="chip-text">Follow Up</span>
+                                </button>
+                                <button type="button" class="dsr-status-chip" data-value="Document Submission">
+                                    <span class="chip-dot"></span>
+                                    <span class="chip-text">Document Submission</span>
+                                </button>
+                                <button type="button" class="dsr-status-chip" data-value="Bill Submission">
+                                    <span class="chip-dot"></span>
+                                    <span class="chip-text">Bill Submission</span>
+                                </button>
+                                <button type="button" class="dsr-status-chip" data-value="Payment Collection">
+                                    <span class="chip-dot"></span>
+                                    <span class="chip-text">Payment Collection</span>
+                                </button>
+                                <button type="button" class="dsr-status-chip" data-value="Document Collection">
+                                    <span class="chip-dot"></span>
+                                    <span class="chip-text">Document Collection</span>
+                                </button>
+                                <button type="button" class="dsr-status-chip" data-value="Others">
+                                    <span class="chip-dot"></span>
+                                    <span class="chip-text">Others</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">rate_review</span>
+                            <h4>Visit Notes</h4>
+                        </div>
+
+                        <div class="dsr-input-group notes-input-group">
+                            <div class="dsr-input-wrapper textarea-wrapper">
+                                <span class="material-symbols-rounded dsr-input-icon">description</span>
+                                <div class="input-content-box">
+                                    <label class="dsr-input-label">Remarks / Visit Notes</label>
+                                    <textarea id="dsr-remark" class="glass-textarea" placeholder="Add your remarks about today's visit..." rows="4" maxlength="250" oninput="updateDsrRemarkCounter()"></textarea>
+                                </div>
+                            </div>
+                            <div class="dsr-char-counter" id="dsr-remark-counter">0 / 250</div>
+                        </div>
                     </div>
+
+                    <!-- STEP 3: FOLLOW-UP DETAILS -->
+                    <div class="dsr-wizard-panel" id="dsr-panel-3">
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">calendar_today</span>
+                            <h4>Follow-up</h4>
+                        </div>
+
+                        <div class="dsr-input-group">
+                            <div class="dsr-input-wrapper">
+                                <span class="material-symbols-rounded dsr-input-icon">calendar_month</span>
+                                <div class="input-content-box">
+                                    <label class="dsr-input-label">Followup Date</label>
+                                    <input type="date" id="dsr-followup-date" class="glass-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dsr-input-group">
+                            <div class="dsr-input-wrapper time-picker-wrapper">
+                                <span class="material-symbols-rounded dsr-input-icon">schedule</span>
+                                <div class="input-content-box" style="flex: 1;">
+                                    <label class="dsr-input-label">Followup Time</label>
+                                    <div class="dsr-time-select-row">
+                                        <div class="dsr-select-container">
+                                            <select id="dsr-followup-hours" class="glass-select"></select>
+                                            <span class="dsr-select-subtitle">Hrs</span>
+                                        </div>
+                                        <span class="dsr-time-separator">:</span>
+                                        <div class="dsr-select-container">
+                                            <select id="dsr-followup-minutes" class="glass-select"></select>
+                                            <span class="dsr-select-subtitle">Min</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">my_location</span>
+                            <h4>Location Captured</h4>
+                        </div>
+
+                        <div class="dsr-gps-card">
+                            <div class="dsr-gps-info">
+                                <span class="dsr-gps-title">GPS Coordinates</span>
+                                <span class="dsr-gps-coords" id="dsr-gps-coordinates-display">Detecting current location...</span>
+                            </div>
+                            <div class="dsr-gps-icon-wrapper">
+                                <span class="material-symbols-rounded">my_location</span>
+                            </div>
+                        </div>
+
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">photo_camera</span>
+                            <h4>Add Visit Media (Optional)</h4>
+                        </div>
+
+                        <div class="dsr-media-row">
+                            <div class="dsr-media-box">
+                                <span class="material-symbols-rounded dsr-media-icon">photo_camera</span>
+                                <span class="dsr-media-title">Add Photo</span>
+                                <span class="dsr-media-subtitle">Upload site photo</span>
+                            </div>
+                            <div class="dsr-media-box">
+                                <span class="material-symbols-rounded dsr-media-icon">mic</span>
+                                <span class="dsr-media-title">Voice Note</span>
+                                <span class="dsr-media-subtitle">Record audio note</span>
+                            </div>
+                        </div>
+
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">bolt</span>
+                            <h4>Quick Notes (Optional)</h4>
+                        </div>
+
+                        <div class="dsr-quick-chips">
+                            <button type="button" class="dsr-quick-chip" onclick="appendDsrQuickNote('Customer Busy')">Customer Busy</button>
+                            <button type="button" class="dsr-quick-chip" onclick="appendDsrQuickNote('Visit Completed')">Visit Completed</button>
+                            <button type="button" class="dsr-quick-chip" onclick="appendDsrQuickNote('Payment Pending')">Payment Pending</button>
+                            <button type="button" class="dsr-quick-chip" onclick="appendDsrQuickNote('Call Later')">Call Later</button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: REVIEW SUMMARY -->
+                    <div class="dsr-wizard-panel" id="dsr-panel-4">
+                        <div class="dsr-section-header">
+                            <span class="material-symbols-rounded">rate_review</span>
+                            <h4>Review Details</h4>
+                        </div>
+
+                        <div class="dsr-review-card">
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Customer Name</span>
+                                <span class="dsr-review-val" id="dsr-review-name">--</span>
+                            </div>
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Office Address</span>
+                                <span class="dsr-review-val" id="dsr-review-address">--</span>
+                            </div>
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Site Details</span>
+                                <span class="dsr-review-val" id="dsr-review-site">--</span>
+                            </div>
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Contact Person</span>
+                                <span class="dsr-review-val" id="dsr-review-contact-person">--</span>
+                            </div>
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Contact No</span>
+                                <span class="dsr-review-val" id="dsr-review-contact-no">--</span>
+                            </div>
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Today Status</span>
+                                <span class="dsr-review-val" id="dsr-review-status">--</span>
+                            </div>
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Remark</span>
+                                <span class="dsr-review-val" id="dsr-review-remark">--</span>
+                            </div>
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Followup Date</span>
+                                <span class="dsr-review-val" id="dsr-review-followup-date">--</span>
+                            </div>
+                            <div class="dsr-review-item">
+                                <span class="dsr-review-label">Followup Time</span>
+                                <span class="dsr-review-val" id="dsr-review-followup-time">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Sticky Bottom Action Bar -->
+                <div class="dsr-bottom-action-bar">
+                    <button type="button" class="dsr-bottom-btn secondary-btn" id="dsr-wizard-back-btn" onclick="prevDsrWizardStep()">
+                        Back
+                    </button>
+                    <button type="button" class="dsr-bottom-btn primary-btn" id="dsr-wizard-next-btn" onclick="nextDsrWizardStep()">
+                        Save & Continue <span class="material-symbols-rounded">arrow_forward</span>
+                    </button>
+                </div>
+
+                <!-- Keep existing original buttons hidden to guarantee full backwards compatibility for original actions -->
+                <div style="display: none !important;">
+                    <button class="primary-btn" id="hidden-dsr-submit-btn" onclick="submitDSR()">SUBMIT</button>
+                    <button class="secondary-btn" id="hidden-dsr-back-btn" onclick="showView('dsr-client-list-view')">BACK</button>
+                </div>
+            </div>
+            
+            <!-- Bottom Progress Banner -->
+            <div class="dsr-progress-banner">
+                <div class="dsr-progress-circle-container">
+                    <svg class="dsr-progress-svg" viewBox="0 0 36 36">
+                        <path class="dsr-progress-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="dsr-progress-bar" id="dsr-progress-circle-bar" stroke-dasharray="25, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div class="dsr-progress-percentage" id="dsr-progress-percent-val">25%</div>
+                </div>
+                <div class="dsr-progress-text-block">
+                    <span class="dsr-progress-title">You're doing great!</span>
+                    <span class="dsr-progress-desc" id="dsr-progress-steps-desc">1 of 4 steps completed</span>
+                </div>
+                <div class="dsr-tip-card">
+                    <span class="material-symbols-rounded tip-icon">lightbulb</span>
+                    <span class="tip-text">Tip: Add clear visit notes for better tracking</span>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- ============================================ -->
@@ -2253,6 +2556,12 @@
     <script src="js/client.js"></script>
     <script src="js/admin.js"></script>
     <script src="js/app.js"></script>
-
+    <!-- SVG Filter for Liquid Glass Refraction -->
+    <svg width="0" height="0" style="position: absolute;">
+      <filter id="liquid-glass-filter" color-interpolation-filters="linearRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
 </body>
 </html>

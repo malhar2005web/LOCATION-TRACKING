@@ -86,6 +86,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Material Symbols Rounded -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="LOCATION_TRACKING.styles.css" />
     <link rel="icon" href="data:,">
@@ -247,6 +249,12 @@
     <script src="js/client.js"></script>
     <script src="js/admin.js"></script>
     <script src="js/app.js"></script>
-
+    <!-- SVG Filter for Liquid Glass Refraction -->
+    <svg width="0" height="0" style="position: absolute;">
+      <filter id="liquid-glass-filter" color-interpolation-filters="linearRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
 </body>
 </html>
