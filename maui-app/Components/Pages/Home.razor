@@ -1206,6 +1206,31 @@
             </header>
 
             <div class="page-content dsr-page-content">
+                <!-- Liquid Glass Step Stepper/Navigation -->
+                <div class="dsr-stepper-container">
+                    <div class="dsr-stepper-track-bg"></div>
+                    <div class="dsr-stepper-steps">
+                        <button type="button" class="dsr-step-btn active" id="dsr-step-btn-1" onclick="goToDsrStep(1)" interestfor="dsr-tip-1">
+                            <span class="material-symbols-rounded">person</span>
+                            <span class="dsr-step-label">Client</span>
+                        </button>
+                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-2" onclick="goToDsrStep(2)" interestfor="dsr-tip-2">
+                            <span class="material-symbols-rounded">calendar_today</span>
+                            <span class="dsr-step-label">Visit</span>
+                        </button>
+                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-3" onclick="goToDsrStep(3)" interestfor="dsr-tip-3">
+                            <span class="material-symbols-rounded">assignment</span>
+                            <span class="dsr-step-label">Follow-up</span>
+                        </button>
+                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-4" onclick="goToDsrStep(4)" interestfor="dsr-tip-4">
+                            <span class="material-symbols-rounded">done_all</span>
+                            <span class="dsr-step-label">Review</span>
+                        </button>
+                    </div>
+                    <!-- The Anchored Liquid-Glass Capsule Indicator -->
+                    <div class="dsr-anchored-pointer"></div>
+                </div>
+
                 <!-- Floating Liquid Glass Hero Card -->
                 <div class="dsr-hero-card">
                     <div class="dsr-hero-header">
@@ -1231,31 +1256,6 @@
                             GPS Verified
                         </span>
                     </div>
-                </div>
-
-                <!-- Liquid Glass Step Stepper/Navigation -->
-                <div class="dsr-stepper-container">
-                    <div class="dsr-stepper-track-bg"></div>
-                    <div class="dsr-stepper-steps">
-                        <button type="button" class="dsr-step-btn active" id="dsr-step-btn-1" onclick="goToDsrStep(1)" interestfor="dsr-tip-1">
-                            <span class="material-symbols-rounded">person</span>
-                            <span class="dsr-step-label">Client</span>
-                        </button>
-                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-2" onclick="goToDsrStep(2)" interestfor="dsr-tip-2">
-                            <span class="material-symbols-rounded">calendar_today</span>
-                            <span class="dsr-step-label">Visit</span>
-                        </button>
-                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-3" onclick="goToDsrStep(3)" interestfor="dsr-tip-3">
-                            <span class="material-symbols-rounded">assignment</span>
-                            <span class="dsr-step-label">Follow-up</span>
-                        </button>
-                        <button type="button" class="dsr-step-btn" id="dsr-step-btn-4" onclick="goToDsrStep(4)" interestfor="dsr-tip-4">
-                            <span class="material-symbols-rounded">done_all</span>
-                            <span class="dsr-step-label">Review</span>
-                        </button>
-                    </div>
-                    <!-- The Anchored Liquid-Glass Capsule Indicator -->
-                    <div class="dsr-anchored-pointer"></div>
                 </div>
 
                 <!-- Dynamic Step Panels -->
