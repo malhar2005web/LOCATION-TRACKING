@@ -15,7 +15,6 @@
 }
 
 #existing-client-dsr-view {
-#existing-client-dsr-view{
   --orange: #FF7A1A;
   --orange-deep: #F0630A;
   --orange-light: #FF9142;
@@ -853,24 +852,17 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     position: relative !important;
     isolation: isolate !important;
     background: rgba(255, 255, 255, 0.28) !important;
-    border: 1px solid rgba(255, 255, 255, 0.55) !important;
-    border-radius: 24px !important;
+    border: 1px solid white !important;
+    border-radius: 26px !important;
     backdrop-filter: blur(22px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
-    box-shadow:
-      0 14px 40px rgba(255, 145, 60, 0.08),
-      0 8px 22px rgba(0, 0, 0, 0.05),
-      inset 0 1px rgba(255, 255, 255, 0.70),
-      inset 0 -1px rgba(255, 255, 255, 0.10) !important;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12)) !important;
+    box-shadow: none !important;
     overflow: hidden !important;
     margin-bottom: 18px !important;
     padding: 18px 20px !important;
     min-height: 84px !important;
-    transition:
-      transform .45s cubic-bezier(.2, .9, .2, 1),
-      box-shadow .45s,
-      background .45s !important;
-    filter: none !important;
+    transition: transform 0.5s var(--spring-easing), filter 0.5s var(--spring-easing) !important;
   }
 
   /* Progressive Enhancement: Combine SVG displacement map refraction if supported */
@@ -895,42 +887,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   #existing-client-dsr-view .media-card::before, 
   #existing-client-dsr-view .notes-wrapper::before, 
   #existing-client-dsr-view .summary-card::before {
-    content: "" !important;
+    content: '' !important;
     position: absolute !important;
     inset: 0 !important;
+    background: 
+      radial-gradient(40% 80% ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), 
+      radial-gradient(50% 90% ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
+    z-index: -1 !important;
     pointer-events: none !important;
     border-radius: inherit !important;
-    background:
-      radial-gradient(
-        circle at 18% 12%,
-        rgba(255, 255, 255, 0.65),
-        transparent 32%
-      ),
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.22),
-        transparent 55%
-      ) !important;
-    opacity: .9 !important;
-    z-index: -1 !important;
-  }
-
-  /* Add edge lighting inner border to general form cards */
-  #existing-client-dsr-view .info-card::after, 
-  #existing-client-dsr-view .field::after, 
-  #existing-client-dsr-view .list-group .field::after,
-  #existing-client-dsr-view .location-box::after, 
-  #existing-client-dsr-view .media-card::after, 
-  #existing-client-dsr-view .notes-wrapper::after, 
-  #existing-client-dsr-view .summary-card::after {
-    content: "" !important;
-    position: absolute !important;
-    inset: 1px !important;
-    border-radius: inherit !important;
-    pointer-events: none !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    opacity: .9 !important;
-    z-index: -1 !important;
+    opacity: 0.9 !important;
   }
 
   /* Hover transitions matching the motion system specifications */
@@ -941,11 +907,8 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   #existing-client-dsr-view .media-card:hover, 
   #existing-client-dsr-view .notes-wrapper:hover, 
   #existing-client-dsr-view .summary-card:hover {
-    transform: translateY(-2px) !important;
-    box-shadow:
-      0 22px 55px rgba(255, 145, 60, 0.10),
-      0 10px 24px rgba(0, 0, 0, 0.06),
-      inset 0 1px rgba(255, 255, 255, 0.8) !important;
+    transform: translateY(-3px) !important;
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.16)) !important;
   }
 
   /* Press active transition states */
@@ -956,24 +919,17 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   #existing-client-dsr-view .media-card:active, 
   #existing-client-dsr-view .notes-wrapper:active, 
   #existing-client-dsr-view .summary-card:active {
-    transform: scale(.985) !important;
+    transform: scale(.985) translateY(1px) !important;
   }
 
   /* Increase depth and elevation hierarchy for Hero Card */
   #existing-client-dsr-view .info-card {
     transform: translateY(-2px);
-    box-shadow:
-      0 28px 56px rgba(255, 145, 60, 0.11),
-      0 12px 28px rgba(0, 0, 0, 0.06),
-      inset 0 1px rgba(255, 255, 255, 0.70),
-      inset 0 -1px rgba(255, 255, 255, 0.10) !important;
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.16)) !important;
   }
   #existing-client-dsr-view .info-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow:
-      0 34px 68px rgba(255, 145, 60, 0.14),
-      0 16px 32px rgba(0, 0, 0, 0.07),
-      inset 0 1px rgba(255, 255, 255, 0.8) !important;
+    transform: translateY(-5px) !important;
+    filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.2)) !important;
   }
 
   /* Stepper Active Capsule: Locked from user request (untouched liquid glass) */
@@ -1039,40 +995,39 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   #existing-client-dsr-view .status-pill {
     position: relative !important;
     isolation: isolate !important;
-    background: rgba(255, 255, 255, 0.2) !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    background: rgba(255, 255, 255, 0.28) !important;
+    border: 1px solid white !important;
     border-radius: 26px !important;
     backdrop-filter: blur(15px) saturate(150%) !important;
     -webkit-backdrop-filter: blur(15px) saturate(150%) !important;
-    box-shadow:
-      0 6px 14px rgba(255, 140, 60, 0.03),
-      0 3px 6px rgba(0, 0, 0, 0.02),
-      inset 0 1px rgba(255, 255, 255, 0.5) !important;
-    transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.2, 1) !important;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08)) !important;
+    box-shadow: none !important;
+    transition: transform 0.3s var(--spring-easing), filter 0.3s var(--spring-easing) !important;
+  }
+  @supports (backdrop-filter: url(#filter)) {
+    #existing-client-dsr-view .status-pill {
+      backdrop-filter: blur(15px) saturate(150%) url(#filter) !important;
+      -webkit-backdrop-filter: blur(15px) saturate(150%) url(#filter) !important;
+    }
   }
 
   #existing-client-dsr-view .status-pill::before {
-    content: "" !important;
+    content: '' !important;
     position: absolute !important;
     inset: 0 !important;
+    background: 
+      radial-gradient(40% 80% ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), 
+      radial-gradient(50% 90% ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
+    z-index: -1 !important;
     pointer-events: none !important;
     border-radius: inherit !important;
-    background:
-      radial-gradient(
-        circle at top left,
-        rgba(255, 255, 255, 0.4),
-        transparent 45%
-      ) !important;
     opacity: 0.8 !important;
-    z-index: -1 !important;
   }
 
   #existing-client-dsr-view .status-pill.active {
     background: rgba(255, 122, 26, 0.15) !important;
     border: 1.5px solid rgba(255, 122, 26, 0.6) !important;
-    box-shadow: 
-      0 12px 24px rgba(255, 122, 26, 0.1),
-      inset 0 1px rgba(255, 255, 255, 0.3) !important;
+    filter: drop-shadow(0 6px 12px rgba(255, 122, 26, 0.25)) !important;
   }
 
   #existing-client-dsr-view .status-pill.active span {
@@ -1083,6 +1038,4 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     background: var(--orange-deep) !important;
     color: white !important;
   }
-}
-}}
 }
