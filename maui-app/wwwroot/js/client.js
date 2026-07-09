@@ -2789,8 +2789,12 @@ function renderClientList(list) {
     tableBody.innerHTML = html;
 }
 
+let clientSearchTimeout = null;
 function filterClientList() {
-    fetchClientList();
+    clearTimeout(clientSearchTimeout);
+    clientSearchTimeout = setTimeout(() => {
+        fetchClientList();
+    }, 300);
 }
 
 function clearClientListFilters() {

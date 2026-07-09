@@ -1042,30 +1042,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="header-right">
+                <div class="header-right" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
                     <div class="company-logo-small">
                         <img src="img/skyway-logo.png" alt="Skyway Logo">
                     </div>
+                    <button type="button" class="icon-btn glass-chip" onclick="fetchClientList()" title="Refresh" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; padding: 0; background: rgba(255, 255, 255, 0.2) !important; border: 1px solid rgba(255,255,255,0.4) !important; color: var(--ink); box-shadow: none !important;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    </button>
                 </div>
             </header>
 
             <div class="page-content">
                 <div class="glass-form-card" style="margin-bottom: 16px; padding: 16px;">
-                    <div class="search-flex-row" style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
-                        <div class="search-input-group" style="flex: 1; min-width: 150px;">
-                            <input type="text" id="search-client-input" placeholder="Search Client..." class="glass-input" style="width: 100%;">
+                    <div class="search-flex-row" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 0;">
+                        <div class="search-input-group" style="width: 100%;">
+                            <input type="text" id="search-client-input" placeholder="Search Client..." class="glass-input" style="width: 100%;" oninput="filterClientList()">
                         </div>
-                        <button class="search-action-btn" onclick="filterClientList()">GO</button>
-                        
-                        <div class="search-input-group" style="flex: 1; min-width: 150px;">
-                            <input type="text" id="search-group-input" placeholder="Search Group..." class="glass-input" style="width: 100%;">
+                        <div class="search-input-group" style="width: 100%;">
+                            <input type="text" id="search-group-input" placeholder="Search Group..." class="glass-input" style="width: 100%;" oninput="filterClientList()">
                         </div>
-                        <button class="search-action-btn" onclick="filterClientList()">GO</button>
-                    </div>
-                    
-                    <div class="filter-actions-row" style="display: flex; gap: 12px;">
-                        <button class="secondary-btn-small" onclick="clearClientListFilters()" style="flex: 1;">CLEAR FIELD</button>
-                        <button class="primary-btn-small" onclick="fetchClientList()" style="flex: 1;">REFRESH</button>
                     </div>
                 </div>
 
