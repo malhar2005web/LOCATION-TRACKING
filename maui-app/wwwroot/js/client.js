@@ -240,6 +240,7 @@ function startLocationTracking(clientId, deviceId) {
                         // Update last sync time
                         if (data.lastSync && data.lastSync !== 'Never') {
                             updateSyncStatusText(`Last Location Sent: ${data.lastSync}`);
+                            StorageService.setLastSyncTime(data.lastSync);
                             
                             const lastSyncEl = document.getElementById('last-sync-time-display');
                             if (lastSyncEl) {
@@ -582,7 +583,16 @@ function updateSyncUI() {
     const lastSyncEl = document.getElementById('last-sync-time-display');
     const lastSyncBadge = document.getElementById('last-sync-time-display-badge');
     const lastSync = StorageService.getLastSyncTime();
-    const formattedSyncTime = lastSync !== 'Never' ? new Date(lastSync).toLocaleTimeString() : 'Never';
+    
+    let formattedSyncTime = 'Never';
+    if (lastSync && lastSync !== 'Never') {
+        const d = new Date(lastSync);
+        if (!isNaN(d.getTime())) {
+            formattedSyncTime = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        } else {
+            formattedSyncTime = lastSync;
+        }
+    }
 
     if (lastSyncEl) {
         lastSyncEl.textContent = formattedSyncTime;
@@ -4113,6 +4123,7 @@ function updateMetricsUI() {
         }
     } else {
         if (durationEl) {
+            const lastDuration = localStorage.getItem('lastWorkDuration') || '00:00';
             durationEl.innerHTML = `${lastDuration} <span class="stat-unit">hrs</span>`;
         }
     }

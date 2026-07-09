@@ -161,8 +161,8 @@ namespace LocationTracker.Platforms.Android
                                     calbaering = Math.Round(location.Bearing)
                                 };
 
-                                GpsDiagnostics.Log("Posting native coordinates payload to Skyway...");
-                                var response = await client.PostAsJsonAsync("https://fleettrackon.co.in/skywaydia/receiveddata", payload);
+                                 GpsDiagnostics.Log("Posting native coordinates payload to Skyway...");
+                                 var response = await client.PostAsJsonAsync("https://fleettrackon.co.in/skywaydia/receiveddata", payload);
                                 if (response.IsSuccessStatusCode)
                                 {
                                     _locationsSentCount++;
