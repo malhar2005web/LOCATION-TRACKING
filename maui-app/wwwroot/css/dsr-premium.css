@@ -829,9 +829,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 }
 .tip-row .shield svg{ width:16px; height:16px; }
 .tip-row .tip-txt{ font-size:11.5px; color:#5B6371; line-height:1.4; font-weight:500; }
-.tip-row .tip-txt strong{ color:var(--ink); }
-
-  /* ==========================================================================
+.tip-row .tip-txt strong{ color:var(--ink); }  /* ==========================================================================
      UNIFIED APPLE VISIONOS GLASSMORPHIC SYSTEM
      ========================================================================= */
   #existing-client-dsr-view {
@@ -875,7 +873,21 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     filter: none !important;
   }
 
-  /* Add highlight reflections to general form cards */
+  /* Progressive Enhancement: Combine SVG displacement map refraction if supported */
+  @supports (backdrop-filter: url(#filter)) {
+    #existing-client-dsr-view .info-card, 
+    #existing-client-dsr-view .field, 
+    #existing-client-dsr-view .list-group .field,
+    #existing-client-dsr-view .location-box, 
+    #existing-client-dsr-view .media-card, 
+    #existing-client-dsr-view .notes-wrapper, 
+    #existing-client-dsr-view .summary-card {
+      backdrop-filter: blur(22px) saturate(180%) url(#filter) !important;
+      -webkit-backdrop-filter: blur(22px) saturate(180%) url(#filter) !important;
+    }
+  }
+
+  /* Add highlight reflections to general form cards (Reflection Scaling) */
   #existing-client-dsr-view .info-card::before, 
   #existing-client-dsr-view .field::before, 
   #existing-client-dsr-view .list-group .field::before,
@@ -921,7 +933,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     z-index: -1 !important;
   }
 
-  /* Hover transitions */
+  /* Hover transitions matching the motion system specifications */
   #existing-client-dsr-view .info-card:hover, 
   #existing-client-dsr-view .field:hover, 
   #existing-client-dsr-view .list-group .field:hover,
@@ -945,6 +957,23 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   #existing-client-dsr-view .notes-wrapper:active, 
   #existing-client-dsr-view .summary-card:active {
     transform: scale(.985) !important;
+  }
+
+  /* Increase depth and elevation hierarchy for Hero Card */
+  #existing-client-dsr-view .info-card {
+    transform: translateY(-2px);
+    box-shadow:
+      0 28px 56px rgba(255, 145, 60, 0.11),
+      0 12px 28px rgba(0, 0, 0, 0.06),
+      inset 0 1px rgba(255, 255, 255, 0.70),
+      inset 0 -1px rgba(255, 255, 255, 0.10) !important;
+  }
+  #existing-client-dsr-view .info-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow:
+      0 34px 68px rgba(255, 145, 60, 0.14),
+      0 16px 32px rgba(0, 0, 0, 0.07),
+      inset 0 1px rgba(255, 255, 255, 0.8) !important;
   }
 
   /* Stepper Active Capsule: Locked from user request (untouched liquid glass) */
@@ -1006,34 +1035,44 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     border-radius: 12px !important;
   }
 
-  /* Status Pills Liquid Glass style & selection treatment matching active stepper styles */
+  /* Status Pills Glass style & selection treatment matching active stepper styles */
   #existing-client-dsr-view .status-pill {
     position: relative !important;
     isolation: isolate !important;
-    background: none !important;
-    border: 1px solid white !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
     border-radius: 26px !important;
-    filter: drop-shadow(0 3px 6px rgba(128,128,128,0.3)) !important;
-    backdrop-filter: url(#filter) !important;
-    -webkit-backdrop-filter: url(#filter) !important;
-    overflow: hidden !important;
-    box-shadow: none !important;
+    backdrop-filter: blur(15px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(150%) !important;
+    box-shadow:
+      0 6px 14px rgba(255, 140, 60, 0.03),
+      0 3px 6px rgba(0, 0, 0, 0.02),
+      inset 0 1px rgba(255, 255, 255, 0.5) !important;
+    transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.2, 1) !important;
   }
 
   #existing-client-dsr-view .status-pill::before {
-    content: '' !important;
+    content: "" !important;
     position: absolute !important;
     inset: 0 !important;
-    background: radial-gradient(1rem 3rem ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), radial-gradient(2rem 3.5rem ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
-    z-index: -1 !important;
     pointer-events: none !important;
     border-radius: inherit !important;
+    background:
+      radial-gradient(
+        circle at top left,
+        rgba(255, 255, 255, 0.4),
+        transparent 45%
+      ) !important;
+    opacity: 0.8 !important;
+    z-index: -1 !important;
   }
 
   #existing-client-dsr-view .status-pill.active {
     background: rgba(255, 122, 26, 0.15) !important;
     border: 1.5px solid rgba(255, 122, 26, 0.6) !important;
-    filter: drop-shadow(0 4px 8px rgba(255, 122, 26, 0.25)) !important;
+    box-shadow: 
+      0 12px 24px rgba(255, 122, 26, 0.1),
+      inset 0 1px rgba(255, 255, 255, 0.3) !important;
   }
 
   #existing-client-dsr-view .status-pill.active span {
@@ -1045,4 +1084,5 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     color: white !important;
   }
 }
+}}
 }
