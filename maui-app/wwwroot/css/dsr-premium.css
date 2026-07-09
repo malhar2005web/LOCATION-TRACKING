@@ -365,7 +365,7 @@
 .step.active .label{ color: var(--orange-deep); font-weight:800; }
 .step.done .label{ color:#3AA155; }
  
-.tab-indicator {
+.steps-wrap .tab-indicator {
   position: absolute;
   width: 52px;
   height: 78px;
@@ -381,7 +381,7 @@
   -webkit-backdrop-filter: url(#filter) !important;
   z-index: 1;
 }
-.tab-indicator::before {
+.steps-wrap .tab-indicator::before {
   content: '';
   position: absolute;
   inset: 0;
