@@ -4138,6 +4138,9 @@ function initDsrWizard(clientName, clientAddress) {
     if (heroNameEl) heroNameEl.textContent = clientName || 'Client Name';
     if (heroAddressEl) heroAddressEl.textContent = clientAddress || 'Office Address';
     
+    const customerNameTextEl = document.getElementById('dsr-customer-name-text');
+    if (customerNameTextEl) customerNameTextEl.textContent = clientName || 'Client Name';
+    
     // Checked-in time calculation
     const heroTimeEl = document.getElementById('hero-checkin-time');
     if (heroTimeEl) {
@@ -4147,7 +4150,7 @@ function initDsrWizard(clientName, clientAddress) {
         hrs = hrs % 12;
         hrs = hrs ? hrs : 12; // 0 should be 12
         const mins = now.getMinutes().toString().padStart(2, '0');
-        heroTimeEl.innerHTML = `<span class="material-symbols-rounded">schedule</span>Checked in ${hrs}:${mins} ${ampm}`;
+        heroTimeEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Checked in ${hrs}:${mins} ${ampm}`;
     }
 
     // Capture location display coordinates
@@ -4348,7 +4351,10 @@ function updateDsrWizardUI() {
             }
         }
         if (button) {
-            button.classList.remove('active');
+            button.classList.remove('active', 'done');
+            if (i < dsrActiveStep) {
+                button.classList.add('done');
+            }
             if (i === dsrActiveStep) {
                 button.classList.add('active');
             }
@@ -4358,15 +4364,25 @@ function updateDsrWizardUI() {
     // Position pointer to the active step
     positionDsrPointer(dsrActiveStep);
 
+    // Update progress filled line
+    const lineFill = document.getElementById('lineFill');
+    if (lineFill) {
+        const pct = ((dsrActiveStep - 1) / (dsrTotalSteps - 1)) * 100;
+        lineFill.style.width = pct + '%';
+    }
+
     // Update progress circle & bottom progress description
     const progressPercent = Math.round((dsrActiveStep / dsrTotalSteps) * 100);
-    const circleBar = document.getElementById('dsr-progress-circle-bar');
-    const percentVal = document.getElementById('dsr-progress-percent-val');
-    const stepsDesc = document.getElementById('dsr-progress-steps-desc');
+    const circleBar = document.getElementById('ringProgress');
+    const percentVal = document.getElementById('pctLabel');
+    const stepsDesc = document.getElementById('footerSub');
+    const footerTitle = document.getElementById('footerTitle');
     
     if (circleBar) {
-        // Circumference is 2 * pi * radius (15.9155) ≈ 100
-        circleBar.style.strokeDasharray = `${progressPercent}, 100`;
+        const RADIUS = 27;
+        const CIRC = 2 * Math.PI * RADIUS; // 169.646
+        const offset = CIRC - (progressPercent / 100) * CIRC;
+        circleBar.style.strokeDashoffset = offset;
     }
     if (percentVal) {
         percentVal.textContent = `${progressPercent}%`;
@@ -4374,15 +4390,17 @@ function updateDsrWizardUI() {
     if (stepsDesc) {
         stepsDesc.textContent = `${dsrActiveStep} of 4 steps completed`;
     }
+    if (footerTitle) {
+        footerTitle.textContent = progressPercent >= 100 ? 'All set!' : "You're doing great!";
+    }
 
     // Update bottom wizard buttons text
     const nextBtn = document.getElementById('dsr-wizard-next-btn');
     if (nextBtn) {
         if (dsrActiveStep === dsrTotalSteps) {
-            nextBtn.innerHTML = `Submit DSR <span class="material-symbols-rounded">done_all</span>`;
+            nextBtn.innerHTML = `Submit DSR <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
         } else {
-            // REDESIGNED: Show Continue instead of Save & Continue
-            nextBtn.innerHTML = `Continue <span class="material-symbols-rounded">arrow_forward</span>`;
+            nextBtn.innerHTML = `Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
         }
     }
 }
@@ -4391,44 +4409,33 @@ function updateDsrWizardUI() {
  * Align DSR liquid-glass capsule indicator
  */
 function positionDsrPointer(index) {
-    const pointer = document.querySelector('.dsr-anchored-pointer');
-    if (!pointer) return;
+    const tabIndicator = document.getElementById('tabIndicator');
+    const steps = document.querySelectorAll('.step');
+    const stepsTrack = document.getElementById('stepsTrack');
+    if (!tabIndicator || !steps || !stepsTrack) return;
 
-    // Anchor positioning support check
-    const hasAnchorSupport = ('positionAnchor' in document.documentElement.style) || 
-                             ('anchorName' in document.documentElement.style);
-    
-    if (hasAnchorSupport) {
-        pointer.style.positionAnchor = `--dsr-step-${index}`;
-    } else {
-        // Fallback for custom layouts
-        const targetBtn = document.getElementById(`dsr-step-btn-${index}`);
-        const container = document.querySelector('.dsr-stepper-container');
-        if (targetBtn && container) {
-            const targetRect = targetBtn.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            
-            pointer.style.top = `${targetRect.top - containerRect.top}px`;
-            pointer.style.left = `${targetRect.left - containerRect.left}px`;
-            pointer.style.width = `${targetRect.width}px`;
-            pointer.style.height = `${targetRect.height}px`;
-        }
-    }
+    const el = steps[index - 1];
+    if (!el) return;
+    const circle = el.querySelector('.circle');
+    if (!circle) return;
+
+    const trackRect = stepsTrack.getBoundingClientRect();
+    const circleRect = circle.getBoundingClientRect();
+    const centerX = circleRect.left + circleRect.width / 2 - trackRect.left;
+    tabIndicator.style.left = (centerX - 48) + 'px';
+    tabIndicator.style.top = (circleRect.top - trackRect.top - 14) + 'px';
 }
 
 /**
  * Setup interactions on step tabs (temporary hover shifts, click bindings).
  */
 function setupDsrStepperInteractions() {
-    const buttons = document.querySelectorAll('.dsr-step-btn');
-    const pointer = document.querySelector('.dsr-anchored-pointer');
-    if (!pointer) return;
-
-    buttons.forEach((btn, i) => {
+    const steps = document.querySelectorAll('.step');
+    steps.forEach((step, i) => {
         const stepIndex = i + 1;
 
         // Mouseenter shifts pointer momentarily
-        btn.addEventListener('mouseenter', () => {
+        step.addEventListener('mouseenter', () => {
             // Only shift if it is already verified/accessible
             let canAccess = true;
             if (stepIndex > dsrActiveStep) {
@@ -4451,10 +4458,20 @@ function setupDsrStepperInteractions() {
         });
 
         // Mouseleave resets back to active step
-        btn.addEventListener('mouseleave', () => {
+        step.addEventListener('mouseleave', () => {
             positionDsrPointer(dsrActiveStep);
         });
     });
+    
+    // Add window resize listener once
+    if (!window.dsrResizeListenerAdded) {
+        window.addEventListener('resize', () => {
+            if (typeof dsrActiveStep !== 'undefined') {
+                positionDsrPointer(dsrActiveStep);
+            }
+        });
+        window.dsrResizeListenerAdded = true;
+    }
 }
 
 /**
