@@ -833,9 +833,9 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
      ========================================================================= */
   #existing-client-dsr-view {
     background: linear-gradient(180deg, 
-      rgba(255, 122, 26, 0.12) 0%, 
-      rgba(255, 160, 80, 0.06) 45%, 
-      rgba(255, 180, 100, 0.03) 75%, 
+      rgba(255, 122, 26, 0.24) 0%, 
+      rgba(255, 160, 80, 0.14) 40%, 
+      rgba(255, 180, 100, 0.08) 75%, 
       #F7F4EF 100%
     ) !important;
     background-attachment: fixed !important;
@@ -1025,152 +1025,28 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     border: 1px solid rgba(255, 255, 255, 0.5) !important;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03) !important;
     border-radius: 12px !important;
-  }  /* Single continuous Glass container for Step 1, Step 2, and Step 3 panels */
-  #dsr-panel-1,
-  #dsr-panel-2,
-  #dsr-panel-3 {
-    position: relative !important;
-    isolation: isolate !important;
-    background: rgba(255, 255, 255, 0.28) !important;
-    border: 1px solid rgba(255, 255, 255, 0.6) !important;
-    border-radius: 26px !important;
-    backdrop-filter: blur(22px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08) !important;
-    padding: 20px !important;
-    margin: 18px 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-    box-sizing: border-box !important;
-  }
-  @supports (backdrop-filter: url(#filter)) {
-    #dsr-panel-1,
-    #dsr-panel-2,
-    #dsr-panel-3 {
-      backdrop-filter: blur(22px) saturate(180%) url(#filter) !important;
-      -webkit-backdrop-filter: blur(22px) saturate(180%) url(#filter) !important;
-    }
   }
 
-  /* Strip all backgrounds, borders, and shadows from inner layout elements to keep them flat inside the panel */
-  #existing-client-dsr-view .section-label,
-  #existing-client-dsr-view .today-status-label,
-  #existing-client-dsr-view .char-count,
-  #existing-client-dsr-view .notes-wrapper,
-  #existing-client-dsr-view .location-box,
-  #existing-client-dsr-view .media-row,
-  #existing-client-dsr-view .pill-grid,
+  /* Fix List-Group Container Background and Padding Overflow */
   #existing-client-dsr-view .list-group,
-  #existing-client-dsr-view .list-group.glass,
-  #existing-client-dsr-view .summary-card {
+  #existing-client-dsr-view .list-group.glass {
     background: transparent !important;
     border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
     padding: 0 !important;
-    margin: 0 !important;
+    margin: 0 0 18px 0 !important;
   }
-
   #existing-client-dsr-view .list-group::before,
   #existing-client-dsr-view .list-group::after,
   #existing-client-dsr-view .list-group.glass::before,
-  #existing-client-dsr-view .list-group.glass::after,
-  #existing-client-dsr-view .summary-card::before,
-  #existing-client-dsr-view .summary-card::after {
+  #existing-client-dsr-view .list-group.glass::after {
     display: none !important;
     content: none !important;
   }
 
-  /* Subtle dividers between inner fields */
-  #existing-client-dsr-view .list-group .field {
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
-    min-height: auto !important;
-    padding: 12px 0 !important;
-    margin: 0 !important;
-  }
-  #existing-client-dsr-view .list-group .field::before,
-  #existing-client-dsr-view .list-group .field::after {
-    display: none !important;
-    content: none !important;
-  }
-  #existing-client-dsr-view .list-group .field:not(:last-child) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-  }
-
-  /* Embedded glass look for textarea remark notes */
-  #existing-client-dsr-view textarea.notes {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.06) !important;
-    border-radius: 14px !important;
-    padding: 12px 14px !important;
-    color: var(--ink) !important;
-    outline: none !important;
-    box-sizing: border-box !important;
-    width: 100% !important;
-    font-family: inherit !important;
-  }
-
-  /* Location Capture Inner Pin and Locate button styling */
-  #existing-client-dsr-view .location-box .pin,
-  #existing-client-dsr-view .location-box .locate-btn {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.04) !important;
-  }
-
-  /* Media Card Embedded Glass Tiles */
-  #existing-client-dsr-view .media-card {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.06) !important;
-    border-radius: 16px !important;
-    padding: 12px !important;
-    min-height: auto !important;
-    filter: none !important;
-  }
-  #existing-client-dsr-view .media-card::before,
-  #existing-client-dsr-view .media-card::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  /* Quick Note Embedded Pills */
-  #existing-client-dsr-view .quick-note-pill {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.03) !important;
-    border-radius: 12px !important;
-    padding: 8px 12px !important;
-    color: var(--ink) !important;
-    font-weight: 700 !important;
-    font-size: 12px !important;
-    filter: none !important;
-  }
-  #existing-client-dsr-view .quick-note-pill::before,
-  #existing-client-dsr-view .quick-note-pill::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  /* RESTORE ORIGINAL STATUS PILLS (BUTTONS) - DO NOT TOUCH */
+  /* Status Pills Glass style & selection treatment matching active stepper styles */
   #existing-client-dsr-view .status-pill {
     position: relative !important;
     isolation: isolate !important;
@@ -1183,7 +1059,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     min-height: 96px !important;
     background: rgba(255, 255, 255, 0.28) !important;
     border: 1px solid white !important;
-    border-radius: 28px !important;
+    border-radius: 28px !important; /* Softer VisionOS corners */
     backdrop-filter: blur(15px) saturate(150%) !important;
     -webkit-backdrop-filter: blur(15px) saturate(150%) !important;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.03)) !important;
@@ -1210,6 +1086,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     opacity: 0.8 !important;
   }
 
+  /* Inactive Pill components: High contrast elements */
   #existing-client-dsr-view .status-pill .pill-icon {
     width: 32px !important;
     height: 32px !important;
@@ -1235,6 +1112,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     transition: color 0.3s ease, opacity 0.3s ease !important;
   }
 
+  /* Active Pill Selection state */
   #existing-client-dsr-view .status-pill.active {
     background: rgba(255, 255, 255, 0.42) !important;
     border: 1.5px solid rgba(255, 122, 26, 0.6) !important;
@@ -1252,201 +1130,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     box-shadow: none !important;
   }
 
-  #existing-client-dsr-view .notes-wrapper,
-  #existing-client-dsr-view .location-box,
-  #existing-client-dsr-view .media-row,
-  #existing-client-dsr-view .pill-grid,
-  #existing-client-dsr-view .list-group,
-  #existing-client-dsr-view .list-group.glass,
-  #existing-client-dsr-view .summary-card {
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  #existing-client-dsr-view .list-group::before,
-  #existing-client-dsr-view .list-group::after,
-  #existing-client-dsr-view .list-group.glass::before,
-  #existing-client-dsr-view .list-group.glass::after,
-  #existing-client-dsr-view .summary-card::before,
-  #existing-client-dsr-view .summary-card::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  /* Subtle dividers between inner fields */
-  #existing-client-dsr-view .list-group .field {
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    filter: none !important;
-    min-height: auto !important;
-    padding: 12px 0 !important;
-    margin: 0 !important;
-  }
-  #existing-client-dsr-view .list-group .field::before,
-  #existing-client-dsr-view .list-group .field::after {
-    display: none !important;
-    content: none !important;
-  }
-  #existing-client-dsr-view .list-group .field:not(:last-child) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-  }
-
-  /* Embedded glass look for textarea remark notes */
-  #existing-client-dsr-view textarea.notes {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.06) !important;
-    border-radius: 14px !important;
-    padding: 12px 14px !important;
-    color: var(--ink) !important;
-    outline: none !important;
-    box-sizing: border-box !important;
-    width: 100% !important;
-    font-family: inherit !important;
-  }
-
-  /* Location Capture Inner Pin and Locate button styling */
-  #existing-client-dsr-view .location-box .pin,
-  #existing-client-dsr-view .location-box .locate-btn {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.04) !important;
-  }
-
-  /* Media Card Embedded Glass Tiles */
-  #existing-client-dsr-view .media-card {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.06) !important;
-    border-radius: 16px !important;
-    padding: 12px !important;
-    min-height: auto !important;
-    filter: none !important;
-  }
-  #existing-client-dsr-view .media-card::before,
-  #existing-client-dsr-view .media-card::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  /* Quick Note Embedded Pills */
-  #existing-client-dsr-view .quick-note-pill {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.03) !important;
-    border-radius: 12px !important;
-    padding: 8px 12px !important;
-    color: var(--ink) !important;
-    font-weight: 700 !important;
-    font-size: 12px !important;
-    filter: none !important;
-  }
-  #existing-client-dsr-view .quick-note-pill::before,
-  #existing-client-dsr-view .quick-note-pill::after {
-    display: none !important;
-    content: none !important;
-  }
-
-  /* RESTORE ORIGINAL STATUS PILLS (BUTTONS) - DO NOT TOUCH */
-  #existing-client-dsr-view .status-pill {
-    position: relative !important;
-    isolation: isolate !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    padding: 16px 12px !important;
-    min-height: 96px !important;
-    background: rgba(255, 255, 255, 0.28) !important;
-    border: 1px solid white !important;
-    border-radius: 28px !important;
-    backdrop-filter: blur(15px) saturate(150%) !important;
-    -webkit-backdrop-filter: blur(15px) saturate(150%) !important;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.03)) !important;
-    box-shadow: none !important;
-    transition: transform 0.3s var(--spring-easing), filter 0.3s var(--spring-easing), background-color 0.3s ease !important;
-  }
-  @supports (backdrop-filter: url(#filter)) {
-    #existing-client-dsr-view .status-pill {
-      backdrop-filter: blur(15px) saturate(150%) url(#filter) !important;
-      -webkit-backdrop-filter: blur(15px) saturate(150%) url(#filter) !important;
-    }
-  }
-
-  #existing-client-dsr-view .status-pill::before {
-    content: '' !important;
-    position: absolute !important;
-    inset: 0 !important;
-    background: 
-      radial-gradient(40% 80% ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), 
-      radial-gradient(50% 90% ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
-    z-index: -1 !important;
-    pointer-events: none !important;
-    border-radius: inherit !important;
-    opacity: 0.8 !important;
-  }
-
-  #existing-client-dsr-view .status-pill .pill-icon {
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.06) !important;
-    color: var(--ink) !important;
-    flex: 0 0 auto !important;
-    transition: background-color 0.3s ease, color 0.3s ease !important;
-  }
-  #existing-client-dsr-view .status-pill span {
-    color: var(--ink) !important;
-    opacity: 0.8 !important;
-    font-size: 10.5px !important;
-    font-weight: 700 !important;
-    white-space: nowrap !important;
-    transition: color 0.3s ease, opacity 0.3s ease !important;
-  }
-
-  #existing-client-dsr-view .status-pill.active {
-    background: rgba(255, 255, 255, 0.42) !important;
-    border: 1.5px solid rgba(255, 122, 26, 0.6) !important;
-    filter: drop-shadow(0 6px 12px rgba(255, 122, 26, 0.18)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05)) !important;
-  }
-  #existing-client-dsr-view .status-pill.active span {
-    color: var(--ink) !important;
-    opacity: 1 !important;
-    font-weight: 800 !important;
-  }
-  #existing-client-dsr-view .status-pill.active .pill-icon {
-    background: var(--orange-deep) !important;
-    color: white !important;
-    border-color: transparent !important;
-    box-shadow: none !important;
-  }
-
+  /* Hover / Press Animations matching motion specifications */
   #existing-client-dsr-view .status-pill:hover {
     transform: translateY(-2px) !important;
     background: rgba(255, 255, 255, 0.38) !important;
@@ -1455,3 +1139,65 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   #existing-client-dsr-view .status-pill:active {
     transform: scale(0.96) translateY(1px) !important;
   }
+
+  /* -------------------------------------------------------------
+     UNIFIED GIANT GLASS PANEL CONTAINERS (STEP 1 & STEP 2)
+     ------------------------------------------------------------- */
+
+  /* Outer page container completely transparent & borderless */
+  #existing-client-dsr-view .dsr-page-container,
+  #existing-client-dsr-view .dsr-page-container.glass-shell {
+    background: transparent !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    padding: 24px 16px 24px !important;
+  }
+
+  #existing-client-dsr-view .dsr-page-container::before,
+  #existing-client-dsr-view .dsr-page-container.glass-shell::before,
+  #existing-client-dsr-view .dsr-page-container::after,
+  #existing-client-dsr-view .dsr-page-container.glass-shell::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* Style active step panels as single continuous frosted glass sheets */
+  #existing-client-dsr-view #dsr-panel-1.active,
+  #existing-client-dsr-view #dsr-panel-2.active {
+    position: relative !important;
+    isolation: isolate !important;
+    background: rgba(255, 255, 255, 0.22) !important;
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    border-radius: 32px !important;
+    backdrop-filter: blur(20px) saturate(210%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(210%) !important;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.3) !important;
+    padding: 24px 20px !important;
+    margin-bottom: 24px !important;
+    overflow: visible !important;
+  }
+
+  @supports (backdrop-filter: url(#filter)) {
+    #existing-client-dsr-view #dsr-panel-1.active,
+    #existing-client-dsr-view #dsr-panel-2.active {
+      backdrop-filter: blur(20px) saturate(210%) url(#filter) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(210%) url(#filter) !important;
+    }
+  }
+
+  #existing-client-dsr-view #dsr-panel-1.active::before,
+  #existing-client-dsr-view #dsr-panel-2.active::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: 
+      radial-gradient(40% 80% ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), 
+      radial-gradient(50% 90% ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+    border-radius: inherit !important;
+    opacity: 0.7 !important;
+  }
+}
