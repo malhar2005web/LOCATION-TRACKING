@@ -4134,7 +4134,7 @@ function updateMetricsUI() {
    ========================================================================== */
 
 let dsrActiveStep = 1;
-const dsrTotalSteps = 4;
+const dsrTotalSteps = 3;
 
 /**
  * Initializes the DSR premium multi-step wizard.
@@ -4253,7 +4253,7 @@ function populateDsrTimeDropdowns() {
 function goToDsrStep(stepNum) {
     // REDESIGNED: Make jumping between steps easy and frictionless
     dsrActiveStep = stepNum;
-    if (dsrActiveStep === 4) {
+    if (dsrActiveStep === dsrTotalSteps) {
         buildDsrReviewSummary();
     }
     updateDsrWizardUI();
@@ -4294,7 +4294,7 @@ function nextDsrWizardStep() {
         updateDsrWizardUI();
         
         // Build the Review screen summary details
-        if (dsrActiveStep === 4) {
+        if (dsrActiveStep === dsrTotalSteps) {
             buildDsrReviewSummary();
         }
     } else {
@@ -4399,7 +4399,7 @@ function updateDsrWizardUI() {
         percentVal.textContent = `${progressPercent}%`;
     }
     if (stepsDesc) {
-        stepsDesc.textContent = `${dsrActiveStep} of 4 steps completed`;
+        stepsDesc.textContent = `${dsrActiveStep} of ${dsrTotalSteps} steps completed`;
     }
     if (footerTitle) {
         footerTitle.textContent = progressPercent >= 100 ? 'All set!' : "You're doing great!";

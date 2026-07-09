@@ -366,39 +366,27 @@
 .step.active .label{ color: var(--orange-deep); font-weight:800; }
 .step.done .label{ color:#3AA155; }
  
-.tab-indicator{
-  position:absolute;
-  top:0;
-  width:52px;
-  height:78px;
-  border-radius:26px;
-  transform: translateX(0);
-  transition: left 0.8s var(--spring-easing), top 0.8s var(--spring-easing);
-  z-index:1;
-  pointer-events:none;
-  border: 1.5px solid rgba(255,255,255,0.7);
-  box-shadow: 0 8px 24px rgba(30,36,48,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+.tab-indicator {
+  position: absolute;
+  width: 52px;
+  height: 78px;
+  display: block;
+  background: none !important;
+  border: 1px solid white !important;
+  border-radius: 26px !important;
+  transition: left 0.8s var(--spring-easing), top 0.8s var(--spring-easing) !important;
+  filter: drop-shadow(0 3px 6px gray) !important;
+  pointer-events: none;
   overflow: hidden;
+  backdrop-filter: url(#filter) !important;
+  -webkit-backdrop-filter: url(#filter) !important;
+  z-index: 1;
 }
-.tab-indicator::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:26px;
-  background: radial-gradient(1.2rem 3.5rem ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 12%) 175% 165%), radial-gradient(2.2rem 4rem ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, rgba(140,150,165,0.06) 150%);
-  backdrop-filter: blur(10px) saturate(180%) url(#liquid-distort-soft);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-}
-.tab-indicator::after{
-  content:"";
-  position:absolute;
-  top:50%; left:50%;
-  width:48px; height:48px;
-  transform: translate(-50%,-50%);
-  border-radius:50%;
-  background: radial-gradient(circle, var(--orange-glow) 0%, rgba(255,122,26,0.1) 50%, rgba(255,122,26,0) 70%);
-  filter: blur(2px);
-  opacity: 0.65;
+.tab-indicator::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(1rem 3rem ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), radial-gradient(2rem 3.5rem ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
 }
  
 .step.active .circle{
@@ -670,12 +658,16 @@
 .locate-btn svg{ width:19px; height:19px; }
 
 /* media cards */
-.media-row{ display:flex; gap:10px; margin-bottom:18px; }
+.media-row{
+  display:flex; gap:10px; margin-bottom:18px;
+  width: 100%; box-sizing: border-box;
+}
 .media-card{
   flex:1;
+  min-width:0;
   border-radius:20px;
   border:1.5px dashed rgba(255,150,90,0.5);
-  padding:24px 16px;
+  padding:24px 10px;
   text-align:center;
   cursor:pointer;
   min-height:144px;
@@ -697,6 +689,7 @@
   display:flex; gap:9px; overflow-x:auto;
   margin-bottom:14px;
   padding-bottom:4px;
+  width: 100%; box-sizing: border-box;
 }
 .pill-grid::-webkit-scrollbar{ display:none; }
 .status-pill{
