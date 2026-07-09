@@ -49,6 +49,7 @@
   --shadow-orange-contact: 0 10px 20px -8px rgba(240,99,10,0.2);
   --shadow-orange-edge:    inset 0 0 0 1px rgba(255,230,205,0.55), 0 0 40px rgba(255,180,130,0.22);
   --shadow-orange-glass: var(--shadow-orange-outer), var(--shadow-orange-contact), var(--shadow-in-top), var(--shadow-orange-edge);
+  --spring-easing: linear(0, 0.0018, 0.0069 1.15%, 0.026 2.3%, 0.0637, 0.1135 5.18%, 0.2229 7.78%, 0.5977 15.84%, 0.7014, 0.7904, 0.8641, 0.9228, 0.9676 28.8%, 1.0032 31.68%, 1.0225, 1.0352 36.29%, 1.0431 38.88%, 1.046 42.05%, 1.0448 44.35%, 1.0407 47.23%, 1.0118 61.63%, 1.0025 69.41%, 0.9981 80.35%, 0.9992 99.94%);
 }
 
 *{box-sizing:border-box;}
@@ -368,33 +369,36 @@
 .tab-indicator{
   position:absolute;
   top:0;
-  width:74px;
-  height:74px;
-  border-radius:24px;
+  width:52px;
+  height:78px;
+  border-radius:26px;
   transform: translateX(0);
-  transition: left .35s cubic-bezier(.34, 1.56, .64, 1), top .35s cubic-bezier(.34, 1.56, .64, 1);
+  transition: left 0.8s var(--spring-easing), top 0.8s var(--spring-easing);
   z-index:1;
   pointer-events:none;
+  border: 1.5px solid rgba(255,255,255,0.7);
+  box-shadow: 0 8px 24px rgba(30,36,48,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+  overflow: hidden;
 }
 .tab-indicator::before{
   content:"";
   position:absolute;
   inset:0;
-  border-radius:24px;
-  background: rgba(255,175,110,0.18);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border:1px solid rgba(255,255,255,0.35);
+  border-radius:26px;
+  background: radial-gradient(1.2rem 3.5rem ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 12%) 175% 165%), radial-gradient(2.2rem 4rem ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, rgba(140,150,165,0.06) 150%);
+  backdrop-filter: blur(10px) saturate(180%) url(#liquid-distort-soft);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
 }
 .tab-indicator::after{
   content:"";
   position:absolute;
   top:50%; left:50%;
-  width:62px; height:62px;
-  transform: translate(-50%,-52%);
+  width:48px; height:48px;
+  transform: translate(-50%,-50%);
   border-radius:50%;
-  background: radial-gradient(circle, var(--orange-glow) 0%, rgba(255,122,26,0.15) 55%, rgba(255,122,26,0) 75%);
-  filter: blur(3px);
+  background: radial-gradient(circle, var(--orange-glow) 0%, rgba(255,122,26,0.1) 50%, rgba(255,122,26,0) 70%);
+  filter: blur(2px);
+  opacity: 0.65;
 }
  
 .step.active .circle{

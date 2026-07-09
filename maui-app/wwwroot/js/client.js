@@ -4433,8 +4433,17 @@ function positionDsrPointer(index) {
     const trackRect = stepsTrack.getBoundingClientRect();
     const circleRect = circle.getBoundingClientRect();
     const centerX = circleRect.left + circleRect.width / 2 - trackRect.left;
-    tabIndicator.style.left = (centerX - 48) + 'px';
-    tabIndicator.style.top = (circleRect.top - trackRect.top - 14) + 'px';
+
+    // Dynamically calculate half width of the indicator to support responsive sizing
+    const indicatorWidth = tabIndicator.offsetWidth || 52;
+    const indicatorHeight = tabIndicator.offsetHeight || 78;
+    const halfWidth = indicatorWidth / 2;
+
+    // Dynamically align vertically based on height
+    const topOffset = (circleRect.top - trackRect.top) - (indicatorHeight - circleRect.height) / 2;
+
+    tabIndicator.style.left = (centerX - halfWidth) + 'px';
+    tabIndicator.style.top = topOffset + 'px';
 }
 
 /**
