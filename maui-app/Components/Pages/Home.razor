@@ -1377,8 +1377,10 @@
                         <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
                         <span>Remark / Visit Notes</span>
                     </div>
-                    <textarea id="dsr-remark" class="notes glass" maxlength="250" placeholder="Add your remarks about today's visit..." oninput="updateDsrRemarkCounter()"></textarea>
-                    <div class="char-count" id="dsr-remark-counter">0 / 250</div>
+                    <div class="notes-wrapper">
+                        <textarea id="dsr-remark" class="notes" maxlength="250" placeholder="Add your remarks about today's visit..." oninput="updateDsrRemarkCounter()"></textarea>
+                    </div>
+                    <div class="char-count" id="dsr-remark-counter" style="margin-top: 6px;">0 / 250</div>
                 </div>
 
                 <!-- STEP 2: VISIT DETAILS (screen1 in zip) -->

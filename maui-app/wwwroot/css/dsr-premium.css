@@ -736,22 +736,25 @@
   white-space:nowrap;
 }
 
-textarea.notes{
-  width:100%;
-  border-radius:20px;
-  padding:16px 18px;
-  font-family:inherit;
-  font-size:13.5px;
-  color:var(--ink);
-  resize:none;
-  min-height:96px;
-  margin-bottom:6px;
-  outline:none;
-  background: rgba(255, 255, 255, 0.45) !important;
-  border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  backdrop-filter: blur(15px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
-  box-shadow: 0 8px 32px rgba(30,36,48,0.03), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+.notes-wrapper {
+  margin-bottom: 6px;
+}
+textarea.notes {
+  width: 100%;
+  background: transparent !important;
+  border: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--ink);
+  resize: none;
+  min-height: 96px;
+  outline: none;
+  padding: 16px 18px;
+  box-sizing: border-box;
+  display: block;
 }
 textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .char-count{ text-align:right; font-size:10.5px; color:#B9BFC9; margin-bottom:18px; font-weight:600; }
@@ -828,7 +831,47 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .tip-row .tip-txt{ font-size:11.5px; color:#5B6371; line-height:1.4; font-weight:500; }
 .tip-row .tip-txt strong{ color:var(--ink); }
 
-@media (max-width:460px){
-  .phone{ width:100%; padding:20px 14px 16px; border-radius:32px; }
+  /* Unified Glassmorphic Design System (Matching Step Navigation Capsule) */
+  .info-card, 
+  .field, 
+  .location-box, 
+  .media-card, 
+  .notes-wrapper, 
+  .summary-card {
+    position: relative !important;
+    isolation: isolate !important;
+    background: none !important;
+    border: 1px solid white !important;
+    border-radius: 26px !important;
+    filter: drop-shadow(0 3px 6px rgba(130, 140, 150, 0.22)) !important;
+    backdrop-filter: url(#filter) !important;
+    -webkit-backdrop-filter: url(#filter) !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+  }
+
+  .info-card::before, 
+  .field::before, 
+  .location-box::before, 
+  .media-card::before, 
+  .notes-wrapper::before, 
+  .summary-card::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: -1 !important;
+    background: radial-gradient(1rem 3rem ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), radial-gradient(2rem 3.5rem ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
+    pointer-events: none !important;
+  }
+  
+  /* Ensure content inside glass containers sits correctly on z-index stack above the pseudo background */
+  .info-card > *, 
+  .field > *, 
+  .location-box > *, 
+  .media-card > *, 
+  .summary-card > * {
+    position: relative !important;
+    z-index: 2 !important;
+  }
 }
 }
