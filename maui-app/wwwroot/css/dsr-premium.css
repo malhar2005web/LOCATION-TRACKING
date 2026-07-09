@@ -844,84 +844,41 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
       #F8F5F1 !important;
   }
 
-  /* Frosty Glass treatment for general form cards */
+  /* Frosty Glass treatment for general form cards & indicators */
   #existing-client-dsr-view .info-card, 
   #existing-client-dsr-view .field, 
   #existing-client-dsr-view .list-group .field,
   #existing-client-dsr-view .location-box, 
   #existing-client-dsr-view .media-card, 
   #existing-client-dsr-view .notes-wrapper, 
-  #existing-client-dsr-view .summary-card {
+  #existing-client-dsr-view .summary-card,
+  #existing-client-dsr-view .tab-indicator {
     position: relative !important;
     isolation: isolate !important;
-    background: rgba(255, 255, 255, 0.22) !important;
-    border: 1px solid rgba(255, 255, 255, 0.45) !important;
-    border-radius: 24px !important;
-    backdrop-filter: blur(22px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
-    box-shadow:
-      0 18px 40px rgba(255, 140, 60, 0.06),
-      0 8px 18px rgba(0, 0, 0, 0.05),
-      inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+    background: none !important;
+    border: 1px solid white !important;
+    border-radius: 26px !important;
+    filter: drop-shadow(0 3px 6px gray) !important;
+    backdrop-filter: url(#filter) !important;
+    -webkit-backdrop-filter: url(#filter) !important;
     overflow: hidden !important;
-    filter: none !important;
+    box-shadow: none !important;
   }
 
   /* Increase depth and elevation for Hero Card to sit above other elements */
   #existing-client-dsr-view .info-card {
     transform: translateY(-2px);
-    box-shadow:
-      0 28px 56px rgba(255, 140, 60, 0.11),
-      0 12px 28px rgba(0, 0, 0, 0.06),
-      inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+    filter: drop-shadow(0 8px 16px rgba(128,128,128,0.5)) !important;
   }
 
-  /* Subtle top-left light highlight for frosted glass cards */
+  /* Unified Liquid Reflection Highlight Layer */
   #existing-client-dsr-view .info-card::before, 
   #existing-client-dsr-view .field::before, 
   #existing-client-dsr-view .list-group .field::before,
   #existing-client-dsr-view .location-box::before, 
   #existing-client-dsr-view .media-card::before, 
   #existing-client-dsr-view .notes-wrapper::before, 
-  #existing-client-dsr-view .summary-card::before {
-    content: "" !important;
-    position: absolute !important;
-    inset: 0 !important;
-    border-radius: inherit !important;
-    background:
-      radial-gradient(
-        circle at top left,
-        rgba(255, 255, 255, 0.45),
-        transparent 45%
-      ),
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.22),
-        transparent 60%
-      ) !important;
-    pointer-events: none !important;
-    z-index: -1 !important;
-  }
-
-  /* Stepper Active Capsule: Exact user liquid glass code */
-  #existing-client-dsr-view .tab-indicator {
-    position: absolute !important;
-    width: 52px !important;
-    height: 78px !important;
-    display: block !important;
-    background: none !important;
-    border: 1px solid white !important;
-    border-radius: 26px !important;
-    transition: left 0.8s var(--spring-easing), top 0.8s var(--spring-easing) !important;
-    filter: drop-shadow(0 3px 6px gray) !important;
-    pointer-events: none !important;
-    overflow: hidden !important;
-    backdrop-filter: url(#filter) !important;
-    -webkit-backdrop-filter: url(#filter) !important;
-    z-index: 1 !important;
-    box-shadow: none !important;
-  }
-
+  #existing-client-dsr-view .summary-card::before,
   #existing-client-dsr-view .tab-indicator::before {
     content: '' !important;
     position: absolute !important;
@@ -962,25 +919,34 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     border-radius: 12px !important;
   }
 
-  /* Status Pills Glass style & selection treatment matching active stepper styles */
+  /* Status Pills Liquid Glass style & selection treatment matching active stepper styles */
   #existing-client-dsr-view .status-pill {
-    background: rgba(255, 255, 255, 0.22) !important;
-    backdrop-filter: blur(22px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.45) !important;
-    border-radius: 24px !important;
-    box-shadow:
-      0 12px 24px rgba(255, 140, 60, 0.04),
-      0 6px 12px rgba(0, 0, 0, 0.03),
-      inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+    position: relative !important;
+    isolation: isolate !important;
+    background: none !important;
+    border: 1px solid white !important;
+    border-radius: 26px !important;
+    filter: drop-shadow(0 3px 6px rgba(128,128,128,0.3)) !important;
+    backdrop-filter: url(#filter) !important;
+    -webkit-backdrop-filter: url(#filter) !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+  }
+
+  #existing-client-dsr-view .status-pill::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: radial-gradient(1rem 3rem ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), radial-gradient(2rem 3.5rem ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+    border-radius: inherit !important;
   }
 
   #existing-client-dsr-view .status-pill.active {
     background: rgba(255, 122, 26, 0.15) !important;
-    border: 1px solid rgba(255, 122, 26, 0.5) !important;
-    box-shadow: 
-      0 12px 24px rgba(255, 122, 26, 0.1),
-      inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+    border: 1.5px solid rgba(255, 122, 26, 0.6) !important;
+    filter: drop-shadow(0 4px 8px rgba(255, 122, 26, 0.25)) !important;
   }
 
   #existing-client-dsr-view .status-pill.active span {
