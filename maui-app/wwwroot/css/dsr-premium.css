@@ -833,9 +833,9 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
      ========================================================================= */
   #existing-client-dsr-view {
     background: linear-gradient(180deg, 
-      rgba(255, 122, 26, 0.24) 0%, 
-      rgba(255, 160, 80, 0.14) 40%, 
-      rgba(255, 180, 100, 0.08) 75%, 
+      rgba(255, 122, 26, 0.08) 0%, 
+      rgba(255, 160, 80, 0.04) 40%, 
+      rgba(255, 180, 100, 0.02) 75%, 
       #F7F4EF 100%
     ) !important;
     background-attachment: fixed !important;
@@ -846,30 +846,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     margin-bottom: 24px !important;
   }
 
-  /* Frosted Glass treatment for general form cards */
-  #existing-client-dsr-view .field, 
-  #existing-client-dsr-view .list-group .field,
-  #existing-client-dsr-view .location-box, 
-  #existing-client-dsr-view .media-card, 
-  #existing-client-dsr-view .notes-wrapper, 
-  #existing-client-dsr-view .summary-card {
-    position: relative !important;
-    isolation: isolate !important;
-    background: rgba(255, 255, 255, 0.28) !important;
-    border: 1px solid white !important;
-    border-radius: 26px !important;
-    backdrop-filter: blur(22px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
-    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12)) !important;
-    box-shadow: none !important;
-    overflow: hidden !important;
-    margin-bottom: 18px !important;
-    padding: 18px 20px !important;
-    min-height: 84px !important;
-    transition: transform 0.5s var(--spring-easing), filter 0.5s var(--spring-easing) !important;
-  }
-
-  /* Frosted Glass treatment for Hero Card (no overflow clipping, auto height) */
+  /* Frosted Glass treatment for Hero Card only */
   #existing-client-dsr-view .info-card {
     position: relative !important;
     isolation: isolate !important;
@@ -888,31 +865,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     transition: transform 0.5s var(--spring-easing), filter 0.5s var(--spring-easing) !important;
   }
 
-  /* Progressive Enhancement: Combine SVG displacement map refraction if supported */
+  /* Progressive Enhancement for Hero Card if supported */
   @supports (backdrop-filter: url(#filter)) {
-    #existing-client-dsr-view .field, 
-    #existing-client-dsr-view .list-group .field,
-    #existing-client-dsr-view .location-box, 
-    #existing-client-dsr-view .media-card, 
-    #existing-client-dsr-view .notes-wrapper, 
-    #existing-client-dsr-view .summary-card {
-      backdrop-filter: blur(22px) saturate(180%) url(#filter) !important;
-      -webkit-backdrop-filter: blur(22px) saturate(180%) url(#filter) !important;
-    }
     #existing-client-dsr-view .info-card {
       backdrop-filter: blur(22px) saturate(180%) url(#filter) !important;
       -webkit-backdrop-filter: blur(22px) saturate(180%) url(#filter) !important;
     }
   }
 
-  /* Add highlight reflections to general form cards (Reflection Scaling) */
-  #existing-client-dsr-view .info-card::before, 
-  #existing-client-dsr-view .field::before, 
-  #existing-client-dsr-view .list-group .field::before,
-  #existing-client-dsr-view .location-box::before, 
-  #existing-client-dsr-view .media-card::before, 
-  #existing-client-dsr-view .notes-wrapper::before, 
-  #existing-client-dsr-view .summary-card::before {
+  /* Add highlight reflections to Hero Card only */
+  #existing-client-dsr-view .info-card::before {
     content: '' !important;
     position: absolute !important;
     inset: 0 !important;
@@ -925,26 +887,14 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     opacity: 0.9 !important;
   }
 
-  /* Hover transitions matching the motion system specifications */
-  #existing-client-dsr-view .info-card:hover, 
-  #existing-client-dsr-view .field:hover, 
-  #existing-client-dsr-view .list-group .field:hover,
-  #existing-client-dsr-view .location-box:hover, 
-  #existing-client-dsr-view .media-card:hover, 
-  #existing-client-dsr-view .notes-wrapper:hover, 
-  #existing-client-dsr-view .summary-card:hover {
+  /* Hover transitions for Hero Card only */
+  #existing-client-dsr-view .info-card:hover {
     transform: translateY(-3px) !important;
     filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.16)) !important;
   }
 
-  /* Press active transition states */
-  #existing-client-dsr-view .info-card:active, 
-  #existing-client-dsr-view .field:active, 
-  #existing-client-dsr-view .list-group .field:active,
-  #existing-client-dsr-view .location-box:active, 
-  #existing-client-dsr-view .media-card:active, 
-  #existing-client-dsr-view .notes-wrapper:active, 
-  #existing-client-dsr-view .summary-card:active {
+  /* Press active transition states for Hero Card only */
+  #existing-client-dsr-view .info-card:active {
     transform: scale(.985) translateY(1px) !important;
   }
 
