@@ -537,16 +537,16 @@
   overflow: visible !important;
 }
 .list-group .field{
-  border-radius:20px !important;
-  margin-bottom:0 !important;
-  border:1px solid rgba(255,255,255,0.85) !important;
-  background: linear-gradient(150deg, rgba(255,255,255,0.72), rgba(255,255,255,0.3)) !important;
-  box-shadow: 0 8px 32px rgba(30,36,48,0.04), inset 0 1px 0 rgba(255,255,255,0.9) !important;
-  backdrop-filter: blur(15px) saturate(185%) !important;
-  -webkit-backdrop-filter: blur(15px) saturate(185%) !important;
+  border-radius:24px;
+  margin-bottom:0;
+  border:1px solid rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.22);
+  box-shadow: 0 18px 40px rgba(255,140,60,0.06), 0 8px 18px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.5);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
 }
 .list-group .field::before,
-.list-group .field::after{ display:block !important; }
+.list-group .field::after{ display:block; }
 
 /* ---------- Fields / inputs : compact but tall enough to tap (72px) ---------- */
 .field{
@@ -844,13 +844,14 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
       #F8F5F1 !important;
   }
 
-  .info-card, 
-  .field, 
-  .location-box, 
-  .media-card, 
-  .notes-wrapper, 
-  .summary-card,
-  .tab-indicator {
+  /* Frosty Glass treatment for general form cards */
+  #existing-client-dsr-view .info-card, 
+  #existing-client-dsr-view .field, 
+  #existing-client-dsr-view .list-group .field,
+  #existing-client-dsr-view .location-box, 
+  #existing-client-dsr-view .media-card, 
+  #existing-client-dsr-view .notes-wrapper, 
+  #existing-client-dsr-view .summary-card {
     position: relative !important;
     isolation: isolate !important;
     background: rgba(255, 255, 255, 0.22) !important;
@@ -867,7 +868,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   }
 
   /* Increase depth and elevation for Hero Card to sit above other elements */
-  .info-card {
+  #existing-client-dsr-view .info-card {
     transform: translateY(-2px);
     box-shadow:
       0 28px 56px rgba(255, 140, 60, 0.11),
@@ -875,13 +876,14 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
       inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
   }
 
-  .info-card::before, 
-  .field::before, 
-  .location-box::before, 
-  .media-card::before, 
-  .notes-wrapper::before, 
-  .summary-card::before,
-  .tab-indicator::before {
+  /* Subtle top-left light highlight for frosted glass cards */
+  #existing-client-dsr-view .info-card::before, 
+  #existing-client-dsr-view .field::before, 
+  #existing-client-dsr-view .list-group .field::before,
+  #existing-client-dsr-view .location-box::before, 
+  #existing-client-dsr-view .media-card::before, 
+  #existing-client-dsr-view .notes-wrapper::before, 
+  #existing-client-dsr-view .summary-card::before {
     content: "" !important;
     position: absolute !important;
     inset: 0 !important;
@@ -900,19 +902,48 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     pointer-events: none !important;
     z-index: -1 !important;
   }
+
+  /* Stepper Active Capsule: Exact user liquid glass code */
+  #existing-client-dsr-view .tab-indicator {
+    position: absolute !important;
+    width: 52px !important;
+    height: 78px !important;
+    display: block !important;
+    background: none !important;
+    border: 1px solid white !important;
+    border-radius: 26px !important;
+    transition: left 0.8s var(--spring-easing), top 0.8s var(--spring-easing) !important;
+    filter: drop-shadow(0 3px 6px gray) !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    backdrop-filter: url(#filter) !important;
+    -webkit-backdrop-filter: url(#filter) !important;
+    z-index: 1 !important;
+    box-shadow: none !important;
+  }
+
+  #existing-client-dsr-view .tab-indicator::before {
+    content: '' !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: radial-gradient(1rem 3rem ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), radial-gradient(2rem 3.5rem ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
+    z-index: -1 !important;
+    pointer-events: none !important;
+    border-radius: inherit !important;
+  }
   
   /* Ensure content inside glass containers sits correctly on z-index stack above the pseudo background */
-  .info-card > *, 
-  .field > *, 
-  .location-box > *, 
-  .media-card > *, 
-  .summary-card > * {
+  #existing-client-dsr-view .info-card > *, 
+  #existing-client-dsr-view .field > *, 
+  #existing-client-dsr-view .location-box > *, 
+  #existing-client-dsr-view .media-card > *, 
+  #existing-client-dsr-view .summary-card > * {
     position: relative !important;
     z-index: 2 !important;
   }
 
   /* Embedded Glass Look for Avatar */
-  .info-avatar {
+  #existing-client-dsr-view .info-avatar {
     background: rgba(255, 255, 255, 0.15) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
@@ -922,7 +953,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   }
 
   /* Floating Glass Badges */
-  .info-badge {
+  #existing-client-dsr-view .info-badge {
     background: rgba(255, 255, 255, 0.35) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
@@ -932,7 +963,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   }
 
   /* Status Pills Glass style & selection treatment matching active stepper styles */
-  .status-pill {
+  #existing-client-dsr-view .status-pill {
     background: rgba(255, 255, 255, 0.22) !important;
     backdrop-filter: blur(22px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
@@ -944,7 +975,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
       inset 0 1px 1px rgba(255, 255, 255, 0.5) !important;
   }
 
-  .status-pill.active {
+  #existing-client-dsr-view .status-pill.active {
     background: rgba(255, 122, 26, 0.15) !important;
     border: 1px solid rgba(255, 122, 26, 0.5) !important;
     box-shadow: 
@@ -952,11 +983,11 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
       inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
   }
 
-  .status-pill.active span {
+  #existing-client-dsr-view .status-pill.active span {
     color: var(--orange-deep) !important;
   }
 
-  .status-pill.active .pill-icon {
+  #existing-client-dsr-view .status-pill.active .pill-icon {
     background: var(--orange-deep) !important;
     color: white !important;
   }
