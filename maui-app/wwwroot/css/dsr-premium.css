@@ -1333,13 +1333,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .dsr-wizard-panel {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
   box-shadow: 
-    0 0 25px rgba(255, 255, 255, 0.35), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 0 0 15px rgba(255, 255, 255, 0.18), 
-    0 15px 35px rgba(0, 0, 0, 0.35) !important;
+    0 0 30px rgba(255, 255, 255, 0.12), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 0 15px rgba(255, 255, 255, 0.12), 
+    0 15px 35px rgba(0, 0, 0, 0.28) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
@@ -1348,13 +1351,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .list-group {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.03) !important;
   box-shadow: 
-    0 0 25px rgba(255, 255, 255, 0.3), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 0 15px rgba(255, 255, 255, 0.15), 
-    0 12px 30px rgba(0, 0, 0, 0.3) !important;
+    0 0 25px rgba(255, 255, 255, 0.1), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 0 12px rgba(255, 255, 255, 0.1), 
+    0 12px 30px rgba(0, 0, 0, 0.25) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
   border-radius: 32px !important;
@@ -1371,13 +1377,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .summary-card {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.55) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.04) !important;
   box-shadow: 
-    0 0 25px rgba(255, 255, 255, 0.35), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    inset 0 0 12px rgba(255, 255, 255, 0.18), 
-    0 12px 30px rgba(0, 0, 0, 0.28) !important;
+    0 0 25px rgba(255, 255, 255, 0.15), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 0 10px rgba(255, 255, 255, 0.1), 
+    0 12px 25px rgba(0, 0, 0, 0.22) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
@@ -1385,13 +1394,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .info-card {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(255, 255, 255, 0.18) !important;
-  border: 1.8px solid rgba(255, 255, 255, 0.6) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-top: 1.8px solid rgba(255, 255, 255, 0.6) !important;
+  border-left: 1.8px solid rgba(255, 255, 255, 0.45) !important;
+  border-bottom: 1.2px solid rgba(255, 255, 255, 0.15) !important;
+  border-right: 1.2px solid rgba(255, 255, 255, 0.06) !important;
   box-shadow: 
-    0 0 30px rgba(255, 255, 255, 0.45), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 0 0 15px rgba(255, 255, 255, 0.22), 
-    0 15px 35px rgba(0, 0, 0, 0.3) !important;
+    0 0 35px rgba(255, 255, 255, 0.22), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 0 15px rgba(255, 255, 255, 0.15), 
+    0 18px 35px rgba(0, 0, 0, 0.3) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
@@ -1406,7 +1418,20 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .location-box::before, 
 .dark-mode #existing-client-dsr-view .media-card::before, 
 .dark-mode #existing-client-dsr-view .notes-wrapper::before, 
-.dark-mode #existing-client-dsr-view .summary-card::before,
+.dark-mode #existing-client-dsr-view .summary-card::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: 
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 80%),
+    radial-gradient(ellipse 40% 30% at 15% 15%, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 70%) !important;
+  z-index: -1 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
 .dark-mode #existing-client-dsr-view #dsr-panel-1.active::after,
 .dark-mode #existing-client-dsr-view #dsr-panel-2.active::after,
 .dark-mode #existing-client-dsr-view .dsr-wizard-panel::after,
