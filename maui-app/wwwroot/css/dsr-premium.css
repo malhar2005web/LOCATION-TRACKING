@@ -1285,12 +1285,23 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 /* ==========================================================================
    DSR DARK MODE STYLING OVERRIDES
    ========================================================================== */
+.dark-mode {
+  --dsr-color-bg: #071221 !important;
+  --dsr-color-accent: #38BDF8 !important;
+  --dsr-color-hover: #3b82f6 !important;
+  --dsr-color-pressed: #1d4ed8 !important;
+  --dsr-color-text: #FFFFFF !important;
+  --dsr-color-text-secondary: #8892B0 !important;
+  --dsr-color-border: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark-mode .dsr-premium-space-view,
 .dark-mode #existing-client-dsr-view {
-  background:
+  background-color: #071221 !important;
+  background-image:
     radial-gradient(ellipse 760px 600px at 50% 34%, rgba(7, 18, 33, 1) 0%, rgba(7, 18, 33, 0.8) 70%),
     radial-gradient(ellipse 1000px 780px at 50% 0%, #0c2340, transparent 62%),
-    radial-gradient(ellipse 560px 560px at 50% 55%, rgba(30, 144, 255, 0.1), transparent 74%),
-    #071221 !important;
+    radial-gradient(ellipse 560px 560px at 50% 55%, rgba(30, 144, 255, 0.1), transparent 74%) !important;
   color: #FFFFFF !important;
 }
 
