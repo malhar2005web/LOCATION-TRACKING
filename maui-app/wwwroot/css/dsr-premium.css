@@ -62,6 +62,9 @@
     #FDF8F0;
   min-height: 100dvh;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -69,6 +72,12 @@
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+}
+
+#existing-client-dsr-view::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .dsr-page-container {
