@@ -771,25 +771,69 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   right: auto !important;
   z-index: 10;
 }
-.btn{
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  height:60px;
-  border-radius:20px;
-  font-size:15px;
-  font-weight:800;
-  border:none;
-  cursor:pointer;
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 60px;
+  border-radius: 26px !important;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: hidden !important;
   transition: transform .16s cubic-bezier(.22,1,.36,1), box-shadow .16s ease;
 }
-.btn:hover{ transform: translateY(-3px); }
-.btn:active{ transform: scale(0.97) translateY(1px); }
-.btn svg{ width:17px; height:17px; }
-.btn.secondary{
-  flex: 1 1 38% !important;
-  color:#5B6371;
+.btn:hover {
+  transform: translateY(-3px);
 }
-.btn.primary{
+.btn:active {
+  transform: scale(0.97) translateY(1px);
+}
+.btn svg {
+  width: 17px;
+  height: 17px;
+}
+.btn::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 50% !important;
+  border-top-left-radius: inherit !important;
+  border-top-right-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+.btn.secondary {
+  flex: 1 1 38% !important;
+  color: #5B6371 !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.18) 50%, rgba(255,255,255,0.06) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  border-left: 1.2px solid rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(15px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(15px) saturate(160%) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03), inset 0 2px 3px rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+.btn.secondary::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.1) 100%) !important;
+}
+.btn.primary {
   flex: 1 1 58% !important;
+  color: #FFFFFF !important;
+  background: linear-gradient(180deg, #FFA25A 0%, #FF8A3D 30%, #F0630A 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+  border-left: 1.2px solid rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 8px 24px rgba(240, 99, 10, 0.45), inset 0 2px 3px rgba(255, 255, 255, 0.6), inset 0 -2px 3px rgba(0, 0, 0, 0.1) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2) !important;
+}
+.btn.primary::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
 }
 
 /* ---------- Progress footer ---------- */
@@ -856,7 +900,9 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     position: relative !important;
     isolation: isolate !important;
     background: rgba(255, 255, 255, 0.28) !important;
-    border: 1px solid white !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-top: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+    border-left: 1.5px solid rgba(255, 255, 255, 0.55) !important;
     border-radius: 26px !important;
     backdrop-filter: blur(22px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
@@ -874,7 +920,9 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     position: relative !important;
     isolation: isolate !important;
     background: rgba(255, 255, 255, 0.28) !important;
-    border: 1px solid white !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-top: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+    border-left: 1.5px solid rgba(255, 255, 255, 0.55) !important;
     border-radius: 26px !important;
     backdrop-filter: blur(22px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(22px) saturate(180%) !important;
@@ -1169,7 +1217,9 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     position: relative !important;
     isolation: isolate !important;
     background: rgba(255, 255, 255, 0.22) !important;
-    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-top: 1.8px solid rgba(255, 255, 255, 0.72) !important;
+    border-left: 1.8px solid rgba(255, 255, 255, 0.6) !important;
     border-radius: 32px !important;
     backdrop-filter: blur(20px) saturate(210%) !important;
     -webkit-backdrop-filter: blur(20px) saturate(210%) !important;
@@ -1199,5 +1249,26 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     pointer-events: none !important;
     border-radius: inherit !important;
     opacity: 0.7 !important;
+  }
+
+  /* Volumetric 3D cylindrical reflection overlays for cards and fields */
+  #existing-client-dsr-view .info-card::after, 
+  #existing-client-dsr-view .field::after, 
+  #existing-client-dsr-view .list-group .field::after,
+  #existing-client-dsr-view .location-box::after, 
+  #existing-client-dsr-view .media-card::after, 
+  #existing-client-dsr-view .notes-wrapper::after, 
+  #existing-client-dsr-view .summary-card::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 48% !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+    border-top-left-radius: inherit !important;
+    border-top-right-radius: inherit !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
   }
 }
