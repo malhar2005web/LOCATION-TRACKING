@@ -1332,15 +1332,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view #dsr-panel-2.active,
 .dark-mode #existing-client-dsr-view .dsr-wizard-panel {
   background: rgba(15, 32, 67, 0.45) !important;
-  border: none !important;
-  border-top: 3.5px solid rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
   box-shadow: 
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 8px 22px rgba(255, 255, 255, 0.10),
-    0 24px 50px rgba(255, 255, 255, 0.08),
-    0 18px 40px rgba(80, 160, 255, 0.10),
-    0 40px 90px rgba(0, 0, 0, 0.18),
-    inset 0 0 20px rgba(255, 255, 255, 0.35) !important;
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 10px 32px rgba(255, 255, 255, 0.06),
+    0 22px 55px rgba(255, 255, 255, 0.04),
+    0 18px 45px rgba(80, 160, 255, 0.06),
+    0 38px 90px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 12px rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
@@ -1348,15 +1349,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 /* List Groups (Containers for Fields) in Dark Mode */
 .dark-mode #existing-client-dsr-view .list-group {
   background: rgba(15, 32, 67, 0.4) !important;
-  border: none !important;
-  border-top: 3.5px solid rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
   box-shadow: 
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 8px 22px rgba(255, 255, 255, 0.10),
-    0 24px 50px rgba(255, 255, 255, 0.08),
-    0 18px 40px rgba(80, 160, 255, 0.10),
-    0 40px 90px rgba(0, 0, 0, 0.18),
-    inset 0 0 18px rgba(255, 255, 255, 0.32) !important;
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 8px 30px rgba(255, 255, 255, 0.05),
+    0 20px 50px rgba(255, 255, 255, 0.04),
+    0 18px 40px rgba(80, 160, 255, 0.05),
+    0 35px 80px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 12px rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
   border-radius: 32px !important;
@@ -1372,30 +1374,32 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .notes-wrapper,
 .dark-mode #existing-client-dsr-view .summary-card {
   background: rgba(15, 32, 67, 0.6) !important;
-  border: none !important;
-  border-top: 3px solid rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
   box-shadow: 
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 8px 22px rgba(255, 255, 255, 0.10),
-    0 24px 50px rgba(255, 255, 255, 0.08),
-    0 18px 40px rgba(80, 160, 255, 0.10),
-    0 40px 90px rgba(0, 0, 0, 0.18),
-    inset 0 0 15px rgba(255, 255, 255, 0.3) !important;
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 8px 24px rgba(255, 255, 255, 0.05),
+    0 18px 40px rgba(255, 255, 255, 0.03),
+    0 15px 35px rgba(80, 160, 255, 0.05),
+    0 30px 70px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 10px rgba(255, 255, 255, 0.04) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
 
 .dark-mode #existing-client-dsr-view .info-card {
   background: rgba(15, 32, 67, 0.55) !important;
-  border: none !important;
-  border-top: 3.5px solid rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
   box-shadow: 
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 8px 22px rgba(255, 255, 255, 0.10),
-    0 24px 50px rgba(255, 255, 255, 0.08),
-    0 18px 40px rgba(80, 160, 255, 0.10),
-    0 40px 90px rgba(0, 0, 0, 0.18),
-    inset 0 0 18px rgba(255, 255, 255, 0.35) !important;
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 12px 35px rgba(255, 255, 255, 0.08),
+    0 24px 60px rgba(255, 255, 255, 0.05),
+    0 20px 50px rgba(80, 160, 255, 0.08),
+    0 40px 100px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 15px rgba(255, 255, 255, 0.06) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
