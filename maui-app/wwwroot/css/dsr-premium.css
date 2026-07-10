@@ -1281,3 +1281,209 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
     z-index: 1 !important;
   }
 }
+
+/* ==========================================================================
+   DSR DARK MODE STYLING OVERRIDES
+   ========================================================================== */
+.dark-mode #existing-client-dsr-view {
+  background:
+    radial-gradient(ellipse 760px 600px at 50% 34%, rgba(7, 18, 33, 1) 0%, rgba(7, 18, 33, 0.8) 70%),
+    radial-gradient(ellipse 1000px 780px at 50% 0%, #0c2340, transparent 62%),
+    radial-gradient(ellipse 560px 560px at 50% 55%, rgba(30, 144, 255, 0.1), transparent 74%),
+    #071221 !important;
+  color: #FFFFFF !important;
+}
+
+.dark-mode #existing-client-dsr-view::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.dark-mode #existing-client-dsr-view .page-title {
+  color: #FFFFFF !important;
+}
+.dark-mode #existing-client-dsr-view .submenu-client-name {
+  color: #8892B0 !important;
+}
+.dark-mode #existing-client-dsr-view .back-btn-header {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #E2E8F0 !important;
+  box-shadow: none !important;
+}
+.dark-mode #existing-client-dsr-view .back-btn-header:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Unified Giant Panel Container in Dark Mode */
+.dark-mode #existing-client-dsr-view #dsr-panel-1.active,
+.dark-mode #existing-client-dsr-view #dsr-panel-2.active {
+  background: rgba(10, 25, 47, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark-mode #existing-client-dsr-view #dsr-panel-1.active::before,
+.dark-mode #existing-client-dsr-view #dsr-panel-2.active::before {
+  background: 
+    radial-gradient(40% 80% ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), 
+    radial-gradient(50% 90% ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, #030810 150%) !important;
+  opacity: 0.4 !important;
+}
+
+/* Fields & Inputs in Dark Mode */
+.dark-mode #existing-client-dsr-view .field,
+.dark-mode #existing-client-dsr-view .list-group .field,
+.dark-mode #existing-client-dsr-view .location-box,
+.dark-mode #existing-client-dsr-view .media-card,
+.dark-mode #existing-client-dsr-view .notes-wrapper,
+.dark-mode #existing-client-dsr-view .summary-card {
+  background: rgba(2, 12, 27, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-top: 1.2px solid rgba(255, 255, 255, 0.15) !important;
+  border-left: 1.2px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.03) !important;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3)) !important;
+}
+
+.dark-mode #existing-client-dsr-view .info-card {
+  background: rgba(2, 12, 27, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-top: 1.2px solid rgba(255, 255, 255, 0.15) !important;
+  border-left: 1.2px solid rgba(255, 255, 255, 0.1) !important;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4)) !important;
+}
+
+.dark-mode #existing-client-dsr-view .info-card::before, 
+.dark-mode #existing-client-dsr-view .field::before, 
+.dark-mode #existing-client-dsr-view .list-group .field::before,
+.dark-mode #existing-client-dsr-view .location-box::before, 
+.dark-mode #existing-client-dsr-view .media-card::before, 
+.dark-mode #existing-client-dsr-view .notes-wrapper::before, 
+.dark-mode #existing-client-dsr-view .summary-card::before {
+  background: 
+    radial-gradient(40% 80% ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), 
+    radial-gradient(50% 90% ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, #030810 150%) !important;
+  opacity: 0.35 !important;
+}
+
+.dark-mode #existing-client-dsr-view .info-card::after, 
+.dark-mode #existing-client-dsr-view .field::after, 
+.dark-mode #existing-client-dsr-view .list-group .field::after,
+.dark-mode #existing-client-dsr-view .location-box::after, 
+.dark-mode #existing-client-dsr-view .media-card::after, 
+.dark-mode #existing-client-dsr-view .notes-wrapper::after, 
+.dark-mode #existing-client-dsr-view .summary-card::after {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+}
+
+/* Form Input Text & Placeholders in Dark Mode */
+.dark-mode #existing-client-dsr-view .value-input,
+.dark-mode #existing-client-dsr-view textarea.notes,
+.dark-mode #existing-client-dsr-view select,
+.dark-mode #existing-client-dsr-view input[type="date"] {
+  color: #FFFFFF !important;
+}
+
+.dark-mode #existing-client-dsr-view .value-input::placeholder,
+.dark-mode #existing-client-dsr-view textarea.notes::placeholder {
+  color: #4B5563 !important;
+}
+
+.dark-mode #existing-client-dsr-view .field label,
+.dark-mode #existing-client-dsr-view .section-label span,
+.dark-mode #existing-client-dsr-view .today-status-label,
+.dark-mode #existing-client-dsr-view .char-count {
+  color: #8892B0 !important;
+}
+
+.dark-mode #existing-client-dsr-view .value,
+.dark-mode #existing-client-dsr-view .section-label,
+.dark-mode #existing-client-dsr-view .dsr-welcome-name {
+  color: #E2E8F0 !important;
+}
+
+/* Blue/Cyan Glowing Accent Icons */
+.dark-mode #existing-client-dsr-view .field-icon svg,
+.dark-mode #existing-client-dsr-view .field-text svg,
+.dark-mode #existing-client-dsr-view .section-icon svg,
+.dark-mode #existing-client-dsr-view .icon svg,
+.dark-mode #existing-client-dsr-view .field-icon,
+.dark-mode #existing-client-dsr-view .field svg,
+.dark-mode #existing-client-dsr-view .locate-btn svg,
+.dark-mode #existing-client-dsr-view .back-btn svg,
+.dark-mode #existing-client-dsr-view .edit-pen {
+  color: #38BDF8 !important;
+  stroke: #38BDF8 !important;
+}
+
+/* Stepper Timeline elements in Dark Mode */
+.dark-mode #existing-client-dsr-view .steps-line {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.dark-mode #existing-client-dsr-view .steps-line-fill {
+  background: #3b82f6 !important;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5) !important;
+}
+.dark-mode #existing-client-dsr-view .step .circle {
+  background: rgba(2, 12, 27, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #64748B !important;
+}
+.dark-mode #existing-client-dsr-view .step.active .circle {
+  background: #FFFFFF !important;
+  color: #3b82f6 !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4) !important;
+}
+.dark-mode #existing-client-dsr-view .step.done .circle {
+  background: #10B981 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;
+}
+.dark-mode #existing-client-dsr-view .step.active .label {
+  color: #38BDF8 !important;
+}
+.dark-mode #existing-client-dsr-view .steps-wrap .tab-indicator {
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.35), inset 0 0 12px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Status Chips/Pills in Dark Mode */
+.dark-mode #existing-client-dsr-view .status-pill {
+  color: #8892B0 !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+.dark-mode #existing-client-dsr-view .status-pill:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+.dark-mode #existing-client-dsr-view .status-pill.active {
+  background: rgba(59, 130, 246, 0.15) !important;
+  border: 1.5px solid #3b82f6 !important;
+  color: #38BDF8 !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25) !important;
+}
+.dark-mode #existing-client-dsr-view .status-pill.active .pill-icon svg {
+  color: #38BDF8 !important;
+  stroke: #38BDF8 !important;
+}
+
+/* Bottom Action Buttons in Dark Mode */
+.dark-mode #existing-client-dsr-view .btn.secondary {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #E2E8F0 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+.dark-mode #existing-client-dsr-view .btn.secondary::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+}
+
+.dark-mode #existing-client-dsr-view .btn.primary {
+  background: linear-gradient(180deg, #FFA25A 0%, #FF8A3D 30%, #F0630A 100%) !important;
+  box-shadow: 0 8px 24px rgba(240, 99, 10, 0.45), inset 0 2px 3px rgba(255, 255, 255, 0.6), inset 0 -2px 3px rgba(0, 0, 0, 0.1) !important;
+}
