@@ -1327,42 +1327,40 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* Unified Giant Panel Container in Dark Mode */
+/* ═══════════════════════════════════════════════════════════════
+   DARK MODE CARDS — EXACT INDICATOR MATERIAL
+   Source: .dark-mode .steps-wrap .tab-indicator (line 1532)
+   + .tab-indicator::before (line 1047)
+   Only adaptation: ::before gradient sizes scaled proportionally
+   (indicator = 52×78px, cards ≈ 7× larger → gradient sizes × 7)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Wizard Panels */
 .dark-mode #existing-client-dsr-view #dsr-panel-1.active,
 .dark-mode #existing-client-dsr-view #dsr-panel-2.active,
 .dark-mode #existing-client-dsr-view .dsr-wizard-panel {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(255, 255, 255, 0.025) !important;
-  border: none !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.25) !important;
-  border-left: 1px solid rgba(255, 255, 255, 0.12) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.02) !important;
+  background: rgba(10, 25, 47, 0.5) !important;
+  border: 2px solid rgba(255, 255, 255, 0.7) !important;
   box-shadow: 
-    0 0 40px rgba(255, 255, 255, 0.08),
-    0 0 80px rgba(255, 255, 255, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 20px 40px rgba(0, 0, 0, 0.25) !important;
+    0 0 25px rgba(255, 255, 255, 0.45), 
+    inset 0 0 15px rgba(255, 255, 255, 0.5), 
+    0 10px 25px rgba(0, 0, 0, 0.45) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
 
-/* List Groups (Containers for Fields) in Dark Mode */
+/* List Groups */
 .dark-mode #existing-client-dsr-view .list-group {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(255, 255, 255, 0.02) !important;
-  border: none !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.015) !important;
+  background: rgba(10, 25, 47, 0.5) !important;
+  border: 2px solid rgba(255, 255, 255, 0.7) !important;
   box-shadow: 
-    0 0 35px rgba(255, 255, 255, 0.06),
-    0 0 70px rgba(255, 255, 255, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 16px 32px rgba(0, 0, 0, 0.2) !important;
+    0 0 25px rgba(255, 255, 255, 0.45), 
+    inset 0 0 15px rgba(255, 255, 255, 0.5), 
+    0 10px 25px rgba(0, 0, 0, 0.45) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
   border-radius: 32px !important;
@@ -1370,7 +1368,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   margin-bottom: 24px !important;
 }
 
-/* Fields & Inputs in Dark Mode */
+/* Fields & Input Cards */
 .dark-mode #existing-client-dsr-view .field,
 .dark-mode #existing-client-dsr-view .list-group .field,
 .dark-mode #existing-client-dsr-view .location-box,
@@ -1379,41 +1377,31 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .summary-card {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: none !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.02) !important;
+  background: rgba(10, 25, 47, 0.5) !important;
+  border: 2px solid rgba(255, 255, 255, 0.7) !important;
   box-shadow: 
-    0 0 30px rgba(255, 255, 255, 0.1),
-    0 0 60px rgba(255, 255, 255, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    0 10px 22px rgba(0, 0, 0, 0.18) !important;
+    0 0 25px rgba(255, 255, 255, 0.45), 
+    inset 0 0 15px rgba(255, 255, 255, 0.5), 
+    0 10px 25px rgba(0, 0, 0, 0.45) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
 
-/* Hero Card: highest elevation, overflow visible so content is NOT cropped */
+/* Hero Card — same material, overflow visible */
 .dark-mode #existing-client-dsr-view .info-card {
   position: relative !important;
   overflow: visible !important;
-  background: rgba(255, 255, 255, 0.065) !important;
-  border: none !important;
-  border-top: 1.2px solid rgba(255, 255, 255, 0.4) !important;
-  border-left: 1.2px solid rgba(255, 255, 255, 0.2) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.03) !important;
+  background: rgba(10, 25, 47, 0.5) !important;
+  border: 2px solid rgba(255, 255, 255, 0.7) !important;
   box-shadow: 
-    0 0 40px rgba(255, 255, 255, 0.15),
-    0 0 80px rgba(255, 255, 255, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 22px 45px rgba(0, 0, 0, 0.28) !important;
+    0 0 25px rgba(255, 255, 255, 0.45), 
+    inset 0 0 15px rgba(255, 255, 255, 0.5), 
+    0 10px 25px rgba(0, 0, 0, 0.45) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
 
-/* Fresnel Edge Glow + Specular Highlight (::before) — adapted from indicator's oklch material */
+/* ::before — indicator's oklch gradient, sizes scaled ×7 for cards */
 .dark-mode #existing-client-dsr-view #dsr-panel-1.active::before,
 .dark-mode #existing-client-dsr-view #dsr-panel-2.active::before,
 .dark-mode #existing-client-dsr-view .dsr-wizard-panel::before,
@@ -1428,23 +1416,13 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   content: '' !important;
   position: absolute !important;
   inset: 0 !important;
-  background: 
-    /* Top specular wash — bright along top, fades to nothing at center */
-    linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 25%, transparent 55%),
-    /* Upper-left corner specular catch */
-    radial-gradient(ellipse 50% 50% at 10% 5%, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
-    /* Upper-right corner specular catch — softer */
-    radial-gradient(ellipse 40% 40% at 90% 5%, rgba(255, 255, 255, 0.06) 0%, transparent 70%),
-    /* Fresnel ring — bright edges fading to dark center */
-    radial-gradient(ellipse 70% 60% at 50% 50%, transparent 60%, rgba(255, 255, 255, 0.05) 85%, rgba(255, 255, 255, 0.1) 100%) !important;
-  z-index: 1 !important;
+  background: radial-gradient(7rem 21rem ellipse at 50% 85% in oklch, oklch(100% 0 0 / 0%) 10% 50%, 150%, oklch(100% 0 0 / 100%) 175% 165%), radial-gradient(14rem 24.5rem ellipse at 45% 35% in oklch, oklch(0% 0 0 / 0%) 80%, gray 150%) !important;
+  z-index: -1 !important;
   pointer-events: none !important;
   border-radius: inherit !important;
-  opacity: 1 !important;
-  display: block !important;
 }
 
-/* Disable ::after completely */
+/* ::after — disabled */
 .dark-mode #existing-client-dsr-view #dsr-panel-1.active::after,
 .dark-mode #existing-client-dsr-view #dsr-panel-2.active::after,
 .dark-mode #existing-client-dsr-view .dsr-wizard-panel::after,
