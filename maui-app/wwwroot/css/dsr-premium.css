@@ -1328,39 +1328,39 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   DARK MODE CARDS — EXACT INDICATOR MATERIAL
-   Source: .dark-mode .steps-wrap .tab-indicator (line 1532)
-   + .tab-indicator::before (line 1047)
-   Only adaptation: ::before gradient sizes scaled proportionally
-   (indicator = 52×78px, cards ≈ 7× larger → gradient sizes × 7)
+   DARK MODE CARDS — INDICATOR MATERIAL WITH LAYERED HIERARCHY
+   Base: .dark-mode .steps-wrap .tab-indicator
+   Tier 1 (Hero):    Full indicator intensity
+   Tier 2 (Inputs):  Indicator values (user approved ✓)
+   Tier 3 (Panels):  30% darker, thinner border, softer glow
    ═══════════════════════════════════════════════════════════════ */
 
-/* Wizard Panels */
+/* Tier 3: Wizard Panels — darkest container, subtle edge */
 .dark-mode #existing-client-dsr-view #dsr-panel-1.active,
 .dark-mode #existing-client-dsr-view #dsr-panel-2.active,
 .dark-mode #existing-client-dsr-view .dsr-wizard-panel {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(10, 25, 47, 0.5) !important;
-  border: 2px solid rgba(255, 255, 255, 0.7) !important;
+  background: rgba(10, 25, 47, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
   box-shadow: 
-    0 0 25px rgba(255, 255, 255, 0.45), 
-    inset 0 0 15px rgba(255, 255, 255, 0.5), 
-    0 10px 25px rgba(0, 0, 0, 0.45) !important;
+    0 0 20px rgba(255, 255, 255, 0.15), 
+    inset 0 0 12px rgba(255, 255, 255, 0.2), 
+    0 12px 30px rgba(0, 0, 0, 0.5) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
 
-/* List Groups */
+/* Tier 3: List Groups — same as panels */
 .dark-mode #existing-client-dsr-view .list-group {
   position: relative !important;
   overflow: hidden !important;
-  background: rgba(10, 25, 47, 0.5) !important;
-  border: 2px solid rgba(255, 255, 255, 0.7) !important;
+  background: rgba(10, 25, 47, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
   box-shadow: 
-    0 0 25px rgba(255, 255, 255, 0.45), 
-    inset 0 0 15px rgba(255, 255, 255, 0.5), 
-    0 10px 25px rgba(0, 0, 0, 0.45) !important;
+    0 0 20px rgba(255, 255, 255, 0.15), 
+    inset 0 0 12px rgba(255, 255, 255, 0.2), 
+    0 12px 30px rgba(0, 0, 0, 0.5) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
   border-radius: 32px !important;
@@ -1368,7 +1368,7 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   margin-bottom: 24px !important;
 }
 
-/* Fields & Input Cards */
+/* Tier 2: Input Cards — exact indicator values (user approved ✓ do not change) */
 .dark-mode #existing-client-dsr-view .field,
 .dark-mode #existing-client-dsr-view .list-group .field,
 .dark-mode #existing-client-dsr-view .location-box,
@@ -1387,16 +1387,16 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
 
-/* Hero Card — same material, overflow visible */
+/* Tier 1: Hero Card — full indicator intensity + higher elevation */
 .dark-mode #existing-client-dsr-view .info-card {
   position: relative !important;
   overflow: visible !important;
   background: rgba(10, 25, 47, 0.5) !important;
   border: 2px solid rgba(255, 255, 255, 0.7) !important;
   box-shadow: 
-    0 0 25px rgba(255, 255, 255, 0.45), 
+    0 0 30px rgba(255, 255, 255, 0.5), 
     inset 0 0 15px rgba(255, 255, 255, 0.5), 
-    0 10px 25px rgba(0, 0, 0, 0.45) !important;
+    0 16px 35px rgba(0, 0, 0, 0.5) !important;
   backdrop-filter: blur(28px) saturate(190%) !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
