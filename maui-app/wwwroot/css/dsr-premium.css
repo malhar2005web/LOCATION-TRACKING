@@ -1352,20 +1352,29 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .media-card,
 .dark-mode #existing-client-dsr-view .notes-wrapper,
 .dark-mode #existing-client-dsr-view .summary-card {
-  background: rgba(2, 12, 27, 0.55) !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-  border-top: 1.2px solid rgba(255, 255, 255, 0.15) !important;
-  border-left: 1.2px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.03) !important;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3)) !important;
+  background: rgba(10, 25, 47, 0.55) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.32) !important;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 
+    0 12px 32px rgba(0, 0, 0, 0.35), 
+    0 0 20px rgba(255, 255, 255, 0.08), 
+    inset 0 1px 2px rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
 }
 
 .dark-mode #existing-client-dsr-view .info-card {
-  background: rgba(2, 12, 27, 0.55) !important;
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
-  border-top: 1.2px solid rgba(255, 255, 255, 0.15) !important;
-  border-left: 1.2px solid rgba(255, 255, 255, 0.1) !important;
-  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4)) !important;
+  background: rgba(10, 25, 47, 0.55) !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  border-left: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.45), 
+    0 0 25px rgba(255, 255, 255, 0.12), 
+    inset 0 1px 2px rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(25px) saturate(180%) !important;
 }
 
 .dark-mode #existing-client-dsr-view .info-card::before, 
@@ -1447,7 +1456,10 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode #existing-client-dsr-view .step.active .circle {
   background: #FFFFFF !important;
   color: #3b82f6 !important;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4) !important;
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.65), 
+    0 0 0 3px rgba(255, 255, 255, 0.8), 
+    inset 0 2px 3px rgba(255, 255, 255, 0.5) !important;
 }
 .dark-mode #existing-client-dsr-view .step.done .circle {
   background: #10B981 !important;
