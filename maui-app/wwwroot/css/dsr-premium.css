@@ -1484,6 +1484,43 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 }
 
 .dark-mode #existing-client-dsr-view .btn.primary {
-  background: linear-gradient(180deg, #FFA25A 0%, #FF8A3D 30%, #F0630A 100%) !important;
-  box-shadow: 0 8px 24px rgba(240, 99, 10, 0.45), inset 0 2px 3px rgba(255, 255, 255, 0.6), inset 0 -2px 3px rgba(0, 0, 0, 0.1) !important;
+  background: linear-gradient(180deg, #38BDF8 0%, #1d4ed8 100%) !important;
+  box-shadow: 0 8px 24px rgba(29, 78, 216, 0.45), inset 0 2px 3px rgba(255, 255, 255, 0.5), inset 0 -2px 3px rgba(0, 0, 0, 0.2) !important;
+  color: #FFFFFF !important;
+}
+
+/* Background Blobs in Dark Mode (No Orange) */
+.dark-mode #existing-client-dsr-view .blob1 {
+  background: #00d2ff !important;
+  opacity: 0.12 !important;
+}
+.dark-mode #existing-client-dsr-view .blob2 {
+  background: #1e90ff !important;
+  opacity: 0.15 !important;
+}
+.dark-mode #existing-client-dsr-view .blob3 {
+  background: #0000ff !important;
+  opacity: 0.1 !important;
+}
+
+/* Info Card Avatar in Dark Mode (No Orange) */
+.dark-mode #existing-client-dsr-view .info-card .avatar {
+  background: rgba(30, 144, 255, 0.15) !important;
+  border: 1px solid rgba(30, 144, 255, 0.35) !important;
+  box-shadow: 0 8px 24px rgba(30, 144, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+}
+.dark-mode #existing-client-dsr-view .info-card .avatar svg {
+  color: #38BDF8 !important;
+  stroke: #38BDF8 !important;
+}
+
+/* Meta Row Tag in Dark Mode (No Orange) */
+.dark-mode #existing-client-dsr-view .meta-row .tag {
+  color: #38BDF8 !important;
+  background: rgba(30, 144, 255, 0.15) !important;
+  border: 1px solid rgba(30, 144, 255, 0.25) !important;
+}
+.dark-mode #existing-client-dsr-view .meta-row .dot {
+  background: #38BDF8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35) !important;
 }
