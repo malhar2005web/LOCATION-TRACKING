@@ -2777,7 +2777,7 @@ function renderClientList(list) {
                 <td style="font-weight:700; color:var(--color-text-primary);">${leadname}</td>
                 <td style="font-size:0.85rem; color:var(--color-text-secondary); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${address}</td>
                 <td>
-                    <button class="btn-booking" onclick="openBookingForm('${escapedName}', '${escapedSiteName}', '${escapedAddress}', '${leadno}')">Booking</button>
+                    <!-- <button class="btn-booking" onclick="openBookingForm('${escapedName}', '${escapedSiteName}', '${escapedAddress}', '${leadno}')">Booking</button> -->
                 </td>
                 <td>
                     <button class="btn-dsr" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
