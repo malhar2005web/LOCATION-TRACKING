@@ -111,27 +111,14 @@
 
     /**
      * Evaluate anti-tamper conditions and render warnings or blocks
-     */
-    function checkSecurityConstraints() {
+     */    function checkSecurityConstraints() {
         const absOffset = Math.abs(timeOffsetMs);
         const incorrectTz = isIncorrectTimezone();
 
-        // 1. Timezone Incorrect Warn
         if (incorrectTz) {
-            showWarningBanner('Timezone Alert: Your device timezone is not set to India (GMT+5:30). Please update it in device settings.');
-        } 
-        // 2. Off by > 30 seconds warn
-        else if (absOffset > SECONDS_30 && absOffset <= MINUTES_10) {
-            const diffSecStr = (absOffset / 1000).toFixed(0);
-            showWarningBanner(`Time Alert: Your device clock is off by ${diffSecStr} seconds. Please set time to Automatic.`);
-        } 
-        // Clear warning if all good
-        else {
-            hideWarningBanner();
-        }
-
-        // 3. Time difference > 10 minutes block
-        if (absOffset > MINUTES_10) {
+            showBlockingOverlay(`Security Block: Incorrect Timezone`, 
+                `Your phone timezone is incorrect. attendance, DSR, check-in, check-out, and reports are blocked for security.<br><br>Please set your device timezone settings to <strong>India Standard Time (GMT+5:30) / Asia/Kolkata</strong>.`);
+        } else if (absOffset > MINUTES_10) {
             const diffMinStr = (absOffset / 60000).toFixed(1);
             const serverTimeString = new Date(Date.now() + timeOffsetMs).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             showBlockingOverlay(`Security Block: Time Tampering Detected`, 
@@ -141,46 +128,7 @@
         }
     }
 
-    /**
-     * Render non-intrusive warning banner at the top of screen
-     */
-    function showWarningBanner(msg) {
-        if (!warningBannerEl) {
-            warningBannerEl = document.createElement('div');
-            warningBannerEl.id = 'time-guard-banner';
-            warningBannerEl.style.cssText = `
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                padding: 10px 15px !important;
-                background: rgba(245, 158, 11, 0.95) !important;
-                border-bottom: 1.5px solid rgba(251, 191, 36, 0.8) !important;
-                color: #FFFFFF !important;
-                font-family: system-ui, -apple-system, sans-serif !important;
-                font-size: 13px !important;
-                font-weight: 700 !important;
-                text-align: center !important;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-                z-index: 999999 !important;
-                backdrop-filter: blur(10px) !important;
-                box-sizing: border-box !important;
-                transition: transform 0.3s ease !important;
-            `;
-            document.body.appendChild(warningBannerEl);
-            // Push body content down slightly if needed
-            document.body.style.paddingTop = '40px';
-        }
-        warningBannerEl.innerText = msg;
-    }
 
-    function hideWarningBanner() {
-        if (warningBannerEl) {
-            warningBannerEl.remove();
-            warningBannerEl = null;
-            document.body.style.paddingTop = '0px';
-        }
-    }
 
     /**
      * Render premium glassmorphic overlay to block access completely
