@@ -8,10 +8,9 @@
 
 (function () {
     'use strict';
-
     // Constants & Limits
     const SECONDS_30 = 30 * 1000;
-    const MINUTES_2 = 2 * 60 * 1000;
+    const MINUTES_10 = 10 * 60 * 1000;
     const SYNC_INTERVAL = 60 * 1000; // Recalculate offset every 60s
 
     // State Variables
@@ -122,7 +121,7 @@
             showWarningBanner('Timezone Alert: Your device timezone is not set to India (GMT+5:30). Please update it in device settings.');
         } 
         // 2. Off by > 30 seconds warn
-        else if (absOffset > SECONDS_30 && absOffset <= MINUTES_2) {
+        else if (absOffset > SECONDS_30 && absOffset <= MINUTES_10) {
             const diffSecStr = (absOffset / 1000).toFixed(0);
             showWarningBanner(`Time Alert: Your device clock is off by ${diffSecStr} seconds. Please set time to Automatic.`);
         } 
@@ -131,8 +130,8 @@
             hideWarningBanner();
         }
 
-        // 3. Time difference > 2 minutes block
-        if (absOffset > MINUTES_2) {
+        // 3. Time difference > 10 minutes block
+        if (absOffset > MINUTES_10) {
             const diffMinStr = (absOffset / 60000).toFixed(1);
             const serverTimeString = new Date(Date.now() + timeOffsetMs).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             showBlockingOverlay(`Security Block: Time Tampering Detected`, 
@@ -312,7 +311,7 @@
     // SECURITY INTERCEPTION LAYER (Capture phase click interception)
     // ============================================================================
     window.addEventListener('click', function (e) {
-        if (isOffsetSynced && Math.abs(timeOffsetMs) > MINUTES_2) {
+        if (isOffsetSynced && Math.abs(timeOffsetMs) > MINUTES_10) {
             const target = e.target;
             const isCriticalAction = target.closest && (
                 target.closest('.btn-dsr') ||
@@ -350,15 +349,13 @@
             urlStr.includes('/api/client/dsr-update') ||
             urlStr.includes('/iamatevent')
         )) {
-            if (isOffsetSynced && Math.abs(timeOffsetMs) > MINUTES_2) {
+            if (isOffsetSynced && Math.abs(timeOffsetMs) > MINUTES_10) {
                 console.error(`[TimeGuard] Blocked fetch request to ${urlStr} due to time tampering.`);
                 return Promise.reject(new Error('Time Tampering Block: attendance and DSR actions are disabled until device clock is correct.'));
             }
         }
         return originalFetch.apply(this, args);
     };
-
-    // 2. XHR Interceptor
     const originalOpen = XMLHttpRequest.prototype.open;
     XMLHttpRequest.prototype.open = function (method, url, ...args) {
         this._reqUrl = url;
@@ -373,7 +370,7 @@
             this._reqUrl.includes('/api/client/dsr-update') ||
             this._reqUrl.includes('/iamatevent')
         )) {
-            if (isOffsetSynced && Math.abs(timeOffsetMs) > MINUTES_2) {
+            if (isOffsetSynced && Math.abs(timeOffsetMs) > MINUTES_10) {
                 console.error(`[TimeGuard] Blocked XHR request to ${this._reqUrl} due to time tampering.`);
                 // Dispatch error callback safely
                 const self = this;
@@ -385,7 +382,6 @@
         }
         return originalSend.apply(this, args);
     };
-
     // ============================================================================
     // PUBLIC TIMEGUARD NAMESPACE
     // ============================================================================
@@ -402,7 +398,7 @@
         },
 
         isTimeTampered: function () {
-            return isOffsetSynced && Math.abs(timeOffsetMs) > MINUTES_2;
+            return isOffsetSynced && Math.abs(timeOffsetMs) > MINUTES_10;
         },
 
         isWarnOffsetActive: function () {
