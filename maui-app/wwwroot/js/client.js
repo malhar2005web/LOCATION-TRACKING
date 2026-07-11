@@ -2620,11 +2620,11 @@ let currentClientList = [];
 let selectedClient = null;
 
 async function fetchClientList() {
-
     const tableBody = document.getElementById('client-list-tbody');
     if (!tableBody) return;
 
     tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">Loading clients...</td></tr>`;
+    const clientSearch = document.getElementById('search-client-input').value.trim();
     const groupSearch = document.getElementById('search-group-input').value.trim();
 
     const session = getSession();
