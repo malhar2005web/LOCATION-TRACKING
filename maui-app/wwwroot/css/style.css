@@ -3953,28 +3953,28 @@ body {
    DARK MODE
    ============================================ */
 .dark-mode {
-    --color-bg-primary: #121110;
-    --color-bg-secondary: #1A1917;
-    --color-bg-tertiary: #161513;
-    --color-bg-card: rgba(30, 28, 26, 0.65);
-    --color-bg-card-solid: #1C1B1A;
-    --color-bg-input: #242220;
+    --color-bg-primary: #071221;
+    --color-bg-secondary: #0A192F;
+    --color-bg-tertiary: #060F1E;
+    --color-bg-card: rgba(6, 15, 30, 0.7);
+    --color-bg-card-solid: #0A1D37;
+    --color-bg-input: #0B1E36;
     
-    --color-text-primary: #FAF6F0;
-    --color-text-secondary: #C0BBB4;
-    --color-text-muted: #8E8982;
-    --color-border: rgba(255, 255, 255, 0.08);
-    --color-border-light: rgba(255, 255, 255, 0.05);
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #94A3B8;
+    --color-text-muted: #64748B;
+    --color-border: rgba(56, 189, 248, 0.15);
+    --color-border-light: rgba(56, 189, 248, 0.08);
     --color-card-border: rgba(255, 255, 255, 0.08);
     
-    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.35);
-    --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 6px rgba(5, 12, 24, 0.4);
+    --shadow-md: 0 8px 24px rgba(5, 12, 24, 0.5);
+    --shadow-lg: 0 16px 40px rgba(5, 12, 24, 0.6);
+    --shadow-card: 0 10px 40px rgba(5, 12, 24, 0.7);
 }
 
 body.dark-mode {
-    background: linear-gradient(135deg, #161513 0%, #121110 50%, #1A1917 100%) !important;
+    background: linear-gradient(135deg, #060F1E 0%, #071221 50%, #0A192F 100%) !important;
 }
 
 .dark-mode, 
@@ -4025,8 +4025,10 @@ body.dark-mode {
 
 /* Profile Dropdown dark styles */
 .dark-mode .profile-dropdown-menu {
-    background: rgba(30, 28, 26, 0.85) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: rgba(6, 15, 30, 0.92) !important;
+    border: 1px solid rgba(56, 189, 248, 0.2) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
 }
 
 .dark-mode .dropdown-item {
@@ -4054,37 +4056,42 @@ body.dark-mode {
 .dark-mode .glass-input, 
 .dark-mode .glass-textarea, 
 .dark-mode .glass-select {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: rgba(10, 25, 47, 0.4) !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
     color: var(--color-text-primary) !important;
 }
 
 /* Header pages */
+.dark-mode .page-header.client-header {
+    background: #071221 !important;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
+}
+
 .dark-mode .page-header.submenu-header {
-    background: rgba(30, 28, 26, 0.65) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: rgba(6, 15, 30, 0.65) !important;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
 }
 
 .dark-mode .dashboard-header {
-    border-bottom: 1px solid var(--color-border) !important;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
 }
 
 /* Premium table colors in dark mode */
 .dark-mode .premium-table th {
-    background: rgba(0, 0, 0, 0.25) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: rgba(5, 12, 24, 0.45) !important;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2) !important;
 }
 
 .dark-mode .premium-table td {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.1) !important;
 }
 
 .dark-mode .premium-table tbody tr:nth-child(even) {
-    background: rgba(255, 255, 255, 0.02) !important;
+    background: rgba(10, 25, 47, 0.25) !important;
 }
 
 .dark-mode .premium-table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.04) !important;
+    background: rgba(10, 25, 47, 0.4) !important;
 }
 
 /* Theme Switcher Toggle Dropdown Item Switch UI */
@@ -4157,25 +4164,39 @@ body.dark-mode {
 
 /* Layout and card container overrides for dark mode */
 .dark-mode .dashboard-layout {
-    background: linear-gradient(135deg, #161513 0%, #121110 50%, #1A1917 100%) !important;
+    background: linear-gradient(135deg, #060F1E 0%, #071221 50%, #0A192F 100%) !important;
 }
 
 .dark-mode .page-header {
-    background: rgba(30, 28, 26, 0.65) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: rgba(6, 15, 30, 0.65) !important;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.15) !important;
 }
 
 .dark-mode .welcome-msg-card {
-    background: radial-gradient(100% 250% at 0% 0%, rgba(242,140,82,0.15) 0%, rgba(30, 28, 26, 0.65) 60%, rgba(28, 26, 24, 0.8) 100%) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
+    background: radial-gradient(100% 250% at 0% 0%, rgba(56, 189, 248, 0.15) 0%, rgba(6, 15, 30, 0.75) 60%, rgba(7, 18, 33, 0.9) 100%) !important;
+    border-color: rgba(56, 189, 248, 0.25) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 .dark-mode .stat-bubble-card,
 .dark-mode .action-card,
 .dark-mode .action-card-premium,
-.dark-mode .leave-stat-card {
+.dark-mode .leave-stat-card,
+.dark-mode .table-container-card,
+.dark-mode .reminder-card-premium,
+.dark-mode .form-section-accordion,
+.dark-mode .leave-card-mobile,
+.dark-mode .admin-stat-card,
+.dark-mode .role-tabs,
+.dark-mode .glass-form-card,
+.dark-mode .action-card-submenu,
+.dark-mode .action-card.reminders-highlight {
     background: var(--color-bg-card) !important;
-    border: 1px solid var(--color-card-border) !important;
+    border: 1px solid rgba(56, 189, 248, 0.15) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
 }
 
 .dark-mode .sidebar-link.active {
