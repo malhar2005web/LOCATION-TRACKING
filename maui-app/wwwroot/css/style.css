@@ -77,7 +77,7 @@
     --transition-slow: 300ms ease;
     
     /* Safe areas */
-    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-top: env(safe-area-inset-top, 28px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
@@ -813,10 +813,11 @@ body {
     border: 1px solid rgba(230, 126, 34, 0.2);
     color: var(--color-orange);
 }
-
 .page-content {
     flex: 1;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
     padding: var(--spacing-lg);
     padding-bottom: calc(var(--safe-bottom) + var(--spacing-2xl));
 }
@@ -1483,11 +1484,11 @@ body {
    Client Home Screen Styles
    ============================================ */
 
-/* Client Header */
 .page-header.client-header {
     background: #FFFFFF;
     border-bottom: 1px solid var(--color-border);
     padding: var(--spacing-md) var(--spacing-lg);
+    padding-top: calc(var(--safe-top) + var(--spacing-md)) !important;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1819,6 +1820,7 @@ body {
     -webkit-backdrop-filter: blur(20px) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
     padding: var(--spacing-md) var(--spacing-lg);
+    padding-top: calc(var(--safe-top) + var(--spacing-md)) !important;
     display: flex;
     justify-content: space-between;
     align-items: center;

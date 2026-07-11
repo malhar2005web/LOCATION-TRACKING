@@ -2620,12 +2620,11 @@ let currentClientList = [];
 let selectedClient = null;
 
 async function fetchClientList() {
+
     const tableBody = document.getElementById('client-list-tbody');
     if (!tableBody) return;
 
-    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--color-text-secondary);">Loading clients...</td></tr>`;
-
-    const clientSearch = document.getElementById('search-client-input').value.trim();
+    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">Loading clients...</td></tr>`;
     const groupSearch = document.getElementById('search-group-input').value.trim();
 
     const session = getSession();
@@ -2755,7 +2754,7 @@ function renderClientList(list) {
     if (!tableBody) return;
 
     if (list.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No clients found</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No clients found</td></tr>`;
         return;
     }
 
@@ -2772,15 +2771,12 @@ function renderClientList(list) {
         const escapedSiteName = (c.leadsitename || '').replace(/'/g, "\\'");
 
         html += `
-            <tr>
-                <td style="font-weight:700; color:var(--color-text-secondary);">${index + 1}</td>
-                <td style="font-weight:700; color:var(--color-text-primary);">${leadname}</td>
-                <td style="font-size:0.85rem; color:var(--color-text-secondary); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${address}</td>
-                <td>
-                    <!-- <button class="btn-booking" onclick="openBookingForm('${escapedName}', '${escapedSiteName}', '${escapedAddress}', '${leadno}')">Booking</button> -->
-                </td>
-                <td>
-                    <button class="btn-dsr" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
+            <tr style="border-bottom:1px solid rgba(0,0,0,0.05);">
+                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:10px 4px; font-size:0.75rem;">${index + 1}</td>
+                <td style="font-weight:700; color:var(--color-text-primary); padding:10px 4px; font-size:0.78rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapedName}">${leadname}</td>
+                <td style="font-size:0.75rem; color:var(--color-text-secondary); padding:10px 4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapedAddress}">${address}</td>
+                <td style="text-align:center; padding:10px 4px;">
+                    <button class="btn-dsr" style="font-size:0.72rem; padding:6px 6px; width:100%; box-sizing:border-box; border-radius:6px; font-weight:700;" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
                 </td>
             </tr>
         `;
