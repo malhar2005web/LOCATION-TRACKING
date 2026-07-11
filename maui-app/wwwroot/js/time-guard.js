@@ -119,9 +119,8 @@
 
         // 1. Timezone Incorrect Warn
         if (incorrectTz) {
-            showWarningBanner('Timezone Alert: Your device timezone is not set to India (GMT+5:30). Please update it in device settings.');
-        } 
-        // 2. Off by > 30 seconds warn
+            showWarningBanner('Timezone Alert: Your device timezone is not set to Asia/Mumbai (GMT+5:30). Please update it in device settings.');
+        }
         else if (absOffset > SECONDS_30 && absOffset <= MINUTES_2) {
             const diffSecStr = (absOffset / 1000).toFixed(0);
             showWarningBanner(`Time Alert: Your device clock is off by ${diffSecStr} seconds. Please set time to Automatic.`);
