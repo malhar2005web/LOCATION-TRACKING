@@ -1018,6 +1018,7 @@ function updateWorkdayUI() {
 
         if (isDayStarted) {
             cardDayStart.classList.add('day-end-active');
+            cardDayStart.classList.add('day-active');
             if (dayToggleTitle) dayToggleTitle.textContent = 'Day End';
             if (dayToggleDesc) dayToggleDesc.textContent = 'Complete your workday and tracking';
             if (dayToggleIconContainer) {
@@ -1027,6 +1028,7 @@ function updateWorkdayUI() {
             }
         } else {
             cardDayStart.classList.remove('day-end-active');
+            cardDayStart.classList.remove('day-active');
             if (dayToggleTitle) dayToggleTitle.textContent = 'Day Start';
             if (dayToggleDesc) dayToggleDesc.textContent = 'Begin your workday and tracking';
             if (dayToggleIconContainer) {
@@ -2821,6 +2823,42 @@ function openBookingForm(name, siteName, address, leadno) {
     showView('booking-view');
 }
 
+// ── DSR Live Timer System ──
+let dsrTimerInterval = null;
+let dsrTimerStartTime = null;
+
+function startDsrTimer() {
+    stopDsrTimer(); // Clear any existing timer
+    dsrTimerStartTime = Date.now();
+    const timerDisplay = document.getElementById('dsr-timer-display');
+    const timerContainer = document.getElementById('dsr-live-timer');
+    if (timerDisplay) timerDisplay.textContent = '00:00';
+    if (timerContainer) timerContainer.style.display = 'flex';
+
+    dsrTimerInterval = setInterval(() => {
+        if (!dsrTimerStartTime) return;
+        const elapsed = Math.floor((Date.now() - dsrTimerStartTime) / 1000);
+        const hrs = Math.floor(elapsed / 3600);
+        const mins = Math.floor((elapsed % 3600) / 60);
+        const secs = elapsed % 60;
+        if (timerDisplay) {
+            if (hrs > 0) {
+                timerDisplay.textContent = `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            } else {
+                timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+    }, 1000);
+}
+
+function stopDsrTimer() {
+    if (dsrTimerInterval) {
+        clearInterval(dsrTimerInterval);
+        dsrTimerInterval = null;
+    }
+    dsrTimerStartTime = null;
+}
+
 function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadno) {
     selectedClient = { name, address, siteDetails, contactPerson, contactNo, leadno };
 
@@ -2839,6 +2877,9 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     document.getElementById('dsr-followup-minutes').value = '00';
 
     showView('existing-client-dsr-view');
+    
+    // Start the DSR live timer
+    startDsrTimer();
     
     // REDESIGNED: Initialize premium wizard flow
     if (typeof initDsrWizard === 'function') {
@@ -3020,6 +3061,9 @@ async function submitDSR() {
     localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
     localStorage.setItem('visitsToday', currentVisits.toString());
     updateMetricsUI();
+
+    // Stop the DSR live timer
+    stopDsrTimer();
 
     showToast('DSR submitted successfully!', 'success');
     showView('dsr-client-list-view');

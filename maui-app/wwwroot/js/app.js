@@ -43,6 +43,11 @@ function showView(viewId) {
         }
     }
 
+    // Stop DSR timer when leaving the DSR form
+    if (viewId !== 'existing-client-dsr-view' && typeof stopDsrTimer === 'function') {
+        stopDsrTimer();
+    }
+
     console.log('[App] View:', viewId);
 }
 

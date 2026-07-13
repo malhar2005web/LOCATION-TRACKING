@@ -3366,6 +3366,33 @@ body {
     border-color: #F28C52 !important;
 }
 
+/* Day Start Active Card - Vibrant green glow when workday is running */
+.action-card-premium.day-active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(52, 211, 153, 0.15) 50%, rgba(255, 255, 255, 0.7) 100%) !important;
+    border: 1.5px solid rgba(16, 185, 129, 0.45) !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.12), 0 8px 32px rgba(0, 0, 0, 0.04) !important;
+    animation: dayActiveGlow 3s ease-in-out infinite;
+}
+.action-card-premium.day-active .card-premium-icon {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #10B981 !important;
+}
+.action-card-premium.day-active .card-premium-arrow-btn {
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    color: #10B981 !important;
+}
+@keyframes dayActiveGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.1), 0 8px 32px rgba(0, 0, 0, 0.04); }
+    50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.2), 0 8px 32px rgba(0, 0, 0, 0.04); }
+}
+
+/* Dark mode Day Active */
+.dark-mode .action-card-premium.day-active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%) !important;
+    border: 1.5px solid rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+}
+
 /* Row 3: Reminders and metrics section */
 .reminders-metrics-row {
     display: flex;
