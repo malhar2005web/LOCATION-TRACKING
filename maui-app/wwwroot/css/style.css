@@ -3368,29 +3368,41 @@ body {
 
 /* Day Start Active Card - Vibrant green glow when workday is running */
 .action-card-premium.day-active {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(52, 211, 153, 0.15) 50%, rgba(255, 255, 255, 0.7) 100%) !important;
-    border: 1.5px solid rgba(16, 185, 129, 0.45) !important;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.12), 0 8px 32px rgba(0, 0, 0, 0.04) !important;
-    animation: dayActiveGlow 3s ease-in-out infinite;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(52, 211, 153, 0.22) 50%, rgba(209, 250, 229, 0.5) 100%) !important;
+    border: 2px solid rgba(16, 185, 129, 0.5) !important;
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.2), 0 8px 32px rgba(0, 0, 0, 0.05) !important;
+    animation: dayActiveGlow 2.5s ease-in-out infinite !important;
 }
 .action-card-premium.day-active .card-premium-icon {
-    background: rgba(16, 185, 129, 0.15) !important;
+    background: rgba(16, 185, 129, 0.2) !important;
     color: #10B981 !important;
+}
+.action-card-premium.day-active .card-premium-title {
+    color: #059669 !important;
 }
 .action-card-premium.day-active .card-premium-arrow-btn {
-    border-color: rgba(16, 185, 129, 0.3) !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
     color: #10B981 !important;
+    background: rgba(16, 185, 129, 0.08) !important;
+}
+.action-card-premium.day-active .card-premium-status-pill {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #059669 !important;
+    font-weight: 700 !important;
 }
 @keyframes dayActiveGlow {
-    0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.1), 0 8px 32px rgba(0, 0, 0, 0.04); }
-    50% { box-shadow: 0 0 25px rgba(16, 185, 129, 0.2), 0 8px 32px rgba(0, 0, 0, 0.04); }
+    0%, 100% { box-shadow: 0 0 18px rgba(16, 185, 129, 0.15), 0 8px 32px rgba(0, 0, 0, 0.04) !important; }
+    50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.3), 0 8px 32px rgba(0, 0, 0, 0.04) !important; }
 }
 
 /* Dark mode Day Active */
 .dark-mode .action-card-premium.day-active {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%) !important;
-    border: 1.5px solid rgba(16, 185, 129, 0.4) !important;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%) !important;
+    border: 2px solid rgba(16, 185, 129, 0.45) !important;
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.2), 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+}
+.dark-mode .action-card-premium.day-active .card-premium-title {
+    color: #34D399 !important;
 }
 
 /* Row 3: Reminders and metrics section */

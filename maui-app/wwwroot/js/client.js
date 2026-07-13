@@ -1022,8 +1022,8 @@ function updateWorkdayUI() {
             if (dayToggleTitle) dayToggleTitle.textContent = 'Day End';
             if (dayToggleDesc) dayToggleDesc.textContent = 'Complete your workday and tracking';
             if (dayToggleIconContainer) {
-                dayToggleIconContainer.style.background = 'rgba(229, 115, 115, 0.15)';
-                dayToggleIconContainer.style.color = '#E57373';
+                dayToggleIconContainer.style.background = 'rgba(16, 185, 129, 0.18)';
+                dayToggleIconContainer.style.color = '#10B981';
                 dayToggleIconContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>`;
             }
         } else {
@@ -2852,11 +2852,16 @@ function startDsrTimer() {
 }
 
 function stopDsrTimer() {
+    let elapsedSeconds = 0;
+    if (dsrTimerStartTime) {
+        elapsedSeconds = Math.floor((Date.now() - dsrTimerStartTime) / 1000);
+    }
     if (dsrTimerInterval) {
         clearInterval(dsrTimerInterval);
         dsrTimerInterval = null;
     }
     dsrTimerStartTime = null;
+    return elapsedSeconds;
 }
 
 function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadno) {
@@ -3062,12 +3067,30 @@ async function submitDSR() {
     localStorage.setItem('visitsToday', currentVisits.toString());
     updateMetricsUI();
 
-    // Stop the DSR live timer
-    stopDsrTimer();
+    // Stop the DSR live timer and get elapsed time
+    const dsrElapsed = stopDsrTimer();
 
     showToast('DSR submitted successfully!', 'success');
     showView('dsr-client-list-view');
     fetchClientList();
+
+    // Show time-taken alert after a brief delay for the view transition
+    if (dsrElapsed > 0) {
+        setTimeout(() => {
+            let timeStr = '';
+            const hrs = Math.floor(dsrElapsed / 3600);
+            const mins = Math.floor((dsrElapsed % 3600) / 60);
+            const secs = dsrElapsed % 60;
+            if (hrs > 0) {
+                timeStr = `${hrs} hr ${mins} min ${secs} sec`;
+            } else if (mins > 0) {
+                timeStr = `${mins} min ${secs} sec`;
+            } else {
+                timeStr = `${secs} sec`;
+            }
+            alert(`✅ DSR Submitted!\n\nYou filled the DSR form in ${timeStr}.`);
+        }, 600);
+    }
 }
 
 async function submitBooking() {
