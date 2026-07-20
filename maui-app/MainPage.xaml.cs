@@ -372,6 +372,27 @@ namespace LOCATION_TRACKING
             });
         }
 
+        [JSInvokable]
+        public static Task<string> GetAutomaticTimeSettings()
+        {
+#if ANDROID
+            try
+            {
+                var context = Android.App.Application.Context;
+                int autoTime = global::Android.Provider.Settings.Global.GetInt(context.ContentResolver, global::Android.Provider.Settings.Global.AutoTime, 0);
+                int autoTimeZone = global::Android.Provider.Settings.Global.GetInt(context.ContentResolver, global::Android.Provider.Settings.Global.AutoTimeZone, 0);
+                var data = new { autoTime = autoTime == 1, autoTimeZone = autoTimeZone == 1 };
+                return Task.FromResult(System.Text.Json.JsonSerializer.Serialize(data));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Bridge] GetAutomaticTimeSettings failed: {ex.Message}");
+            }
+#endif
+            var fallback = new { autoTime = true, autoTimeZone = true };
+            return Task.FromResult(System.Text.Json.JsonSerializer.Serialize(fallback));
+        }
+
         private static void OpenAppSettings()
         {
 #if ANDROID
