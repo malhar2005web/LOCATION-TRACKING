@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jlY/PBI3y48=",
+  "dgSpecHash": "zNuQRgzU0No=",
   "success": true,
   "projectFilePath": "D:\\Desktop\\New folder (100)\\maui-app\\LOCATION-TRACKING.csproj",
   "expectedPackageFiles": [
@@ -161,6 +161,10 @@
     "C:\\Users\\Malhar\\.nuget\\packages\\xamarin.kotlinx.coroutines.core.jvm\\1.10.2.1\\xamarin.kotlinx.coroutines.core.jvm.1.10.2.1.nupkg.sha512",
     "C:\\Users\\Malhar\\.nuget\\packages\\xamarin.kotlinx.serialization.core\\1.9.0.1\\xamarin.kotlinx.serialization.core.1.9.0.1.nupkg.sha512",
     "C:\\Users\\Malhar\\.nuget\\packages\\xamarin.kotlinx.serialization.core.jvm\\1.9.0.1\\xamarin.kotlinx.serialization.core.jvm.1.9.0.1.nupkg.sha512",
+    "C:\\Users\\Malhar\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\10.0.9\\microsoft.netcore.app.runtime.win-x64.10.0.9.nupkg.sha512",
+    "C:\\Users\\Malhar\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\10.0.9\\microsoft.windowsdesktop.app.runtime.win-x64.10.0.9.nupkg.sha512",
+    "C:\\Users\\Malhar\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\10.0.9\\microsoft.aspnetcore.app.runtime.win-x64.10.0.9.nupkg.sha512",
+    "C:\\Users\\Malhar\\.nuget\\packages\\microsoft.netcore.app.crossgen2.win-x64\\10.0.9\\microsoft.netcore.app.crossgen2.win-x64.10.0.9.nupkg.sha512",
     "C:\\Users\\Malhar\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
   "logs": [
@@ -177,12 +181,14 @@
         "net10.0-maccatalyst/android-arm64",
         "net10.0-maccatalyst/android-x64",
         "net10.0-maccatalyst/iossimulator-x64",
+        "net10.0-maccatalyst/maccatalyst-arm64",
         "net10.0-maccatalyst/maccatalyst-x64",
         "net10.0-maccatalyst/win-x64",
         "net10.0-windows10.0.19041.0",
         "net10.0-windows10.0.19041.0/android-arm64",
         "net10.0-windows10.0.19041.0/android-x64",
         "net10.0-windows10.0.19041.0/iossimulator-x64",
+        "net10.0-windows10.0.19041.0/maccatalyst-arm64",
         "net10.0-windows10.0.19041.0/maccatalyst-x64",
         "net10.0-windows10.0.19041.0/win-x64"
       ]
@@ -200,6 +206,7 @@
         "net10.0-android/android-arm64",
         "net10.0-android/android-x64",
         "net10.0-android/iossimulator-x64",
+        "net10.0-android/maccatalyst-arm64",
         "net10.0-android/maccatalyst-x64",
         "net10.0-android/win-x64"
       ]
@@ -217,6 +224,7 @@
         "net10.0-windows10.0.19041.0/android-arm64",
         "net10.0-windows10.0.19041.0/android-x64",
         "net10.0-windows10.0.19041.0/iossimulator-x64",
+        "net10.0-windows10.0.19041.0/maccatalyst-arm64",
         "net10.0-windows10.0.19041.0/maccatalyst-x64",
         "net10.0-windows10.0.19041.0/win-x64"
       ]

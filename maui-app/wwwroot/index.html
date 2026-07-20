@@ -228,6 +228,21 @@
                     .catch(err => {
                         if (errorCallback) errorCallback(err);
                     });
+            },
+            getAutomaticTimeSettings: function(successCallback, errorCallback) {
+                invokeCSharp('GetAutomaticTimeSettings')
+                    .then(jsonStr => {
+                        if (successCallback) {
+                            try {
+                                successCallback(JSON.parse(jsonStr));
+                            } catch (e) {
+                                successCallback({ autoTime: true, autoTimeZone: true });
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        if (errorCallback) errorCallback(err);
+                    });
             }
         };
 
@@ -241,6 +256,7 @@
     </script>
 
     <!-- Original Cordova App Scripts -->
+    <script src="js/time-guard.js"></script>
     <script src="js/api.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/reminderDb.js"></script>

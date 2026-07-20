@@ -90,12 +90,15 @@ router.post('/login', async (req, res) => {
             [clientId]
         );
 
+        const { name, userfullname, user_fullname } = req.body;
+        const dynamicName = (name || userfullname || user_fullname || '').trim();
+
         if (result.rows.length === 0) {
-            // Auto-create/register client in local DB to allow easy testing with any client ID (like 11)
-            console.log(`[Login] Auto-creating client ${clientId} with device ${deviceId}`);
+            const clientName = dynamicName || `Client ${clientId}`;
+            console.log(`[Login] Auto-creating client ${clientId} (${clientName}) with device ${deviceId}`);
             await db.query(
                 'INSERT INTO clients (client_id, device_id, name) VALUES ($1, $2, $3)',
-                [clientId, deviceId, clientId === '11' ? 'demo admin2' : `Client ${clientId}`]
+                [clientId, deviceId, clientName]
             );
             result = await db.query(
                 'SELECT * FROM clients WHERE client_id = $1 AND device_id = $2',
@@ -103,6 +106,12 @@ router.post('/login', async (req, res) => {
             );
         } else {
             const existingClient = result.rows[0];
+            if (dynamicName && (existingClient.name !== dynamicName || existingClient.name === `Client ${clientId}`)) {
+                await db.query(
+                    'UPDATE clients SET name = $2, updated_at = NOW() WHERE client_id = $1',
+                    [clientId, dynamicName]
+                );
+            }
             // Only reject login if the user is ALREADY active (logged in) on a different device
             if (existingClient.is_active && existingClient.device_id !== deviceId) {
                 return res.status(409).json({

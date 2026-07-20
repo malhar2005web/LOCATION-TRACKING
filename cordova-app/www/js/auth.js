@@ -165,13 +165,37 @@ async function handleClientLogin() {
             throw new Error('Invalid User ID or Device ID. Please contact your administrator.');
         }
 
+        // Helper to extract field value dynamically regardless of casing
+        function getDynamicField(obj, ...possibleKeys) {
+            if (!obj || typeof obj !== 'object') return '';
+            const keys = Object.keys(obj);
+            for (const pKey of possibleKeys) {
+                const target = pKey.toLowerCase();
+                const found = keys.find(k => k.toLowerCase() === target);
+                if (found && obj[found] !== null && obj[found] !== undefined) {
+                    const str = String(obj[found]).trim();
+                    if (str.length > 0) return str;
+                }
+            }
+            return '';
+        }
+
+        const resolvedClientId = String(getDynamicField(info, 'userid', 'id') || clientId);
+        const resolvedDeviceId = String(getDynamicField(info, 'imeinumber', 'imei', 'deviceid') || deviceId);
+
+        // Dynamically extract user name from server response fields
+        let resolvedName = getDynamicField(info, 'userfullname', 'user_fullname', 'fullname', 'userloginid', 'username', 'name');
+        if (!resolvedName) {
+            resolvedName = `Client ${resolvedClientId}`;
+        }
+
         // Build client object from Skyway response
         const clientData = {
-            clientId:   String(info.userid  || clientId),
-            deviceId:   String(info.imeinumber || deviceId),
-            name:       info.userfullname || `Client ${clientId}`,
-            userType:   info.usertype     || 'client',
-            clusters:   info.clusters     || '',
+            clientId:   resolvedClientId,
+            deviceId:   resolvedDeviceId,
+            name:       resolvedName,
+            userType:   getDynamicField(info, 'usertype', 'user_type', 'role') || 'client',
+            clusters:   getDynamicField(info, 'clusters') || '',
             skywayInfo: info
         };
 
