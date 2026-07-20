@@ -178,48 +178,31 @@ async function handleClientLogin() {
             throw new Error('Invalid User ID or Device ID. Please contact your administrator.');
         }
 
-        // Helper to extract non-zero, non-empty field value dynamically
-        function getDynamicField(obj, ...possibleKeys) {
-            if (!obj || typeof obj !== 'object') return '';
-            const keys = Object.keys(obj);
-            for (const pKey of possibleKeys) {
-                const target = pKey.toLowerCase();
-                const found = keys.find(k => k.toLowerCase() === target);
-                if (found && obj[found] !== null && obj[found] !== undefined) {
-                    const str = String(obj[found]).trim();
-                    if (str.length > 0 && str !== '0' && str !== 'null' && str !== 'undefined') {
-                        return str;
-                    }
-                }
-            }
-            return '';
-        }
+        // Build client object strictly from Skyway API response fields (100% dynamic, zero hardcoding)
+        const apiUserId = (info.userid !== undefined && info.userid !== null && String(info.userid).trim() !== '' && String(info.userid).trim() !== '0')
+            ? String(info.userid).trim()
+            : ((info.clientid !== undefined && info.clientid !== null && String(info.clientid).trim() !== '' && String(info.clientid).trim() !== '0')
+                ? String(info.clientid).trim()
+                : ((info.id !== undefined && info.id !== null && String(info.id).trim() !== '' && String(info.id).trim() !== '0')
+                    ? String(info.id).trim()
+                    : String(clientId).trim()));
 
-        // Resolve client ID: prefer non-zero API field, fallback to user input
-        let resolvedClientId = getDynamicField(info, 'userid', 'empid', 'clientid', 'user_id', 'employeeid');
-        if (!resolvedClientId || resolvedClientId === '0') {
-            resolvedClientId = String(clientId).trim();
-        }
+        const apiName = (info.userfullname && String(info.userfullname).trim() && String(info.userfullname).trim() !== '0')
+            ? String(info.userfullname).trim()
+            : ((info.userloginid && String(info.userloginid).trim() && String(info.userloginid).trim() !== '0')
+                ? String(info.userloginid).trim()
+                : ((info.username && String(info.username).trim() && String(info.username).trim() !== '0')
+                    ? String(info.username).trim()
+                    : `Client ${apiUserId}`));
 
-        const resolvedDeviceId = String(getDynamicField(info, 'imeinumber', 'imei', 'deviceid') || deviceId);
+        const apiDeviceId = (info.imeinumber && String(info.imeinumber).trim()) || String(deviceId).trim();
 
-        // Dynamically extract user name from server response fields
-        let resolvedName = getDynamicField(info, 'userfullname', 'user_fullname', 'fullname', 'empname', 'userloginid', 'username', 'name', 'clientname');
-        if (!resolvedName || resolvedName === '0' || resolvedName.toLowerCase().includes('client 0')) {
-            if (resolvedClientId === '179' || String(clientId).trim() === '179') {
-                resolvedName = 'TEST MARKETING';
-            } else {
-                resolvedName = `Client ${resolvedClientId}`;
-            }
-        }
-
-        // Build client object from Skyway response
         const clientData = {
-            clientId:   resolvedClientId,
-            deviceId:   resolvedDeviceId,
-            name:       resolvedName,
-            userType:   getDynamicField(info, 'usertype', 'user_type', 'role') || 'client',
-            clusters:   getDynamicField(info, 'clusters') || '',
+            clientId:   apiUserId,
+            deviceId:   apiDeviceId,
+            name:       apiName,
+            userType:   info.usertype || 'client',
+            clusters:   info.clusters || '',
             skywayInfo: info
         };
 
