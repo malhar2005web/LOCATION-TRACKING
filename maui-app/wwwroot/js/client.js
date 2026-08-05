@@ -3085,24 +3085,76 @@ let pendingCheckoutData = null;
 
 function showDsrSuccessModal(timeStr, clientName, lat, lng) {
     pendingCheckoutData = { clientName, lat, lng };
+
+    let modalEl = document.getElementById('dsr-success-modal');
+    if (!modalEl) {
+        modalEl = document.createElement('div');
+        modalEl.id = 'dsr-success-modal';
+        modalEl.style.cssText = 'position: fixed; inset: 0; z-index: 99999; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; padding: 20px;';
+        modalEl.innerHTML = `
+            <div style="background: #FFFFFF; border-radius: 24px; padding: 28px 24px; max-width: 320px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, rgba(72,187,120,0.15), rgba(72,187,120,0.3)); color: #38A169; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 800; color: #1E2430; margin: 0 0 8px;">DSR Submitted!</h3>
+                <p id="dsr-success-modal-msg" style="font-size: 13.5px; color: #6A7180; margin: 0 0 20px; line-height: 1.4;"></p>
+                <button type="button" onclick="onDsrSuccessOkClick()" style="width: 100%; padding: 13px; font-weight: 750; font-size: 15px; color: #FFFFFF; background: linear-gradient(145deg, #FF7A1A, #F0630A); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(240, 99, 10, 0.3); cursor: pointer;">
+                    OK
+                </button>
+            </div>
+        `;
+        document.body.appendChild(modalEl);
+    }
+
     const msgEl = document.getElementById('dsr-success-modal-msg');
     if (msgEl) {
         msgEl.textContent = timeStr ? `You filled the DSR form in ${timeStr}.` : 'DSR submitted successfully!';
     }
-    const modalEl = document.getElementById('dsr-success-modal');
-    if (modalEl) {
-        modalEl.style.display = 'flex';
-    }
+    modalEl.style.display = 'flex';
 }
 
-function onDsrSuccessOkClick() {
+async function onDsrSuccessOkClick() {
     // 1. Hide modal immediately
     const modalEl = document.getElementById('dsr-success-modal');
     if (modalEl) {
         modalEl.style.display = 'none';
     }
 
-    // 2. Return to Home screen
+    // 2. Call CHECKOUT API to iamatevent
+    if (navigator.onLine) {
+        try {
+            const session = getSession();
+            const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            const empid = (session && session.userData && session.userData.name) || 'demo admin2';
+            const userid = (session && session.userData && (session.userData.clientId || session.userData.deviceId)) || '11';
+            const imeino = (session && session.userData && session.userData.deviceId) || 'a057d027fed7bace';
+            const latVal = (pendingCheckoutData && pendingCheckoutData.lat) ? parseFloat(pendingCheckoutData.lat) : 17.7012001;
+            const lngVal = (pendingCheckoutData && pendingCheckoutData.lng) ? parseFloat(pendingCheckoutData.lng) : 73.9826115;
+            const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
+
+            console.log('[CHECKOUT] Triggering CHECKOUT API on OK click...');
+            const response = await fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: currentDate,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "CHECKOUT",
+                    gotiamatclient: clientNameVal,
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
+                })
+            });
+            const data = await response.json();
+            console.log('[CHECKOUT] API response:', data);
+        } catch (err) {
+            console.error('[CHECKOUT] API call error:', err);
+        }
+    }
+
+    // 3. Return to Home screen
     showView('client-view');
 }
 
