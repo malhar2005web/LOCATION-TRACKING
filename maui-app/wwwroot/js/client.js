@@ -2756,12 +2756,12 @@ function renderClientList(list) {
         const escapedSiteName = (c.leadsitename || '').replace(/'/g, "\\'");
 
         html += `
-            <tr style="border-bottom:1px solid rgba(0,0,0,0.05);">
-                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:10px 4px; font-size:0.78rem;">${index + 1}</td>
-                <td style="font-weight:700; color:var(--color-text-primary); padding:10px 6px; font-size:0.82rem; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedName}">${leadname}</td>
-                <td style="font-size:0.78rem; color:var(--color-text-secondary); padding:10px 6px; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedAddress}">${address || '--'}</td>
-                <td style="text-align:center; padding:10px 4px; white-space:nowrap;">
-                    <button class="btn-dsr" style="font-size:0.75rem; padding:7px 10px; white-space:nowrap; border-radius:8px; font-weight:700;" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
+            <tr style="border-bottom:1px solid rgba(0,0,0,0.06);">
+                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:12px 4px; font-size:0.8rem; width:36px; min-width:36px;">${index + 1}</td>
+                <td style="font-weight:700; color:var(--ink, #1E2430); padding:12px 10px; font-size:0.85rem; word-break:normal; overflow-wrap:break-word; white-space:normal; line-height:1.35; min-width:200px;" title="${escapedName}">${leadname}</td>
+                <td style="font-size:0.8rem; color:#4A5568; padding:12px 10px; word-break:normal; overflow-wrap:break-word; white-space:normal; line-height:1.35; min-width:250px;" title="${escapedAddress}">${address || '--'}</td>
+                <td style="text-align:center; padding:12px 6px; width:110px; min-width:110px; white-space:nowrap;">
+                    <button class="btn-dsr" style="font-size:0.75rem; padding:8px 12px; white-space:nowrap; border-radius:10px; font-weight:700; background: linear-gradient(135deg, #48BB78, #38A169); color: #fff; border: none; box-shadow: 0 4px 12px rgba(56, 161, 105, 0.25);" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
                 </td>
             </tr>
         `;
