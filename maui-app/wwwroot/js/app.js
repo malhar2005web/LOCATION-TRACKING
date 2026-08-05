@@ -393,3 +393,139 @@ window.addEventListener('click', function(event) {
         dropdownMenu.classList.remove('show');
     }
 });
+
+// ── Multi-Language Translation System (English, Hindi, Marathi) ──
+const i18nTranslations = {
+    en: {
+        my_profile: "My Profile",
+        theme: "Theme",
+        select_language: "Language / भाषा",
+        today_stats: "Today's Stats / आज का आँकड़ा",
+        total_visits: "Total Visits",
+        dsr_updates: "DSR Updates",
+        pending_tasks: "Pending Tasks",
+        work_duration: "Work Duration",
+        logout: "Logout",
+        day_start: "Day Start",
+        day_end: "Day End",
+        check_in: "Check In",
+        leave_mgmt: "Leave Management",
+        reports: "Reports",
+        todays_reminders: "Today's Reminders",
+        client_list: "Client List",
+        search_client: "Search Client...",
+        search_group: "Search Group...",
+        sr: "SR",
+        client_name: "CLIENT NAME",
+        address: "ADDRESS",
+        action: "ACTION",
+        update_dsr: "Update DSR",
+        submit_dsr: "Submit DSR",
+        confirm_submit: "Confirm & Submit",
+        back: "Back",
+        edit_form: "Edit Form",
+        checked_in: "Checked In"
+    },
+    hi: {
+        my_profile: "मेरी प्रोफ़ाइल",
+        theme: "थीम",
+        select_language: "भाषा चुनें",
+        today_stats: "आज के आँकड़े",
+        total_visits: "कुल विजिट",
+        dsr_updates: "DSR अपडेट",
+        pending_tasks: "शेष कार्य",
+        work_duration: "कार्य अवधि",
+        logout: "लॉगआउट",
+        day_start: "दिन शुरू",
+        day_end: "दिन समाप्त",
+        check_in: "चेक इन",
+        leave_mgmt: "छुट्टी प्रबंधन",
+        reports: "रिपोर्ट्स",
+        todays_reminders: "आज के रिमाइंडर्स",
+        client_list: "ग्राहक सूची",
+        search_client: "ग्राहक खोजें...",
+        search_group: "समूह खोजें...",
+        sr: "क्र.",
+        client_name: "ग्राहक नाम",
+        address: "पता",
+        action: "कार्रवाई",
+        update_dsr: "DSR अपडेट करें",
+        submit_dsr: "DSR जमा करें",
+        confirm_submit: "पुष्टि करें और जमा करें",
+        back: "वापस",
+        edit_form: "फॉर्म संपादित करें",
+        checked_in: "चेक इन किया"
+    },
+    mr: {
+        my_profile: "माझी प्रोफाईल",
+        theme: "थीम",
+        select_language: "भाषा निवडा",
+        today_stats: "आजची आकडेवारी",
+        total_visits: "एकूण भेटी",
+        dsr_updates: "DSR अपडेट्स",
+        pending_tasks: "बाकी कामे",
+        work_duration: "कामाचा वेळ",
+        logout: "लॉगआउट",
+        day_start: "दिवस सुरू",
+        day_end: "दिवस समाप्त",
+        check_in: "चेक इन",
+        leave_mgmt: "रजा व्यवस्थापन",
+        reports: "रिपोर्ट्स",
+        todays_reminders: "आजचे रिमाइंडर्स",
+        client_list: "ग्राहक यादी",
+        search_client: "ग्राहक शोधा...",
+        search_group: "गट शोधा...",
+        sr: "क्र.",
+        client_name: "ग्राहकाचे नाव",
+        address: "पत्ता",
+        action: "कृती",
+        update_dsr: "DSR अपडेट करा",
+        submit_dsr: "DSR सबमिट करा",
+        confirm_submit: "खात्री करा आणि सबमिट करा",
+        back: "मागे",
+        edit_form: "फॉर्म संपादित करा",
+        checked_in: "चेक इन केले"
+    }
+};
+
+function changeAppLanguage(lang) {
+    if (!i18nTranslations[lang]) lang = 'en';
+    localStorage.setItem('app_language', lang);
+    applyLanguageTranslations(lang);
+}
+
+function applyLanguageTranslations(lang) {
+    lang = lang || localStorage.getItem('app_language') || 'en';
+    const dict = i18nTranslations[lang] || i18nTranslations['en'];
+
+    const langSelect = document.getElementById('app-language-select');
+    if (langSelect) langSelect.value = lang;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+            if (el.tagName === 'INPUT' && (el.type === 'text' || el.type === 'search')) {
+                el.placeholder = dict[key];
+            } else {
+                el.textContent = dict[key];
+            }
+        }
+    });
+
+    const dayTitle = document.getElementById('day-toggle-title');
+    if (dayTitle) {
+        const currentText = dayTitle.textContent.toLowerCase();
+        const isEnd = currentText.includes('end') || currentText.includes('समाप्त');
+        dayTitle.textContent = isEnd ? dict.day_end : dict.day_start;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const savedLang = localStorage.getItem('app_language') || 'en';
+    applyLanguageTranslations(savedLang);
+});
+
+setTimeout(function() {
+    const savedLang = localStorage.getItem('app_language') || 'en';
+    applyLanguageTranslations(savedLang);
+}, 500);

@@ -1407,23 +1407,6 @@ async function submitOthers() {
         } catch (e) {
             console.error('[Others] Third-party API failed:', e);
         }
-
-        try {
-            await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDateTime,
-                    gotempname: gempname,
-                    gotempid: userid,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: customerName,
-                    gotiamatlat: parseFloat(dsrBody.gpsLatitude),
-                    gotiamatlong: parseFloat(dsrBody.gpsLongitude),
-                    gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-                })
-            });
-        } catch (e) { }
     } else {
         showToast('Offline Mode: Activity saved locally.', 'info');
     }
@@ -1511,7 +1494,7 @@ async function submitOthers() {
     updateMetricsUI();
 
     showToast('Activity submitted successfully!', 'success');
-    showView('checkin-view');
+    showView('client-view');
 }
 
 function handleLeaveApplication() {
@@ -2774,11 +2757,11 @@ function renderClientList(list) {
 
         html += `
             <tr style="border-bottom:1px solid rgba(0,0,0,0.05);">
-                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:10px 4px; font-size:0.75rem;">${index + 1}</td>
-                <td style="font-weight:700; color:var(--color-text-primary); padding:10px 4px; font-size:0.78rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapedName}">${leadname}</td>
-                <td style="font-size:0.75rem; color:var(--color-text-secondary); padding:10px 4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapedAddress}">${address}</td>
-                <td style="text-align:center; padding:10px 4px;">
-                    <button class="btn-dsr" style="font-size:0.72rem; padding:6px 6px; width:100%; box-sizing:border-box; border-radius:6px; font-weight:700;" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
+                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:10px 4px; font-size:0.78rem;">${index + 1}</td>
+                <td style="font-weight:700; color:var(--color-text-primary); padding:10px 6px; font-size:0.82rem; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedName}">${leadname}</td>
+                <td style="font-size:0.78rem; color:var(--color-text-secondary); padding:10px 6px; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedAddress}">${address || '--'}</td>
+                <td style="text-align:center; padding:10px 4px; white-space:nowrap;">
+                    <button class="btn-dsr" style="font-size:0.75rem; padding:7px 10px; white-space:nowrap; border-radius:8px; font-weight:700;" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
                 </td>
             </tr>
         `;
@@ -2881,6 +2864,31 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     document.getElementById('dsr-followup-hours').value = '00';
     document.getElementById('dsr-followup-minutes').value = '00';
 
+    // Trigger DSR_UPDATE event on Update DSR button click
+    const session = typeof getSession === 'function' ? getSession() : null;
+    if (navigator.onLine && session && session.userData) {
+        const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+        const empid = (session.userData.name) || 'demo admin2';
+        const userid = session.userData.clientId || session.userData.deviceId || '';
+        const latVal = parseFloat(session.userData.lat || '0');
+        const lngVal = parseFloat(session.userData.long || '0');
+
+        fetch(`${API_BASE_URL}/iamatevent`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                gotiamatdate: currentDateTime,
+                gotempname: empid,
+                gotempid: userid,
+                gotinoutstatus: "DSR_UPDATE",
+                gotiamatclient: name || "",
+                gotiamatlat: latVal,
+                gotiamatlong: lngVal,
+                gimeinumber: (session && session.userData && session.userData.deviceId) || ""
+            })
+        }).catch(err => console.error('iamatevent DSR_UPDATE error:', err));
+    }
+
     showView('existing-client-dsr-view');
     
     // Start the DSR live timer
@@ -2964,23 +2972,6 @@ async function submitDSR() {
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
         }
-
-        try {
-            await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDateTime,
-                    gotempname: gempname,
-                    gotempid: userid,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: name,
-                    gotiamatlat: parseFloat(dsrBody.gpsLatitude),
-                    gotiamatlong: parseFloat(dsrBody.gpsLongitude),
-                    gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-                })
-            });
-        } catch (e) { }
     } else {
         showToast('Offline Mode: DSR saved locally.', 'info');
     }
@@ -3071,27 +3062,53 @@ async function submitDSR() {
     const dsrElapsed = stopDsrTimer();
 
     showToast('DSR submitted successfully!', 'success');
-    showView('dsr-client-list-view');
-    fetchClientList();
 
-    // Show time-taken alert after a brief delay for the view transition
+    let timeStr = '';
     if (dsrElapsed > 0) {
-        setTimeout(() => {
-            let timeStr = '';
-            const hrs = Math.floor(dsrElapsed / 3600);
-            const mins = Math.floor((dsrElapsed % 3600) / 60);
-            const secs = dsrElapsed % 60;
-            if (hrs > 0) {
-                timeStr = `${hrs} hr ${mins} min ${secs} sec`;
-            } else if (mins > 0) {
-                timeStr = `${mins} min ${secs} sec`;
-            } else {
-                timeStr = `${secs} sec`;
-            }
-            alert(`✅ DSR Submitted!\n\nYou filled the DSR form in ${timeStr}.`);
-        }, 600);
+        const hrs = Math.floor(dsrElapsed / 3600);
+        const mins = Math.floor((dsrElapsed % 3600) / 60);
+        const secs = dsrElapsed % 60;
+        if (hrs > 0) {
+            timeStr = `${hrs} hr ${mins} min ${secs} sec`;
+        } else if (mins > 0) {
+            timeStr = `${mins} min ${secs} sec`;
+        } else {
+            timeStr = `${secs} sec`;
+        }
+    }
+
+    // Show Custom Modal alert -> User taps OK -> returns to Home Screen
+    showDsrSuccessModal(timeStr, name, dsrBody.gpsLatitude, dsrBody.gpsLongitude);
+}
+
+let pendingCheckoutData = null;
+
+function showDsrSuccessModal(timeStr, clientName, lat, lng) {
+    pendingCheckoutData = { clientName, lat, lng };
+    const msgEl = document.getElementById('dsr-success-modal-msg');
+    if (msgEl) {
+        msgEl.textContent = timeStr ? `You filled the DSR form in ${timeStr}.` : 'DSR submitted successfully!';
+    }
+    const modalEl = document.getElementById('dsr-success-modal');
+    if (modalEl) {
+        modalEl.style.display = 'flex';
     }
 }
+
+function onDsrSuccessOkClick() {
+    // 1. Hide modal immediately
+    const modalEl = document.getElementById('dsr-success-modal');
+    if (modalEl) {
+        modalEl.style.display = 'none';
+    }
+
+    // 2. Return to Home screen
+    showView('client-view');
+}
+
+// Bind to window object for guaranteed global availability in WebView
+window.showDsrSuccessModal = showDsrSuccessModal;
+window.onDsrSuccessOkClick = onDsrSuccessOkClick;
 
 async function submitBooking() {
     const clientName = document.getElementById('booking-client-name').value.trim();
@@ -3706,7 +3723,7 @@ async function handleDayEnd() {
                 gotiamatdate: currentDate,
                 gotempname: empid,
                 gotempid: session.userData.clientId || imeino,
-                gotinoutstatus: "CHECKOUT",
+                gotinoutstatus: "END",
                 gotiamatclient: "",
                 gotiamatlat: latVal,
                 gotiamatlong: lngVal,
@@ -4057,23 +4074,6 @@ async function submitNewClient() {
         } catch (e) {
             console.error('[NewClient] Third-party API failed:', e);
         }
-
-        try {
-            await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDateTime,
-                    gotempname: gempname,
-                    gotempid: userid,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: clientName,
-                    gotiamatlat: parseFloat(dsrBody.gpsLatitude),
-                    gotiamatlong: parseFloat(dsrBody.gpsLongitude),
-                    gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-                })
-            });
-        } catch (e) { }
     } else {
         showToast('Offline Mode: DSR saved locally.', 'info');
     }
@@ -4157,7 +4157,7 @@ async function submitNewClient() {
     updateMetricsUI();
 
     showToast('New client registered successfully!', 'success');
-    showView('checkin-view');
+    showView('client-view');
 }
 
 /**
@@ -4197,18 +4197,18 @@ function updateMetricsUI() {
 }
 
 /* ==========================================================================
-   REDESIGNED DSR PREMIUM WORKFORCE SYSTEM WORKFLOW ENGINE
+/* ==========================================================================
+   REDESIGNED DSR WORKFORCE SYSTEM WORKFLOW ENGINE
    ========================================================================== */
 
-let dsrActiveStep = 1;
-const dsrTotalSteps = 3;
-
 /**
- * Initializes the DSR premium multi-step wizard.
- * Called automatically from modified openDSRForm().
+ * Initializes the DSR form view.
  */
 function initDsrWizard(clientName, clientAddress) {
-    dsrActiveStep = 1;
+    const p1 = document.getElementById('dsr-panel-1');
+    const p2 = document.getElementById('dsr-panel-2');
+    if (p1) p1.classList.add('active');
+    if (p2) p2.classList.remove('active');
     
     // Update Hero Card details
     const heroNameEl = document.getElementById('hero-customer-name');
@@ -4231,60 +4231,8 @@ function initDsrWizard(clientName, clientAddress) {
         heroTimeEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Checked in ${hrs}:${mins} ${ampm}`;
     }
 
-    // Capture location display coordinates
-    const gpsCoordsEl = document.getElementById('dsr-gps-coordinates-display');
-    if (gpsCoordsEl) {
-        const curLatEl = document.getElementById('current-lat');
-        const curLngEl = document.getElementById('current-lng');
-        if (curLatEl && curLngEl && curLatEl.textContent.trim() !== '--') {
-            gpsCoordsEl.textContent = `${curLatEl.textContent.trim()}, ${curLngEl.textContent.trim()}`;
-        } else {
-            gpsCoordsEl.textContent = 'GPS location verified (mock coordinates)';
-        }
-    }
-
-    // Reset status chips & sync with original select
-    resetDsrStatusChips();
-    
     // Populate Hrs and Mins select options if they are empty
     populateDsrTimeDropdowns();
-
-    // Reset wizard steps UI
-    updateDsrWizardUI();
-    
-    // Setup stepper hover animations & anchor positioning fallback
-    setupDsrStepperInteractions();
-}
-
-/**
- * Reset premium status chips selection.
- */
-function resetDsrStatusChips() {
-    const chips = document.querySelectorAll('.dsr-status-chip');
-    chips.forEach(chip => {
-        chip.classList.remove('active');
-        chip.onclick = function() {
-            // Select chip
-            chips.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Sync with hidden original select option
-            const val = this.getAttribute('data-value');
-            const selectEl = document.getElementById('dsr-today-status');
-            if (selectEl) {
-                selectEl.value = val;
-                // Trigger change event for any listeners
-                const event = new Event('change', { bubbles: true });
-                selectEl.dispatchEvent(event);
-            }
-        };
-    });
-
-    // Make sure initial state of original select is empty
-    const selectEl = document.getElementById('dsr-today-status');
-    if (selectEl) {
-        selectEl.value = '';
-    }
 }
 
 /**
@@ -4312,267 +4260,79 @@ function populateDsrTimeDropdowns() {
 }
 
 /**
- * Handle Wizard Step Stepping
+ * Opens the Review summary screen after form validation.
  */
-/**
- * Handle Wizard Step Stepping
- */
-function goToDsrStep(stepNum) {
-    // REDESIGNED: Make jumping between steps easy and frictionless
-    dsrActiveStep = stepNum;
-    if (dsrActiveStep === dsrTotalSteps) {
-        buildDsrReviewSummary();
+function openDsrReviewScreen() {
+    const name = document.getElementById('dsr-customer-name').value.trim();
+    const status = document.getElementById('dsr-today-status').value;
+    const dateVal = document.getElementById('dsr-followup-date').value;
+
+    if (!name) {
+        showToast('Customer Name is missing', 'error');
+        return;
     }
-    updateDsrWizardUI();
+    if (!status) {
+        showToast("Today's Status is required. Please select a status.", 'warning');
+        return;
+    }
+    if (!dateVal) {
+        showToast("Follow-up date is required.", 'warning');
+        return;
+    }
+
+    // Build the Review screen summary details
+    buildDsrReviewSummary();
+
+    // Show Panel 2 (Review) and hide Panel 1 (Form)
+    const p1 = document.getElementById('dsr-panel-1');
+    const p2 = document.getElementById('dsr-panel-2');
+    if (p1) p1.classList.remove('active');
+    if (p2) p2.classList.add('active');
 }
 
 /**
- * Validates entries in a given step before advancing.
+ * Closes the Review screen and goes back to form edit.
  */
-function validateDsrStep(stepNum) {
-    if (stepNum === 1) {
-        const name = document.getElementById('dsr-customer-name').value.trim();
-        if (!name) {
-            showToast('Customer Name is missing', 'error');
-            return false;
-        }
-    } else if (stepNum === 2) {
-        const status = document.getElementById('dsr-today-status').value;
-        if (!status) {
-            showToast("Today's Status is required. Please select a status chip.", 'warning');
-            return false;
-        }
-    } else if (stepNum === 3) {
-        const dateVal = document.getElementById('dsr-followup-date').value;
-        if (!dateVal) {
-            showToast("Follow-up date is required.", 'warning');
-            return false;
-        }
-    }
-    return true;
+function closeDsrReviewScreen() {
+    const p1 = document.getElementById('dsr-panel-1');
+    const p2 = document.getElementById('dsr-panel-2');
+    if (p1) p1.classList.add('active');
+    if (p2) p2.classList.remove('active');
 }
 
 /**
- * Next button action
+ * Triggered from Review screen "Confirm & Submit" button.
  */
-function nextDsrWizardStep() {
-    if (dsrActiveStep < dsrTotalSteps) {
-        dsrActiveStep++;
-        updateDsrWizardUI();
-        
-        // Build the Review screen summary details
-        if (dsrActiveStep === dsrTotalSteps) {
-            buildDsrReviewSummary();
-        }
-    } else {
-        // REDESIGNED: Validate all data together on the final Review step submission
-        if (validateDsrStep(1) && validateDsrStep(2) && validateDsrStep(3)) {
-            // Trigger actual DSR form submission logic
-            const hiddenSubmitBtn = document.getElementById('hidden-dsr-submit-btn');
-            if (hiddenSubmitBtn) {
-                hiddenSubmitBtn.click();
-            } else {
-                submitDSR();
-            }
-        }
-    }
+function confirmAndSubmitDSR() {
+    submitDSR();
 }
 
 /**
- * Back button action
- */
-function prevDsrWizardStep() {
-    if (dsrActiveStep > 1) {
-        dsrActiveStep--;
-        updateDsrWizardUI();
-    } else {
-        // Go back to the client list view
-        const hiddenBackBtn = document.getElementById('hidden-dsr-back-btn');
-        if (hiddenBackBtn) {
-            hiddenBackBtn.click();
-        } else {
-            showView('dsr-client-list-view');
-        }
-    }
-}
-
-/**
- * Build dynamic reviews summary details on Step 4
+ * Build dynamic reviews summary details
  */
 function buildDsrReviewSummary() {
-    document.getElementById('dsr-review-name').textContent = document.getElementById('dsr-customer-name').value || '--';
-    document.getElementById('dsr-review-address').textContent = document.getElementById('dsr-office-address').value || '--';
-    document.getElementById('dsr-review-site').textContent = document.getElementById('dsr-site-details').value || '--';
-    document.getElementById('dsr-review-contact-person').textContent = document.getElementById('dsr-contact-person').value || '--';
-    document.getElementById('dsr-review-contact-no').textContent = document.getElementById('dsr-contact-number').value || '--';
-    document.getElementById('dsr-review-status').textContent = document.getElementById('dsr-today-status').value || '--';
-    document.getElementById('dsr-review-remark').textContent = document.getElementById('dsr-remark').value || '--';
-    document.getElementById('dsr-review-followup-date').textContent = document.getElementById('dsr-followup-date').value || '--';
+    const nameEl = document.getElementById('dsr-review-name');
+    const addrEl = document.getElementById('dsr-review-address');
+    const siteEl = document.getElementById('dsr-review-site');
+    const personEl = document.getElementById('dsr-review-contact-person');
+    const phoneEl = document.getElementById('dsr-review-contact-no');
+    const statusEl = document.getElementById('dsr-review-status');
+    const remarkEl = document.getElementById('dsr-review-remark');
+    const dateEl = document.getElementById('dsr-review-followup-date');
+    const timeEl = document.getElementById('dsr-review-followup-time');
+
+    if (nameEl) nameEl.textContent = document.getElementById('dsr-customer-name').value || '--';
+    if (addrEl) addrEl.textContent = document.getElementById('dsr-office-address').value || '--';
+    if (siteEl) siteEl.textContent = document.getElementById('dsr-site-details').value || '--';
+    if (personEl) personEl.textContent = document.getElementById('dsr-contact-person').value || '--';
+    if (phoneEl) phoneEl.textContent = document.getElementById('dsr-contact-number').value || '--';
+    if (statusEl) statusEl.textContent = document.getElementById('dsr-today-status').value || '--';
+    if (remarkEl) remarkEl.textContent = document.getElementById('dsr-remark').value || '--';
+    if (dateEl) dateEl.textContent = document.getElementById('dsr-followup-date').value || '--';
     
-    const hr = document.getElementById('dsr-followup-hours').value;
-    const min = document.getElementById('dsr-followup-minutes').value;
-    document.getElementById('dsr-review-followup-time').textContent = `${hr}:${min}`;
-}
-
-/**
- * Updates wizard panels view, progress meters, and indicator positions.
- */
-function updateDsrWizardUI() {
-    // Hide all panels and set active one
-    for (let i = 1; i <= dsrTotalSteps; i++) {
-        const panel = document.getElementById(`dsr-panel-${i}`);
-        const button = document.getElementById(`dsr-step-btn-${i}`);
-        if (panel) {
-            panel.classList.remove('active');
-            if (i === dsrActiveStep) {
-                panel.classList.add('active');
-            }
-        }
-        if (button) {
-            button.classList.remove('active', 'done');
-            if (i < dsrActiveStep) {
-                button.classList.add('done');
-            }
-            if (i === dsrActiveStep) {
-                button.classList.add('active');
-            }
-        }
-    }
-
-    // Position pointer to the active step
-    positionDsrPointer(dsrActiveStep);
-
-    // Update progress filled line
-    const lineFill = document.getElementById('lineFill');
-    if (lineFill) {
-        const pct = ((dsrActiveStep - 1) / (dsrTotalSteps - 1)) * 100;
-        lineFill.style.width = pct + '%';
-    }
-
-    // Update progress circle & bottom progress description
-    const progressPercent = Math.round((dsrActiveStep / dsrTotalSteps) * 100);
-    const circleBar = document.getElementById('ringProgress');
-    const percentVal = document.getElementById('pctLabel');
-    const stepsDesc = document.getElementById('footerSub');
-    const footerTitle = document.getElementById('footerTitle');
-    
-    if (circleBar) {
-        const RADIUS = 27;
-        const CIRC = 2 * Math.PI * RADIUS; // 169.646
-        const offset = CIRC - (progressPercent / 100) * CIRC;
-        circleBar.style.strokeDashoffset = offset;
-    }
-    if (percentVal) {
-        percentVal.textContent = `${progressPercent}%`;
-    }
-    if (stepsDesc) {
-        stepsDesc.textContent = `${dsrActiveStep} of ${dsrTotalSteps} steps completed`;
-    }
-    if (footerTitle) {
-        footerTitle.textContent = progressPercent >= 100 ? 'All set!' : "You're doing great!";
-    }
-
-    // Update bottom wizard buttons text
-    const nextBtn = document.getElementById('dsr-wizard-next-btn');
-    if (nextBtn) {
-        if (dsrActiveStep === dsrTotalSteps) {
-            nextBtn.innerHTML = `Submit DSR <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
-        } else {
-            nextBtn.innerHTML = `Continue <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
-        }
-    }
-}
-
-/**
- * Align DSR liquid-glass capsule indicator
- */
-function positionDsrPointer(index) {
-    const tabIndicator = document.getElementById('tabIndicator');
-    const steps = document.querySelectorAll('.step');
-    const stepsTrack = document.getElementById('stepsTrack');
-    if (!tabIndicator || !steps || !stepsTrack) return;
-
-    const el = steps[index - 1];
-    if (!el) return;
-    const circle = el.querySelector('.circle');
-    if (!circle) return;
-
-    const trackRect = stepsTrack.getBoundingClientRect();
-    const circleRect = circle.getBoundingClientRect();
-    const centerX = circleRect.left + circleRect.width / 2 - trackRect.left;
-
-    // Dynamically calculate half width of the indicator to support responsive sizing
-    const indicatorWidth = tabIndicator.offsetWidth || 52;
-    const indicatorHeight = tabIndicator.offsetHeight || 78;
-    const halfWidth = indicatorWidth / 2;
-
-    // Dynamically align vertically based on height
-    const topOffset = (circleRect.top - trackRect.top) - (indicatorHeight - circleRect.height) / 2;
-
-    tabIndicator.style.left = (centerX - halfWidth) + 'px';
-    tabIndicator.style.top = topOffset + 'px';
-}
-
-/**
- * Setup interactions on step tabs (temporary hover shifts, click bindings).
- */
-function setupDsrStepperInteractions() {
-    const steps = document.querySelectorAll('.step');
-    steps.forEach((step, i) => {
-        const stepIndex = i + 1;
-
-        // Mouseenter shifts pointer momentarily
-        step.addEventListener('mouseenter', () => {
-            // Only shift if it is already verified/accessible
-            let canAccess = true;
-            if (stepIndex > dsrActiveStep) {
-                for (let check = dsrActiveStep; check < stepIndex; check++) {
-                    if (check === 1) {
-                        const name = document.getElementById('dsr-customer-name').value.trim();
-                        if (!name) canAccess = false;
-                    } else if (check === 2) {
-                        const status = document.getElementById('dsr-today-status').value;
-                        if (!status) canAccess = false;
-                    } else if (check === 3) {
-                        const dateVal = document.getElementById('dsr-followup-date').value;
-                        if (!dateVal) canAccess = false;
-                    }
-                }
-            }
-            if (canAccess) {
-                positionDsrPointer(stepIndex);
-            }
-        });
-
-        // Mouseleave resets back to active step
-        step.addEventListener('mouseleave', () => {
-            positionDsrPointer(dsrActiveStep);
-        });
-    });
-    
-    // Add window resize listener once
-    if (!window.dsrResizeListenerAdded) {
-        window.addEventListener('resize', () => {
-            if (typeof dsrActiveStep !== 'undefined') {
-                positionDsrPointer(dsrActiveStep);
-            }
-        });
-        window.dsrResizeListenerAdded = true;
-    }
-}
-
-/**
- * Appends quick notes shortcuts in notes section
- */
-function appendDsrQuickNote(text) {
-    const remarkField = document.getElementById('dsr-remark');
-    if (remarkField) {
-        const curVal = remarkField.value.trim();
-        remarkField.value = curVal ? `${curVal}, ${text}` : text;
-        
-        // Trigger oninput explicitly
-        updateDsrRemarkCounter();
-    }
+    const hr = document.getElementById('dsr-followup-hours') ? document.getElementById('dsr-followup-hours').value : '00';
+    const min = document.getElementById('dsr-followup-minutes') ? document.getElementById('dsr-followup-minutes').value : '00';
+    if (timeEl) timeEl.textContent = `${hr}:${min}`;
 }
 
 /**
@@ -4586,4 +4346,5 @@ function updateDsrRemarkCounter() {
         counterField.textContent = `${len} / 250`;
     }
 }
+
 

@@ -1683,3 +1683,424 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 .dark-mode .dsr-live-timer {
   animation: timer-pulse-dark 2s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   UNIFIED LIQUID GLASS LUXURY THEME FOR ALL FORMS & REPORTS
+   Leave Application, Check-in (Others & New Client), Reports & Bookings
+   ========================================================================== */
+
+/* Dashboard views get clean white/light background matching Home page */
+#checkin-view,
+#leave-view,
+#reports-view,
+#reminders-view {
+  --orange: #FF7A1A;
+  --orange-deep: #F0630A;
+  --orange-light: #FF9142;
+  --ink: #1E2430;
+  --sub: #6A7180;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  background: #F8FAFC !important;
+  min-height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 !important;
+  color: var(--ink) !important;
+  box-sizing: border-box !important;
+}
+
+/* Form & Report views keep DSR warm liquid glass background */
+#leave-application-view,
+#leave-status-view,
+#new-client-view,
+#others-view,
+#start-end-day-report-view,
+#dsr-summary-report-view,
+#dsr-updated-list-view,
+#dsr-client-list-view,
+#booking-view {
+  --orange: #FF7A1A;
+  --orange-deep: #F0630A;
+  --orange-light: #FF9142;
+  --ink: #1E2430;
+  --sub: #6A7180;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  background:
+    radial-gradient(ellipse 760px 600px at 50% 34%, rgba(255,248,238,1) 0%, rgba(255,248,238,0) 70%),
+    radial-gradient(ellipse 1000px 780px at 50% 0%, #FFFDF9, transparent 62%),
+    radial-gradient(ellipse 560px 560px at 50% 55%, rgba(255,225,190,0.15), transparent 74%),
+    #FDF8F0 !important;
+  min-height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 !important;
+  color: var(--ink) !important;
+  box-sizing: border-box !important;
+}
+
+/* ── Hide old submenu headers in all views ── */
+#leave-view > .page-container > .page-header.submenu-header,
+#leave-application-view > .page-container > .page-header.submenu-header,
+#leave-status-view > .page-container > .page-header.submenu-header,
+#checkin-view > .page-container > .page-header.submenu-header,
+#new-client-view > .page-container > .page-header.submenu-header,
+#others-view > .page-container > .page-header.submenu-header,
+#reports-view > .page-container > .page-header.submenu-header,
+#start-end-day-report-view > .page-container > .page-header.submenu-header,
+#dsr-summary-report-view > .page-container > .page-header.submenu-header,
+#dsr-updated-list-view > .page-container > .page-header.submenu-header,
+#dsr-client-list-view > .page-container > .page-header.submenu-header,
+#booking-view > .page-container > .page-header.submenu-header,
+#reminders-view > .page-container > .page-header.submenu-header {
+  display: none !important;
+}
+
+/* ── Hide "Welcome Client/demo group" text everywhere ── */
+.submenu-client-name {
+  display: none !important;
+}
+
+/* ── New Inline Back Button Row ── */
+.inline-back-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px 8px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
+}
+.inline-back-row.client-list-white-header {
+  background: #FFFFFF !important;
+  border-radius: 20px !important;
+  padding: 10px 14px !important;
+  margin: 6px 4px 14px 4px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+.inline-back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(150deg, rgba(255,255,255,0.72), rgba(255,255,255,0.3));
+  border: 1px solid rgba(255,255,255,0.85);
+  backdrop-filter: blur(15px) saturate(185%);
+  -webkit-backdrop-filter: blur(15px) saturate(185%);
+  box-shadow: 0 10px 20px -6px rgba(30,36,48,0.2), inset 0 1.5px 0 rgba(255,255,255,0.9);
+  color: var(--orange-deep, #F0630A);
+  cursor: pointer;
+  flex: 0 0 40px;
+  transition: transform 0.18s ease;
+  position: relative;
+  isolation: isolate;
+}
+.inline-back-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(255,255,255,0.6), rgba(255,255,255,0) 55%);
+  pointer-events: none;
+}
+.inline-back-btn:active {
+  transform: scale(0.9) translateY(1px);
+}
+.inline-back-btn svg {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  z-index: 1;
+}
+.inline-page-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink, #1E2430);
+  letter-spacing: -0.2px;
+  margin: 0;
+  flex: 1;
+}
+
+/* ── Page content gets proper padding ── */
+#leave-view > .page-container > .page-content,
+#leave-application-view > .page-container > .page-content,
+#leave-status-view > .page-container > .page-content,
+#checkin-view > .page-container > .page-content,
+#new-client-view > .page-container > .page-content,
+#others-view > .page-container > .page-content,
+#reports-view > .page-container > .page-content,
+#start-end-day-report-view > .page-container > .page-content,
+#dsr-summary-report-view > .page-container > .page-content,
+#dsr-updated-list-view > .page-container > .page-content,
+#dsr-client-list-view > .page-container > .page-content,
+#booking-view > .page-container > .page-content,
+#reminders-view > .page-container > .page-content {
+  padding: 8px 16px 30px !important;
+}
+
+/* Glass Form Card Containers */
+#leave-application-view .glass-form-card,
+#new-client-view .glass-form-card,
+#others-view .glass-form-card,
+#booking-view .glass-form-card,
+#start-end-day-report-view .reports-card-container,
+#dsr-summary-report-view .reports-card-container,
+#dsr-updated-list-view .reports-card-container,
+.glass-form-card,
+.form-section-card,
+.form-section-accordion {
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.20)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  border-top-color: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(28px) saturate(210%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(210%) !important;
+  border-radius: 28px !important;
+  box-shadow: 
+    0 35px 70px -18px rgba(30, 36, 48, 0.18),
+    0 12px 24px -8px rgba(30, 36, 48, 0.12),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95) !important;
+  padding: 22px 18px !important;
+  margin-bottom: 20px !important;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease !important;
+}
+
+/* Form Titles - hidden, replaced by section-labels */
+.form-title {
+  display: none !important;
+}
+
+/* Accordion & Section Headers */
+.accordion-header, .form-section-card h4 {
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.3)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  border-radius: 16px !important;
+  padding: 12px 16px !important;
+  color: var(--ink, #1E2430) !important;
+  font-weight: 750 !important;
+  font-size: 15px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(30, 36, 48, 0.05) !important;
+}
+
+/* Glass Inputs, Selects & Textareas */
+#leave-application-view .glass-input,
+#leave-application-view .glass-select,
+#leave-application-view .glass-textarea,
+#new-client-view .glass-input,
+#new-client-view .glass-select,
+#new-client-view .glass-textarea,
+#others-view .glass-input,
+#others-view .glass-select,
+#others-view .glass-textarea,
+#booking-view .glass-input,
+#booking-view .glass-select,
+#booking-view .glass-textarea,
+#start-end-day-report-view input,
+#start-end-day-report-view select,
+#dsr-summary-report-view input,
+#dsr-summary-report-view select,
+.glass-input, .glass-select, .glass-textarea {
+  background: rgba(255, 255, 255, 0.65) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  border-radius: 16px !important;
+  padding: 12px 16px !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  color: var(--ink, #1E2430) !important;
+  box-shadow: inset 0 2px 4px rgba(30, 36, 48, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.2s ease !important;
+}
+
+#leave-application-view .glass-input:focus,
+#leave-application-view .glass-select:focus,
+#leave-application-view .glass-textarea:focus,
+#new-client-view .glass-input:focus,
+#new-client-view .glass-select:focus,
+#new-client-view .glass-textarea:focus,
+#others-view .glass-input:focus,
+#others-view .glass-select:focus,
+#others-view .glass-textarea:focus,
+#booking-view .glass-input:focus,
+#booking-view .glass-select:focus,
+#booking-view .glass-textarea:focus,
+.glass-input:focus, .glass-select:focus, .glass-textarea:focus {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: #FF7A1A !important;
+  box-shadow: 0 0 0 4px rgba(255, 122, 26, 0.22), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+  outline: none !important;
+}
+
+/* Upload Cards in New Client Form */
+.upload-card {
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.25)) !important;
+  border: 2px dashed rgba(255, 122, 26, 0.4) !important;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  text-align: center !important;
+  backdrop-filter: blur(15px) !important;
+  box-shadow: 0 10px 24px -8px rgba(240, 99, 10, 0.15) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease !important;
+  cursor: pointer !important;
+}
+.upload-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: #FF7A1A !important;
+}
+
+/* Primary Action Buttons */
+#leave-application-view .primary-btn,
+#new-client-view .primary-btn,
+#others-view .primary-btn,
+#booking-view .primary-btn,
+#new-client-view .primary-btn-small,
+.primary-btn {
+  background: linear-gradient(145deg, #FF7A1A, #F0630A) !important;
+  border: 1px solid rgba(255, 214, 180, 0.8) !important;
+  border-top-color: rgba(255, 255, 255, 0.95) !important;
+  color: #FFFFFF !important;
+  font-weight: 750 !important;
+  font-size: 15px !important;
+  letter-spacing: 0.5px !important;
+  border-radius: 18px !important;
+  padding: 14px 20px !important;
+  box-shadow: 
+    0 14px 28px -6px rgba(240, 99, 10, 0.42),
+    0 4px 10px -2px rgba(240, 99, 10, 0.25),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.75) !important;
+  cursor: pointer !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+}
+.primary-btn:active, .primary-btn-small:active {
+  transform: scale(0.97) translateY(1px) !important;
+  box-shadow: 0 4px 14px rgba(240, 99, 10, 0.3) !important;
+}
+
+/* Secondary Buttons */
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  color: var(--ink, #1E2430) !important;
+  font-weight: 700 !important;
+  border-radius: 18px !important;
+  padding: 14px 20px !important;
+  backdrop-filter: blur(15px) !important;
+  box-shadow: 0 6px 16px rgba(30, 36, 48, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  transition: transform 0.18s ease !important;
+}
+.secondary-btn:active {
+  transform: scale(0.97) !important;
+}
+
+/* Submenu Action Cards (Leave Dashboard, Check-in Dashboard, Reports Dashboard) */
+.action-card-submenu {
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.22)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(24px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+  border-radius: 24px !important;
+  padding: 18px 20px !important;
+  margin-bottom: 16px !important;
+  box-shadow: 
+    0 20px 40px -12px rgba(30, 36, 48, 0.14),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  cursor: pointer !important;
+}
+.action-card-submenu:active {
+  transform: scale(0.98) translateY(1px) !important;
+}
+.action-card-submenu-title {
+  font-size: 16px !important;
+  font-weight: 750 !important;
+  color: var(--ink, #1E2430) !important;
+}
+.action-card-submenu-desc {
+  font-size: 13px !important;
+  color: var(--sub, #6A7180) !important;
+}
+
+/* Glass Tables in Reports */
+.reports-card-container table, .submenu-cards-container table, table.report-table, table.premium-table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(24px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 40px -12px rgba(30, 36, 48, 0.14) !important;
+}
+
+.reports-card-container th, .submenu-cards-container th, table.report-table th, table.premium-table th {
+  background: linear-gradient(135deg, rgba(255, 122, 26, 0.9), rgba(240, 99, 10, 0.95)) !important;
+  color: #FFFFFF !important;
+  font-weight: 750 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  padding: 13px 14px !important;
+  border: none !important;
+}
+
+.reports-card-container td, .submenu-cards-container td, table.report-table td, table.premium-table td {
+  padding: 12px 14px !important;
+  font-size: 13.5px !important;
+  color: var(--ink, #1E2430) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ── DSR-style value-input for all forms ── */
+.value-input {
+  border: none !important;
+  background: transparent !important;
+  color: var(--ink, #1E2430) !important;
+  font-weight: 700 !important;
+  width: 100% !important;
+  outline: none !important;
+  font-family: inherit !important;
+  font-size: 14.5px !important;
+  padding: 0 !important;
+}
+.value-input::placeholder {
+  color: #B9BFC9 !important;
+  font-weight: 500 !important;
+}
+
+/* ── DSR-style notes-wrapper for textareas ── */
+.notes-wrapper {
+  border-radius: 20px !important;
+  padding: 12px 16px !important;
+  min-height: 60px !important;
+  border: 1px solid rgba(255,255,255,0.85) !important;
+  background: linear-gradient(150deg, rgba(255,255,255,0.72), rgba(255,255,255,0.3)) !important;
+  backdrop-filter: blur(15px) saturate(185%) !important;
+  -webkit-backdrop-filter: blur(15px) saturate(185%) !important;
+  box-shadow: 0 8px 32px rgba(30,36,48,0.04), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  margin-bottom: 14px !important;
+}
+.notes-wrapper textarea.notes,
+.notes-wrapper textarea {
+  border: none !important;
+  background: transparent !important;
+  color: var(--ink, #1E2430) !important;
+  font-weight: 600 !important;
+  width: 100% !important;
+  outline: none !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  resize: none !important;
+}
+
+/* ── Leave stat cards glass ── */
+.leave-stat-card {
+  background: linear-gradient(150deg, rgba(255,255,255,0.5), rgba(255,255,255,0.25)) !important;
+  border: 1px solid rgba(255,255,255,0.8) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(15px) !important;
+  box-shadow: 0 8px 20px rgba(30,36,48,0.06) !important;
+}

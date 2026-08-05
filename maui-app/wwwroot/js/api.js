@@ -6,7 +6,7 @@
  */
 
 // Skyway Production API URL
-let API_BASE_URL = 'https://fleettrackon.co.in/skywaydia';
+let API_BASE_URL = 'https://fleettrackon.co.in/pcsdia';
 
 function getApiBaseUrls() {
     const urls = [

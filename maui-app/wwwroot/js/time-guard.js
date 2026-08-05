@@ -24,43 +24,95 @@
      * Fetch standard time from server or fallback API
      * Returns: epoch milliseconds or null on failure
      */
+    /**
+     * Fetch time from a single endpoint via Date header
+     * Returns: { time: epoch_ms, source: string } or null
+     */
+    async function fetchTimeFromEndpoint(url, label) {
+        try {
+            const startTime = Date.now();
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 5000);
+
+            const response = await fetch(url, {
+                method: 'HEAD',
+                cache: 'no-store',
+                signal: controller.signal,
+                headers: { 'Bypass-Tunnel-Reminder': 'true' }
+            });
+            clearTimeout(timeout);
+
+            const latency = Date.now() - startTime;
+            const dateHeader = response.headers.get('Date');
+            if (dateHeader) {
+                const serverMs = new Date(dateHeader).getTime();
+                if (!isNaN(serverMs) && serverMs > 0) {
+                    const corrected = serverMs + (latency / 2);
+                    console.log(`[TimeGuard] ${label}: ${new Date(corrected).toISOString()} (latency ${latency}ms)`);
+                    return { time: corrected, source: label };
+                }
+            }
+        } catch (e) {
+            console.warn(`[TimeGuard] ${label} failed:`, e.message || e);
+        }
+        return null;
+    }
+
+    /**
+     * Fetch server time using multiple reliable sources with cross-validation.
+     * Uses Date headers from well-known servers (Google, Cloudflare, own API).
+     * Requires consensus: if sources disagree by > 2 min, returns null (safe fallback).
+     * Returns: epoch milliseconds or null on failure/disagreement.
+     */
     async function fetchServerTime() {
-        const endpoints = [
-            window.API_BASE_URL || 'https://fleettrackon.co.in/skywaydia',
-            'https://worldtimeapi.org/api/timezone/Asia/Kolkata',
-            'https://timeapi.io/api/Time/current/zone?timeZone=Asia/Kolkata'
+        const sources = [
+            { url: window.API_BASE_URL || 'https://fleettrackon.co.in/pcsdia', label: 'FleetTrackOn' },
+            { url: 'https://www.google.com/generate_204', label: 'Google' },
+            { url: 'https://cloudflare.com/cdn-cgi/trace', label: 'Cloudflare' }
         ];
 
-        for (const url of endpoints) {
-            try {
-                const startTime = Date.now();
-                // Simple request with bypass headers
-                const response = await fetch(url, {
-                    method: url.includes('fleettrackon') ? 'HEAD' : 'GET',
-                    cache: 'no-store',
-                    headers: { 'Bypass-Tunnel-Reminder': 'true' }
-                });
+        // Fire all requests in parallel for speed
+        const results = await Promise.all(
+            sources.map(s => fetchTimeFromEndpoint(s.url, s.label))
+        );
 
-                const latency = Date.now() - startTime;
-                
-                // Method 1: Get Date header (extremely reliable for main server)
-                const dateHeader = response.headers.get('Date');
-                if (dateHeader) {
-                    return new Date(dateHeader).getTime() + (latency / 2);
-                }
+        const validResults = results.filter(r => r !== null);
+        console.log(`[TimeGuard] Got ${validResults.length}/${sources.length} time sources`);
 
-                // Method 2: Fallback to JSON payload if available
-                if (response.ok && !url.includes('fleettrackon')) {
-                    const data = await response.json();
-                    const dateStr = data.datetime || data.dateTime;
-                    if (dateStr) {
-                        return new Date(dateStr).getTime() + (latency / 2);
-                    }
-                }
-            } catch (e) {
-                console.warn(`[TimeGuard] Time fetch failed for endpoint ${url}:`, e);
-            }
+        if (validResults.length === 0) {
+            console.warn('[TimeGuard] No time sources responded');
+            return null;
         }
+
+        // Single source: trust it only if it's Google or Cloudflare (highly reliable)
+        if (validResults.length === 1) {
+            const r = validResults[0];
+            if (r.source === 'Google' || r.source === 'Cloudflare') {
+                return r.time;
+            }
+            // Single unreliable source — don't block the user
+            console.warn(`[TimeGuard] Only ${r.source} responded, skipping enforcement`);
+            return null;
+        }
+
+        // Multiple sources: cross-validate (sources must agree within 2 minutes)
+        const TWO_MINUTES = 2 * 60 * 1000;
+        const times = validResults.map(r => r.time);
+        const median = times.sort((a, b) => a - b)[Math.floor(times.length / 2)];
+        
+        // Check if all sources agree with the median within 2 min
+        const agreeing = validResults.filter(r => Math.abs(r.time - median) < TWO_MINUTES);
+        
+        if (agreeing.length >= 2) {
+            // Use average of agreeing sources for best accuracy
+            const avg = agreeing.reduce((sum, r) => sum + r.time, 0) / agreeing.length;
+            console.log(`[TimeGuard] Consensus time from ${agreeing.length} sources: ${new Date(avg).toISOString()}`);
+            return avg;
+        }
+
+        // Sources disagree badly — one of them is wrong, don't block user
+        console.warn('[TimeGuard] Time sources disagree, skipping enforcement');
+        validResults.forEach(r => console.warn(`  ${r.source}: ${new Date(r.time).toISOString()}`));
         return null;
     }
 

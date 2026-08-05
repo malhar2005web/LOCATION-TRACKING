@@ -8,7 +8,7 @@ namespace LocationTracker.Services.Api
     {
         private readonly HttpClient _httpClient;
         private readonly IStorageService _storageService;
-        private readonly string _apiBaseUrl = "https://fleettrackon.co.in/skywaydia";
+        private readonly string _apiBaseUrl = "https://fleettrackon.co.in/pcsdia";
 
         public ApiService(IStorageService storageService)
         {

@@ -162,7 +162,7 @@ namespace LocationTracker.Platforms.Android
                                 };
 
                                  GpsDiagnostics.Log("Posting native coordinates payload to Skyway...");
-                                 var response = await client.PostAsJsonAsync("https://fleettrackon.co.in/skywaydia/receiveddata", payload);
+                                 var response = await client.PostAsJsonAsync("https://fleettrackon.co.in/pcsdia/receiveddata", payload);
                                 if (response.IsSuccessStatusCode)
                                 {
                                     _locationsSentCount++;

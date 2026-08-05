@@ -220,19 +220,77 @@
                             <div class="profile-dropdown-menu" id="profile-dropdown-menu">
                                 <a href="#" onclick="event.preventDefault(); alert('My Profile');" class="dropdown-item">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                    <span>My Profile</span>
+                                    <span data-i18n="my_profile">My Profile</span>
                                 </a>
                                 <a href="#" onclick="event.preventDefault(); event.stopPropagation(); toggleThemeMode();" class="dropdown-item theme-toggle-item">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                                    <span>Theme: <strong id="current-theme-label">Light</strong></span>
+                                    <span><span data-i18n="theme">Theme</span>: <strong id="current-theme-label">Light</strong></span>
                                     <div class="switch-control">
                                         <div class="switch-handle"></div>
                                     </div>
                                 </a>
+
                                 <div class="dropdown-divider"></div>
+
+                                <!-- Language Selector Dropdown -->
+                                <div class="dropdown-section-header" style="font-size: 0.7rem; font-weight: 700; color: #7A7A7A; padding: 4px 8px 2px; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="select_language">Language / भाषा</div>
+                                <div class="dropdown-item language-selector-item" style="padding: 4px 8px;" onclick="event.stopPropagation();">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                    <select id="app-language-select" class="glass-select" onchange="changeAppLanguage(this.value)" style="width: 100%; font-size: 0.82rem; font-weight: 700; border-radius: 8px; padding: 4px 6px; border: 1px solid rgba(0,0,0,0.12); background: rgba(255,255,255,0.85); outline: none; cursor: pointer; color: var(--ink);">
+                                        <option value="en">English 🇬🇧</option>
+                                        <option value="hi">हिन्दी (Hindi) 🇮🇳</option>
+                                        <option value="mr">मराठी (Marathi) 🇮🇳</option>
+                                    </select>
+                                </div>
+
+                                <div class="dropdown-divider"></div>
+
+                                <!-- Today's Stats Section -->
+                                <div class="dropdown-section-header" style="font-size: 0.7rem; font-weight: 700; color: #7A7A7A; padding: 4px 8px 2px; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="today_stats">Today's Stats / आज का आँकड़ा</div>
+                                <div class="dropdown-stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; padding: 4px 4px 8px 4px;">
+                                    <div class="stat-bubble-card" style="padding: 8px; border-radius: 10px; flex-direction: row; gap: 8px; min-height: unset; align-items: center; background: rgba(0,0,0,0.03);">
+                                        <div class="stat-icon-container" style="width: 28px; height: 28px; min-width: 28px; border-radius: 8px; background: var(--color-green-bg); color: var(--color-green);">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle></svg>
+                                        </div>
+                                        <div class="stat-bubble-info" style="display: flex; flex-direction: column;">
+                                            <span class="stat-number" id="stat-visits-count" style="font-size: 0.9rem; font-weight: 800; line-height: 1;">0</span>
+                                            <span class="stat-label" style="font-size: 0.65rem; color: #666;" data-i18n="total_visits">Total Visits</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bubble-card" style="padding: 8px; border-radius: 10px; flex-direction: row; gap: 8px; min-height: unset; align-items: center; background: rgba(0,0,0,0.03);">
+                                        <div class="stat-icon-container" style="width: 28px; height: 28px; min-width: 28px; border-radius: 8px; background: var(--color-orange-bg); color: var(--color-orange);">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                                        </div>
+                                        <div class="stat-bubble-info" style="display: flex; flex-direction: column;">
+                                            <span class="stat-number" id="stat-dsr-count" style="font-size: 0.9rem; font-weight: 800; line-height: 1;">0</span>
+                                            <span class="stat-label" style="font-size: 0.65rem; color: #666;" data-i18n="dsr_updates">DSR Updates</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bubble-card" style="padding: 8px; border-radius: 10px; flex-direction: row; gap: 8px; min-height: unset; align-items: center; background: rgba(0,0,0,0.03);">
+                                        <div class="stat-icon-container" style="width: 28px; height: 28px; min-width: 28px; border-radius: 8px; background: var(--color-blue-bg); color: #8C9EFF;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                        </div>
+                                        <div class="stat-bubble-info" style="display: flex; flex-direction: column;">
+                                            <span class="stat-number" id="stat-pending-tasks-count" style="font-size: 0.9rem; font-weight: 800; line-height: 1;">0</span>
+                                            <span class="stat-label" style="font-size: 0.65rem; color: #666;" data-i18n="pending_tasks">Pending Tasks</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bubble-card" style="padding: 8px; border-radius: 10px; flex-direction: row; gap: 8px; min-height: unset; align-items: center; background: rgba(0,0,0,0.03);">
+                                        <div class="stat-icon-container" style="width: 28px; height: 28px; min-width: 28px; border-radius: 8px; background: var(--color-amber-bg); color: #D4B44A;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                        </div>
+                                        <div class="stat-bubble-info" style="display: flex; flex-direction: column;">
+                                            <span class="stat-number" id="stat-duration-count" style="font-size: 0.85rem; font-weight: 800; line-height: 1;">00:00</span>
+                                            <span class="stat-label" style="font-size: 0.65rem; color: #666;" data-i18n="work_duration">Work Duration</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown-divider"></div>
+
                                 <a href="#" onclick="event.preventDefault(); handleLogout();" class="dropdown-item logout-link" style="color: var(--color-red) !important;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                                    <span>Logout</span>
+                                    <span data-i18n="logout">Logout</span>
                                 </a>
                             </div>
                         </div>
@@ -242,7 +300,7 @@
                                 <span class="user-name" id="client-welcome-name">demo admin2</span>
                                 <div class="checked-in-pill">
                                     <span class="pill-dot" id="client-status-dot"></span>
-                                    <span class="pill-text" id="client-status-indicator">Checked In</span>
+                                    <span class="pill-text" id="client-status-indicator" data-i18n="checked_in">Checked In</span>
                                 </div>
                             </div>
                             <p class="employee-id" id="client-id-display">Employee ID: 11</p>
@@ -250,171 +308,85 @@
                     </div>
                 </header>
 
+                <!-- Hidden elements for JS compatibility -->
+                <span id="client-welcome-greeting" style="display:none;"></span>
+                <span id="client-welcome-name-banner" style="display:none;"></span>
+
                 <!-- Page content container -->
                 <div class="dashboard-content">
                     
-                    <!-- Row 1: Welcome message and Stats Row -->
-                    <div class="welcome-stats-row">
-                        <!-- Welcome message card (Clickable to toggle stats) -->
-                        <div class="welcome-msg-card collapsible-card" onclick="toggleClientStats(event)">
-                            <div class="welcome-orb"></div>
-                            <div class="welcome-msg-content" style="width: 100%; display: flex; flex-direction: column; margin-left: 0;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                                    <div class="welcome-text-group">
-                                        <span class="welcome-subtitle" id="client-welcome-greeting">Good Morning,</span>
-                                        <h2 class="welcome-title"><span id="client-welcome-name-banner">demo admin2</span>,</h2>
-                                        <p class="welcome-desc">Let's make today productive. <span class="stats-tap-hint" style="font-weight: 600; text-decoration: underline; color: var(--color-orange, #F28C52); margin-left: 4px;">(Tap to view stats)</span></p>
-                                    </div>
-                                    <div id="stats-toggle-arrow" class="stats-toggle-arrow-circle" style="transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center; background: rgba(242, 140, 82, 0.15); color: #F28C52; border-radius: 50%; width: 36px; height: 36px; flex-shrink: 0; margin-left: 10px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                    </div>
-                                </div>
-                                
-                                <!-- Collapsible stats container -->
-                                <div id="client-stats-container" class="collapsible-stats-container" onclick="event.stopPropagation()">
-                                    <div class="stat-bubbles-grid" style="margin-top: 20px; width: 100%;">
-                                        <div class="stat-bubble-card">
-                                            <div class="stat-icon-container" style="background: var(--color-green-bg); color: var(--color-green);">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                                            </div>
-                                            <div class="stat-bubble-info">
-                                                <span class="stat-number" id="stat-visits-count">0</span>
-                                                <span class="stat-label">Total Visits <span class="stat-label-sub">Today</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="stat-bubble-card">
-                                            <div class="stat-icon-container" style="background: var(--color-orange-bg); color: var(--color-orange);">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                            </div>
-                                            <div class="stat-bubble-info">
-                                                <span class="stat-number" id="stat-dsr-count">0</span>
-                                                <span class="stat-label">DSR Updates <span class="stat-label-sub">Today</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="stat-bubble-card">
-                                            <div class="stat-icon-container" style="background: var(--color-blue-bg); color: #8C9EFF;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                                            </div>
-                                            <div class="stat-bubble-info">
-                                                <span class="stat-number" id="stat-pending-tasks-count">0</span>
-                                                <span class="stat-label">Pending Tasks <span class="stat-label-sub">Today</span></span>
-                                            </div>
-                                        </div>
-                                        <div class="stat-bubble-card">
-                                            <div class="stat-icon-container" style="background: var(--color-amber-bg); color: #D4B44A;">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                            </div>
-                                            <div class="stat-bubble-info">
-                                                <span class="stat-number" id="stat-duration-count">00:00 <span class="stat-unit">hrs</span></span>
-                                                <span class="stat-label">Work Duration <span class="stat-label-sub">Today</span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Row 2: Action Cards Grid (6 cards) -->
                     <div class="dashboard-action-grid">
                         
                         <!-- Day Start / End Toggle Card -->
                         <div class="action-card-premium" id="card-day-start" onclick="handleDayToggle()">
-                            <div class="card-premium-top">
-                                <div class="card-premium-icon" id="day-toggle-icon-container" style="background: rgba(242, 140, 82, 0.15); color: #F28C52;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                </div>
-                                <span class="card-premium-status-pill status-inactive" id="badge-day-start">Pending</span>
+                            <div class="card-premium-icon" id="day-toggle-icon-container" style="background: rgba(242, 140, 82, 0.15); color: #F28C52;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                             </div>
-                            <div class="card-premium-bottom">
-                                <div class="card-premium-text">
-                                    <h3 class="card-premium-title" id="day-toggle-title">Day Start</h3>
-                                    <p class="card-premium-desc" id="day-toggle-desc">Begin your workday and tracking</p>
-                                </div>
-                                <button class="card-premium-arrow-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                </button>
+                            <div class="card-premium-text">
+                                <h3 class="card-premium-title" id="day-toggle-title" data-i18n="day_start">Day Start</h3>
+                                <p id="day-toggle-desc" style="display:none;"></p>
                             </div>
+                            <span class="card-premium-status-pill status-inactive" id="badge-day-start">PENDING</span>
+                            <button class="card-premium-arrow-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
                         </div>
 
                         <!-- Check In Card -->
                         <div class="action-card-premium" id="card-check-in" onclick="handleCheckIn()">
-                            <div class="card-premium-top">
-                                <div class="card-premium-icon" style="background: rgba(216, 204, 255, 0.45); color: #8A70FF;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                </div>
-                                <span class="card-premium-status-pill status-inactive" id="badge-check-in">Pending</span>
+                            <div class="card-premium-icon" style="background: rgba(216, 204, 255, 0.45); color: #8A70FF;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                             </div>
-                            <div class="card-premium-bottom">
-                                <div class="card-premium-text">
-                                    <h3 class="card-premium-title">Check In</h3>
-                                    <p class="card-premium-desc">Mark daily branch attendance</p>
-                                </div>
-                                <button class="card-premium-arrow-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                </button>
+                            <div class="card-premium-text">
+                                <h3 class="card-premium-title" data-i18n="check_in">Check In</h3>
                             </div>
+                            <span class="card-premium-status-pill status-inactive" id="badge-check-in">PENDING</span>
+                            <button class="card-premium-arrow-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
                         </div>
 
                         <!-- Leave Management Card -->
                         <div class="action-card-premium" id="card-leave-page" onclick="handleLeavePage()">
-                            <div class="card-premium-top">
-                                <div class="card-premium-icon" style="background: rgba(138, 191, 154, 0.15); color: #8ABF9A;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                </div>
-                                <span class="card-premium-status-pill status-new">New</span>
+                            <div class="card-premium-icon" style="background: rgba(138, 191, 154, 0.15); color: #8ABF9A;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </div>
-                            <div class="card-premium-bottom">
-                                <div class="card-premium-text">
-                                    <h3 class="card-premium-title">Leave Management</h3>
-                                    <p class="card-premium-desc">Apply for leave and check status</p>
-                                </div>
-                                <button class="card-premium-arrow-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                </button>
+                            <div class="card-premium-text">
+                                <h3 class="card-premium-title" data-i18n="leave_mgmt">Leave Management</h3>
                             </div>
+                            <button class="card-premium-arrow-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
                         </div>
 
                         <!-- Reports Card -->
                         <div class="action-card-premium" id="card-reports" onclick="handleReports()">
-                            <div class="card-premium-top">
-                                <div class="card-premium-icon" style="background: rgba(220, 238, 255, 0.5); color: #5B8CFF;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                                </div>
+                            <div class="card-premium-icon" style="background: rgba(220, 238, 255, 0.5); color: #5B8CFF;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                             </div>
-                            <div class="card-premium-bottom">
-                                <div class="card-premium-text">
-                                    <h3 class="card-premium-title">Reports</h3>
-                                    <p class="card-premium-desc">View location history and logs</p>
-                                </div>
-                                <button class="card-premium-arrow-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                </button>
+                            <div class="card-premium-text">
+                                <h3 class="card-premium-title" data-i18n="reports">Reports</h3>
                             </div>
+                            <button class="card-premium-arrow-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
                         </div>
 
                         <!-- Today's Reminders Card -->
                         <div class="action-card-premium reminders-highlight" id="card-reminders" onclick="handleReminders()">
-                            <div class="card-premium-top">
-                                <div class="card-premium-icon" style="background: rgba(244, 208, 111, 0.18); color: #E5C15F;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                                </div>
-                                <span class="card-premium-counter" id="badge-reminders-count">0</span>
+                            <div class="card-premium-icon" style="background: rgba(255, 255, 255, 0.6); color: #D97706;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                             </div>
-                            <div class="card-premium-bottom">
-                                <div class="card-premium-text">
-                                    <h3 class="card-premium-title" id="badge-reminders-title">Today's Reminders</h3>
-                                    <p class="card-premium-desc" id="badge-reminders-desc">Check tasks and reminders</p>
-                                </div>
-                                <button class="card-premium-arrow-btn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                </button>
+                            <div class="card-premium-text">
+                                <h3 class="card-premium-title" id="badge-reminders-title" data-i18n="todays_reminders">Today's Reminders</h3>
+                                <p id="badge-reminders-desc" style="display:none;"></p>
                             </div>
+                            <span class="card-premium-counter" id="badge-reminders-count">0 PENDING</span>
+                            <button class="card-premium-arrow-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
                         </div>
-
-
 
                     </div>
 
@@ -580,30 +552,44 @@
     <!-- ============================================ -->
     <!-- VIEW: Check In Submenu                       -->
     <!-- ============================================ -->
+    <!-- ============================================ -->
+    <!-- VIEW: Check In Submenu                       -->
+    <!-- ============================================ -->
     <div id="checkin-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('client-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Check In Dashboard</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                            <div class="status-dot checked-in"></div>
-                            <span id="checkin-status-indicator">Checked In</span>
-                        </div>
+        <div class="page-container" style="max-width: 100%; padding: 0;">
+            <header class="dashboard-header" style="background: #FFFFFF; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+                <div class="header-left-group" style="display: flex; align-items: center;">
+                    <img src="img/skyway-logo.png" alt="Skyway Logo" style="height: 48px; margin-right: 12px; object-fit: contain;">
+                    
+                    <div class="client-avatar" style="width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--color-orange, #F28C52); margin-right: 10px; flex-shrink: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin: 0;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    
+                    <div class="header-user-info" style="display: flex; flex-direction: column;">
+                        <span class="user-name" style="font-weight: 800; font-size: 15px; color: var(--ink, #1E2430); line-height: 1.2;">demo group</span>
+                        <span class="user-id" style="font-size: 11px; color: var(--sub, #6A7180); font-weight: 500;">Employee ID: 6</span>
                     </div>
                 </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                
+                <div class="header-right-group">
+                    <div class="client-status-pill-container" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(72, 187, 120, 0.12); border: 1px solid rgba(72, 187, 120, 0.25); border-radius: 20px;">
+                        <div class="status-dot checked-in" style="width: 8px; height: 8px; border-radius: 50%; background: #48BB78; box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);"></div>
+                        <span style="font-size: 12px; font-weight: 700; color: #2F855A;">Checked In</span>
                     </div>
                 </div>
             </header>
 
-            <div class="page-content">
+            <div class="inline-back-row" style="padding: 14px 16px 10px;">
+                <button type="button" class="inline-back-btn" onclick="showView('client-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Check In Dashboard</h2>
+            </div>
+
+            <div class="page-content" style="padding: 10px 16px 30px;">
                 <div class="submenu-cards-container">
                     
                     <div class="action-card-submenu" onclick="handleUpdateDSR()">
@@ -654,29 +640,40 @@
     <!-- VIEW: Leave Submenu                          -->
     <!-- ============================================ -->
     <div id="leave-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('client-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Leave Management</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                            <div class="status-dot active" id="leave-status-dot"></div>
-                            <span id="leave-status-indicator">Online</span>
-                        </div>
+        <div class="page-container" style="max-width: 100%; padding: 0;">
+            <header class="dashboard-header" style="background: #FFFFFF; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+                <div class="header-left-group" style="display: flex; align-items: center;">
+                    <img src="img/skyway-logo.png" alt="Skyway Logo" style="height: 48px; margin-right: 12px; object-fit: contain;">
+                    
+                    <div class="client-avatar" style="width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--color-orange, #F28C52); margin-right: 10px; flex-shrink: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin: 0;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    
+                    <div class="header-user-info" style="display: flex; flex-direction: column;">
+                        <span class="user-name" style="font-weight: 800; font-size: 15px; color: var(--ink, #1E2430); line-height: 1.2;">demo group</span>
+                        <span class="user-id" style="font-size: 11px; color: var(--sub, #6A7180); font-weight: 500;">Employee ID: 6</span>
                     </div>
                 </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                
+                <div class="header-right-group">
+                    <div class="client-status-pill-container" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(72, 187, 120, 0.12); border: 1px solid rgba(72, 187, 120, 0.25); border-radius: 20px;">
+                        <div class="status-dot checked-in" style="width: 8px; height: 8px; border-radius: 50%; background: #48BB78; box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);"></div>
+                        <span style="font-size: 12px; font-weight: 700; color: #2F855A;">Checked In</span>
                     </div>
                 </div>
             </header>
 
-            <div class="page-content">
+            <div class="inline-back-row" style="padding: 14px 16px 10px;">
+                <button type="button" class="inline-back-btn" onclick="showView('client-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Leave Management</h2>
+            </div>
+
+            <div class="page-content" style="padding: 10px 16px 30px;">
                 <div class="submenu-cards-container">
                     
                     <div class="action-card-submenu" onclick="handleLeaveApplication()">
@@ -714,27 +711,38 @@
     <!-- VIEW: Reports Submenu                        -->
     <!-- ============================================ -->
     <div id="reports-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('client-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Reports Dashboard</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                            <div class="status-dot active" id="reports-status-dot"></div>
-                            <span id="reports-status-indicator">Online</span>
-                        </div>
+        <div class="page-container" style="max-width: 100%; padding: 0;">
+            <header class="dashboard-header" style="background: #FFFFFF; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+                <div class="header-left-group" style="display: flex; align-items: center;">
+                    <img src="img/skyway-logo.png" alt="Skyway Logo" style="height: 48px; margin-right: 12px; object-fit: contain;">
+                    
+                    <div class="client-avatar" style="width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--color-orange, #F28C52); margin-right: 10px; flex-shrink: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin: 0;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    
+                    <div class="header-user-info" style="display: flex; flex-direction: column;">
+                        <span class="user-name" style="font-weight: 800; font-size: 15px; color: var(--ink, #1E2430); line-height: 1.2;">demo group</span>
+                        <span class="user-id" style="font-size: 11px; color: var(--sub, #6A7180); font-weight: 500;">Employee ID: 6</span>
                     </div>
                 </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
+                
+                <div class="header-right-group">
+                    <div class="client-status-pill-container" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(72, 187, 120, 0.12); border: 1px solid rgba(72, 187, 120, 0.25); border-radius: 20px;">
+                        <div class="status-dot checked-in" style="width: 8px; height: 8px; border-radius: 50%; background: #48BB78; box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);"></div>
+                        <span style="font-size: 12px; font-weight: 700; color: #2F855A;">Checked In</span>
                     </div>
                 </div>
             </header>
+
+            <div class="inline-back-row" style="padding: 14px 16px 10px;">
+                <button type="button" class="inline-back-btn" onclick="showView('client-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Reports Dashboard</h2>
+            </div>
 
             <div class="page-content">
                 <div class="submenu-cards-container">
@@ -786,24 +794,18 @@
     <!-- ============================================ -->
     <!-- VIEW: Start End Day Report                   -->
     <!-- ============================================ -->
-    <div id="start-end-day-report-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="goBackFromReport()">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Start End Day</h2>
-                        <span class="submenu-client-name">Attendance Summary</span>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
-                    </div>
-                </div>
-            </header>
+    <div id="start-end-day-report-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="goBackFromReport()" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Start End Day</h2>
+            </div>
 
             <div class="page-content">
                 <div class="glass-form-card" style="padding: 16px; margin-bottom: 16px;">
@@ -856,24 +858,18 @@
     <!-- ============================================ -->
     <!-- VIEW: DSR Summary Report                     -->
     <!-- ============================================ -->
-    <div id="dsr-summary-report-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="goBackFromReport()">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">DSR Summary Report</h2>
-                        <span class="submenu-client-name">Performance Summary</span>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
-                    </div>
-                </div>
-            </header>
+    <div id="dsr-summary-report-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="goBackFromReport()" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">DSR Summary Report</h2>
+            </div>
 
             <div class="page-content">
                 <div class="glass-form-card" style="padding: 16px; margin-bottom: 16px;">
@@ -952,24 +948,18 @@
     <!-- ============================================ -->
     <!-- VIEW: DSR Updated List                       -->
     <!-- ============================================ -->
-    <div id="dsr-updated-list-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="goBackFromReport()">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Updated DSR List</h2>
-                        <span class="submenu-client-name">DSR Submissions</span>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
-                    </div>
-                </div>
-            </header>
+    <div id="dsr-updated-list-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="goBackFromReport()" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Updated DSR List</h2>
+            </div>
 
             <div class="page-content">
                 <div class="glass-form-card" style="padding: 16px; margin-bottom: 16px;">
@@ -1026,35 +1016,23 @@
     <!-- ============================================ -->
     <!-- VIEW: DSR Client List                        -->
     <!-- ============================================ -->
-    <div id="dsr-client-list-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('checkin-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Client List</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                            <div class="status-dot active" id="dsrlist-status-dot"></div>
-                            <span id="dsrlist-status-indicator">Online</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-right" style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
-                    </div>
-                    <button type="button" class="icon-btn glass-chip" onclick="fetchClientList()" title="Refresh" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; padding: 0; background: rgba(255, 255, 255, 0.2) !important; border: 1px solid rgba(255,255,255,0.4) !important; color: var(--ink); box-shadow: none !important;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                    </button>
-                </div>
-            </header>
+    <div id="dsr-client-list-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
 
-            <div class="page-content">
-                <div class="glass-form-card" style="margin-bottom: 16px; padding: 16px;">
-                    <div class="search-flex-row" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 0;">
+        <div class="page-container dsr-page-container glass-shell" style="padding: 8px 4px 30px;">
+            <div class="inline-back-row client-list-white-header">
+                <button type="button" class="inline-back-btn" onclick="showView('checkin-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title" style="margin-left: 8px;">Client List</h2>
+                <img src="img/skyway-logo.png" alt="Skyway Logo" style="height: 42px; object-fit: contain; flex-shrink: 0; margin-left: auto;">
+            </div>
+
+            <div class="page-content" style="padding: 4px 4px 30px !important;">
+                <div class="glass-form-card" style="margin-bottom: 14px; padding: 14px 12px; width: 100%; border-radius: 20px;">
+                    <div class="search-flex-row" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 0;">
                         <div class="search-input-group" style="width: 100%;">
                             <input type="text" id="search-client-input" placeholder="Search Client..." class="glass-input" style="width: 100%;" oninput="filterClientList()">
                         </div>
@@ -1064,14 +1042,14 @@
                     </div>
                 </div>
 
-                <div class="table-container-card" style="width: 100%; overflow-x: hidden;">
-                    <table class="premium-table" id="client-list-table" style="table-layout: fixed; width: 100%; min-width: unset;">
+                <div class="table-container-card" style="width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 2px; border-radius: 20px; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.8);">
+                    <table class="premium-table" id="client-list-table" style="width: 100%; min-width: 100%;">
                         <thead>
                             <tr>
-                                <th style="width: 12%; padding: 10px 8px; text-align: center;">SR</th>
-                                <th style="width: 35%; padding: 10px 8px;">CLIENT NAME</th>
-                                <th style="width: 30%; padding: 10px 8px;">ADDRESS</th>
-                                <th style="width: 23%; padding: 10px 4px; text-align: center;">ACTION</th>
+                                <th style="width: 36px; padding: 10px 4px; text-align: center;">SR</th>
+                                <th style="padding: 10px 8px;">CLIENT NAME</th>
+                                <th style="padding: 10px 8px;">ADDRESS</th>
+                                <th style="width: 110px; padding: 10px 4px; text-align: center;">ACTION</th>
                             </tr>
                         </thead>
                         <tbody id="client-list-tbody">
@@ -1086,45 +1064,72 @@
     <!-- ============================================ -->
     <!-- VIEW: Booking Form                           -->
     <!-- ============================================ -->
-    <div id="booking-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('dsr-client-list-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Booking Page</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                    </div>
-                </div>
-            </header>
+    <div id="booking-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="showView('dsr-client-list-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Booking Page</h2>
+            </div>
 
             <div class="page-content">
-                <div class="glass-form-card" style="padding: 20px;">
-                    <h3 class="form-title">BOOKING PAGE</h3>
-                    <div class="input-group">
-                        <label class="input-label">Client Name</label>
-                        <input type="text" id="booking-client-name" class="glass-input disabled" readonly>
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Site Name</label>
-                        <input type="text" id="booking-site-name" class="glass-input" placeholder="Site Name">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Office Address</label>
-                        <input type="text" id="booking-office-address" class="glass-input" placeholder="Office Address">
-                    </div>
-                    <div class="input-row-flex" style="display: flex; gap: 12px; align-items: flex-end;">
-                        <div class="input-group" style="flex: 1;">
-                            <label class="input-label">Quantity</label>
-                            <input type="text" id="booking-quantity" class="glass-input" placeholder="Quantity">
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V8l6-4 6 4v13"/></svg></div>
+                    <span>Booking Details</span>
+                </div>
+
+                <div class="list-group glass floaty">
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+                        <div class="field-text">
+                            <label>Client Name</label>
+                            <input type="text" id="booking-client-name" class="value-input" readonly style="opacity: 0.8;">
                         </div>
-                        <div class="quantity-label-m3" style="padding-bottom: 12px; font-weight: 700; color: var(--color-text-primary);">M3</div>
                     </div>
-                    <div class="input-group">
-                        <label class="input-label">Grade</label>
-                        <select id="booking-grade" class="glass-select">
+
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                        <div class="field-text">
+                            <label>Site Name</label>
+                            <input type="text" id="booking-site-name" class="value-input" placeholder="Site Name">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                        <div class="field-text">
+                            <label>Office Address</label>
+                            <input type="text" id="booking-office-address" class="value-input" placeholder="Office Address">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+                        <div class="field-text" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                            <div style="flex: 1;">
+                                <label>Quantity</label>
+                                <input type="text" id="booking-quantity" class="value-input" placeholder="Quantity">
+                            </div>
+                            <div style="font-weight: 800; color: var(--orange-deep); font-size: 14px; padding-right: 4px;">M3</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+                    <span>Grade Specification</span>
+                </div>
+
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg></div>
+                    <div class="field-text" style="width: 100%;">
+                        <label>Grade</label>
+                        <select id="booking-grade" class="glass-select" style="border: none !important; background: transparent !important; width: 100%; color: var(--ink); font-weight: 700; font-size: 14.5px; outline: none; padding: 4px 0 0 0; font-family: inherit;">
                             <option value="">0 selected</option>
                             <option value="M10">M10</option>
                             <option value="M15">M15</option>
@@ -1136,40 +1141,64 @@
                             <option value="Others">Others</option>
                         </select>
                     </div>
-                    <div class="input-group">
-                        <input type="text" id="booking-grade-other" class="glass-input" placeholder="Other Grade">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Remark</label>
-                        <input type="text" id="booking-remark" class="glass-input" placeholder="Remark">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Schedule Date</label>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 0.8rem; color: var(--color-text-secondary); width: 45px; flex-shrink: 0;">From:</span>
-                                <input type="date" id="booking-schedule-from" class="glass-input" style="flex: 1;">
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 0.8rem; color: var(--color-text-secondary); width: 45px; flex-shrink: 0;">Till:</span>
-                                <input type="date" id="booking-schedule-till" class="glass-input" style="flex: 1;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Dispatch Time</label>
-                        <div style="display: flex; gap: 12px; align-items: center;">
-                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Hrs:</span>
-                            <select id="booking-dispatch-hours" class="glass-select" style="flex: 1;"></select>
-                            <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Min:</span>
-                            <select id="booking-dispatch-minutes" class="glass-select" style="flex: 1;"></select>
-                        </div>
-                    </div>
+                </div>
 
-                    <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button class="primary-btn" onclick="submitBooking()" style="flex: 1;">GENERATE</button>
-                        <button class="secondary-btn" onclick="showView('dsr-client-list-view')" style="flex: 1;">BACK</button>
+                <div class="field glass floaty" style="margin-bottom: 14px;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+                    <div class="field-text">
+                        <label>Other Grade</label>
+                        <input type="text" id="booking-grade-other" class="value-input" placeholder="Other Grade">
                     </div>
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+                    <span>Remark</span>
+                </div>
+                <div class="notes-wrapper" style="min-height: 60px; padding: 10px 14px;">
+                    <input type="text" id="booking-remark" class="value-input" placeholder="Remark">
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+                    <span>Schedule Date</span>
+                </div>
+                <div class="list-group glass floaty">
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg></div>
+                        <div class="field-text">
+                            <label>From Date</label>
+                            <input type="date" id="booking-schedule-from" class="value-input">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg></div>
+                        <div class="field-text">
+                            <label>Till Date</label>
+                            <input type="date" id="booking-schedule-till" class="value-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                    <span>Dispatch Time</span>
+                </div>
+                <div class="field glass floaty" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                        <span style="font-size: 14px; font-weight: 600; color: var(--sub);">Hrs:</span>
+                        <select id="booking-dispatch-hours" class="glass-select" style="flex: 1; border: none; background: transparent; color: var(--ink); font-weight: 700; font-size: 15px; outline: none; padding: 0;"></select>
+                    </div>
+                    <div style="width: 1px; height: 24px; background: rgba(255, 255, 255, 0.25);"></div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                        <span style="font-size: 14px; font-weight: 600; color: var(--sub); margin-left: 8px;">Min:</span>
+                        <select id="booking-dispatch-minutes" class="glass-select" style="flex: 1; border: none; background: transparent; color: var(--ink); font-weight: 700; font-size: 15px; outline: none; padding: 0;"></select>
+                    </div>
+                </div>
+
+                <div class="actions" style="margin-top: 24px; display: flex; gap: 12px;">
+                    <button type="button" class="btn primary glass-orange" onclick="submitBooking()" style="flex: 1;">GENERATE</button>
+                    <button type="button" class="btn secondary glass" onclick="showView('dsr-client-list-view')" style="flex: 1;">BACK</button>
                 </div>
             </div>
         </div>
@@ -1203,46 +1232,12 @@
         <div class="bg-blob blob3"></div>
 
         <div class="page-container dsr-page-container glass-shell">
-            <!-- Header -->
-            <div class="header">
-                <button type="button" class="icon-btn glass-chip" id="backBtn" onclick="showView('dsr-client-list-view')" title="Back">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            <!-- Inline Back Header -->
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" id="backBtn" onclick="showView('dsr-client-list-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
                 </button>
-                <div class="header-title">
-                    <h1>Existing Client</h1>
-                    <span class="submenu-client-name">Welcome demo admin2</span>
-                </div>
-                <button type="button" class="icon-btn glass-chip menu" title="More">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
-                </button>
-            </div>
-
-            <!-- Step indicator -->
-            <div class="steps-wrap">
-                <div class="steps-line">
-                    <div class="steps-line-fill" id="lineFill"></div>
-                </div>
-                <div class="steps-track" id="stepsTrack">
-                    <div class="tab-indicator" id="tabIndicator"></div>
-                    <div class="step" data-step="0" id="dsr-step-btn-1" onclick="goToDsrStep(1)">
-                        <div class="circle">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>
-                        </div>
-                        <div class="label">Client</div>
-                    </div>
-                    <div class="step" data-step="1" id="dsr-step-btn-2" onclick="goToDsrStep(2)">
-                        <div class="circle">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                        </div>
-                        <div class="label">Visit</div>
-                    </div>
-                    <div class="step" data-step="2" id="dsr-step-btn-3" onclick="goToDsrStep(3)">
-                        <div class="circle">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                        </div>
-                        <div class="label">Review</div>
-                    </div>
-                </div>
+                <h2 class="inline-page-title">Existing Client DSR</h2>
             </div>
 
             <!-- Client / location hero card -->
@@ -1275,10 +1270,10 @@
                 </div>
             </div>
 
-            <!-- Dynamic Step Panels -->
+            <!-- Dynamic Panels (Panel 1: Form, Panel 2: Review) -->
             <div class="dsr-wizard-panels">
                 
-                <!-- STEP 1: CLIENT DETAILS (screen0 in zip) -->
+                <!-- COMBINED DSR FORM PANEL -->
                 <div class="dsr-wizard-panel active" id="dsr-panel-1">
                     <div class="section-label">
                         <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V8l6-4 6 4v13"/></svg></div>
@@ -1295,14 +1290,7 @@
                             </div>
                         </div>
 
-                        <div class="field editable">
-                            <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-                            <div class="field-text">
-                                <label>Office Address</label>
-                                <textarea id="dsr-office-address" class="value-input" style="border: none; background: transparent; color: var(--ink); font-weight: 700; width: 100%; outline: none; resize: none; font-family: inherit; font-size: 14.5px; padding: 0;" placeholder="Enter Office Address" rows="2"></textarea>
-                            </div>
-                            <svg class="edit-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                        </div>
+                        <input type="hidden" id="dsr-office-address">
 
                         <div class="field">
                             <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
@@ -1341,36 +1329,18 @@
                         <span>Visit Details</span>
                     </div>
 
-                    <div class="today-status-label">Today Status</div>
-                    <select id="dsr-today-status" style="display: none;">
-                        <option value="">Please Select</option>
-                        <option value="Visit Done">Visit Done</option>
-                        <option value="Follow Up">Follow Up</option>
-                        <option value="Busy">Busy</option>
-                        <option value="Closed">Closed</option>
-                        <option value="Rescheduled">Rescheduled</option>
-                    </select>
-
-                    <div class="pill-grid" id="dsr-status-chips">
-                        <div class="status-pill dsr-status-chip glass" data-value="Visit Done">
-                            <div class="pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
-                            <span>Visit Done</span>
-                        </div>
-                        <div class="status-pill dsr-status-chip glass" data-value="Follow Up">
-                            <div class="pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-                            <span>Follow-up</span>
-                        </div>
-                        <div class="status-pill dsr-status-chip glass" data-value="Busy">
-                            <div class="pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
-                            <span>Busy</span>
-                        </div>
-                        <div class="status-pill dsr-status-chip glass" data-value="Closed">
-                            <div class="pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
-                            <span>Closed</span>
-                        </div>
-                        <div class="status-pill dsr-status-chip glass" data-value="Rescheduled">
-                            <div class="pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
-                            <span>Rescheduled</span>
+                    <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                        <div class="field-text" style="width: 100%;">
+                            <label>Today Status</label>
+                            <select id="dsr-today-status" class="glass-select" style="border: none !important; background: transparent !important; width: 100%; color: var(--ink); font-weight: 700; font-size: 14.5px; outline: none; padding: 4px 0 0 0; font-family: inherit;">
+                                <option value="">Please Select Status</option>
+                                <option value="Visit Done">Visit Done</option>
+                                <option value="Follow Up">Follow Up</option>
+                                <option value="Busy">Busy</option>
+                                <option value="Closed">Closed</option>
+                                <option value="Rescheduled">Rescheduled</option>
+                            </select>
                         </div>
                     </div>
 
@@ -1378,26 +1348,16 @@
                         <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
                         <span>Remark / Visit Notes</span>
                     </div>
-                    <div class="notes-wrapper">
-                        <textarea id="dsr-remark" class="notes" maxlength="250" placeholder="Add your remarks about today's visit..." oninput="updateDsrRemarkCounter()"></textarea>
+                    <div class="notes-wrapper" style="min-height: 60px; padding: 10px 14px;">
+                        <textarea id="dsr-remark" class="notes" maxlength="250" placeholder="Add your remarks about today's visit..." rows="2" style="min-height: 50px; height: 50px; resize: none;" oninput="updateDsrRemarkCounter()"></textarea>
                     </div>
-                    <div class="char-count" id="dsr-remark-counter" style="margin-top: 6px;">0 / 250</div>
-                </div>
-
-                <!-- STEP 2: VISIT DETAILS (screen1 in zip) -->
-                <div class="dsr-wizard-panel" id="dsr-panel-2">
-                    <div style="display: none !important;">
-                        <!-- Keep inputs/labels to prevent JS / C# ReferenceErrors -->
-                        <div id="dsr-review-followup-date"></div>
-                        <div id="dsr-review-followup-time"></div>
-                        <span id="dsr-gps-coordinates-display">Detecting current location...</span>
-                    </div>
+                    <div class="char-count" id="dsr-remark-counter" style="margin-top: 4px; margin-bottom: 14px;">0 / 250</div>
 
                     <div class="section-label">
                         <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
                         <span>Followup Date</span>
                     </div>
-                    <div class="field glass floaty" style="position: relative;">
+                    <div class="field glass floaty" style="position: relative; margin-bottom: 14px;">
                         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
                         <input type="date" id="dsr-followup-date" class="glass-input" style="border: none !important; background: transparent !important; width: 100%; color: var(--ink); font-weight: 600; font-size: 15px; outline: none; padding: 0;">
                     </div>
@@ -1406,7 +1366,7 @@
                         <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
                         <span>Followup Time</span>
                     </div>
-                    <div class="field glass floaty" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px;">
+                    <div class="field glass floaty" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; margin-bottom: 20px;">
                         <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
                             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
                             <span style="font-size: 14px; font-weight: 600; color: var(--sub);">Hrs:</span>
@@ -1419,38 +1379,24 @@
                         </div>
                     </div>
 
-                    <div class="section-label">
-                        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM1 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg></div>
-                        <span>Add Visit Media (optional)</span>
-                    </div>
+                    <!-- Hidden element to keep references intact -->
+                    <span id="dsr-gps-coordinates-display" style="display: none;">Detecting current location...</span>
 
-                    <div class="media-row">
-                        <div class="media-card glass floaty">
-                            <div class="m-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
-                            <div class="m-title">Add Photo</div>
-                            <div class="m-sub">Upload site photo</div>
-                        </div>
-                        <div class="media-card glass floaty">
-                            <div class="m-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4M9 22h6"/></svg></div>
-                            <div class="m-title">Voice Note</div>
-                            <div class="m-sub">Record audio note</div>
-                        </div>
-                    </div>
-
-                    <div class="section-label">
-                        <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
-                        <span>Quick Notes (optional)</span>
-                    </div>
-                    <div class="pill-grid">
-                        <div class="quick-note-pill glass" onclick="appendDsrQuickNote('Customer Busy')">Customer Busy</div>
-                        <div class="quick-note-pill glass" onclick="appendDsrQuickNote('Visit Completed')">Visit Completed</div>
-                        <div class="quick-note-pill glass" onclick="appendDsrQuickNote('Payment Pending')">Payment Pending</div>
-                        <div class="quick-note-pill glass" onclick="appendDsrQuickNote('Call Later')">Call Later</div>
+                    <!-- Form Action Button -->
+                    <div class="actions" style="margin-top: 10px;">
+                        <button type="button" class="btn secondary glass" onclick="showView('dsr-client-list-view')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            Back
+                        </button>
+                        <button type="button" class="btn primary glass-orange" onclick="openDsrReviewScreen()">
+                            Submit DSR
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                        </button>
                     </div>
                 </div>
 
-                <!-- STEP 3: REVIEW SUMMARY -->
-                <div class="dsr-wizard-panel" id="dsr-panel-3">
+                <!-- STEP 2: REVIEW SUMMARY PANEL -->
+                <div class="dsr-wizard-panel" id="dsr-panel-2">
                     <!-- Big check/review icon at the top -->
                     <div class="review-header" style="text-align: center; padding: 12px 0 20px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
                         <div class="avatar glass-chip orange-chip" style="width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255, 122, 26, 0.08) !important; border: 1px solid rgba(255, 122, 26, 0.24) !important;">
@@ -1511,21 +1457,33 @@
                                 <div style="font-size: 10px; text-transform: uppercase; color: var(--sub); font-weight: 600; margin-bottom: 2px;">Remarks / Notes</div>
                                 <div id="dsr-review-remark" style="font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.4; white-space: pre-wrap; word-break: break-word;">--</div>
                             </div>
+                            <div style="height: 1px; background: rgba(140,150,165,0.08);"></div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div>
+                                    <div style="font-size: 10px; text-transform: uppercase; color: var(--sub); font-weight: 600; margin-bottom: 2px;">Followup Date</div>
+                                    <div id="dsr-review-followup-date" style="font-size: 13px; font-weight: 700; color: var(--ink);">--</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 10px; text-transform: uppercase; color: var(--sub); font-weight: 600; margin-bottom: 2px;">Followup Time</div>
+                                    <div id="dsr-review-followup-time" style="font-size: 13px; font-weight: 700; color: var(--ink);">--</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Bottom Action Bar inside page-content -->
-            <div class="actions">
-                <button type="button" class="btn secondary glass" id="dsr-wizard-back-btn" onclick="prevDsrWizardStep()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                    Back
-                </button>
-                <button type="button" class="btn primary glass-orange" id="dsr-wizard-next-btn" onclick="nextDsrWizardStep()">
-                    Continue
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                </button>
+                    <!-- Review Actions -->
+                    <div class="actions">
+                        <button type="button" class="btn secondary glass" onclick="closeDsrReviewScreen()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            Edit Form
+                        </button>
+                        <button type="button" class="btn primary glass-orange" onclick="confirmAndSubmitDSR()">
+                            Confirm &amp; Submit
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Keep existing original buttons hidden to guarantee full backwards compatibility for original actions -->
@@ -1533,59 +1491,24 @@
                 <button class="primary-btn" id="hidden-dsr-submit-btn" onclick="submitDSR()">SUBMIT</button>
                 <button class="secondary-btn" id="hidden-dsr-back-btn" onclick="showView('dsr-client-list-view')">BACK</button>
             </div>
-
-            <!-- Progress Ring Footer -->
-            <div class="footer-card glass floaty">
-                <div class="footer-top">
-                    <div class="progress-ring">
-                        <svg width="64" height="64" viewBox="0 0 64 64">
-                            <circle cx="32" cy="32" r="27" fill="none" stroke="rgba(140,150,165,0.18)" stroke-width="6"/>
-                            <circle id="ringProgress" cx="32" cy="32" r="27" fill="none" stroke="url(#gradRing)" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="127.2"/>
-                            <defs>
-                                <linearGradient id="gradRing" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#FF9142"/>
-                                    <stop offset="100%" stop-color="#F0630A"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                        <div class="pct" id="pctLabel">25%</div>
-                    </div>
-                    <div class="txt">
-                        <strong id="footerTitle">You're doing great!</strong>
-                        <span id="footerSub">1 of 4 steps completed</span>
-                    </div>
-                </div>
-                <div class="tip-row glass-orange-soft">
-                    <div class="shield glass-chip">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6z"/></svg>
-                    </div>
-                    <div class="tip-txt"><strong>Tip:</strong> Add clear visit notes for better tracking</div>
-                </div>
-            </div>
         </div>
     </div>
 
     <!-- ============================================ -->
     <!-- VIEW: New Client Registration Form           -->
     <!-- ============================================ -->
-    <div id="new-client-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('checkin-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">New Client</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
-                    </div>
-                </div>
-            </header>
+    <div id="new-client-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="showView('checkin-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">New Client</h2>
+            </div>
 
             <div class="page-content">
                 <div class="glass-form-card" style="padding: 20px;">
@@ -1850,115 +1773,148 @@
     <!-- ============================================ -->
     <!-- VIEW: Others Workflow Form                   -->
     <!-- ============================================ -->
-    <div id="others-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('checkin-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Others</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                            <div class="status-dot active" id="others-status-dot"></div>
-                            <span id="others-status-indicator">Online</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
-                    </div>
-                </div>
-            </header>
+    <div id="others-view" class="view dsr-premium-space-view">
+        <svg class="filters-defs" aria-hidden="true" focusable="false">
+          <defs>
+            <filter id="liquid-distort-others" x="-40%" y="-40%" width="180%" height="180%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.009 0.012" numOctaves="2" seed="9" result="noise"/>
+              <feGaussianBlur in="noise" stdDeviation="2.2" result="soft"/>
+              <feDisplacementMap in="SourceGraphic" in2="soft" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+          </defs>
+        </svg>
+
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="showView('checkin-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Others</h2>
+            </div>
 
             <div class="page-content">
-                <div class="glass-form-card" style="padding: 20px;">
-                    <h3 class="form-title">ADDITIONAL FIELD ACTIVITY</h3>
-                    
-                    <!-- Section 1: Client Information -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
-                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                            <span>Client</span> Client Information
-                        </h4>
-                        <div class="input-group">
-                            <label class="input-label">Customer Name <span style="color:#ef4444;">*</span></label>
-                            <input type="text" id="others-customer-name" class="glass-input" placeholder="Customer Name">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Office Address</label>
-                            <textarea id="others-office-address" class="glass-textarea" placeholder="Office Address" rows="3"></textarea>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Site Details</label>
-                            <input type="text" id="others-site-details" class="glass-input" placeholder="Site Details">
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V8l6-4 6 4v13"/></svg></div>
+                    <span>Client Information</span>
+                </div>
+
+                <div class="list-group glass floaty">
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+                        <div class="field-text">
+                            <label>Customer Name <span style="color:#ef4444;">*</span></label>
+                            <input type="text" id="others-customer-name" class="value-input" placeholder="Customer Name">
                         </div>
                     </div>
 
-                    <!-- Section 2: Contact Information -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
-                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                            <span>Contact</span> Contact Information
-                        </h4>
-                        <div class="input-group">
-                            <label class="input-label">Contact Person</label>
-                            <input type="text" id="others-contact-person" class="glass-input" placeholder="Contact Person">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Contact Number</label>
-                            <input type="tel" id="others-contact-number" class="glass-input" placeholder="Contact Number">
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                        <div class="field-text">
+                            <label>Office Address</label>
+                            <textarea id="others-office-address" class="notes" placeholder="Office Address" rows="2" style="min-height:40px; height:40px; resize:none;"></textarea>
                         </div>
                     </div>
 
-                    <!-- Section 3: Activity Information -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
-                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                            <span>Activity</span> Activity Information
-                        </h4>
-                        <div class="input-group">
-                            <label class="input-label">Today's Status <span style="color:#ef4444;">*</span></label>
-                            <select id="others-today-status" class="glass-select">
-                                <option value="">Please Select</option>
-                                <option value="Follow Up">Follow Up</option>
-                                <option value="Document Submission">Document Submission</option>
-                                <option value="Bill Submission">Bill Submission</option>
-                                <option value="Payment Collection">Payment Collection</option>
-                                <option value="Document Collection">Document Collection</option>
-                                <option value="Others">Others</option>
-                            </select>
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                        <div class="field-text">
+                            <label>Site Details</label>
+                            <input type="text" id="others-site-details" class="value-input" placeholder="Site Details">
                         </div>
-                        <div class="input-group">
-                            <label class="input-label">Remark</label>
-                            <input type="text" id="others-remark" class="glass-input" placeholder="Remark">
+                    </div>
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <span>Contact Information</span>
+                </div>
+
+                <div class="list-group glass floaty">
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+                        <div class="field-text">
+                            <label>Contact Person</label>
+                            <input type="text" id="others-contact-person" class="value-input" placeholder="Contact Person">
                         </div>
                     </div>
 
-                    <!-- Section 4: Follow-Up Information -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
-                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                            <span>Follow-up</span> Follow-Up Information
-                        </h4>
-                        <div class="input-group">
-                            <label class="input-label">Followup Date</label>
-                            <input type="date" id="others-followup-date" class="glass-input">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Followup Time</label>
-                            <div style="display: flex; gap: 12px; align-items: center;">
-                                <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Hrs:</span>
-                                <select id="others-followup-hours" class="glass-select" style="flex: 1;"></select>
-                                <span style="font-size: 0.8rem; color: var(--color-text-secondary);">Min:</span>
-                                <select id="others-followup-minutes" class="glass-select" style="flex: 1;"></select>
-                            </div>
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.35 1.79.68 2.63a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.45-1.45a2 2 0 0 1 2.11-.45c.84.33 1.73.56 2.63.68A2 2 0 0 1 22 16.92z"/></svg></div>
+                        <div class="field-text">
+                            <label>Contact Number</label>
+                            <input type="tel" id="others-contact-number" class="value-input" placeholder="Contact Number">
                         </div>
                     </div>
+                </div>
 
-                    <!-- Submit / Cancel Buttons -->
-                    <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button class="primary-btn" onclick="submitOthers()" style="flex: 1;">SUBMIT</button>
-                        <button class="secondary-btn" onclick="showView('checkin-view')" style="flex: 1;">CANCEL</button>
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                    <span>Activity Information</span>
+                </div>
+
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                    <div class="field-text" style="width: 100%;">
+                        <label>Today's Status <span style="color:#ef4444;">*</span></label>
+                        <select id="others-today-status" class="glass-select" style="border: none !important; background: transparent !important; width: 100%; color: var(--ink); font-weight: 700; font-size: 14.5px; outline: none; padding: 4px 0 0 0; font-family: inherit;">
+                            <option value="">Please Select</option>
+                            <option value="Follow Up">Follow Up</option>
+                            <option value="Document Submission">Document Submission</option>
+                            <option value="Bill Submission">Bill Submission</option>
+                            <option value="Payment Collection">Payment Collection</option>
+                            <option value="Document Collection">Document Collection</option>
+                            <option value="Others">Others</option>
+                        </select>
                     </div>
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+                    <span>Remark</span>
+                </div>
+                <div class="notes-wrapper" style="min-height: 60px; padding: 10px 14px;">
+                    <input type="text" id="others-remark" class="value-input" placeholder="Remark">
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+                    <span>Followup Date</span>
+                </div>
+                <div class="field glass floaty" style="position: relative; margin-bottom: 14px;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+                    <div class="field-text" style="width:100%;">
+                        <label>Followup Date</label>
+                        <input type="date" id="others-followup-date" class="value-input">
+                    </div>
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                    <span>Followup Time</span>
+                </div>
+                <div class="field glass floaty" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                        <span style="font-size: 14px; font-weight: 600; color: var(--sub);">Hrs:</span>
+                        <select id="others-followup-hours" class="glass-select" style="flex: 1; border: none; background: transparent; color: var(--ink); font-weight: 700; font-size: 15px; outline: none; padding: 0;"></select>
+                    </div>
+                    <div style="width: 1px; height: 24px; background: rgba(255, 255, 255, 0.25);"></div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                        <span style="font-size: 14px; font-weight: 600; color: var(--sub); margin-left: 8px;">Min:</span>
+                        <select id="others-followup-minutes" class="glass-select" style="flex: 1; border: none; background: transparent; color: var(--ink); font-weight: 700; font-size: 15px; outline: none; padding: 0;"></select>
+                    </div>
+                </div>
+
+                <div class="actions" style="margin-top: 20px; display:flex; gap:12px;">
+                    <button type="button" class="btn primary glass-orange" onclick="submitOthers()" style="flex:1;">
+                        SUBMIT
+                    </button>
+                    <button type="button" class="btn secondary glass" onclick="showView('checkin-view')" style="flex:1;">
+                        CANCEL
+                    </button>
                 </div>
             </div>
         </div>
@@ -1968,20 +1924,40 @@
     <!-- VIEW: Reminders Dashboard                   -->
     <!-- ============================================ -->
     <div id="reminders-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="showView('client-view')">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Reminders Dashboard</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
+        <div class="page-container" style="max-width: 100%; padding: 0;">
+            <header class="dashboard-header" style="background: #FFFFFF; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;">
+                <div class="header-left-group" style="display: flex; align-items: center;">
+                    <img src="img/skyway-logo.png" alt="Skyway Logo" style="height: 48px; margin-right: 12px; object-fit: contain;">
+                    
+                    <div class="client-avatar" style="width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: var(--color-orange, #F28C52); margin-right: 10px; flex-shrink: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin: 0;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    
+                    <div class="header-user-info" style="display: flex; flex-direction: column;">
+                        <span class="user-name" style="font-weight: 800; font-size: 15px; color: var(--ink, #1E2430); line-height: 1.2;">demo group</span>
+                        <span class="user-id" style="font-size: 11px; color: var(--sub, #6A7180); font-weight: 500;">Employee ID: 6</span>
+                    </div>
+                </div>
+                
+                <div class="header-right-group">
+                    <div class="client-status-pill-container" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(72, 187, 120, 0.12); border: 1px solid rgba(72, 187, 120, 0.25); border-radius: 20px;">
+                        <div class="status-dot checked-in" style="width: 8px; height: 8px; border-radius: 50%; background: #48BB78; box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);"></div>
+                        <span style="font-size: 12px; font-weight: 700; color: #2F855A;">Checked In</span>
                     </div>
                 </div>
             </header>
 
-            <div class="page-content">
+            <div class="inline-back-row" style="padding: 14px 16px 10px;">
+                <button type="button" class="inline-back-btn" onclick="showView('client-view')" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Reminders Dashboard</h2>
+            </div>
+
+            <div class="page-content" style="padding: 10px 16px 30px;">
                 <div class="glass-form-card" style="margin-bottom: 16px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
                     <input type="text" id="reminders-search" placeholder="Search Client Name..." class="glass-input" oninput="applyRemindersFilter()">
                     
@@ -2240,116 +2216,110 @@
     <!-- ============================================ -->
     <!-- VIEW: Leave Application Screen               -->
     <!-- ============================================ -->
-    <div id="leave-application-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="goBackFromLeaveStatus()">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Leave Management</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                            <div class="status-dot active" id="leave-app-status-dot"></div>
-                            <span id="leave-app-status-indicator">Online</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="company-logo-small">
-                        <img src="img/skyway-logo.png" alt="Skyway Logo">
-                    </div>
-                </div>
-            </header>
+    <div id="leave-application-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="goBackFromLeaveStatus()" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Leave Application</h2>
+            </div>
 
             <div class="page-content">
-                <div class="glass-form-card" style="padding: 20px;">
-                    <h3 class="form-title">LEAVE APPLICATION</h3>
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
+                    <span>Leave Details</span>
+                </div>
 
-                    <!-- Section 1: Leave Details -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
-                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                            <span>Leave</span> Leave Details
-                        </h4>
-                        <div class="input-group">
-                            <label class="input-label">Leave Type <span style="color:#ef4444;">*</span></label>
-                            <select id="leave-type" class="glass-select" onchange="calculateTotalLeaveDays()">
-                                <option value="">Please Select</option>
-                                <option value="Casual Leave">Casual Leave (CL)</option>
-                                <option value="Sick Leave">Sick Leave (SL)</option>
-                                <option value="Privilege Leave">Privilege Leave (PL)</option>
-                                <option value="Leave Without Pay">Leave Without Pay (LWP)</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Full/Half Day <span style="color:#ef4444;">*</span></label>
-                            <select id="leave-full-half" class="glass-select" onchange="calculateTotalLeaveDays()">
-                                <option value="">Please Select</option>
-                                <option value="Full Day">Full Day</option>
-                                <option value="Half Day">Half Day</option>
-                            </select>
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
+                    <div class="field-text" style="width: 100%;">
+                        <label>Leave Type <span style="color:#ef4444;">*</span></label>
+                        <select id="leave-type" class="glass-select" onchange="calculateTotalLeaveDays()" style="border: none !important; background: transparent !important; width: 100%; color: var(--ink); font-weight: 700; font-size: 14.5px; outline: none; padding: 4px 0 0 0; font-family: inherit;">
+                            <option value="">Please Select</option>
+                            <option value="Casual Leave">Casual Leave (CL)</option>
+                            <option value="Sick Leave">Sick Leave (SL)</option>
+                            <option value="Privilege Leave">Privilege Leave (PL)</option>
+                            <option value="Leave Without Pay">Leave Without Pay (LWP)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                    <div class="field-text" style="width: 100%;">
+                        <label>Full/Half Day <span style="color:#ef4444;">*</span></label>
+                        <select id="leave-full-half" class="glass-select" onchange="calculateTotalLeaveDays()" style="border: none !important; background: transparent !important; width: 100%; color: var(--ink); font-weight: 700; font-size: 14.5px; outline: none; padding: 4px 0 0 0; font-family: inherit;">
+                            <option value="">Please Select</option>
+                            <option value="Full Day">Full Day</option>
+                            <option value="Half Day">Half Day</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div>
+                    <span>Duration</span>
+                </div>
+
+                <div class="list-group glass floaty">
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg></div>
+                        <div class="field-text">
+                            <label>Leave Required From <span style="color:#ef4444;">*</span></label>
+                            <input type="date" id="leave-from-date" class="value-input" onchange="calculateTotalLeaveDays()">
                         </div>
                     </div>
-
-                    <!-- Section 2: Duration -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
-                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                            <span>Time</span> Duration
-                        </h4>
-                        <div class="input-group">
-                            <label class="input-label">Leave Required From <span style="color:#ef4444;">*</span></label>
-                            <input type="date" id="leave-from-date" class="glass-input" onchange="calculateTotalLeaveDays()">
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Leave Required Till <span style="color:#ef4444;">*</span></label>
-                            <input type="date" id="leave-till-date" class="glass-input" onchange="calculateTotalLeaveDays()">
-                        </div>
-                        
-                        <!-- Dynamic Calculation Display -->
-                        <div class="calc-display-card" style="margin-top: 14px; padding: 10px 14px; background: rgba(46, 125, 50, 0.06); border: 1px dashed rgba(46, 125, 50, 0.25); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-secondary);">Calculated Leave Required:</span>
-                            <span id="leave-total-display" style="font-size: 1rem; font-weight: 700; color: #2E7D32;">0.0 Days</span>
+                    <div class="field">
+                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg></div>
+                        <div class="field-text">
+                            <label>Leave Required Till <span style="color:#ef4444;">*</span></label>
+                            <input type="date" id="leave-till-date" class="value-input" onchange="calculateTotalLeaveDays()">
                         </div>
                     </div>
+                </div>
 
-                    <!-- Section 3: Reason -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
-                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                            <span>Reason</span> Reason
-                        </h4>
-                        <div class="input-group">
-                            <label class="input-label">Reason for Leave <span style="color:#ef4444;">*</span></label>
-                            <textarea id="leave-reason" class="glass-textarea" placeholder="Describe the reason for applying leave..." rows="4"></textarea>
-                        </div>
-                    </div>
+                <div class="calc-display-card" style="margin-top: 14px; margin-bottom: 14px; padding: 12px 16px; background: rgba(255, 122, 26, 0.08); border: 1px dashed rgba(255, 122, 26, 0.3); border-radius: 16px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 13px; font-weight: 700; color: var(--sub);">Calculated Leave Required:</span>
+                    <span id="leave-total-display" style="font-size: 16px; font-weight: 800; color: var(--orange-deep);">0.0 Days</span>
+                </div>
 
-                    <!-- Section 4: Delegation -->
-                    <div class="form-section-card" style="margin-bottom: 20px; padding: 16px; border-radius: 12px; background: var(--color-bg-tertiary); border: 1px solid var(--color-border);">
-                        <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-text-primary); font-size: 0.95rem; font-weight: 700; border-bottom: 1px solid #E0E0E0; padding-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                            <span>Delegate</span> Delegation
-                        </h4>
-                        <div class="input-group">
-                            <label class="input-label">In Absence Responsible Person <span style="color:#ef4444;">*</span></label>
-                            <input type="text" id="leave-absence-person" class="glass-input" placeholder="Name of colleague handling duties">
-                        </div>
-                    </div>
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+                    <span>Reason</span>
+                </div>
+                <div class="notes-wrapper" style="min-height: 70px; padding: 10px 14px;">
+                    <textarea id="leave-reason" class="notes" placeholder="Describe the reason for applying leave..." rows="3"></textarea>
+                </div>
 
-                    <!-- Summary Card before submission -->
-                    <div id="leave-summary-card" class="form-section-card hidden" style="margin-bottom: 24px; padding: 14px; border-radius: 12px; background: rgba(230, 126, 34, 0.06); border: 1px solid rgba(230, 126, 34, 0.2);">
-                        <h4 style="margin-top: 0; margin-bottom: 8px; color: var(--color-text-primary); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;">Leave Request Summary</h4>
-                        <div style="font-size: 0.825rem; display: flex; flex-direction: column; gap: 4px;">
-                            <div><strong style="color: var(--color-text-secondary);">Type:</strong> <span id="summary-leave-type">--</span></div>
-                            <div><strong style="color: var(--color-text-secondary);">Duration:</strong> <span id="summary-leave-duration">--</span></div>
-                            <div><strong style="color: var(--color-text-secondary);">Total Days:</strong> <span id="summary-leave-days">--</span></div>
-                        </div>
+                <div class="section-label">
+                    <div class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <span>Delegation</span>
+                </div>
+                <div class="field glass floaty" style="margin-bottom: 18px;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <div class="field-text">
+                        <label>In Absence Responsible Person <span style="color:#ef4444;">*</span></label>
+                        <input type="text" id="leave-absence-person" class="value-input" placeholder="Name of colleague handling duties">
                     </div>
+                </div>
 
-                    <!-- Submit / Cancel Buttons -->
-                    <div style="display: flex; gap: 12px;">
-                        <button class="primary-btn" onclick="submitLeave()" style="flex: 2;">SUBMIT LEAVE REQUEST</button>
-                        <button class="secondary-btn" onclick="showView('client-view')" style="flex: 1;">RETURN TO DASHBOARD</button>
+                <div id="leave-summary-card" class="form-section-card hidden" style="margin-bottom: 24px; padding: 14px; border-radius: 16px; background: rgba(255, 122, 26, 0.06); border: 1px solid rgba(255, 122, 26, 0.2);">
+                    <h4 style="margin-top: 0; margin-bottom: 8px; color: var(--ink); font-size: 0.85rem; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase;">Leave Request Summary</h4>
+                    <div style="font-size: 0.825rem; display: flex; flex-direction: column; gap: 4px;">
+                        <div><strong style="color: var(--sub);">Type:</strong> <span id="summary-leave-type">--</span></div>
+                        <div><strong style="color: var(--sub);">Duration:</strong> <span id="summary-leave-duration">--</span></div>
+                        <div><strong style="color: var(--sub);">Total Days:</strong> <span id="summary-leave-days">--</span></div>
                     </div>
+                </div>
+
+                <div class="actions" style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button type="button" class="btn primary glass-orange" onclick="submitLeave()" style="flex: 2;">SUBMIT LEAVE REQUEST</button>
+                    <button type="button" class="btn secondary glass" onclick="showView('client-view')" style="flex: 1;">CANCEL</button>
                 </div>
             </div>
         </div>
@@ -2358,23 +2328,18 @@
     <!-- ============================================ -->
     <!-- VIEW: Applied Leave Status                   -->
     <!-- ============================================ -->
-    <div id="leave-status-view" class="view">
-        <div class="page-container">
-            <header class="page-header client-header submenu-header">
-                <div class="header-left">
-                    <button class="back-btn-header" onclick="goBackFromLeaveStatus()">
-                        <span class="back-arrow">←</span> <span class="back-text">Back</span>
-                    </button>
-                    <div class="header-title-block">
-                        <h2 class="page-title">Applied Leave Status</h2>
-                        <span class="submenu-client-name">Welcome Client</span>
-                        <div class="client-status-pill-container" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
-                            <div class="status-dot active" id="leave-status-status-dot"></div>
-                            <span id="leave-status-status-indicator">Online</span>
-                        </div>
-                    </div>
-                </div>
-            </header>
+    <div id="leave-status-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="goBackFromLeaveStatus()" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">Applied Leave Status</h2>
+            </div>
 
             <div class="page-content">
                 <!-- Leave Statistics Dashboard -->
@@ -2460,7 +2425,96 @@
     <!-- ============================================ -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Cordova -->
+    <!-- ============================================ -->
+    <!-- Custom DSR Success Modal                     -->
+    <!-- ============================================ -->
+    <div id="dsr-success-modal" class="custom-modal-overlay" style="display: none;">
+        <div class="custom-modal-card">
+            <div class="custom-modal-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" style="color: #22c55e;">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            <h3 class="custom-modal-title">DSR Submitted!</h3>
+            <p class="custom-modal-body" id="dsr-success-modal-msg">You filled the DSR form in 11 sec.</p>
+            <button type="button" class="custom-modal-btn" onclick="onDsrSuccessOkClick()">OK</button>
+        </div>
+    </div>
+
+    <style>
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeInModal 0.2s ease-out;
+        }
+
+        .custom-modal-card {
+            background: rgba(28, 33, 43, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 320px;
+            padding: 28px 24px 22px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .custom-modal-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.12);
+            margin-bottom: 12px;
+        }
+
+        .custom-modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 8px 0 6px;
+            color: #ffffff;
+        }
+
+        .custom-modal-body {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
+        .custom-modal-btn {
+            width: 100%;
+            padding: 13px;
+            border-radius: 14px;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+            transition: transform 0.1s ease, background 0.2s ease;
+        }
+
+        .custom-modal-btn:active {
+            transform: scale(0.97);
+        }
+    </style>
     
     
     <!-- App Scripts -->

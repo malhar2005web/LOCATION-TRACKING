@@ -178,14 +178,29 @@ async function handleClientLogin() {
             throw new Error('Invalid User ID or Device ID. Please contact your administrator.');
         }
 
+        // Block login if device is not registered for this user (Skyway security)
+        if (info.resstatus === 'Register With Valid Device') {
+            throw new Error('Device not registered for this User ID. Please contact your administrator to register this device.');
+        }
+
+        // Block login if user is deactivated on server
+        if (info.resstatus === 'User Not Active') {
+            throw new Error('Your account is not active. Please contact your administrator.');
+        }
+
+        // Block login if API returns zeroed/empty data (server rejection)
+        const rawUserId = String(info.userid || '').trim();
+        const rawClientId = String(info.clientid || '').trim();
+        const rawId = String(info.id || '').trim();
+        
+        if ((!rawUserId || rawUserId === '0') && (!rawClientId || rawClientId === '0') && (!rawId || rawId === '0')) {
+            throw new Error('Login rejected by server. User/Client ID is 0. Please contact your administrator.');
+        }
+
         // Build client object strictly from Skyway API response fields (100% dynamic, zero hardcoding)
-        const apiUserId = (info.userid !== undefined && info.userid !== null && String(info.userid).trim() !== '' && String(info.userid).trim() !== '0')
-            ? String(info.userid).trim()
-            : ((info.clientid !== undefined && info.clientid !== null && String(info.clientid).trim() !== '' && String(info.clientid).trim() !== '0')
-                ? String(info.clientid).trim()
-                : ((info.id !== undefined && info.id !== null && String(info.id).trim() !== '' && String(info.id).trim() !== '0')
-                    ? String(info.id).trim()
-                    : String(clientId).trim()));
+        const apiUserId = (rawUserId && rawUserId !== '0') ? rawUserId
+            : ((rawClientId && rawClientId !== '0') ? rawClientId
+                : ((rawId && rawId !== '0') ? rawId : String(clientId).trim()));
 
         const apiName = (info.userfullname && String(info.userfullname).trim() && String(info.userfullname).trim() !== '0')
             ? String(info.userfullname).trim()
