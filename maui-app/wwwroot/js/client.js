@@ -2949,14 +2949,19 @@ async function submitDSR() {
         lleadno: (selectedClient && selectedClient.leadno) || ""
     };
 
+    let latNum = 18.4748182;
+    let lngNum = 73.8119225;
+
     const curLatEl = document.getElementById('current-lat');
     const curLngEl = document.getElementById('current-lng');
     if (curLatEl && curLngEl) {
         const latVal = curLatEl.textContent.trim();
         const lngVal = curLngEl.textContent.trim();
-        if (latVal !== '--' && lngVal !== '--') {
+        if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0') {
             dsrBody.gpsLatitude = latVal;
             dsrBody.gpsLongitude = lngVal;
+            latNum = parseFloat(latVal);
+            lngNum = parseFloat(lngVal);
         }
     }
 
@@ -2969,46 +2974,6 @@ async function submitDSR() {
                 body: JSON.stringify(dsrBody)
             });
             console.log('[DSR] Third-party submission succeeded.');
-
-            // Fire CHECKOUT event on DSR submit
-            const checkoutDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-            const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
-            const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-            const userid = (session && session.userData && session.userData.clientId) || imeino;
-            const checkoutLat = parseFloat(dsrBody.gpsLatitude || '18.4748182');
-            const checkoutLng = parseFloat(dsrBody.gpsLongitude || '73.8119225');
-
-            // Fire startendday CHECKOUT API
-            fetch(`${API_BASE_URL}/startendday`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gcdatetime: checkoutDate.slice(0, 16),
-                    glaststatus: "CHECKOUT",
-                    empid: empid,
-                    imeino: imeino,
-                    gpsLatitude: checkoutLat,
-                    gpsLongitude: checkoutLng
-                })
-            }).catch(e => console.error('[DSR Submit startendday CHECKOUT] Error:', e));
-
-            // Fire iamatevent CHECKOUT API
-            fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: checkoutDate,
-                    gotempname: empid,
-                    gotempid: userid,
-                    gotinoutstatus: "CHECKOUT",
-                    gotiamatclient: name || "",
-                    gotiamatlat: checkoutLat,
-                    gotiamatlong: checkoutLng,
-                    gimeinumber: imeino
-                })
-            }).then(r => r.json()).then(res => console.log('[DSR Submit CHECKOUT] Response:', res))
-              .catch(e => console.error('[DSR Submit CHECKOUT] Error:', e));
-
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
         }
@@ -3117,8 +3082,8 @@ async function submitDSR() {
         }
     }
 
-    // Show Custom Modal alert -> User taps OK -> returns to Home Screen
-    showDsrSuccessModal(timeStr, name, dsrBody.gpsLatitude, dsrBody.gpsLongitude);
+    // Show Custom Modal alert -> User taps OK -> triggers CHECKOUT & returns to Home Screen
+    showDsrSuccessModal(timeStr, name, latNum, lngNum);
 }
 
 let pendingCheckoutData = null;
