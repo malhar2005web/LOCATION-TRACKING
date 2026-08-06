@@ -2949,14 +2949,31 @@ async function submitDSR() {
         lleadno: (selectedClient && selectedClient.leadno) || ""
     };
 
+    let latNum = 0.0;
+    let lngNum = 0.0;
+
     const curLatEl = document.getElementById('current-lat');
     const curLngEl = document.getElementById('current-lng');
     if (curLatEl && curLngEl) {
         const latVal = curLatEl.textContent.trim();
         const lngVal = curLngEl.textContent.trim();
-        if (latVal !== '--' && lngVal !== '--') {
+        if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0') {
             dsrBody.gpsLatitude = latVal;
             dsrBody.gpsLongitude = lngVal;
+            latNum = parseFloat(latVal);
+            lngNum = parseFloat(lngVal);
+        }
+    }
+
+    // Fallback to session userData coordinates if screen element was -- or 0
+    if ((latNum === 0 || isNaN(latNum)) && session && session.userData) {
+        const sessLat = parseFloat(session.userData.lat || '0');
+        const sessLng = parseFloat(session.userData.long || '0');
+        if (sessLat !== 0 && !isNaN(sessLat)) {
+            latNum = sessLat;
+            lngNum = sessLng;
+            dsrBody.gpsLatitude = String(sessLat);
+            dsrBody.gpsLongitude = String(sessLng);
         }
     }
 
@@ -2973,8 +2990,6 @@ async function submitDSR() {
             // Also send CHECKOUT event to iamatevent on DSR submit
             const checkoutDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
             const checkoutImei = (session && session.userData && session.userData.deviceId) || 'a057d027fed7bace';
-            const checkoutLat = parseFloat(dsrBody.gpsLatitude || '0.0');
-            const checkoutLng = parseFloat(dsrBody.gpsLongitude || '0.0');
 
             fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
@@ -2985,8 +3000,8 @@ async function submitDSR() {
                     gotempid: userid || '11',
                     gotinoutstatus: "CHECKOUT",
                     gotiamatclient: name || "",
-                    gotiamatlat: checkoutLat,
-                    gotiamatlong: checkoutLng,
+                    gotiamatlat: latNum,
+                    gotiamatlong: lngNum,
                     gimeinumber: checkoutImei
                 })
             }).then(r => r.json()).then(res => console.log('[DSR Submit CHECKOUT] Response:', res))
