@@ -2986,27 +2986,6 @@ async function submitDSR() {
                 body: JSON.stringify(dsrBody)
             });
             console.log('[DSR] Third-party submission succeeded.');
-
-            // Also send CHECKOUT event to iamatevent on DSR submit
-            const checkoutDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-            const checkoutImei = (session && session.userData && session.userData.deviceId) || 'a057d027fed7bace';
-
-            fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: checkoutDate,
-                    gotempname: gempname || 'demo admin2',
-                    gotempid: userid || '11',
-                    gotinoutstatus: "CHECKOUT",
-                    gotiamatclient: name || "",
-                    gotiamatlat: latNum,
-                    gotiamatlong: lngNum,
-                    gimeinumber: checkoutImei
-                })
-            }).then(r => r.json()).then(res => console.log('[DSR Submit CHECKOUT] Response:', res))
-              .catch(e => console.error('[DSR Submit CHECKOUT] Error:', e));
-
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
         }
@@ -3115,8 +3094,8 @@ async function submitDSR() {
         }
     }
 
-    // Show Custom Modal alert -> User taps OK -> returns to Home Screen
-    showDsrSuccessModal(timeStr, name, dsrBody.gpsLatitude, dsrBody.gpsLongitude);
+    // Show Custom Modal alert -> User taps OK -> returns to Home Screen & triggers CHECKOUT
+    showDsrSuccessModal(timeStr, name, latNum, lngNum);
 }
 
 let pendingCheckoutData = null;
