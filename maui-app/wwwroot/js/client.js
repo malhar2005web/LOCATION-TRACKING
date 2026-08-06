@@ -2978,6 +2978,21 @@ async function submitDSR() {
             const checkoutLat = parseFloat(dsrBody.gpsLatitude || '18.4748182');
             const checkoutLng = parseFloat(dsrBody.gpsLongitude || '73.8119225');
 
+            // Fire startendday CHECKOUT API
+            fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gcdatetime: checkoutDate.slice(0, 16),
+                    glaststatus: "CHECKOUT",
+                    empid: empid,
+                    imeino: imeino,
+                    gpsLatitude: checkoutLat,
+                    gpsLongitude: checkoutLng
+                })
+            }).catch(e => console.error('[DSR Submit startendday CHECKOUT] Error:', e));
+
+            // Fire iamatevent CHECKOUT API
             fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -3162,14 +3177,29 @@ async function onDsrSuccessOkClick() {
     console.log('[CHECKOUT OK Click] Triggering CHECKOUT API:', payload);
 
     if (navigator.onLine) {
+        // 1. Call startendday with CHECKOUT
+        fetch(`${API_BASE_URL}/startendday`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                gcdatetime: currentDate.slice(0, 16),
+                glaststatus: "CHECKOUT",
+                empid: empid,
+                imeino: imeino,
+                gpsLatitude: latVal,
+                gpsLongitude: lngVal
+            })
+        }).catch(err => console.error('[CHECKOUT OK Click] startendday error:', err));
+
+        // 2. Call iamatevent with CHECKOUT
         fetch(`${API_BASE_URL}/iamatevent`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         }).then(res => res.json()).then(data => {
-            console.log('[CHECKOUT OK Click] API Response:', data);
+            console.log('[CHECKOUT OK Click] iamatevent Response:', data);
         }).catch(err => {
-            console.error('[CHECKOUT OK Click] API Error:', err);
+            console.error('[CHECKOUT OK Click] iamatevent Error:', err);
         });
     }
 
