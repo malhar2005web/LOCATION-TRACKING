@@ -2952,18 +2952,31 @@ async function submitDSR() {
     let latNum = 18.4748182;
     let lngNum = 73.8119225;
 
-    const curLatEl = document.getElementById('current-lat');
-    const curLngEl = document.getElementById('current-lng');
-    if (curLatEl && curLngEl) {
-        const latVal = curLatEl.textContent.trim();
-        const lngVal = curLngEl.textContent.trim();
-        if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0') {
-            dsrBody.gpsLatitude = latVal;
-            dsrBody.gpsLongitude = lngVal;
-            latNum = parseFloat(latVal);
-            lngNum = parseFloat(lngVal);
+    showToast('Fetching location...', 'info');
+    let coords = await getCurrentLocationPromise();
+    if (coords && coords.latitude && coords.longitude) {
+        latNum = coords.latitude;
+        lngNum = coords.longitude;
+        updateLocationUI(latNum, lngNum);
+    } else {
+        const curLatEl = document.getElementById('current-lat');
+        const curLngEl = document.getElementById('current-lng');
+        if (curLatEl && curLngEl) {
+            const latVal = curLatEl.textContent.trim();
+            const lngVal = curLngEl.textContent.trim();
+            if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0' && latVal !== 'Fetching...') {
+                latNum = parseFloat(latVal);
+                lngNum = parseFloat(lngVal);
+            }
+        }
+        if ((latNum === 18.4748182 || latNum === 0) && session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+            latNum = parseFloat(session.userData.lat);
+            lngNum = parseFloat(session.userData.long);
         }
     }
+
+    dsrBody.gpsLatitude = String(latNum);
+    dsrBody.gpsLongitude = String(lngNum);
 
     if (navigator.onLine) {
         try {
@@ -3101,6 +3114,8 @@ function showDsrSuccessModal(timeStr, clientName, lat, lng) {
 }
 
 async function onDsrSuccessOkClick() {
+    console.log('[CHECKOUT] OK BUTTON CLICKED');
+
     // 1. Hide modal immediately
     const modalEl = document.getElementById('dsr-success-modal');
     if (modalEl) {
@@ -3118,12 +3133,18 @@ async function onDsrSuccessOkClick() {
     let latVal = 18.4748182;
     let lngVal = 73.8119225;
 
-    if (pendingCheckoutData && pendingCheckoutData.lat && pendingCheckoutData.lat !== '0.0' && pendingCheckoutData.lat !== 0) {
+    if (pendingCheckoutData && pendingCheckoutData.lat && pendingCheckoutData.lat !== '0.0' && pendingCheckoutData.lat !== 0 && !isNaN(pendingCheckoutData.lat)) {
         latVal = parseFloat(pendingCheckoutData.lat);
         lngVal = parseFloat(pendingCheckoutData.lng);
-    } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
-        latVal = parseFloat(session.userData.lat);
-        lngVal = parseFloat(session.userData.long);
+    } else {
+        const coords = await getCurrentLocationPromise();
+        if (coords && coords.latitude && coords.longitude) {
+            latVal = coords.latitude;
+            lngVal = coords.longitude;
+        } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+            latVal = parseFloat(session.userData.lat);
+            lngVal = parseFloat(session.userData.long);
+        }
     }
 
     const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
@@ -3139,36 +3160,38 @@ async function onDsrSuccessOkClick() {
         gimeinumber: imeino
     };
 
-    console.log('[CHECKOUT OK Click] Triggering CHECKOUT API:', payload);
+    console.log('[CHECKOUT OK Click] Triggering CHECKOUT APIs (startendday + iamatevent):', payload);
 
     if (navigator.onLine) {
-        // 1. Call startendday with CHECKOUT
-        fetch(`${API_BASE_URL}/startendday`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                gcdatetime: currentDate.slice(0, 16),
-                glaststatus: "CHECKOUT",
-                empid: empid,
-                imeino: imeino,
-                gpsLatitude: latVal,
-                gpsLongitude: lngVal
-            })
-        }).catch(err => console.error('[CHECKOUT OK Click] startendday error:', err));
+        try {
+            console.log('[CHECKOUT] Awaiting startendday CHECKOUT...');
+            await fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gcdatetime: currentDate.slice(0, 16),
+                    glaststatus: "CHECKOUT",
+                    empid: empid,
+                    imeino: imeino,
+                    gpsLatitude: latVal,
+                    gpsLongitude: lngVal
+                })
+            });
 
-        // 2. Call iamatevent with CHECKOUT
-        fetch(`${API_BASE_URL}/iamatevent`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).then(res => res.json()).then(data => {
-            console.log('[CHECKOUT OK Click] iamatevent Response:', data);
-        }).catch(err => {
-            console.error('[CHECKOUT OK Click] iamatevent Error:', err);
-        });
+            console.log('[CHECKOUT] Awaiting iamatevent CHECKOUT...');
+            const res = await fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            console.log('[CHECKOUT] CHECKOUT SENT:', data);
+        } catch (err) {
+            console.error('[CHECKOUT] Error sending checkout:', err);
+        }
     }
 
-    // 3. Return to Home screen
+    // 3. Return to Home screen AFTER await completes
     showView('client-view');
 }
 
