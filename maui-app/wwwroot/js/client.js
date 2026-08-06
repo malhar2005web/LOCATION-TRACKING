@@ -2969,6 +2969,31 @@ async function submitDSR() {
                 body: JSON.stringify(dsrBody)
             });
             console.log('[DSR] Third-party submission succeeded.');
+
+            // Fire CHECKOUT event on DSR submit
+            const checkoutDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
+            const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+            const userid = (session && session.userData && session.userData.clientId) || imeino;
+            const checkoutLat = parseFloat(dsrBody.gpsLatitude || '18.4748182');
+            const checkoutLng = parseFloat(dsrBody.gpsLongitude || '73.8119225');
+
+            fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: checkoutDate,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "CHECKOUT",
+                    gotiamatclient: name || "",
+                    gotiamatlat: checkoutLat,
+                    gotiamatlong: checkoutLng,
+                    gimeinumber: imeino
+                })
+            }).then(r => r.json()).then(res => console.log('[DSR Submit CHECKOUT] Response:', res))
+              .catch(e => console.error('[DSR Submit CHECKOUT] Error:', e));
+
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
         }
@@ -3106,23 +3131,9 @@ async function onDsrSuccessOkClick() {
     const session = typeof getSession === 'function' ? getSession() : null;
     const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
     
-    let empid = 'demo group';
-    let userid = '11';
-    let imeino = 'a057d027fed7bace';
-
-    if (session && session.userData) {
-        if (session.userData.name) empid = session.userData.name;
-        if (session.userData.clientId) userid = String(session.userData.clientId);
-        else if (session.userData.deviceId) userid = String(session.userData.deviceId);
-        if (session.userData.deviceId) imeino = String(session.userData.deviceId);
-    } else {
-        const storedName = localStorage.getItem('user_name');
-        const storedId = localStorage.getItem('client_id');
-        const storedImei = localStorage.getItem('device_id');
-        if (storedName) empid = storedName;
-        if (storedId) userid = storedId;
-        if (storedImei) imeino = storedImei;
-    }
+    const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
+    const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+    const userid = (session && session.userData && session.userData.clientId) || imeino;
 
     let latVal = 18.4748182;
     let lngVal = 73.8119225;
