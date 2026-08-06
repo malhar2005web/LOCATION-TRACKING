@@ -2969,6 +2969,29 @@ async function submitDSR() {
                 body: JSON.stringify(dsrBody)
             });
             console.log('[DSR] Third-party submission succeeded.');
+
+            // Also send CHECKOUT event to iamatevent on DSR submit
+            const checkoutDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            const checkoutImei = (session && session.userData && session.userData.deviceId) || 'a057d027fed7bace';
+            const checkoutLat = parseFloat(dsrBody.gpsLatitude || '0.0');
+            const checkoutLng = parseFloat(dsrBody.gpsLongitude || '0.0');
+
+            fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: checkoutDate,
+                    gotempname: gempname || 'demo admin2',
+                    gotempid: userid || '11',
+                    gotinoutstatus: "CHECKOUT",
+                    gotiamatclient: name || "",
+                    gotiamatlat: checkoutLat,
+                    gotiamatlong: checkoutLng,
+                    gimeinumber: checkoutImei
+                })
+            }).then(r => r.json()).then(res => console.log('[DSR Submit CHECKOUT] Response:', res))
+              .catch(e => console.error('[DSR Submit CHECKOUT] Error:', e));
+
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
         }
