@@ -217,12 +217,12 @@ function startLocationTracking(clientId, deviceId) {
             console.log('[Tracking] MAUI Environment: Starting C# Native Foreground Service...');
             // 1. Tell C# to launch the native background foreground service
             invokeCSharp('StartBackgroundService');
-            
+
             // 2. Set up a UI-only poller to retrieve coordinates and counts from C#
             if (window.trackingInterval) {
                 clearInterval(window.trackingInterval);
             }
-            
+
             async function pollNativeTrackingData() {
                 try {
                     const dataJson = await invokeCSharp('GetLatestLocationData');
@@ -231,17 +231,17 @@ function startLocationTracking(clientId, deviceId) {
                         if (data.latitude && data.longitude) {
                             updateLocationUI(data.latitude, data.longitude);
                         }
-                        
+
                         // Update Locations Sent counter
                         locationSentCount = data.sentCount;
                         const countEl = document.getElementById('locations-sent-count');
                         if (countEl) countEl.textContent = locationSentCount.toString();
-                        
+
                         // Update last sync time
                         if (data.lastSync && data.lastSync !== 'Never') {
                             updateSyncStatusText(`Last Location Sent: ${data.lastSync}`);
                             StorageService.setLastSyncTime(data.lastSync);
-                            
+
                             const lastSyncEl = document.getElementById('last-sync-time-display');
                             if (lastSyncEl) {
                                 lastSyncEl.textContent = data.lastSync;
@@ -256,7 +256,7 @@ function startLocationTracking(clientId, deviceId) {
                     console.error('[Tracking] Failed to poll native tracking data:', e);
                 }
             }
-            
+
             pollNativeTrackingData();
             window.trackingInterval = setInterval(pollNativeTrackingData, 3000);
         } else {
@@ -583,7 +583,7 @@ function updateSyncUI() {
     const lastSyncEl = document.getElementById('last-sync-time-display');
     const lastSyncBadge = document.getElementById('last-sync-time-display-badge');
     const lastSync = StorageService.getLastSyncTime();
-    
+
     let formattedSyncTime = 'Never';
     if (lastSync && lastSync !== 'Never') {
         const d = new Date(lastSync);
@@ -2756,12 +2756,12 @@ function renderClientList(list) {
         const escapedSiteName = (c.leadsitename || '').replace(/'/g, "\\'");
 
         html += `
-            <tr style="border-bottom:1px solid rgba(0,0,0,0.06);">
-                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:12px 4px; font-size:0.8rem; width:36px; min-width:36px;">${index + 1}</td>
-                <td style="font-weight:700; color:var(--ink, #1E2430); padding:12px 10px; font-size:0.85rem; word-break:normal; overflow-wrap:break-word; white-space:normal; line-height:1.35; min-width:200px;" title="${escapedName}">${leadname}</td>
-                <td style="font-size:0.8rem; color:#4A5568; padding:12px 10px; word-break:normal; overflow-wrap:break-word; white-space:normal; line-height:1.35; min-width:250px;" title="${escapedAddress}">${address || '--'}</td>
-                <td style="text-align:center; padding:12px 6px; width:110px; min-width:110px; white-space:nowrap;">
-                    <button class="btn-dsr" style="font-size:0.75rem; padding:8px 12px; white-space:nowrap; border-radius:10px; font-weight:700; background: linear-gradient(135deg, #48BB78, #38A169); color: #fff; border: none; box-shadow: 0 4px 12px rgba(56, 161, 105, 0.25);" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
+            <tr style="border-bottom:1px solid rgba(0,0,0,0.05);">
+                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:10px 4px; font-size:0.78rem;">${index + 1}</td>
+                <td style="font-weight:700; color:var(--color-text-primary); padding:10px 6px; font-size:0.82rem; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedName}">${leadname}</td>
+                <td style="font-size:0.78rem; color:var(--color-text-secondary); padding:10px 6px; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedAddress}">${address || '--'}</td>
+                <td style="text-align:center; padding:10px 4px; white-space:nowrap;">
+                    <button class="btn-dsr" style="font-size:0.75rem; padding:7px 10px; white-space:nowrap; border-radius:8px; font-weight:700;" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
                 </td>
             </tr>
         `;
@@ -2890,10 +2890,10 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     }
 
     showView('existing-client-dsr-view');
-    
+
     // Start the DSR live timer
     startDsrTimer();
-    
+
     // REDESIGNED: Initialize premium wizard flow
     if (typeof initDsrWizard === 'function') {
         initDsrWizard(name, address);
@@ -2949,31 +2949,14 @@ async function submitDSR() {
         lleadno: (selectedClient && selectedClient.leadno) || ""
     };
 
-    let latNum = 0.0;
-    let lngNum = 0.0;
-
     const curLatEl = document.getElementById('current-lat');
     const curLngEl = document.getElementById('current-lng');
     if (curLatEl && curLngEl) {
         const latVal = curLatEl.textContent.trim();
         const lngVal = curLngEl.textContent.trim();
-        if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0') {
+        if (latVal !== '--' && lngVal !== '--') {
             dsrBody.gpsLatitude = latVal;
             dsrBody.gpsLongitude = lngVal;
-            latNum = parseFloat(latVal);
-            lngNum = parseFloat(lngVal);
-        }
-    }
-
-    // Fallback to session userData coordinates if screen element was -- or 0
-    if ((latNum === 0 || isNaN(latNum)) && session && session.userData) {
-        const sessLat = parseFloat(session.userData.lat || '0');
-        const sessLng = parseFloat(session.userData.long || '0');
-        if (sessLat !== 0 && !isNaN(sessLat)) {
-            latNum = sessLat;
-            lngNum = sessLng;
-            dsrBody.gpsLatitude = String(sessLat);
-            dsrBody.gpsLongitude = String(sessLng);
         }
     }
 
@@ -3094,40 +3077,22 @@ async function submitDSR() {
         }
     }
 
-    // Show Custom Modal alert -> User taps OK -> returns to Home Screen & triggers CHECKOUT
-    showDsrSuccessModal(timeStr, name, latNum, lngNum);
+    // Show Custom Modal alert -> User taps OK -> returns to Home Screen
+    showDsrSuccessModal(timeStr, name, dsrBody.gpsLatitude, dsrBody.gpsLongitude);
 }
 
 let pendingCheckoutData = null;
 
 function showDsrSuccessModal(timeStr, clientName, lat, lng) {
     pendingCheckoutData = { clientName, lat, lng };
-
-    let modalEl = document.getElementById('dsr-success-modal');
-    if (!modalEl) {
-        modalEl = document.createElement('div');
-        modalEl.id = 'dsr-success-modal';
-        modalEl.style.cssText = 'position: fixed; inset: 0; z-index: 99999; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; padding: 20px;';
-        modalEl.innerHTML = `
-            <div style="background: #FFFFFF; border-radius: 24px; padding: 28px 24px; max-width: 320px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-                <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, rgba(72,187,120,0.15), rgba(72,187,120,0.3)); color: #38A169; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                </div>
-                <h3 style="font-size: 18px; font-weight: 800; color: #1E2430; margin: 0 0 8px;">DSR Submitted!</h3>
-                <p id="dsr-success-modal-msg" style="font-size: 13.5px; color: #6A7180; margin: 0 0 20px; line-height: 1.4;"></p>
-                <button type="button" onclick="onDsrSuccessOkClick()" style="width: 100%; padding: 13px; font-weight: 750; font-size: 15px; color: #FFFFFF; background: linear-gradient(145deg, #FF7A1A, #F0630A); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(240, 99, 10, 0.3); cursor: pointer;">
-                    OK
-                </button>
-            </div>
-        `;
-        document.body.appendChild(modalEl);
-    }
-
     const msgEl = document.getElementById('dsr-success-modal-msg');
     if (msgEl) {
         msgEl.textContent = timeStr ? `You filled the DSR form in ${timeStr}.` : 'DSR submitted successfully!';
     }
-    modalEl.style.display = 'flex';
+    const modalEl = document.getElementById('dsr-success-modal');
+    if (modalEl) {
+        modalEl.style.display = 'flex';
+    }
 }
 
 async function onDsrSuccessOkClick() {
@@ -3137,38 +3102,64 @@ async function onDsrSuccessOkClick() {
         modalEl.style.display = 'none';
     }
 
-    // 2. Call CHECKOUT API to iamatevent
-    if (navigator.onLine) {
-        try {
-            const session = getSession();
-            const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-            const empid = (session && session.userData && session.userData.name) || 'demo admin2';
-            const userid = (session && session.userData && (session.userData.clientId || session.userData.deviceId)) || '11';
-            const imeino = (session && session.userData && session.userData.deviceId) || 'a057d027fed7bace';
-            const latVal = (pendingCheckoutData && pendingCheckoutData.lat) ? parseFloat(pendingCheckoutData.lat) : 17.7012001;
-            const lngVal = (pendingCheckoutData && pendingCheckoutData.lng) ? parseFloat(pendingCheckoutData.lng) : 73.9826115;
-            const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
+    // 2. Extract session & user details with solid fallbacks
+    const session = typeof getSession === 'function' ? getSession() : null;
+    const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    
+    let empid = 'demo group';
+    let userid = '11';
+    let imeino = 'a057d027fed7bace';
 
-            console.log('[CHECKOUT] Triggering CHECKOUT API on OK click...');
-            const response = await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDate,
-                    gotempname: empid,
-                    gotempid: userid,
-                    gotinoutstatus: "CHECKOUT",
-                    gotiamatclient: clientNameVal,
-                    gotiamatlat: latVal,
-                    gotiamatlong: lngVal,
-                    gimeinumber: imeino
-                })
-            });
-            const data = await response.json();
-            console.log('[CHECKOUT] API response:', data);
-        } catch (err) {
-            console.error('[CHECKOUT] API call error:', err);
-        }
+    if (session && session.userData) {
+        if (session.userData.name) empid = session.userData.name;
+        if (session.userData.clientId) userid = String(session.userData.clientId);
+        else if (session.userData.deviceId) userid = String(session.userData.deviceId);
+        if (session.userData.deviceId) imeino = String(session.userData.deviceId);
+    } else {
+        const storedName = localStorage.getItem('user_name');
+        const storedId = localStorage.getItem('client_id');
+        const storedImei = localStorage.getItem('device_id');
+        if (storedName) empid = storedName;
+        if (storedId) userid = storedId;
+        if (storedImei) imeino = storedImei;
+    }
+
+    let latVal = 18.4748182;
+    let lngVal = 73.8119225;
+
+    if (pendingCheckoutData && pendingCheckoutData.lat && pendingCheckoutData.lat !== '0.0' && pendingCheckoutData.lat !== 0) {
+        latVal = parseFloat(pendingCheckoutData.lat);
+        lngVal = parseFloat(pendingCheckoutData.lng);
+    } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+        latVal = parseFloat(session.userData.lat);
+        lngVal = parseFloat(session.userData.long);
+    }
+
+    const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
+
+    const payload = {
+        gotiamatdate: currentDate,
+        gotempname: empid,
+        gotempid: userid,
+        gotinoutstatus: "CHECKOUT",
+        gotiamatclient: clientNameVal,
+        gotiamatlat: latVal,
+        gotiamatlong: lngVal,
+        gimeinumber: imeino
+    };
+
+    console.log('[CHECKOUT OK Click] Triggering CHECKOUT API:', payload);
+
+    if (navigator.onLine) {
+        fetch(`${API_BASE_URL}/iamatevent`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(res => res.json()).then(data => {
+            console.log('[CHECKOUT OK Click] API Response:', data);
+        }).catch(err => {
+            console.error('[CHECKOUT OK Click] API Error:', err);
+        });
     }
 
     // 3. Return to Home screen
@@ -4278,16 +4269,16 @@ function initDsrWizard(clientName, clientAddress) {
     const p2 = document.getElementById('dsr-panel-2');
     if (p1) p1.classList.add('active');
     if (p2) p2.classList.remove('active');
-    
+
     // Update Hero Card details
     const heroNameEl = document.getElementById('hero-customer-name');
     const heroAddressEl = document.getElementById('hero-office-address');
     if (heroNameEl) heroNameEl.textContent = clientName || 'Client Name';
     if (heroAddressEl) heroAddressEl.textContent = clientAddress || 'Office Address';
-    
+
     const customerNameTextEl = document.getElementById('dsr-customer-name-text');
     if (customerNameTextEl) customerNameTextEl.textContent = clientName || 'Client Name';
-    
+
     // Checked-in time calculation
     const heroTimeEl = document.getElementById('hero-checkin-time');
     if (heroTimeEl) {
@@ -4310,7 +4301,7 @@ function initDsrWizard(clientName, clientAddress) {
 function populateDsrTimeDropdowns() {
     const hoursSelect = document.getElementById('dsr-followup-hours');
     const minutesSelect = document.getElementById('dsr-followup-minutes');
-    
+
     if (hoursSelect && hoursSelect.options.length === 0) {
         for (let i = 0; i < 24; i++) {
             const val = i.toString().padStart(2, '0');
@@ -4318,7 +4309,7 @@ function populateDsrTimeDropdowns() {
             hoursSelect.add(opt);
         }
     }
-    
+
     if (minutesSelect && minutesSelect.options.length === 0) {
         for (let i = 0; i < 60; i += 5) {
             const val = i.toString().padStart(2, '0');
@@ -4398,7 +4389,7 @@ function buildDsrReviewSummary() {
     if (statusEl) statusEl.textContent = document.getElementById('dsr-today-status').value || '--';
     if (remarkEl) remarkEl.textContent = document.getElementById('dsr-remark').value || '--';
     if (dateEl) dateEl.textContent = document.getElementById('dsr-followup-date').value || '--';
-    
+
     const hr = document.getElementById('dsr-followup-hours') ? document.getElementById('dsr-followup-hours').value : '00';
     const min = document.getElementById('dsr-followup-minutes') ? document.getElementById('dsr-followup-minutes').value : '00';
     if (timeEl) timeEl.textContent = `${hr}:${min}`;
