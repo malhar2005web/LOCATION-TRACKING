@@ -3173,7 +3173,7 @@ async function onDsrSuccessOkClick() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     gcdatetime: currentDate.slice(0, 16),
-                    glaststatus: "END",
+                    glaststatus: "CHECKOUT",
                     empid: empid,
                     imeino: imeino,
                     gpsLatitude: latVal,
