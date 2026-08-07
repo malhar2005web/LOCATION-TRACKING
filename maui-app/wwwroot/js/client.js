@@ -3164,8 +3164,11 @@ async function onDsrSuccessOkClick() {
 
     if (navigator.onLine) {
         try {
-            console.log('[CHECKOUT] Awaiting startendday CHECKOUT...');
-            await fetch(`${API_BASE_URL}/startendday`, {
+            console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
+            console.log('[CHECKOUT TEST] Payload:', JSON.stringify(payload));
+
+            console.log('[CHECKOUT TEST] Awaiting startendday CHECKOUT...');
+            const startenddayRes = await fetch(`${API_BASE_URL}/startendday`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -3177,17 +3180,19 @@ async function onDsrSuccessOkClick() {
                     gpsLongitude: lngVal
                 })
             });
+            const startenddayText = await startenddayRes.text();
+            console.log('[CHECKOUT TEST] startendday status:', startenddayRes.status, startenddayText);
 
-            console.log('[CHECKOUT] Awaiting iamatevent CHECKOUT...');
+            console.log('[CHECKOUT TEST] Awaiting iamatevent CHECKOUT...');
             const res = await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            const data = await res.json();
-            console.log('[CHECKOUT] CHECKOUT SENT:', data);
+            const resText = await res.text();
+            console.log('[CHECKOUT TEST] iamatevent response text:', resText);
         } catch (err) {
-            console.error('[CHECKOUT] Error sending checkout:', err);
+            console.error('[CHECKOUT TEST] Error sending checkout:', err);
         }
     }
 
