@@ -2924,6 +2924,40 @@ async function submitDSR() {
 
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
+    let latNum = 18.4748182;
+    let lngNum = 73.8119225;
+
+    // Try DOM current location elements first
+    const curLatEl = document.getElementById('current-lat');
+    const curLngEl = document.getElementById('current-lng');
+    if (curLatEl && curLngEl) {
+        const latVal = curLatEl.textContent.trim();
+        const lngVal = curLngEl.textContent.trim();
+        if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0' && latVal !== 'Fetching...') {
+            latNum = parseFloat(latVal);
+            lngNum = parseFloat(lngVal);
+        }
+    }
+
+    if (latNum === 18.4748182) {
+        try {
+            const coords = await Promise.race([
+                getCurrentLocationPromise(),
+                new Promise(resolve => setTimeout(() => resolve(null), 2000))
+            ]);
+            if (coords && coords.latitude && coords.longitude) {
+                latNum = coords.latitude;
+                lngNum = coords.longitude;
+                updateLocationUI(latNum, lngNum);
+            }
+        } catch (e) {}
+    }
+
+    if ((latNum === 18.4748182 || latNum === 0) && session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+        latNum = parseFloat(session.userData.lat);
+        lngNum = parseFloat(session.userData.long);
+    }
+
     const dsrBody = {
         userid: userid,
         gemptype: gemptype,
@@ -2937,8 +2971,8 @@ async function submitDSR() {
         nfollowup: followupDate || "",
         nfollowuptime: followupDate ? (hours + ":" + minutes) : "",
         assignedemp: "All",
-        gpsLatitude: "0.0",
-        gpsLongitude: "0.0",
+        gpsLatitude: String(latNum),
+        gpsLongitude: String(lngNum),
         l_nremark: remark,
         n_nremark: remark,
         leaddatetime: currentDateTime,
@@ -2949,34 +2983,7 @@ async function submitDSR() {
         lleadno: (selectedClient && selectedClient.leadno) || ""
     };
 
-    let latNum = 18.4748182;
-    let lngNum = 73.8119225;
-
-    showToast('Fetching location...', 'info');
-    let coords = await getCurrentLocationPromise();
-    if (coords && coords.latitude && coords.longitude) {
-        latNum = coords.latitude;
-        lngNum = coords.longitude;
-        updateLocationUI(latNum, lngNum);
-    } else {
-        const curLatEl = document.getElementById('current-lat');
-        const curLngEl = document.getElementById('current-lng');
-        if (curLatEl && curLngEl) {
-            const latVal = curLatEl.textContent.trim();
-            const lngVal = curLngEl.textContent.trim();
-            if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0' && latVal !== 'Fetching...') {
-                latNum = parseFloat(latVal);
-                lngNum = parseFloat(lngVal);
-            }
-        }
-        if ((latNum === 18.4748182 || latNum === 0) && session && session.userData && session.userData.lat && session.userData.lat !== '0') {
-            latNum = parseFloat(session.userData.lat);
-            lngNum = parseFloat(session.userData.long);
-        }
-    }
-
-    dsrBody.gpsLatitude = String(latNum);
-    dsrBody.gpsLongitude = String(lngNum);
+    const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
 
     if (navigator.onLine) {
         try {
@@ -2987,6 +2994,23 @@ async function submitDSR() {
                 body: JSON.stringify(dsrBody)
             });
             console.log('[DSR] Third-party submission succeeded.');
+
+            // Also fire iamatevent DSR_UPDATE with real GPS coordinates so DSR_UPDATE row gets full location
+            fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: currentDateTime,
+                    gotempname: gempname || 'demo group',
+                    gotempid: userid || imeino,
+                    gotinoutstatus: "DSR_UPDATE",
+                    gotiamatclient: name,
+                    gotiamatlat: latNum,
+                    gotiamatlong: lngNum,
+                    gimeinumber: imeino
+                })
+            }).catch(e => console.error('[DSR_UPDATE iamatevent Error]:', e));
+
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
         }
