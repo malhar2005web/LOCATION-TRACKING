@@ -5625,3 +5625,123 @@ body.dark-mode {
   display: inline-block;
 }
 
+/* =========================================================
+   DARK MODE ENHANCEMENTS & SUB-DASHBOARDS ORANGE CARDS FIX
+   ========================================================= */
+.dark-mode,
+.dark-mode body,
+.dark-mode .view,
+.dark-mode #client-view,
+.dark-mode #checkin-view,
+.dark-mode #leave-view,
+.dark-mode #reports-view,
+.dark-mode #today-reminders-view,
+.dark-mode #dsr-summary-report-view,
+.dark-mode #dsr-updated-list-view,
+.dark-mode #start-end-day-report-view,
+.dark-mode #day-end-summary-view,
+.dark-mode #booking-report-view,
+.dark-mode #leave-application-view,
+.dark-mode #leave-status-view,
+.dark-mode #existing-client-dsr-view,
+.dark-mode .dsr-premium-space-view,
+.dark-mode .dashboard-layout,
+.dark-mode .main-panel,
+.dark-mode .page-container,
+.dark-mode .page-content {
+    background: linear-gradient(135deg, #060F1E 0%, #071221 50%, #0A192F 100%) !important;
+    color: #F8FAFC !important;
+}
+
+/* Sub-dashboard Headers & Inline Back Bar in Dark Mode */
+.dark-mode .dashboard-header,
+.dark-mode .page-header,
+.dark-mode .submenu-header,
+.dark-mode .inline-back-row {
+    background: rgba(6, 15, 30, 0.85) !important;
+    border-bottom: 1px solid rgba(255, 122, 26, 0.25) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+}
+
+.dark-mode .user-name,
+.dark-mode .inline-page-title,
+.dark-mode .welcome-title,
+.dark-mode .header-user-info .user-name,
+.dark-mode .dashboard-header .user-name {
+    color: #FFFFFF !important;
+}
+
+.dark-mode .user-id,
+.dark-mode .header-user-info .user-id,
+.dark-mode .dashboard-header .user-id,
+.dark-mode .welcome-desc {
+    color: #94A3B8 !important;
+}
+
+.dark-mode .inline-back-btn {
+    background: rgba(255, 122, 26, 0.18) !important;
+    border: 1px solid rgba(255, 122, 26, 0.4) !important;
+    color: #FF7A1A !important;
+}
+
+.dark-mode .inline-back-btn svg {
+    stroke: #FF7A1A !important;
+}
+
+/* Orange Submenu Action Cards (Leave Dashboard, Check-in Dashboard, Reports Dashboard) */
+.dark-mode .action-card-submenu {
+    background: linear-gradient(135deg, rgba(255, 122, 26, 0.20) 0%, rgba(240, 99, 10, 0.10) 100%) !important;
+    border: 1.5px solid rgba(255, 122, 26, 0.45) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border-radius: 20px !important;
+    padding: 18px 20px !important;
+    margin-bottom: 16px !important;
+    box-shadow: 
+        0 12px 32px -8px rgba(240, 99, 10, 0.28),
+        inset 0 1px 0 rgba(255, 200, 160, 0.4) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.dark-mode .action-card-submenu:hover,
+.dark-mode .action-card-submenu:active {
+    transform: scale(0.98) translateY(1px) !important;
+    background: linear-gradient(135deg, rgba(255, 122, 26, 0.32) 0%, rgba(240, 99, 10, 0.20) 100%) !important;
+    border-color: rgba(255, 122, 26, 0.7) !important;
+    box-shadow: 
+        0 16px 40px -8px rgba(240, 99, 10, 0.38),
+        inset 0 1px 0 rgba(255, 220, 180, 0.6) !important;
+}
+
+.dark-mode .action-card-submenu-title {
+    font-size: 16px !important;
+    font-weight: 750 !important;
+    color: #FFFFFF !important;
+}
+
+.dark-mode .action-card-submenu-desc {
+    font-size: 13px !important;
+    color: #CBD5E1 !important;
+    opacity: 0.95 !important;
+}
+
+.dark-mode .action-card-submenu-arrow {
+    color: #FF9142 !important;
+    font-size: 24px !important;
+    font-weight: 800 !important;
+}
+
+.dark-mode .action-card-icon-wrapper {
+    background: linear-gradient(135deg, #FF7A1A 0%, #F0630A 100%) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 14px rgba(240, 99, 10, 0.45) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dark-mode .action-card-icon-wrapper svg {
+    stroke: #FFFFFF !important;
+}
+
+
