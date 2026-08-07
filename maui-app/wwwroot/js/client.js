@@ -4486,4 +4486,10 @@ window.submitDSR = submitDSR;
 window.showDsrSuccessModal = showDsrSuccessModal;
 window.onDsrSuccessOkClick = onDsrSuccessOkClick;
 
+window.openDSRForm = typeof openDSRForm !== 'undefined' ? openDSRForm : null;
+window.cancelLeave = typeof cancelLeave !== 'undefined' ? cancelLeave : null;
+window.snoozeReminder = typeof snoozeReminder !== 'undefined' ? snoozeReminder : null;
+window.completeReminder = typeof completeReminder !== 'undefined' ? completeReminder : null;
+window.removeNewClientUploadedFile = typeof removeNewClientUploadedFile !== 'undefined' ? removeNewClientUploadedFile : null;
+
 
