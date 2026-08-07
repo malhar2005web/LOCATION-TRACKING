@@ -4471,4 +4471,19 @@ function updateDsrRemarkCounter() {
     }
 }
 
+// ── Global Window Bindings for WebView HTML OnClick Handlers ──
+window.handleDayToggle = handleDayToggle;
+window.handleDayStart = handleDayStart;
+window.handleDayEnd = handleDayEnd;
+window.handleCheckIn = handleCheckIn;
+window.handleLeavePage = handleLeavePage;
+window.handleReports = handleReports;
+window.handleUpdateDSR = handleUpdateDSR;
+window.handleNewClient = handleNewClient;
+window.handleBooking = typeof handleBooking !== 'undefined' ? handleBooking : null;
+window.handleReminders = typeof handleReminders !== 'undefined' ? handleReminders : null;
+window.submitDSR = submitDSR;
+window.showDsrSuccessModal = showDsrSuccessModal;
+window.onDsrSuccessOkClick = onDsrSuccessOkClick;
+
 
