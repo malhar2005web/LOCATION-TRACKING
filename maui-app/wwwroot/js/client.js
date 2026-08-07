@@ -2966,6 +2966,7 @@ async function submitDSR() {
         gpsLatitude: dsrBody.gpsLatitude,
         gpsLongitude: dsrBody.gpsLongitude
     });
+    showToast(`📍 DSR GPS: ${dsrBody.gpsLatitude}, ${dsrBody.gpsLongitude}`, 'info');
 
     if (navigator.onLine) {
         try {
@@ -3145,6 +3146,7 @@ async function onDsrSuccessOkClick() {
                 lng: lngVal,
                 pendingCheckoutData: pendingCheckoutData
             });
+            showToast(`🚀 CHECKOUT GPS: ${latVal}, ${lngVal}`, 'info');
 
             console.log('[CHECKOUT] Triggering CHECKOUT API on OK click...');
             const response = await fetch(`${API_BASE_URL}/iamatevent`, {
