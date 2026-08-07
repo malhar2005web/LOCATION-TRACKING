@@ -2936,6 +2936,8 @@ async function submitDSR() {
         lngVal = parseFloat(session.userData.long);
     }
 
+    const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+
     const dsrBody = {
         userid: userid,
         gemptype: gemptype,
