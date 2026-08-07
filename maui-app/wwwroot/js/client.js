@@ -3150,7 +3150,21 @@ async function onDsrSuccessOkClick() {
             });
             showToast(`🚀 CHECKOUT GPS: ${latVal}, ${lngVal}`, 'info');
 
-            console.log('[CHECKOUT] Triggering CHECKOUT API on OK click...');
+            console.log('[CHECKOUT] Awaiting startendday CHECKOUT...');
+            await fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gcdatetime: currentDate.slice(0, 16),
+                    glaststatus: "CHECKOUT",
+                    empid: empid,
+                    imeino: imeino,
+                    gpsLatitude: latVal,
+                    gpsLongitude: lngVal
+                })
+            }).catch(e => console.error('[CHECKOUT] startendday error:', e));
+
+            console.log('[CHECKOUT] Triggering iamatevent CHECKOUT API on OK click...');
             const response = await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
