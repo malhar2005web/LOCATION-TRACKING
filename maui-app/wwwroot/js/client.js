@@ -3173,7 +3173,7 @@ async function onDsrSuccessOkClick() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     gcdatetime: currentDate.slice(0, 16),
-                    glaststatus: "CHECKOUT",
+                    glaststatus: "END",
                     empid: empid,
                     imeino: imeino,
                     gpsLatitude: latVal,
@@ -3191,8 +3191,11 @@ async function onDsrSuccessOkClick() {
             });
             const resText = await res.text();
             console.log('[CHECKOUT TEST] iamatevent response text:', resText);
+
+            showToast(`CHECKOUT Sent! startendday: ${startenddayRes.status} | iamatevent: ${resText.slice(0, 40)}`, 'success');
         } catch (err) {
             console.error('[CHECKOUT TEST] Error sending checkout:', err);
+            showToast(`CHECKOUT Error: ${err.message}`, 'error');
         }
     }
 
