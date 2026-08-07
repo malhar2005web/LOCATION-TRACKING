@@ -3092,8 +3092,11 @@ async function submitDSR() {
             timeStr = `${mins} min ${secs} sec`;
         } else {
             timeStr = `${secs} sec`;
-        }
-    }
+    console.log("===== DSR GPS =====");
+    console.log({
+        gpsLatitude: dsrBody.gpsLatitude,
+        gpsLongitude: dsrBody.gpsLongitude
+    });
 
     // Show Custom Modal alert -> User taps OK -> triggers CHECKOUT & returns to Home Screen
     showDsrSuccessModal(timeStr, name, latNum, lngNum);
@@ -3160,7 +3163,12 @@ async function onDsrSuccessOkClick() {
         gimeinumber: imeino
     };
 
-    console.log('[CHECKOUT OK Click] Triggering CHECKOUT APIs (startendday + iamatevent):', payload);
+    console.log("===== CHECKOUT PAYLOAD =====");
+    console.log({
+        lat: latVal,
+        lng: lngVal,
+        pendingCheckoutData: pendingCheckoutData
+    });
 
     if (navigator.onLine) {
         try {
