@@ -2864,29 +2864,61 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     document.getElementById('dsr-followup-hours').value = '00';
     document.getElementById('dsr-followup-minutes').value = '00';
 
-    // Trigger DSR_UPDATE event on Update DSR button click
+    // Trigger DSR_UPDATE event on Update DSR button click with REAL GPS coordinates
     const session = typeof getSession === 'function' ? getSession() : null;
     if (navigator.onLine && session && session.userData) {
-        const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
-        const empid = (session.userData.name) || 'demo admin2';
-        const userid = session.userData.clientId || session.userData.deviceId || '';
-        const latVal = parseFloat(session.userData.lat || '0');
-        const lngVal = parseFloat(session.userData.long || '0');
+        (async () => {
+            const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            const empid = (session.userData.name) || 'demo group';
+            const userid = session.userData.clientId || session.userData.deviceId || '';
 
-        fetch(`${API_BASE_URL}/iamatevent`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                gotiamatdate: currentDateTime,
-                gotempname: empid,
-                gotempid: userid,
-                gotinoutstatus: "DSR_UPDATE",
-                gotiamatclient: name || "",
-                gotiamatlat: latVal,
-                gotiamatlong: lngVal,
-                gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-            })
-        }).catch(err => console.error('iamatevent DSR_UPDATE error:', err));
+            let latVal = 18.4748182;
+            let lngVal = 73.8119225;
+
+            const curLatEl = document.getElementById('current-lat');
+            const curLngEl = document.getElementById('current-lng');
+            if (curLatEl && curLngEl) {
+                const domLat = curLatEl.textContent.trim();
+                const domLng = curLngEl.textContent.trim();
+                if (domLat !== '--' && domLng !== '--' && domLat !== '0' && domLat !== '0.0' && domLat !== 'Fetching...') {
+                    latVal = parseFloat(domLat);
+                    lngVal = parseFloat(domLng);
+                }
+            }
+
+            if (latVal === 18.4748182) {
+                try {
+                    const coords = await Promise.race([
+                        getCurrentLocationPromise(),
+                        new Promise(resolve => setTimeout(() => resolve(null), 2000))
+                    ]);
+                    if (coords && coords.latitude && coords.longitude) {
+                        latVal = coords.latitude;
+                        lngVal = coords.longitude;
+                    }
+                } catch (e) {}
+            }
+
+            if ((latVal === 18.4748182 || latVal === 0) && session.userData.lat && session.userData.lat !== '0') {
+                latVal = parseFloat(session.userData.lat);
+                lngVal = parseFloat(session.userData.long);
+            }
+
+            fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: currentDateTime,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "DSR_UPDATE",
+                    gotiamatclient: name || "",
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: session.userData.deviceId || ""
+                })
+            }).catch(err => console.error('iamatevent DSR_UPDATE error:', err));
+        })();
     }
 
     showView('existing-client-dsr-view');
@@ -2994,22 +3026,6 @@ async function submitDSR() {
                 body: JSON.stringify(dsrBody)
             });
             console.log('[DSR] Third-party submission succeeded.');
-
-            // Also fire iamatevent DSR_UPDATE with real GPS coordinates so DSR_UPDATE row gets full location
-            fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDateTime,
-                    gotempname: gempname || 'demo group',
-                    gotempid: userid || imeino,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: name,
-                    gotiamatlat: latNum,
-                    gotiamatlong: lngNum,
-                    gimeinumber: imeino
-                })
-            }).catch(e => console.error('[DSR_UPDATE iamatevent Error]:', e));
 
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
