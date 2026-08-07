@@ -3964,12 +3964,11 @@ body {
     .profile-dropdown-menu {
         position: fixed !important;
         top: 68px !important;
-        right: 12px !important;
-        left: auto !important;
-        width: 295px !important;
-        max-width: calc(100vw - 24px) !important;
-        transform-origin: top right !important;
-        z-index: 99999 !important;
+        left: 14px !important;
+        right: auto !important;
+        width: min(310px, calc(100vw - 28px)) !important;
+        transform-origin: top left !important;
+        z-index: 9999999 !important;
     }
     .theme-toggle-item {
         justify-content: space-between !important;
@@ -5763,7 +5762,9 @@ body.dark-mode {
 
 .profile-dropdown-menu,
 .dark-mode .profile-dropdown-menu {
-    position: absolute !important;
+    left: 14px !important;
+    right: auto !important;
+    transform-origin: top left !important;
     z-index: 9999999 !important;
 }
 
