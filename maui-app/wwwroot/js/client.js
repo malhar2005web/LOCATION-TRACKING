@@ -2972,7 +2972,22 @@ async function submitDSR() {
 
     if (navigator.onLine) {
         try {
-            console.log('[DSR] Submitting to third-party API...');
+            console.log('[DSR] Sending location log to Skyway receiveddata API...');
+            const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
+            
+            await fetch(`${API_BASE_URL}/receiveddata`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotdate: currentDateTime,
+                    gotlat: latVal,
+                    gotlong: lngVal,
+                    gotimeino: imeino,
+                    add_Data: name || ""
+                })
+            }).catch(err => console.error('[DSR] receiveddata API error:', err));
+
+            console.log('[DSR] Submitting to third-party API updateleaddeatils_sky...');
             await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -3149,6 +3164,19 @@ async function onDsrSuccessOkClick() {
                 pendingCheckoutData: pendingCheckoutData
             });
             showToast(`🚀 CHECKOUT GPS: ${latVal}, ${lngVal}`, 'info');
+
+            console.log('[CHECKOUT] Sending location log to Skyway receiveddata API...');
+            await fetch(`${API_BASE_URL}/receiveddata`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotdate: currentDate,
+                    gotlat: latVal,
+                    gotlong: lngVal,
+                    gotimeino: imeino,
+                    add_Data: clientNameVal || ""
+                })
+            }).catch(err => console.error('[CHECKOUT] receiveddata API error:', err));
 
             console.log('[CHECKOUT] Triggering CHECKOUT API on OK click...');
             const response = await fetch(`${API_BASE_URL}/iamatevent`, {
