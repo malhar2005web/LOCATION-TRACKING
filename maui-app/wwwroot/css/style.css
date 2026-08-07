@@ -5744,4 +5744,28 @@ body.dark-mode {
     stroke: #FFFFFF !important;
 }
 
+/* Force Header & Profile Dropdown Stacking Context ABOVE all Cards */
+.dashboard-header,
+.page-header,
+.submenu-header,
+.dark-mode .dashboard-header,
+.dark-mode .page-header,
+.dark-mode .submenu-header {
+    position: relative !important;
+    z-index: 99999 !important;
+}
+
+.profile-dropdown-container,
+.dark-mode .profile-dropdown-container {
+    position: relative !important;
+    z-index: 999999 !important;
+}
+
+.profile-dropdown-menu,
+.dark-mode .profile-dropdown-menu {
+    position: absolute !important;
+    z-index: 9999999 !important;
+}
+
+
 
