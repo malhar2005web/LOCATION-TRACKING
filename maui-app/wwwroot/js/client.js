@@ -2756,12 +2756,12 @@ function renderClientList(list) {
         const escapedSiteName = (c.leadsitename || '').replace(/'/g, "\\'");
 
         html += `
-            <tr style="border-bottom:1px solid rgba(0,0,0,0.05);">
-                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:10px 4px; font-size:0.78rem;">${index + 1}</td>
-                <td style="font-weight:700; color:var(--color-text-primary); padding:10px 6px; font-size:0.82rem; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedName}">${leadname}</td>
-                <td style="font-size:0.78rem; color:var(--color-text-secondary); padding:10px 6px; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedAddress}">${address || '--'}</td>
-                <td style="text-align:center; padding:10px 4px; white-space:nowrap;">
-                    <button class="btn-dsr" style="font-size:0.75rem; padding:7px 10px; white-space:nowrap; border-radius:8px; font-weight:700;" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
+            <tr style="border-bottom:1px solid rgba(0,0,0,0.06);">
+                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:12px 4px; font-size:0.8rem; width:36px; min-width:36px;">${index + 1}</td>
+                <td style="font-weight:700; color:var(--ink, #1E2430); padding:12px 10px; font-size:0.85rem; word-break:normal; overflow-wrap:break-word; white-space:normal; line-height:1.35; min-width:200px;" title="${escapedName}">${leadname}</td>
+                <td style="font-size:0.8rem; color:#4A5568; padding:12px 10px; word-break:normal; overflow-wrap:break-word; white-space:normal; line-height:1.35; min-width:250px;" title="${escapedAddress}">${address || '--'}</td>
+                <td style="text-align:center; padding:12px 6px; width:110px; min-width:110px; white-space:nowrap;">
+                    <button class="btn-dsr" style="font-size:0.75rem; padding:8px 12px; white-space:nowrap; border-radius:10px; font-weight:700; background: linear-gradient(135deg, #48BB78, #38A169); color: #fff; border: none; box-shadow: 0 4px 12px rgba(56, 161, 105, 0.25);" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
                 </td>
             </tr>
         `;
@@ -2922,7 +2922,19 @@ async function submitDSR() {
     const gemptype = (session && session.role) || 'client';
     const gempname = (session && session.userData && session.userData.name) || '';
 
-    const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    showToast('Fetching location...', 'info');
+    let latVal = 18.4748182;
+    let lngVal = 73.8119225;
+
+    const coords = await getCurrentLocationPromise();
+    if (coords && coords.latitude && coords.longitude) {
+        latVal = coords.latitude;
+        lngVal = coords.longitude;
+        updateLocationUI(latVal, lngVal);
+    } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+        latVal = parseFloat(session.userData.lat);
+        lngVal = parseFloat(session.userData.long);
+    }
 
     const dsrBody = {
         userid: userid,
@@ -2937,8 +2949,8 @@ async function submitDSR() {
         nfollowup: followupDate || "",
         nfollowuptime: followupDate ? (hours + ":" + minutes) : "",
         assignedemp: "All",
-        gpsLatitude: "0.0",
-        gpsLongitude: "0.0",
+        gpsLatitude: String(latVal),
+        gpsLongitude: String(lngVal),
         l_nremark: remark,
         n_nremark: remark,
         leaddatetime: currentDateTime,
@@ -2949,34 +2961,11 @@ async function submitDSR() {
         lleadno: (selectedClient && selectedClient.leadno) || ""
     };
 
-    let latNum = 18.4748182;
-    let lngNum = 73.8119225;
-
-    showToast('Fetching location...', 'info');
-    let coords = await getCurrentLocationPromise();
-    if (coords && coords.latitude && coords.longitude) {
-        latNum = coords.latitude;
-        lngNum = coords.longitude;
-        updateLocationUI(latNum, lngNum);
-    } else {
-        const curLatEl = document.getElementById('current-lat');
-        const curLngEl = document.getElementById('current-lng');
-        if (curLatEl && curLngEl) {
-            const latVal = curLatEl.textContent.trim();
-            const lngVal = curLngEl.textContent.trim();
-            if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0' && latVal !== 'Fetching...') {
-                latNum = parseFloat(latVal);
-                lngNum = parseFloat(lngVal);
-            }
-        }
-        if ((latNum === 18.4748182 || latNum === 0) && session && session.userData && session.userData.lat && session.userData.lat !== '0') {
-            latNum = parseFloat(session.userData.lat);
-            lngNum = parseFloat(session.userData.long);
-        }
-    }
-
-    dsrBody.gpsLatitude = String(latNum);
-    dsrBody.gpsLongitude = String(lngNum);
+    console.log("===== DSR GPS =====");
+    console.log({
+        gpsLatitude: dsrBody.gpsLatitude,
+        gpsLongitude: dsrBody.gpsLongitude
+    });
 
     if (navigator.onLine) {
         try {
@@ -3092,141 +3081,94 @@ async function submitDSR() {
             timeStr = `${mins} min ${secs} sec`;
         } else {
             timeStr = `${secs} sec`;
-    lastDsrGpsCaptured = { lat: dsrBody.gpsLatitude, lng: dsrBody.gpsLongitude };
+        }
+    }
 
-    console.log("===== DSR GPS =====");
-    console.log({
-        gpsLatitude: dsrBody.gpsLatitude,
-        gpsLongitude: dsrBody.gpsLongitude
-    });
-
-    // Show Custom Modal alert -> User taps OK -> triggers CHECKOUT & returns to Home Screen
-    showDsrSuccessModal(timeStr, name, latNum, lngNum);
+    // Show Custom Modal alert -> User taps OK -> returns to Home Screen
+    showDsrSuccessModal(timeStr, name, dsrBody.gpsLatitude, dsrBody.gpsLongitude);
 }
 
 let pendingCheckoutData = null;
-let lastDsrGpsCaptured = null;
 
 function showDsrSuccessModal(timeStr, clientName, lat, lng) {
     pendingCheckoutData = { clientName, lat, lng };
+
+    let modalEl = document.getElementById('dsr-success-modal');
+    if (!modalEl) {
+        modalEl = document.createElement('div');
+        modalEl.id = 'dsr-success-modal';
+        modalEl.style.cssText = 'position: fixed; inset: 0; z-index: 99999; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; padding: 20px;';
+        modalEl.innerHTML = `
+            <div style="background: #FFFFFF; border-radius: 24px; padding: 28px 24px; max-width: 320px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+                <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, rgba(72,187,120,0.15), rgba(72,187,120,0.3)); color: #38A169; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 800; color: #1E2430; margin: 0 0 8px;">DSR Submitted!</h3>
+                <p id="dsr-success-modal-msg" style="font-size: 13.5px; color: #6A7180; margin: 0 0 20px; line-height: 1.4;"></p>
+                <button type="button" onclick="onDsrSuccessOkClick()" style="width: 100%; padding: 13px; font-weight: 750; font-size: 15px; color: #FFFFFF; background: linear-gradient(145deg, #FF7A1A, #F0630A); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(240, 99, 10, 0.3); cursor: pointer;">
+                    OK
+                </button>
+            </div>
+        `;
+        document.body.appendChild(modalEl);
+    }
+
     const msgEl = document.getElementById('dsr-success-modal-msg');
     if (msgEl) {
         msgEl.textContent = timeStr ? `You filled the DSR form in ${timeStr}.` : 'DSR submitted successfully!';
     }
-    const modalEl = document.getElementById('dsr-success-modal');
-    if (modalEl) {
-        modalEl.style.display = 'flex';
-    }
+    modalEl.style.display = 'flex';
 }
 
 async function onDsrSuccessOkClick() {
-    console.log('[CHECKOUT] OK BUTTON CLICKED');
-
     // 1. Hide modal immediately
     const modalEl = document.getElementById('dsr-success-modal');
     if (modalEl) {
         modalEl.style.display = 'none';
     }
 
-    // 2. Extract session & user details with solid fallbacks
-    const session = typeof getSession === 'function' ? getSession() : null;
-    const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-    
-    const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
-    const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-    const userid = (session && session.userData && session.userData.clientId) || imeino;
-
-    let latVal = 18.4748182;
-    let lngVal = 73.8119225;
-
-    if (pendingCheckoutData && pendingCheckoutData.lat && pendingCheckoutData.lat !== '0.0' && pendingCheckoutData.lat !== 0 && !isNaN(pendingCheckoutData.lat)) {
-        latVal = parseFloat(pendingCheckoutData.lat);
-        lngVal = parseFloat(pendingCheckoutData.lng);
-    } else {
-        const coords = await getCurrentLocationPromise();
-        if (coords && coords.latitude && coords.longitude) {
-            latVal = coords.latitude;
-            lngVal = coords.longitude;
-        } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
-            latVal = parseFloat(session.userData.lat);
-            lngVal = parseFloat(session.userData.long);
-        }
-    }
-
-    const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
-
-    const payload = {
-        gotiamatdate: currentDate,
-        gotempname: empid,
-        gotempid: userid,
-        gotinoutstatus: "CHECKOUT",
-        gotiamatclient: clientNameVal,
-        gotiamatlat: latVal,
-        gotiamatlong: lngVal,
-        gimeinumber: imeino
-    };
-
-    console.log("===== CHECKOUT PAYLOAD =====");
-    console.log({
-        lat: latVal,
-        lng: lngVal,
-        pendingCheckoutData: pendingCheckoutData
-    });
-
-    // 📱 Mobile Screen Debug Alert 1: Show captured GPS coordinates directly on phone screen
-    const debugMessage = 
-        `===== GPS DIAGNOSTIC TEST =====\n\n` +
-        `1️⃣ DSR Submit GPS:\n` +
-        `Lat: ${lastDsrGpsCaptured ? lastDsrGpsCaptured.lat : 'N/A'}\n` +
-        `Lng: ${lastDsrGpsCaptured ? lastDsrGpsCaptured.lng : 'N/A'}\n\n` +
-        `2️⃣ CHECKOUT Payload GPS:\n` +
-        `Lat: ${latVal}\n` +
-        `Lng: ${lngVal}\n\n` +
-        `Pending Data: ${pendingCheckoutData ? JSON.stringify(pendingCheckoutData) : 'null'}`;
-
-    alert(debugMessage);
-
+    // 2. Call CHECKOUT API to iamatevent
     if (navigator.onLine) {
         try {
-            console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
-            console.log('[CHECKOUT TEST] Payload:', JSON.stringify(payload));
+            const session = getSession();
+            const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            const empid = (session && session.userData && session.userData.name) || 'demo admin2';
+            const userid = (session && session.userData && (session.userData.clientId || session.userData.deviceId)) || '11';
+            const imeino = (session && session.userData && session.userData.deviceId) || 'a057d027fed7bace';
+            const latVal = (pendingCheckoutData && pendingCheckoutData.lat) ? parseFloat(pendingCheckoutData.lat) : 17.7012001;
+            const lngVal = (pendingCheckoutData && pendingCheckoutData.lng) ? parseFloat(pendingCheckoutData.lng) : 73.9826115;
+            const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
 
-            console.log('[CHECKOUT TEST] Awaiting startendday CHECKOUT...');
-            const startenddayRes = await fetch(`${API_BASE_URL}/startendday`, {
+            console.log("===== CHECKOUT PAYLOAD =====");
+            console.log({
+                lat: latVal,
+                lng: lngVal,
+                pendingCheckoutData: pendingCheckoutData
+            });
+
+            console.log('[CHECKOUT] Triggering CHECKOUT API on OK click...');
+            const response = await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    gcdatetime: currentDate.slice(0, 16),
-                    glaststatus: "CHECKOUT",
-                    empid: empid,
-                    imeino: imeino,
-                    gpsLatitude: latVal,
-                    gpsLongitude: lngVal
+                    gotiamatdate: currentDate,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "CHECKOUT",
+                    gotiamatclient: clientNameVal,
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
                 })
             });
-            const startenddayText = await startenddayRes.text();
-            console.log('[CHECKOUT TEST] startendday status:', startenddayRes.status, startenddayText);
-
-            console.log('[CHECKOUT TEST] Awaiting iamatevent CHECKOUT...');
-            const res = await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const resText = await res.text();
-            console.log('[CHECKOUT TEST] iamatevent response text:', resText);
-
-            // 📱 Mobile Screen Debug Alert 2: Show exact server response text on phone screen
-            alert(`===== SERVER RESPONSE =====\n\nstartendday (HTTP ${startenddayRes.status}):\n${startenddayText.trim()}\n\niamatevent:\n${resText.trim()}`);
-
-            showToast(`CHECKOUT Sent! startendday: ${startenddayRes.status} | iamatevent: ${resText.slice(0, 40)}`, 'success');
+            const data = await response.json();
+            console.log('[CHECKOUT] API response:', data);
         } catch (err) {
-            console.error('[CHECKOUT TEST] Error sending checkout:', err);
-            alert(`CHECKOUT Error: ${err.message}`);
+            console.error('[CHECKOUT] API call error:', err);
         }
     }
 
-    // 3. Return to Home screen AFTER await completes
+    // 3. Return to Home screen
     showView('client-view');
 }
 
@@ -4470,26 +4412,5 @@ function updateDsrRemarkCounter() {
         counterField.textContent = `${len} / 250`;
     }
 }
-
-// ── Global Window Bindings for WebView HTML OnClick Handlers ──
-window.handleDayToggle = handleDayToggle;
-window.handleDayStart = handleDayStart;
-window.handleDayEnd = handleDayEnd;
-window.handleCheckIn = handleCheckIn;
-window.handleLeavePage = handleLeavePage;
-window.handleReports = handleReports;
-window.handleUpdateDSR = handleUpdateDSR;
-window.handleNewClient = handleNewClient;
-window.handleBooking = typeof handleBooking !== 'undefined' ? handleBooking : null;
-window.handleReminders = typeof handleReminders !== 'undefined' ? handleReminders : null;
-window.submitDSR = submitDSR;
-window.showDsrSuccessModal = showDsrSuccessModal;
-window.onDsrSuccessOkClick = onDsrSuccessOkClick;
-
-window.openDSRForm = typeof openDSRForm !== 'undefined' ? openDSRForm : null;
-window.cancelLeave = typeof cancelLeave !== 'undefined' ? cancelLeave : null;
-window.snoozeReminder = typeof snoozeReminder !== 'undefined' ? snoozeReminder : null;
-window.completeReminder = typeof completeReminder !== 'undefined' ? completeReminder : null;
-window.removeNewClientUploadedFile = typeof removeNewClientUploadedFile !== 'undefined' ? removeNewClientUploadedFile : null;
 
 
