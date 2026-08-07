@@ -3092,6 +3092,8 @@ async function submitDSR() {
             timeStr = `${mins} min ${secs} sec`;
         } else {
             timeStr = `${secs} sec`;
+    lastDsrGpsCaptured = { lat: dsrBody.gpsLatitude, lng: dsrBody.gpsLongitude };
+
     console.log("===== DSR GPS =====");
     console.log({
         gpsLatitude: dsrBody.gpsLatitude,
@@ -3103,6 +3105,7 @@ async function submitDSR() {
 }
 
 let pendingCheckoutData = null;
+let lastDsrGpsCaptured = null;
 
 function showDsrSuccessModal(timeStr, clientName, lat, lng) {
     pendingCheckoutData = { clientName, lat, lng };
@@ -3170,6 +3173,19 @@ async function onDsrSuccessOkClick() {
         pendingCheckoutData: pendingCheckoutData
     });
 
+    // 📱 Mobile Screen Debug Alert 1: Show captured GPS coordinates directly on phone screen
+    const debugMessage = 
+        `===== GPS DIAGNOSTIC TEST =====\n\n` +
+        `1️⃣ DSR Submit GPS:\n` +
+        `Lat: ${lastDsrGpsCaptured ? lastDsrGpsCaptured.lat : 'N/A'}\n` +
+        `Lng: ${lastDsrGpsCaptured ? lastDsrGpsCaptured.lng : 'N/A'}\n\n` +
+        `2️⃣ CHECKOUT Payload GPS:\n` +
+        `Lat: ${latVal}\n` +
+        `Lng: ${lngVal}\n\n` +
+        `Pending Data: ${pendingCheckoutData ? JSON.stringify(pendingCheckoutData) : 'null'}`;
+
+    alert(debugMessage);
+
     if (navigator.onLine) {
         try {
             console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
@@ -3200,10 +3216,13 @@ async function onDsrSuccessOkClick() {
             const resText = await res.text();
             console.log('[CHECKOUT TEST] iamatevent response text:', resText);
 
+            // 📱 Mobile Screen Debug Alert 2: Show exact server response text on phone screen
+            alert(`===== SERVER RESPONSE =====\n\nstartendday (HTTP ${startenddayRes.status}):\n${startenddayText.trim()}\n\niamatevent:\n${resText.trim()}`);
+
             showToast(`CHECKOUT Sent! startendday: ${startenddayRes.status} | iamatevent: ${resText.slice(0, 40)}`, 'success');
         } catch (err) {
             console.error('[CHECKOUT TEST] Error sending checkout:', err);
-            showToast(`CHECKOUT Error: ${err.message}`, 'error');
+            alert(`CHECKOUT Error: ${err.message}`);
         }
     }
 
