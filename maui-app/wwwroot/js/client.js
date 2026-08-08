@@ -3772,7 +3772,21 @@ async function handleDayEnd() {
         const empid = (session.userData.name) || 'demo admin2';
         const imeino = session.userData.deviceId || '';
 
-        // Note: Do not call startendday END to prevent server from overwriting existing Checkout records in CHECK IN/OUT STATUS report
+        // Omit startendday END call to prevent Skyway server from overwriting existing Checkout records in CHECK IN/OUT STATUS report
+        /*
+        fetch(`${API_BASE_URL}/startendday`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                gcdatetime: currentDate.slice(0, 16), // YYYY-MM-DD HH:MM
+                glaststatus: "END",
+                empid: empid,
+                imeino: imeino,
+                gpsLatitude: latVal,
+                gpsLongitude: lngVal
+            })
+        }).catch(err => console.error('startendday END error:', err));
+        */
 
         // Call iamatevent
         fetch(`${API_BASE_URL}/iamatevent`, {
