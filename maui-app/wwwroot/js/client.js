@@ -3866,21 +3866,7 @@ async function handleDayEnd() {
         const empid = (session.userData.name) || 'demo admin2';
         const imeino = session.userData.deviceId || '';
 
-        // Call startendday
-        fetch(`${API_BASE_URL}/startendday`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                gcdatetime: currentDate.slice(0, 16), // YYYY-MM-DD HH:MM
-                glaststatus: "END",
-                empid: empid,
-                imeino: imeino,
-                gpsLatitude: latVal,
-                gpsLongitude: lngVal
-            })
-        }).catch(err => console.error('startendday END error:', err));
-
-        // Call iamatevent
+        // Call iamatevent END (keeps DAY END SUMMARY 2 intact without overwriting CHECK IN/OUT STATUS checkout record)
         fetch(`${API_BASE_URL}/iamatevent`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
