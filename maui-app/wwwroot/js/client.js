@@ -2864,29 +2864,61 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     document.getElementById('dsr-followup-hours').value = '00';
     document.getElementById('dsr-followup-minutes').value = '00';
 
-    // Trigger DSR_UPDATE event on Update DSR button click
+    // Trigger DSR_UPDATE event on Update DSR button click with REAL GPS coordinates
     const session = typeof getSession === 'function' ? getSession() : null;
     if (navigator.onLine && session && session.userData) {
-        const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
-        const empid = (session.userData.name) || 'demo admin2';
-        const userid = session.userData.clientId || session.userData.deviceId || '';
-        const latVal = parseFloat(session.userData.lat || '0');
-        const lngVal = parseFloat(session.userData.long || '0');
+        (async () => {
+            const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            const empid = (session.userData.name) || 'demo group';
+            const userid = session.userData.clientId || session.userData.deviceId || '';
 
-        fetch(`${API_BASE_URL}/iamatevent`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                gotiamatdate: currentDateTime,
-                gotempname: empid,
-                gotempid: userid,
-                gotinoutstatus: "DSR_UPDATE",
-                gotiamatclient: name || "",
-                gotiamatlat: latVal,
-                gotiamatlong: lngVal,
-                gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-            })
-        }).catch(err => console.error('iamatevent DSR_UPDATE error:', err));
+            let latVal = 18.4748182;
+            let lngVal = 73.8119225;
+
+            const curLatEl = document.getElementById('current-lat');
+            const curLngEl = document.getElementById('current-lng');
+            if (curLatEl && curLngEl) {
+                const domLat = curLatEl.textContent.trim();
+                const domLng = curLngEl.textContent.trim();
+                if (domLat !== '--' && domLng !== '--' && domLat !== '0' && domLat !== '0.0' && domLat !== 'Fetching...') {
+                    latVal = parseFloat(domLat);
+                    lngVal = parseFloat(domLng);
+                }
+            }
+
+            if (latVal === 18.4748182) {
+                try {
+                    const coords = await Promise.race([
+                        getCurrentLocationPromise(),
+                        new Promise(resolve => setTimeout(() => resolve(null), 2000))
+                    ]);
+                    if (coords && coords.latitude && coords.longitude) {
+                        latVal = coords.latitude;
+                        lngVal = coords.longitude;
+                    }
+                } catch (e) {}
+            }
+
+            if ((latVal === 18.4748182 || latVal === 0) && session.userData.lat && session.userData.lat !== '0') {
+                latVal = parseFloat(session.userData.lat);
+                lngVal = parseFloat(session.userData.long);
+            }
+
+            fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: currentDateTime,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "DSR_UPDATE",
+                    gotiamatclient: name || "",
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: session.userData.deviceId || ""
+                })
+            }).catch(err => console.error('iamatevent DSR_UPDATE error:', err));
+        })();
     }
 
     showView('existing-client-dsr-view');
@@ -2924,6 +2956,40 @@ async function submitDSR() {
 
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
+    let latNum = 18.4748182;
+    let lngNum = 73.8119225;
+
+    // Try DOM current location elements first
+    const curLatEl = document.getElementById('current-lat');
+    const curLngEl = document.getElementById('current-lng');
+    if (curLatEl && curLngEl) {
+        const latVal = curLatEl.textContent.trim();
+        const lngVal = curLngEl.textContent.trim();
+        if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0' && latVal !== 'Fetching...') {
+            latNum = parseFloat(latVal);
+            lngNum = parseFloat(lngVal);
+        }
+    }
+
+    if (latNum === 18.4748182) {
+        try {
+            const coords = await Promise.race([
+                getCurrentLocationPromise(),
+                new Promise(resolve => setTimeout(() => resolve(null), 2000))
+            ]);
+            if (coords && coords.latitude && coords.longitude) {
+                latNum = coords.latitude;
+                lngNum = coords.longitude;
+                updateLocationUI(latNum, lngNum);
+            }
+        } catch (e) {}
+    }
+
+    if ((latNum === 18.4748182 || latNum === 0) && session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+        latNum = parseFloat(session.userData.lat);
+        lngNum = parseFloat(session.userData.long);
+    }
+
     const dsrBody = {
         userid: userid,
         gemptype: gemptype,
@@ -2937,8 +3003,8 @@ async function submitDSR() {
         nfollowup: followupDate || "",
         nfollowuptime: followupDate ? (hours + ":" + minutes) : "",
         assignedemp: "All",
-        gpsLatitude: "0.0",
-        gpsLongitude: "0.0",
+        gpsLatitude: String(latNum),
+        gpsLongitude: String(lngNum),
         l_nremark: remark,
         n_nremark: remark,
         leaddatetime: currentDateTime,
@@ -2949,16 +3015,7 @@ async function submitDSR() {
         lleadno: (selectedClient && selectedClient.leadno) || ""
     };
 
-    const curLatEl = document.getElementById('current-lat');
-    const curLngEl = document.getElementById('current-lng');
-    if (curLatEl && curLngEl) {
-        const latVal = curLatEl.textContent.trim();
-        const lngVal = curLngEl.textContent.trim();
-        if (latVal !== '--' && lngVal !== '--') {
-            dsrBody.gpsLatitude = latVal;
-            dsrBody.gpsLongitude = lngVal;
-        }
-    }
+    const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
 
     if (navigator.onLine) {
         try {
@@ -2969,30 +3026,6 @@ async function submitDSR() {
                 body: JSON.stringify(dsrBody)
             });
             console.log('[DSR] Third-party submission succeeded.');
-
-            // Fire CHECKOUT event on DSR submit
-            const checkoutDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-            const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
-            const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-            const userid = (session && session.userData && session.userData.clientId) || imeino;
-            const checkoutLat = parseFloat(dsrBody.gpsLatitude || '18.4748182');
-            const checkoutLng = parseFloat(dsrBody.gpsLongitude || '73.8119225');
-
-            fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: checkoutDate,
-                    gotempname: empid,
-                    gotempid: userid,
-                    gotinoutstatus: "CHECKOUT",
-                    gotiamatclient: name || "",
-                    gotiamatlat: checkoutLat,
-                    gotiamatlong: checkoutLng,
-                    gimeinumber: imeino
-                })
-            }).then(r => r.json()).then(res => console.log('[DSR Submit CHECKOUT] Response:', res))
-                .catch(e => console.error('[DSR Submit CHECKOUT] Error:', e));
 
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
@@ -3102,8 +3135,8 @@ async function submitDSR() {
         }
     }
 
-    // Show Custom Modal alert -> User taps OK -> returns to Home Screen
-    showDsrSuccessModal(timeStr, name, dsrBody.gpsLatitude, dsrBody.gpsLongitude);
+    // Show Custom Modal alert -> User taps OK -> triggers CHECKOUT & returns to Home Screen
+    showDsrSuccessModal(timeStr, name, latNum, lngNum);
 }
 
 let pendingCheckoutData = null;
@@ -3121,6 +3154,8 @@ function showDsrSuccessModal(timeStr, clientName, lat, lng) {
 }
 
 async function onDsrSuccessOkClick() {
+    console.log('[CHECKOUT] OK BUTTON CLICKED');
+
     // 1. Hide modal immediately
     const modalEl = document.getElementById('dsr-success-modal');
     if (modalEl) {
@@ -3130,7 +3165,7 @@ async function onDsrSuccessOkClick() {
     // 2. Extract session & user details with solid fallbacks
     const session = typeof getSession === 'function' ? getSession() : null;
     const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-
+    
     const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
     const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
     const userid = (session && session.userData && session.userData.clientId) || imeino;
@@ -3138,12 +3173,18 @@ async function onDsrSuccessOkClick() {
     let latVal = 18.4748182;
     let lngVal = 73.8119225;
 
-    if (pendingCheckoutData && pendingCheckoutData.lat && pendingCheckoutData.lat !== '0.0' && pendingCheckoutData.lat !== 0) {
+    if (pendingCheckoutData && pendingCheckoutData.lat && pendingCheckoutData.lat !== '0.0' && pendingCheckoutData.lat !== 0 && !isNaN(pendingCheckoutData.lat)) {
         latVal = parseFloat(pendingCheckoutData.lat);
         lngVal = parseFloat(pendingCheckoutData.lng);
-    } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
-        latVal = parseFloat(session.userData.lat);
-        lngVal = parseFloat(session.userData.long);
+    } else {
+        const coords = await getCurrentLocationPromise();
+        if (coords && coords.latitude && coords.longitude) {
+            latVal = coords.latitude;
+            lngVal = coords.longitude;
+        } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+            latVal = parseFloat(session.userData.lat);
+            lngVal = parseFloat(session.userData.long);
+        }
     }
 
     const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
@@ -3159,21 +3200,51 @@ async function onDsrSuccessOkClick() {
         gimeinumber: imeino
     };
 
-    console.log('[CHECKOUT OK Click] Triggering CHECKOUT API:', payload);
+    console.log('[CHECKOUT OK Click] Triggering CHECKOUT APIs (startendday + iamatevent):', payload);
 
     if (navigator.onLine) {
-        fetch(`${API_BASE_URL}/iamatevent`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).then(res => res.json()).then(data => {
-            console.log('[CHECKOUT OK Click] API Response:', data);
-        }).catch(err => {
-            console.error('[CHECKOUT OK Click] API Error:', err);
-        });
+        try {
+            console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
+            console.log('[CHECKOUT TEST] Payload:', JSON.stringify(payload));
+
+            console.log('[CHECKOUT TEST] Awaiting startendday CHECKOUT...');
+            const startenddayRes = await fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gcdatetime: currentDate.slice(0, 16),
+                    glaststatus: "CHECKOUT",
+                    empid: empid,
+                    imeino: imeino,
+                    gpsLatitude: latVal,
+                    gpsLongitude: lngVal
+                })
+            });
+            const startenddayText = await startenddayRes.text();
+            console.log('[CHECKOUT TEST] startendday status:', startenddayRes.status, startenddayText);
+
+            console.log('[CHECKOUT TEST] Awaiting iamatevent CHECKOUT...');
+            const res = await fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const resText = await res.text();
+            console.log('[CHECKOUT TEST] iamatevent response text:', resText);
+
+            showToast(`CHECKOUT Sent! startendday: ${startenddayRes.status} | iamatevent: ${resText.slice(0, 40)}`, 'success');
+        } catch (err) {
+            console.error('[CHECKOUT TEST] Error sending checkout:', err);
+            showToast(`CHECKOUT Error: ${err.message}`, 'error');
+        }
     }
 
-    // 3. Return to Home screen
+    // 3. Reset isCheckedIn state so user can Check In again for subsequent client visits
+    isCheckedIn = false;
+    localStorage.setItem('isCheckedIn', 'false');
+    updateWorkdayUI();
+
+    // 4. Return to Home screen AFTER await completes
     showView('client-view');
 }
 
