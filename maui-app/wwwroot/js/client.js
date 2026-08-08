@@ -3177,11 +3177,17 @@ async function onDsrSuccessOkClick() {
         latVal = parseFloat(pendingCheckoutData.lat);
         lngVal = parseFloat(pendingCheckoutData.lng);
     } else {
-        const coords = await getCurrentLocationPromise();
-        if (coords && coords.latitude && coords.longitude) {
-            latVal = coords.latitude;
-            lngVal = coords.longitude;
-        } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+        const curLatEl = document.getElementById('current-lat');
+        const curLngEl = document.getElementById('current-lng');
+        if (curLatEl && curLngEl) {
+            const latText = curLatEl.textContent.trim();
+            const lngText = curLngEl.textContent.trim();
+            if (latText !== '--' && lngText !== '--' && latText !== '0' && latText !== '0.0' && latText !== 'Fetching...') {
+                latVal = parseFloat(latText);
+                lngVal = parseFloat(lngText);
+            }
+        }
+        if ((latVal === 18.4748182 || latVal === 0) && session && session.userData && session.userData.lat && session.userData.lat !== '0') {
             latVal = parseFloat(session.userData.lat);
             lngVal = parseFloat(session.userData.long);
         }
@@ -3200,43 +3206,33 @@ async function onDsrSuccessOkClick() {
         gimeinumber: imeino
     };
 
-    console.log('[CHECKOUT OK Click] Triggering CHECKOUT APIs (startendday + iamatevent):', payload);
+    console.log('[CHECKOUT OK Click] Triggering parallel CHECKOUT APIs (startendday + iamatevent):', payload);
 
     if (navigator.onLine) {
-        try {
-            console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
-            console.log('[CHECKOUT TEST] Payload:', JSON.stringify(payload));
+        // Fire startendday (CHECKOUT) for CHECK IN/OUT STATUS report
+        fetch(`${API_BASE_URL}/startendday`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                gcdatetime: currentDate.slice(0, 16),
+                glaststatus: "CHECKOUT",
+                empid: empid,
+                imeino: imeino,
+                gpsLatitude: latVal,
+                gpsLongitude: lngVal
+            })
+        }).then(r => r.text()).then(txt => console.log('[CHECKOUT] startendday status:', txt))
+          .catch(err => console.error('[CHECKOUT] startendday error:', err));
 
-            console.log('[CHECKOUT TEST] Awaiting startendday CHECKOUT...');
-            const startenddayRes = await fetch(`${API_BASE_URL}/startendday`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gcdatetime: currentDate.slice(0, 16),
-                    glaststatus: "CHECKOUT",
-                    empid: empid,
-                    imeino: imeino,
-                    gpsLatitude: latVal,
-                    gpsLongitude: lngVal
-                })
-            });
-            const startenddayText = await startenddayRes.text();
-            console.log('[CHECKOUT TEST] startendday status:', startenddayRes.status, startenddayText);
+        // Fire iamatevent (CHECKOUT) for DAY END SUMMARY 2 report
+        fetch(`${API_BASE_URL}/iamatevent`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(r => r.text()).then(txt => console.log('[CHECKOUT] iamatevent response:', txt))
+          .catch(err => console.error('[CHECKOUT] iamatevent error:', err));
 
-            console.log('[CHECKOUT TEST] Awaiting iamatevent CHECKOUT...');
-            const res = await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const resText = await res.text();
-            console.log('[CHECKOUT TEST] iamatevent response text:', resText);
-
-            showToast(`CHECKOUT Sent! startendday: ${startenddayRes.status} | iamatevent: ${resText.slice(0, 40)}`, 'success');
-        } catch (err) {
-            console.error('[CHECKOUT TEST] Error sending checkout:', err);
-            showToast(`CHECKOUT Error: ${err.message}`, 'error');
-        }
+        showToast('CHECKOUT Sent Successfully!', 'success');
     }
 
     // 3. Reset isCheckedIn state so user can Check In again for subsequent client visits
@@ -3244,7 +3240,7 @@ async function onDsrSuccessOkClick() {
     localStorage.setItem('isCheckedIn', 'false');
     updateWorkdayUI();
 
-    // 4. Return to Home screen AFTER await completes
+    // 4. Return to Home screen
     showView('client-view');
 }
 
