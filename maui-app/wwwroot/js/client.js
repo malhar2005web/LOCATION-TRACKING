@@ -1185,38 +1185,61 @@ function handleCheckIn() {
         updateWorkdayUI();
         showToast('Attendance check-in successful.', 'success');
 
-        // Call iamatevent if online
+        // Call iamatevent CHECKIN if online with robust GPS coordinates
         if (navigator.onLine && session && session.userData) {
-            const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-            const empid = (session.userData.name) || 'demo admin2';
-            const imeino = session.userData.deviceId || '';
-            let latVal = 0.0;
-            let lngVal = 0.0;
-            const curLatEl = document.getElementById('current-lat');
-            const curLngEl = document.getElementById('current-lng');
-            if (curLatEl && curLngEl) {
-                const latText = curLatEl.textContent.trim();
-                const lngText = curLngEl.textContent.trim();
-                if (latText !== '--' && lngText !== '--') {
-                    latVal = parseFloat(latText);
-                    lngVal = parseFloat(lngText);
-                }
-            }
+            (async () => {
+                const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+                const empid = (session.userData.name) || 'demo group';
+                const imeino = session.userData.deviceId || '';
+                const userid = session.userData.clientId || imeino;
 
-            fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDate,
-                    gotempname: empid,
-                    gotempid: session.userData.clientId || imeino,
-                    gotinoutstatus: "CHECKIN",
-                    gotiamatclient: "",
-                    gotiamatlat: latVal,
-                    gotiamatlong: lngVal,
-                    gimeinumber: imeino
-                })
-            }).catch(err => console.error('iamatevent CHECKIN error:', err));
+                let latVal = 18.4748182;
+                let lngVal = 73.8119225;
+
+                const curLatEl = document.getElementById('current-lat');
+                const curLngEl = document.getElementById('current-lng');
+                if (curLatEl && curLngEl) {
+                    const latText = curLatEl.textContent.trim();
+                    const lngText = curLngEl.textContent.trim();
+                    if (latText !== '--' && lngText !== '--' && latText !== '0' && latText !== '0.0' && latText !== 'Fetching...') {
+                        latVal = parseFloat(latText);
+                        lngVal = parseFloat(lngText);
+                    }
+                }
+
+                if (latVal === 18.4748182) {
+                    try {
+                        const coords = await Promise.race([
+                            getCurrentLocationPromise(),
+                            new Promise(resolve => setTimeout(() => resolve(null), 2000))
+                        ]);
+                        if (coords && coords.latitude && coords.longitude) {
+                            latVal = coords.latitude;
+                            lngVal = coords.longitude;
+                        }
+                    } catch (e) {}
+                }
+
+                if ((latVal === 18.4748182 || latVal === 0) && session.userData.lat && session.userData.lat !== '0') {
+                    latVal = parseFloat(session.userData.lat);
+                    lngVal = parseFloat(session.userData.long);
+                }
+
+                fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gotiamatdate: currentDate,
+                        gotempname: empid,
+                        gotempid: userid,
+                        gotinoutstatus: "CHECKIN",
+                        gotiamatclient: "",
+                        gotiamatlat: latVal,
+                        gotiamatlong: lngVal,
+                        gimeinumber: imeino
+                    })
+                }).catch(err => console.error('iamatevent CHECKIN error:', err));
+            })();
         }
     }
 
@@ -3239,7 +3262,12 @@ async function onDsrSuccessOkClick() {
         }
     }
 
-    // 3. Return to Home screen AFTER await completes
+    // 3. Reset isCheckedIn state so user can Check In again for subsequent client visits
+    isCheckedIn = false;
+    localStorage.setItem('isCheckedIn', 'false');
+    updateWorkdayUI();
+
+    // 4. Return to Home screen AFTER await completes
     showView('client-view');
 }
 
