@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCS Admin - Client List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/client-list.css">
+</head>
+<body class="dark-mode">
+
+    <!-- ── Top Navigation Bar ── -->
+    <header class="top-navbar">
+        <div class="nav-left">
+            <div class="nav-logo-box">
+                <img src="img/pcs-logo.png?v=2" alt="PCS Logo" class="nav-logo">
+            </div>
+            <a href="dashboard.html" class="back-btn" title="Back to Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </a>
+        </div>
+        <div class="nav-center">
+            <h2 class="nav-page-title">Client Directory</h2>
+        </div>
+        <div class="nav-right">
+            <span class="welcome-text">Welcome, <strong id="admin-name">admin</strong></span>
+            <!-- Settings Dropdown -->
+            <div class="settings-dropdown" id="settings-dropdown">
+                <button class="nav-icon-btn" id="btn-settings" title="Settings" onclick="toggleSettingsDropdown(event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+                <div class="settings-menu" id="settings-menu">
+                    <div class="settings-item">
+                        <div class="settings-item-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            <span>Light Mode</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <button class="nav-icon-btn" id="btn-logout" title="Logout" onclick="handleLogout()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ── Main Content ── -->
+    <main class="client-list-main">
+
+        <!-- ── Header Info & Actions ── -->
+        <div class="client-control-card">
+            <div class="client-header-title">
+                <h1 class="main-page-heading">CLIENT LIST</h1>
+            </div>
+
+            <div class="search-actions-bar">
+                <div class="search-input-group">
+                    <label class="search-label">Search By Client</label>
+                    <div class="search-box-wrapper">
+                        <span class="search-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </span>
+                        <input type="text" id="search-client-input" class="dash-search-input" placeholder="Search Client..." onkeyup="if(event.key==='Enter') filterClients();">
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-get-list" onclick="filterClients()">GET LIST</button>
+                    <button class="btn-add-client" onclick="openAddClientModal()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>ADD CLIENT</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Data Table ── -->
+        <div class="table-wrapper">
+            <table class="report-table" id="client-table">
+                <thead>
+                    <tr>
+                        <th>SR NO</th>
+                        <th>CLIENT NAME</th>
+                        <th>SITE</th>
+                        <th>CONTACT PERSON</th>
+                        <th>CONTACT NO</th>
+                        <th>MAIL ID</th>
+                        <th>ADDRESS</th>
+                        <th>REGISTERED</th>
+                        <th>ASSIGNED USER</th>
+                        <th>NEXT FOLLOWUP</th>
+                        <th>REMARK..</th>
+                        <th>PAN NUMBER</th>
+                        <th>GST NUMBER</th>
+                    </tr>
+                </thead>
+                <tbody id="client-tbody">
+                    <!-- Rendered by JS -->
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <!-- ── NEW CLIENT MODAL OVERLAY ── -->
+    <div class="modal-overlay" id="add-client-modal">
+        <div class="modal-card">
+            
+            <div class="modal-header">
+                <h2 class="modal-title">NEW CLIENT</h2>
+                <button type="button" class="modal-close-btn" onclick="closeAddClientModal()">&times;</button>
+            </div>
+
+            <form id="new-client-form" onsubmit="handleCreateClient(event)">
+                <div class="form-columns-grid">
+
+                    <!-- LEFT COLUMN -->
+                    <div class="form-col">
+                        <div class="form-field-group">
+                            <label class="form-label">Client Name</label>
+                            <input type="text" id="client-name" class="form-control" placeholder="Enter Client Name" required>
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">PAN No.</label>
+                            <input type="text" id="client-pan" class="form-control" placeholder="Enter PAN Number">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Mobile No.</label>
+                            <input type="tel" id="client-mobile" class="form-control" placeholder="Enter Mobile Number">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" id="client-email" class="form-control" placeholder="Enter Email Address">
+                        </div>
+
+                        <!-- Name of Directors / Partners / Proprietor -->
+                        <div class="form-field-group">
+                            <label class="form-label">Name of Directors / Partners / Proprietor</label>
+                            <div class="multi-input-row">
+                                <input type="text" id="client-dir1" class="form-control" placeholder="Director 1">
+                                <input type="text" id="client-dir2" class="form-control" placeholder="Director 2">
+                            </div>
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Contact Person</label>
+                            <input type="text" id="client-contact-person" class="form-control" placeholder="Enter Contact Person">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Landline No.</label>
+                            <input type="text" id="client-landline1" class="form-control" placeholder="Enter Landline Number">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Bank Account No.</label>
+                            <input type="text" id="client-bank-acc" class="form-control" placeholder="Enter Account Number">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">IFSC Code</label>
+                            <input type="text" id="client-ifsc" class="form-control" placeholder="Enter IFSC Code">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Two Reference Details</label>
+                            <div class="multi-input-row">
+                                <input type="text" id="client-ref1" class="form-control" placeholder="Ref 1 Details">
+                                <input type="text" id="client-ref2" class="form-control" placeholder="Ref 2 Details">
+                            </div>
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Followup Date.</label>
+                            <input type="date" id="client-followup-date" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="form-col">
+                        <div class="form-field-group">
+                            <label class="form-label">Office Address</label>
+                            <textarea id="client-office-address" class="form-control textarea-field" rows="3" placeholder="Enter Office Address"></textarea>
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">GST No.</label>
+                            <input type="text" id="client-gst" class="form-control" placeholder="Enter GST Number">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Landline No.</label>
+                            <input type="text" id="client-landline2" class="form-control" placeholder="Enter Alternate Landline">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Site Details</label>
+                            <input type="text" id="client-site-details" class="form-control" placeholder="Enter Site Details">
+                            <div class="multi-input-row" style="margin-top: 8px;">
+                                <input type="text" id="client-dir3" class="form-control" placeholder="Director 3">
+                                <input type="text" id="client-dir4" class="form-control" placeholder="Director 4">
+                            </div>
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Contact No.</label>
+                            <input type="text" id="client-contact-no" class="form-control" placeholder="Enter Alternate Contact No.">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Bank Name</label>
+                            <input type="text" id="client-bank-name" class="form-control" placeholder="Enter Bank Name">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Bank Address</label>
+                            <textarea id="client-bank-address" class="form-control textarea-field" rows="2" placeholder="Enter Bank Address"></textarea>
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Remark</label>
+                            <input type="text" id="client-remark" class="form-control" placeholder="Enter Remarks">
+                        </div>
+
+                        <div class="form-field-group">
+                            <label class="form-label">Followup Time</label>
+                            <div class="time-select-row">
+                                <span class="time-lbl">Hrs</span>
+                                <select id="followup-hrs" class="form-control time-select">
+                                    <option value="00" selected>00</option>
+                                    <option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+                                </select>
+                                <span class="time-lbl">Min</span>
+                                <select id="followup-min" class="form-control time-select">
+                                    <option value="00" selected>00</option>
+                                    <option value="15">15</option><option value="30">30</option><option value="45">45</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer Action Buttons -->
+                <div class="modal-footer-actions">
+                    <button type="submit" class="primary-btn submit-btn">Submit</button>
+                    <span class="action-or">or</span>
+                    <button type="button" class="cancel-link-btn" onclick="closeAddClientModal()">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/client-list.js"></script>
+</body>
+</html>

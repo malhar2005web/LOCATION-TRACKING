@@ -1,0 +1,354 @@
+/* ============================================
+   FleetTrackOn Admin Portal CSS
+   Design System & Styling matching Mobile App
+   ============================================ */
+
+/* ── Custom Properties & Design Tokens ── */
+:root {
+    --color-bg-dark-1: #060F1E;
+    --color-bg-dark-2: #071221;
+    --color-bg-dark-3: #0A192F;
+    
+    --color-card-bg: rgba(16, 30, 54, 0.75);
+    --color-card-border: rgba(255, 255, 255, 0.1);
+    
+    --color-orange: #F28C52;
+    --color-orange-dark: #D4731A;
+    --color-orange-light: #FF9E66;
+    --color-orange-gradient: linear-gradient(135deg, #F28C52 0%, #FF9E66 100%);
+    
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #94A3B8;
+    --color-text-muted: #64748B;
+    
+    --color-input-bg: rgba(255, 255, 255, 0.05);
+    --color-input-border: rgba(255, 255, 255, 0.12);
+    --color-input-focus: #F28C52;
+    
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+    
+    --shadow-card: 0 20px 50px rgba(0, 0, 0, 0.4);
+    --shadow-orange-glow: 0 8px 24px rgba(242, 140, 82, 0.35);
+    
+    --font-primary: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Base Reset & No Scroll ── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-primary);
+}
+
+html, body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden !important; /* Disables all scrollbars */
+}
+
+body {
+    background: linear-gradient(135deg, var(--color-bg-dark-1) 0%, var(--color-bg-dark-2) 50%, var(--color-bg-dark-3) 100%);
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* ── Login Wrapper & Container ── */
+.login-wrapper {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ── Header & Branding ── */
+.login-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-box {
+    background: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 24px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-logo {
+    height: 75px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.portal-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+}
+
+.portal-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+}
+
+/* ── Form Card (Glassmorphism) ── */
+.form-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: var(--color-card-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--color-card-border);
+    padding: 32px 28px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+/* ── Input Groups ── */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.form-input {
+    width: 100%;
+    height: 52px;
+    background: var(--color-input-bg);
+    border: 1px solid var(--color-input-border);
+    border-radius: var(--radius-md);
+    padding: 0 46px 0 48px;
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-weight: 500;
+    outline: none;
+    transition: var(--transition);
+}
+
+.form-input::placeholder {
+    color: var(--color-text-muted);
+    font-weight: 400;
+}
+
+.form-input:focus {
+    border-color: var(--color-input-focus);
+    background: rgba(242, 140, 82, 0.06);
+    box-shadow: 0 0 0 3px rgba(242, 140, 82, 0.2);
+}
+
+.form-input:focus + .input-icon,
+.input-wrapper:focus-within .input-icon {
+    color: var(--color-orange);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+    transition: var(--transition);
+}
+
+.toggle-password:hover {
+    color: #FFFFFF;
+}
+
+/* ── Primary Button ── */
+.primary-btn {
+    width: 100%;
+    height: 54px;
+    background: var(--color-orange-gradient);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: var(--shadow-orange-glow);
+    transition: var(--transition);
+    margin-top: 6px;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(242, 140, 82, 0.45);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 14px rgba(242, 140, 82, 0.3);
+}
+
+.btn-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+}
+
+.primary-btn:hover .btn-arrow {
+    transform: translateX(4px);
+}
+
+/* ── Footer ── */
+.login-footer {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+}
+
+/* ── Toast Notifications ── */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 99999;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    font-size: 0.88rem;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    animation: toastIn 0.3s ease-out;
+}
+
+.toast.success {
+    border-left: 4px solid #10B981;
+}
+
+.toast.error {
+    border-left: 4px solid #EF4444;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Global Modal Overlay & Card Centering ── */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(12, 24, 45, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-card {
+    background: var(--color-card-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: auto;
+}
+
+.modal-overlay.open .modal-card {
+    transform: scale(1);
+}
+
+body.light-mode .modal-overlay {
+    background: rgba(42, 42, 42, 0.45);
+}
+
+body.light-mode .modal-card {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: #ECE7E0;
+    box-shadow: 0 25px 60px rgba(42, 42, 42, 0.18);
+}

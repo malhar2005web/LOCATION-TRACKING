@@ -1,0 +1,89 @@
+/* ============================================
+   Applied Leaves Page Styles
+   ============================================ */
+
+.applied-leaves-main {
+    padding-top: 84px;
+    padding-bottom: 40px;
+    max-width: 1450px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.leaves-title-card {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ── Filter Bar Modifications ── */
+.btn-generate {
+    height: 40px;
+    align-self: flex-end;
+}
+
+/* ── Table Cell Custom Badges ── */
+.dept-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.22);
+    color: #60A5FA;
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.leave-type-pill {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.22);
+    color: #A78BFA;
+    font-size: 0.76rem;
+    font-weight: 500;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.status-approved {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-pending {
+    background: rgba(245, 158, 11, 0.15);
+    color: #FBBF24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-rejected {
+    background: rgba(239, 68, 68, 0.15);
+    color: #F87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ============================================
+   LIGHT MODE OVERRIDES
+   ============================================ */
+
+body.light-mode .dept-badge {
+    background: rgba(2, 132, 199, 0.1);
+    color: #0284C7;
+    border-color: rgba(2, 132, 199, 0.25);
+}
+
+body.light-mode .leave-type-pill {
+    background: rgba(139, 92, 246, 0.1);
+    color: #7C3AED;
+    border-color: rgba(139, 92, 246, 0.25);
+}

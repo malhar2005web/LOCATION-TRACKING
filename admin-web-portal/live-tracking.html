@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCS Admin - Live Tracking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet.js CSS for Interactive Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/live-tracking.css">
+</head>
+<body class="dark-mode">
+
+    <!-- ── Top Navigation Bar ── -->
+    <header class="top-navbar">
+        <div class="nav-left">
+            <div class="nav-logo-box">
+                <img src="img/pcs-logo.png?v=2" alt="PCS Logo" class="nav-logo">
+            </div>
+            <a href="dashboard.html" class="back-btn" title="Back to Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </a>
+        </div>
+        <div class="nav-center">
+            <h2 class="nav-page-title">Live Tracking</h2>
+        </div>
+        <div class="nav-right">
+            <span class="welcome-text">Welcome, <strong id="admin-name">admin</strong></span>
+            <!-- Settings Dropdown -->
+            <div class="settings-dropdown" id="settings-dropdown">
+                <button class="nav-icon-btn" id="btn-settings" title="Settings" onclick="toggleSettingsDropdown(event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+                <div class="settings-menu" id="settings-menu">
+                    <div class="settings-item">
+                        <div class="settings-item-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            <span>Light Mode</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <button class="nav-icon-btn" id="btn-logout" title="Logout" onclick="handleLogout()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ── Main Content ── -->
+    <main class="tracking-main">
+
+        <!-- ── Top Map Control Toolbar ── -->
+        <div class="tracking-toolbar">
+            <div class="toolbar-scroll-group">
+                <button class="tool-btn" onclick="showToast('Distance Calculator Active', 'info')">Cal Dis</button>
+                <button class="tool-btn" id="tb-party-name" onclick="togglePopover('party-name')">Party Name</button>
+                <button class="tool-btn" id="tb-user-geofence" onclick="togglePopover('user-geofence')">User Geofence</button>
+                <button class="tool-btn" id="tb-add-landmark" onclick="togglePopover('add-landmark')">Add Landmark</button>
+                <button class="tool-btn" id="tb-update-landmarks" onclick="togglePopover('update-landmarks')">Update Landmarks</button>
+                
+                <div class="tool-input-group">
+                    <input type="text" id="search-landmark" class="tool-input" placeholder="Search Landmark">
+                    <button class="tool-btn btn-go-sm" onclick="searchLandmark()">GO</button>
+                </div>
+
+                <button class="tool-btn" onclick="showToast('User Landmark filter active', 'success')">User Landmark</button>
+                <button class="tool-btn btn-clear-sm" onclick="clearTrackingSearch()">CLEAR</button>
+
+                <div class="tool-input-group">
+                    <input type="text" id="search-user-id" class="tool-input" placeholder="Search User..">
+                    <button class="tool-btn btn-go-sm" onclick="searchTrackingUser()">GO</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Map Container Section ── -->
+        <div class="map-view-wrapper">
+            
+            <!-- Map Controls Overlay (Top Left & Top Right) -->
+            <div class="map-overlay-controls top-left">
+                <div class="map-type-switcher">
+                    <button class="map-type-btn active" id="btn-map-layer" onclick="switchMapLayer('street')">Map</button>
+                    <button class="map-type-btn" id="btn-sat-layer" onclick="switchMapLayer('satellite')">Satellite</button>
+                </div>
+            </div>
+
+            <div class="map-overlay-controls top-right">
+                <button class="map-action-pill" onclick="toggleTrafficLayer()">
+                    <span class="pulse-dot"></span> Traffic
+                </button>
+                <button class="map-action-pill" onclick="fitAllMarkers()">View All</button>
+            </div>
+
+            <!-- Leaflet Map Element -->
+            <div id="live-map" class="leaflet-map-container"></div>
+
+            <!-- ── FLOATING MAP POPOVER WINDOWS ── -->
+
+            <!-- 1. Party Name Popover (Image 1) -->
+            <div class="map-popover-card" id="popover-party-name">
+                <div class="popover-header">
+                    <h3 class="popover-title">Party Name Details</h3>
+                    <button class="popover-close" onclick="closePopover('party-name')">&times;</button>
+                </div>
+                <div class="popover-body">
+                    <div class="popover-field">
+                        <select class="popover-select" id="pn-select-party">
+                            <option value="" selected>Select Party Name</option>
+                            <option value="PIONEER HOUSING">PIONEER HOUSING</option>
+                            <option value="TATA MOTORS">TATA MOTORS</option>
+                        </select>
+                    </div>
+                    <div class="popover-field">
+                        <select class="popover-select" id="pn-select-site">
+                            <option value="" selected>Select Site Name</option>
+                            <option value="Head Office">Head Office</option>
+                            <option value="Pune Plant">Pune Plant</option>
+                        </select>
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Party Name</label>
+                        <input type="text" class="popover-input" id="pn-party-name" placeholder="Party Name">
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Site Name</label>
+                        <input type="text" class="popover-input" id="pn-site-name" placeholder="Site Name">
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Latitude</label>
+                        <input type="text" class="popover-input" id="pn-lat" placeholder="18.4748056" value="18.4748056">
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Longitude</label>
+                        <input type="text" class="popover-input" id="pn-lng" placeholder="73.8119057" value="73.8119057">
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Rediu (Radius)</label>
+                        <input type="text" class="popover-input" id="pn-radius" value="0.15">
+                    </div>
+                    <div class="popover-actions">
+                        <button class="popover-btn primary" onclick="handleUpdatePartyName()">Update</button>
+                        <button class="popover-btn accent" onclick="handleAddPartyName()">Add</button>
+                        <span class="or-txt">or</span>
+                        <button class="popover-cancel" onclick="closePopover('party-name')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. User Geofence Popover (Image 2 - Draws Circle on Map) -->
+            <div class="map-popover-card" id="popover-user-geofence">
+                <div class="popover-header">
+                    <h3 class="popover-title">User Geofence</h3>
+                    <button class="popover-close" onclick="closePopover('user-geofence')">&times;</button>
+                </div>
+                <div class="popover-body">
+                    <div class="popover-field">
+                        <select class="popover-select" id="geo-select-zone">
+                            <option value="" selected>Select Geofence Zone</option>
+                            <option value="Pune City Zone">Pune City Zone (1.5 KM)</option>
+                            <option value="Mumbai Badlapur Zone">Mumbai Badlapur Zone (2.0 KM)</option>
+                        </select>
+                    </div>
+                    <div class="popover-actions">
+                        <button class="popover-btn primary" onclick="displayGeofenceCircle()">Display Geo</button>
+                        <button class="popover-btn danger" onclick="removeGeofenceCircle()">Remove Geo</button>
+                        <span class="or-txt">or</span>
+                        <button class="popover-cancel" onclick="closePopover('user-geofence')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Add Landmark Popover (Image 3) -->
+            <div class="map-popover-card" id="popover-add-landmark">
+                <div class="popover-header">
+                    <h3 class="popover-title">Add Landmark</h3>
+                    <button class="popover-close" onclick="closePopover('add-landmark')">&times;</button>
+                </div>
+                <div class="popover-body">
+                    <div class="popover-field">
+                        <label class="popover-label">Latitude</label>
+                        <input type="text" class="popover-input" id="add-lm-lat" placeholder="Latitude">
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Longitude</label>
+                        <input type="text" class="popover-input" id="add-lm-lng" placeholder="Longitude">
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Address</label>
+                        <textarea class="popover-textarea" id="add-lm-address" rows="3" placeholder="Enter landmark address"></textarea>
+                    </div>
+                    <div class="popover-actions">
+                        <button class="popover-btn primary" onclick="handleSubmitAddLandmark()">Submit</button>
+                        <span class="or-txt">or</span>
+                        <button class="popover-cancel" onclick="closePopover('add-landmark')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Update Landmarks Popover (Image 4) -->
+            <div class="map-popover-card" id="popover-update-landmarks">
+                <div class="popover-header">
+                    <h3 class="popover-title">Update Landmark</h3>
+                    <button class="popover-close" onclick="closePopover('update-landmarks')">&times;</button>
+                </div>
+                <div class="popover-body">
+                    <div class="popover-field">
+                        <select class="popover-select" id="up-select-lm" onchange="onSelectLandmarkToUpdate(this.value)">
+                            <option value="" selected>Select Landmark</option>
+                            <option value="Pune Sun City Office">Pune Sun City Office</option>
+                            <option value="Mumbai Badlapur Plant">Mumbai Badlapur Plant</option>
+                        </select>
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Latitude</label>
+                        <input type="text" class="popover-input" id="up-lm-lat" placeholder="Latitude">
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Longitude</label>
+                        <input type="text" class="popover-input" id="up-lm-lng" placeholder="Longitude">
+                    </div>
+                    <div class="popover-field">
+                        <label class="popover-label">Address</label>
+                        <textarea class="popover-textarea" id="up-lm-address" rows="3" placeholder="Landmark address"></textarea>
+                    </div>
+                    <div class="popover-actions">
+                        <button class="popover-btn primary" onclick="handleSaveUpdateLandmark()">Update</button>
+                        <span class="or-txt">or</span>
+                        <button class="popover-cancel" onclick="closePopover('update-landmarks')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Leaflet.js JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/live-tracking.js"></script>
+</body>
+</html>

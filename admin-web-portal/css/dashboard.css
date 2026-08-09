@@ -1,0 +1,455 @@
+/* ============================================
+   Dashboard Page Styles
+   Inherits design tokens from style.css
+   ============================================ */
+
+/* Override login page body centering for dashboard */
+html, body {
+    overflow: auto !important;
+    height: auto !important;
+}
+
+body {
+    display: block !important;
+    align-items: initial !important;
+    justify-content: initial !important;
+    padding: 0 !important;
+}
+
+/* ── Top Navigation Bar ── */
+.top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(6, 15, 30, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    z-index: 1000;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.nav-logo-box {
+    background: #FFFFFF;
+    padding: 5px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nav-logo {
+    height: 34px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.welcome-text {
+    font-size: 0.88rem;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+}
+
+.welcome-text strong {
+    color: var(--color-orange);
+    font-weight: 600;
+}
+
+.nav-icon-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text-secondary);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.nav-icon-btn:hover {
+    background: rgba(242, 140, 82, 0.15);
+    border-color: rgba(242, 140, 82, 0.3);
+    color: var(--color-orange);
+    transform: translateY(-1px);
+}
+
+/* ── Dashboard Main ── */
+.dashboard-main {
+    padding-top: 96px;
+    padding-bottom: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-align: center;
+    letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 36px;
+}
+
+/* ── Module Cards Grid ── */
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* ── Individual Module Card ── */
+.module-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 32px 20px 28px;
+    background: var(--color-card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.module-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent, var(--color-orange)), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.module-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35),
+                0 0 40px var(--accent-glow, rgba(242, 140, 82, 0.1));
+}
+
+.module-card:hover::before {
+    opacity: 1;
+}
+
+.module-card:active {
+    transform: translateY(-2px);
+}
+
+/* ── Module Icon ── */
+.module-icon-wrap {
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent, var(--color-orange));
+    transition: var(--transition);
+}
+
+.module-card:hover .module-icon-wrap {
+    background: linear-gradient(135deg, var(--accent-glow, rgba(242,140,82,0.15)), transparent);
+    border-color: var(--accent, var(--color-orange));
+    box-shadow: 0 8px 24px var(--accent-glow, rgba(242,140,82,0.2));
+    transform: scale(1.08);
+}
+
+/* ── Module Text ── */
+.module-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    text-align: center;
+    letter-spacing: -0.01em;
+}
+
+.module-desc {
+    font-size: 0.76rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .modules-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .top-navbar {
+        padding: 0 16px;
+    }
+
+    .welcome-text {
+        display: none;
+    }
+
+    .dashboard-main {
+        padding-top: 84px;
+    }
+
+    .module-card {
+        padding: 24px 16px 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modules-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .page-title {
+        font-size: 1.4rem;
+    }
+}
+
+/* ── Settings Dropdown ── */
+.settings-dropdown {
+    position: relative;
+}
+
+.settings-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 200px;
+    background: rgba(12, 24, 45, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.96);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2000;
+}
+
+.settings-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-radius: 10px;
+    transition: background 0.15s ease;
+}
+
+.settings-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.settings-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* ── Toggle Switch ── */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: #94A3B8;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+input:checked + .toggle-slider {
+    background: var(--color-orange-gradient);
+}
+
+input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+    background: #FFFFFF;
+}
+
+/* ============================================
+   LIGHT MODE THEME
+   Colors from MAUI app style.css
+   ============================================ */
+
+body.light-mode {
+    background: linear-gradient(135deg, #F7F3EE 0%, #F5F1EB 50%, #FAF8F4 100%) !important;
+    color: #2A2A2A !important;
+}
+
+/* Navbar - Light */
+body.light-mode .top-navbar {
+    background: rgba(255, 255, 255, 0.85);
+    border-bottom-color: #ECE7E0;
+}
+
+body.light-mode .welcome-text {
+    color: #6A6A6A;
+}
+
+body.light-mode .welcome-text strong {
+    color: #D4731A;
+}
+
+body.light-mode .nav-icon-btn {
+    background: rgba(42, 42, 42, 0.05);
+    border-color: #ECE7E0;
+    color: #6A6A6A;
+}
+
+body.light-mode .nav-icon-btn:hover {
+    background: rgba(242, 140, 82, 0.12);
+    border-color: rgba(242, 140, 82, 0.3);
+    color: #D4731A;
+}
+
+/* Page Title - Light */
+body.light-mode .page-title {
+    color: #2A2A2A;
+}
+
+body.light-mode .page-subtitle {
+    color: #8A8A8A;
+}
+
+/* Module Cards - Light */
+body.light-mode .module-card {
+    background: rgba(255, 255, 255, 0.65);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .module-card:hover {
+    border-color: #ECE7E0;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08),
+                0 0 40px var(--accent-glow, rgba(242, 140, 82, 0.08));
+}
+
+body.light-mode .module-icon-wrap {
+    background: linear-gradient(135deg, rgba(42, 42, 42, 0.04), rgba(42, 42, 42, 0.02));
+    border-color: #ECE7E0;
+}
+
+body.light-mode .module-name {
+    color: #2A2A2A;
+}
+
+body.light-mode .module-desc {
+    color: #8A8A8A;
+}
+
+/* Settings Menu - Light */
+body.light-mode .settings-menu {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #ECE7E0;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .settings-item:hover {
+    background: rgba(42, 42, 42, 0.04);
+}
+
+body.light-mode .settings-item-left {
+    color: #6A6A6A;
+}
+
+body.light-mode .toggle-slider {
+    background: #ECE7E0;
+}
+
+body.light-mode .toggle-slider::before {
+    background: #8A8A8A;
+}
+
+/* Toast - Light */
+body.light-mode .toast {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #ECE7E0;
+    color: #2A2A2A;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo box - Light */
+body.light-mode .nav-logo-box {
+    background: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}

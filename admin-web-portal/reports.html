@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCS Admin - Reports</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/reports.css">
+</head>
+
+<body class="dark-mode">
+
+    <!-- ── Top Navigation Bar ── -->
+    <header class="top-navbar">
+        <div class="nav-left">
+            <div class="nav-logo-box">
+                <img src="img/pcs-logo.png?v=2" alt="PCS Logo" class="nav-logo">
+            </div>
+            <a href="dashboard.html" class="back-btn" title="Back to Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </a>
+        </div>
+        <div class="nav-center">
+            <h2 class="nav-page-title">Reports</h2>
+        </div>
+        <div class="nav-right">
+            <span class="welcome-text">Welcome, <strong id="admin-name">admin</strong></span>
+            <!-- Settings Dropdown -->
+            <div class="settings-dropdown" id="settings-dropdown">
+                <button class="nav-icon-btn" id="btn-settings" title="Settings" onclick="toggleSettingsDropdown(event)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                </button>
+                <div class="settings-menu" id="settings-menu">
+                    <div class="settings-item">
+                        <div class="settings-item-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                            <span>Light Mode</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <button class="nav-icon-btn" id="btn-logout" title="Logout" onclick="handleLogout()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- ── Main Content ── -->
+    <main class="reports-main">
+
+        <!-- ── Filter Bar ── -->
+        <div class="filter-bar">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label class="filter-label">From Date</label>
+                    <input type="date" id="from-date" class="filter-input" value="2026-08-08">
+                </div>
+                <div class="filter-group filter-time-group">
+                    <label class="filter-label">From Time</label>
+                    <input type="time" id="from-time" class="filter-input" value="00:00">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">To Date</label>
+                    <input type="date" id="to-date" class="filter-input" value="2026-08-08">
+                </div>
+                <div class="filter-group filter-time-group">
+                    <label class="filter-label">To Time</label>
+                    <input type="time" id="to-time" class="filter-input" value="23:59">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Search By User</label>
+                    <select id="search-user" class="filter-input filter-select">
+                        <option value="demo group" selected>demo group</option>
+                        <option value="All Users">All Users</option>
+                        <option value="admin">admin</option>
+                        <option value="Staff User 1">Staff User 1</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Search By Client</label>
+                    <input type="text" id="search-client" class="filter-input" placeholder="Select Party Name">
+                </div>
+                <button class="filter-search-btn" id="btn-search-report" onclick="searchReport()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <!-- ── Report Tabs ── -->
+        <div class="report-tabs">
+            <button class="report-tab" data-tab="travel-path" onclick="switchReportTab('travel-path', this)">Travel
+                Path</button>
+            <button class="report-tab" data-tab="dsr-summary" onclick="switchReportTab('dsr-summary', this)">DSR
+                Summary</button>
+            <button class="report-tab" data-tab="checkin-status" onclick="switchReportTab('checkin-status', this)">Check
+                In/Out Status</button>
+            <button class="report-tab active" data-tab="day-end-summary"
+                onclick="switchReportTab('day-end-summary', this)">Day End Summary 2</button>
+            <button class="report-tab" data-tab="day-start-end" onclick="switchReportTab('day-start-end', this)">Day
+                Start/End Report</button>
+        </div>
+
+        <!-- ── Report Header Info ── -->
+        <div class="report-info">
+            <span class="report-company">Trusystem Technology</span>
+            <h3 class="report-title" id="report-title">DAY END SUMMARY 2</h3>
+            <div class="report-meta">
+                <span>Report Between: <strong id="report-range">2026/08/08 - 2026/08/08 23:59</strong></span>
+                <span>Report Date: <strong id="report-date">2026/08/08 17:58</strong></span>
+            </div>
+        </div>
+
+        <!-- ── Data Table (rendered by JS) ── -->
+        <div class="table-wrapper">
+            <table class="report-table" id="report-table">
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody id="report-tbody">
+                    <tr>
+                        <td>84</td>
+                        <td>demo group</td>
+                        <td>08/08/2026 06:40</td>
+                        <td>06:40:00</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="activity-badge start">START</span></td>
+                        <td></td>
+                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
+                            411051</td>
+                        <td>18.4748056, 73.8119057</td>
+                    </tr>
+                    <tr>
+                        <td>85</td>
+                        <td>demo group</td>
+                        <td>08/08/2026 06:40</td>
+                        <td></td>
+                        <td>06:40:35</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="activity-badge checkin">CHECKIN</span></td>
+                        <td></td>
+                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
+                            411051</td>
+                        <td>18.4748056, 73.8119057</td>
+                    </tr>
+                    <tr>
+                        <td>86</td>
+                        <td>demo group</td>
+                        <td>08/08/2026 06:40</td>
+                        <td></td>
+                        <td></td>
+                        <td>06:40:44</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="activity-badge dsr">DSR_UPDATE</span></td>
+                        <td>PIONEER HOUSING</td>
+                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
+                            411051</td>
+                        <td>18.4748056, 73.8119057</td>
+                    </tr>
+                    <tr>
+                        <td>87</td>
+                        <td>demo group</td>
+                        <td>08/08/2026 06:41</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>06:41:00</td>
+                        <td></td>
+                        <td>0:0:25</td>
+                        <td><span class="activity-badge checkout">CHECKOUT</span></td>
+                        <td></td>
+                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
+                            411051</td>
+                        <td>18.4748056, 73.8119057</td>
+                    </tr>
+                    <tr>
+                        <td>88</td>
+                        <td>demo group</td>
+                        <td>08/08/2026 06:41</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>06:41:00</td>
+                        <td>0 Hrs 1 Min</td>
+                        <td><span class="activity-badge end">END</span></td>
+                        <td></td>
+                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
+                            411051</td>
+                        <td>18.4748056, 73.8119057</td>
+                    </tr>
+                    <tr>
+                        <td>89</td>
+                        <td>demo group</td>
+                        <td>08/08/2026 06:41</td>
+                        <td></td>
+                        <td>06:41:15</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><span class="activity-badge checkin">CHECKIN</span></td>
+                        <td></td>
+                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
+                            411051</td>
+                        <td>18.4748056, 73.8119057</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/reports.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,432 @@
+/* ============================================
+   Reports Page Styles
+   ============================================ */
+
+/* ── Reports Main ── */
+.reports-main {
+    padding-top: 80px;
+    padding-bottom: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+/* ── Back Button ── */
+.back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    color: var(--color-text-secondary);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.back-btn:hover {
+    background: rgba(242, 140, 82, 0.15);
+    border-color: rgba(242, 140, 82, 0.3);
+    color: var(--color-orange);
+}
+
+.nav-center {
+    flex: 1;
+    text-align: center;
+}
+
+.nav-page-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    letter-spacing: -0.01em;
+}
+
+/* ── Filter Bar ── */
+.filter-bar {
+    background: var(--color-card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+}
+
+.filter-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 140px;
+}
+
+.filter-time-group {
+    flex: 0.6;
+    min-width: 100px;
+}
+
+.filter-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filter-input {
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0 12px;
+    color: var(--color-text-primary);
+    font-size: 0.82rem;
+    font-family: var(--font-primary);
+    outline: none;
+    transition: var(--transition);
+}
+
+.filter-input:focus {
+    border-color: var(--color-orange);
+    background: rgba(242, 140, 82, 0.06);
+    box-shadow: 0 0 0 3px rgba(242, 140, 82, 0.15);
+}
+
+.filter-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+select.filter-input option {
+    background-color: #0A192F;
+    color: #FFFFFF;
+    padding: 8px;
+}
+
+/* Date/time input color scheme fix for dark mode */
+.filter-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+}
+
+.filter-search-btn {
+    height: 40px;
+    padding: 0 20px;
+    background: var(--color-orange-gradient);
+    border: none;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    box-shadow: var(--shadow-orange-glow);
+    transition: var(--transition);
+}
+
+.filter-search-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(242, 140, 82, 0.4);
+}
+
+/* ── Report Tabs ── */
+.report-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 20px;
+    scrollbar-width: none;
+}
+
+.report-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.report-tab {
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.report-tab:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-text-primary);
+}
+
+.report-tab.active {
+    background: rgba(242, 140, 82, 0.15);
+    border-color: rgba(242, 140, 82, 0.3);
+    color: var(--color-orange);
+    font-weight: 600;
+}
+
+/* ── Report Info Header ── */
+.report-info {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: var(--color-card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-md);
+}
+
+.report-company {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.report-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-orange);
+    margin: 6px 0 10px;
+}
+
+.report-meta {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+}
+
+.report-meta strong {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+/* ── Data Table ── */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-card-border);
+    background: var(--color-card-bg);
+    backdrop-filter: blur(16px);
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    min-width: 1200px;
+}
+
+.report-table thead th {
+    background: rgba(242, 140, 82, 0.12);
+    color: var(--color-orange);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 14px 12px;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(242, 140, 82, 0.2);
+    position: sticky;
+    top: 0;
+}
+
+.report-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.15s ease;
+}
+
+.report-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.report-table tbody td {
+    padding: 12px;
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.report-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* ── Activity Badges ── */
+.activity-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.activity-badge.start {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60A5FA;
+}
+
+.activity-badge.checkin {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+}
+
+.activity-badge.dsr {
+    background: rgba(139, 92, 246, 0.15);
+    color: #A78BFA;
+}
+
+.activity-badge.checkout {
+    background: rgba(245, 158, 11, 0.15);
+    color: #FBBF24;
+}
+
+.activity-badge.end {
+    background: rgba(239, 68, 68, 0.15);
+    color: #F87171;
+}
+
+/* ── Light Mode Overrides ── */
+body.light-mode .filter-bar {
+    background: rgba(255, 255, 255, 0.65);
+    border-color: #ECE7E0;
+}
+
+body.light-mode .filter-input {
+    background: #FFFFFF;
+    border-color: #ECE7E0;
+    color: #2A2A2A;
+}
+
+body.light-mode .filter-input:focus {
+    border-color: var(--color-orange);
+    background: #FFFFFF;
+}
+
+body.light-mode .filter-input::-webkit-calendar-picker-indicator {
+    filter: none;
+}
+
+body.light-mode .report-tab {
+    background: rgba(42, 42, 42, 0.03);
+    border-color: #ECE7E0;
+    color: #6A6A6A;
+}
+
+body.light-mode .report-tab:hover {
+    background: rgba(42, 42, 42, 0.06);
+    color: #2A2A2A;
+}
+
+body.light-mode .report-tab.active {
+    background: rgba(242, 140, 82, 0.1);
+    border-color: rgba(242, 140, 82, 0.3);
+    color: #D4731A;
+}
+
+body.light-mode .report-info {
+    background: rgba(255, 255, 255, 0.65);
+    border-color: #ECE7E0;
+}
+
+body.light-mode .report-company {
+    color: #8A8A8A;
+}
+
+body.light-mode .report-title {
+    color: #D4731A;
+}
+
+body.light-mode .report-meta {
+    color: #8A8A8A;
+}
+
+body.light-mode .report-meta strong {
+    color: #2A2A2A;
+}
+
+body.light-mode .table-wrapper {
+    background: rgba(255, 255, 255, 0.65);
+    border-color: #ECE7E0;
+}
+
+body.light-mode .report-table thead th {
+    background: rgba(242, 140, 82, 0.08);
+    color: #D4731A;
+    border-bottom-color: #ECE7E0;
+}
+
+body.light-mode .report-table tbody tr {
+    border-bottom-color: #ECE7E0;
+}
+
+body.light-mode .report-table tbody tr:hover {
+    background: rgba(242, 140, 82, 0.03);
+}
+
+body.light-mode .report-table tbody td {
+    color: #4A4A4A;
+}
+
+body.light-mode .back-btn {
+    background: rgba(42, 42, 42, 0.05);
+    border-color: #ECE7E0;
+    color: #6A6A6A;
+}
+
+body.light-mode .back-btn:hover {
+    background: rgba(242, 140, 82, 0.12);
+    color: #D4731A;
+}
+
+body.light-mode .nav-page-title {
+    color: #2A2A2A;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .filter-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .filter-group {
+        min-width: 100%;
+    }
+
+    .filter-time-group {
+        flex: 1;
+    }
+
+    .reports-main {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .report-meta {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
