@@ -472,18 +472,29 @@ select.field-sel option {
 }
 
 .link-edit-btn {
-    background: transparent;
-    border: none;
-    color: #38BDF8;
-    font-size: 0.82rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 14px;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 8px;
+    color: #38BDF8 !important;
+    font-size: 0.78rem;
     font-weight: 700;
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: none !important;
     transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(56, 189, 248, 0.15);
 }
 
 .link-edit-btn:hover {
-    color: var(--color-orange);
+    background: var(--color-orange-gradient);
+    border-color: transparent;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(242, 140, 82, 0.35);
 }
 
 /* ── UPDATE CLIENT DETAILS MODAL (Image 2) ── */
@@ -598,4 +609,16 @@ body.light-mode .admin-btn-action.secondary {
 
 body.light-mode .scrollable-names-box {
     color: #6A6A6A;
+}
+
+body.light-mode .link-edit-btn {
+    background: rgba(2, 132, 199, 0.1);
+    border-color: rgba(2, 132, 199, 0.25);
+    color: #0284C7 !important;
+}
+
+body.light-mode .link-edit-btn:hover {
+    background: var(--color-orange-gradient);
+    border-color: transparent;
+    color: #FFFFFF !important;
 }
