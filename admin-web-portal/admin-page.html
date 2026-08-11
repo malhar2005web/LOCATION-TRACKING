@@ -309,11 +309,13 @@
                     </div>
                     <div class="sel-group flex-1">
                         <label class="sub-blue-lbl">SELECT CLIENT</label>
-                        <div class="client-multiselect-box" id="ac-client-box">
-                            <!-- Multi-select / tags -->
-                            <span class="client-tag">SKYWAY HEAD OFFICE (HO)</span>
-                            <span class="client-tag">PIONEER HOUSING PUNE</span>
-                        </div>
+                        <select id="ac-select-client" class="listbox-sel listbox-wide" multiple size="3" onchange="handleSelectClientChange(this)">
+                            <option value="SKYWAY HEAD OFFICE (HO)" selected>SKYWAY HEAD OFFICE (HO)</option>
+                            <option value="PIONEER HOUSING PUNE" selected>PIONEER HOUSING PUNE</option>
+                            <option value="L&T REALTY MUMBAI">L&T REALTY MUMBAI</option>
+                            <option value="GODREJ ESTATES PUNE">GODREJ ESTATES PUNE</option>
+                            <option value="SHAPOORJI PALLONJI">SHAPOORJI PALLONJI</option>
+                        </select>
                     </div>
                 </div>
 

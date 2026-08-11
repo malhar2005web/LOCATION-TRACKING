@@ -215,6 +215,11 @@
     outline: none;
 }
 
+.listbox-wide {
+    width: 100%;
+    min-width: 280px;
+}
+
 .listbox-sel option {
     padding: 4px 8px;
     border-radius: 4px;

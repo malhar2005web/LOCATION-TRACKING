@@ -192,9 +192,14 @@ function renderUserListTable(customList = null) {
             <td><span class="dept-badge-blue">${u.dept}</span></td>
             <td>${u.dsgn}</td>
             <td><code class="code-emp">${u.empCode}</code></td>
-            <td><button type="button" class="link-edit-btn" onclick="openEditUserDetails('${u.id}')">Edit..</button></td>
+            <td><button type="button" class="link-edit-btn" onclick="openEditUserDetails('${u.id}')">Edit</button></td>
         </tr>
     `).join('');
+}
+
+function handleSelectClientChange(selectElem) {
+    const selected = Array.from(selectElem.selectedOptions).map(o => o.value);
+    showToast(`Selected client(s): ${selected.join(', ')}`, 'info');
 }
 
 function handleLiveSearchFilter() {
