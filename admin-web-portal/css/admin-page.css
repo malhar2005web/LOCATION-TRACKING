@@ -1,11 +1,11 @@
 /* ============================================
-   Admin Security Page & Password Modal Styles
+   Admin Security Page & Sub-Views Styles
    ============================================ */
 
 .admin-page-main {
     padding-top: 96px;
     padding-bottom: 40px;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     padding-left: 24px;
     padding-right: 24px;
@@ -86,113 +86,350 @@
     text-decoration: underline;
 }
 
-/* ── Unlocked Content View ── */
+/* ── Unlocked Main Container ── */
 .admin-unlocked-card {
     background: var(--color-card-bg);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid var(--color-card-border);
     border-radius: var(--radius-lg);
-    padding: 32px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+    padding: 28px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
 }
 
-.unlocked-header {
+/* ── Radio Subnav Bar (Matching Images 2, 3, 4) ── */
+.admin-subnav-bar {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 28px;
-    padding-bottom: 20px;
+    gap: 18px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    scrollbar-width: none;
 }
 
-.unlocked-icon-badge {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    background: rgba(16, 185, 129, 0.15);
-    color: #10B981;
+.admin-subnav-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.subnav-radio-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.subnav-radio-item input[type="radio"] {
+    accent-color: var(--color-orange);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.radio-label {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    transition: var(--transition);
+}
+
+.subnav-radio-item input[type="radio"]:checked + .radio-label {
+    color: var(--color-orange);
+    font-weight: 700;
+}
+
+/* ── Subview Panels ── */
+.subview-panel {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.subview-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.subview-title-row {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.subview-blue-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #38BDF8;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+/* ── Compact Admin Forms (Add User / Edit Details) ── */
+.admin-form-box {
+    max-width: 580px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-row-compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.field-lbl {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    width: 160px;
+    text-align: right;
+    letter-spacing: 0.03em;
+}
+
+.field-inp,
+.field-sel {
+    flex: 1;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 0 12px;
+    color: var(--color-text-primary);
+    font-size: 0.86rem;
+    font-family: var(--font-primary);
+    outline: none;
+    transition: var(--transition);
+}
+
+.field-inp:focus,
+.field-sel:focus {
+    border-color: var(--color-orange);
+    background: rgba(242, 140, 82, 0.06);
+}
+
+.disabled-inp {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #94A3B8 !important;
+    cursor: not-allowed;
+}
+
+select.field-sel option {
+    background-color: #0A192F;
+    color: #FFFFFF;
+}
+
+.form-actions-center {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.form-actions-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    gap: 12px;
+    margin-top: 20px;
 }
 
-.unlocked-title {
-    font-size: 1.25rem;
+.admin-btn-action {
+    height: 38px;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-size: 0.82rem;
     font-weight: 700;
-    color: #10B981;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
 }
 
-.unlocked-sub {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
+.admin-btn-action.primary {
+    background: var(--color-orange-gradient);
+    color: #FFFFFF;
+    box-shadow: var(--shadow-orange-glow);
 }
 
-.settings-placeholders-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.setting-item-box {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 20px;
-}
-
-.setting-item-box h3 {
-    font-size: 0.92rem;
-    font-weight: 600;
+.admin-btn-action.secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: var(--color-text-primary);
-    margin-bottom: 6px;
 }
 
-.setting-item-box p {
-    font-size: 0.78rem;
+.admin-btn-action.danger {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #EF4444;
+}
+
+.admin-btn-action:hover {
+    transform: translateY(-1px);
+}
+
+/* ── User List Table ── */
+.admin-table-container {
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-card-border);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1050px;
+    font-size: 0.8rem;
+}
+
+.admin-table th {
+    background: rgba(2, 132, 199, 0.2);
+    color: #38BDF8;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+}
+
+.admin-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--color-text-primary);
+    vertical-align: middle;
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.app-type-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    color: #A78BFA;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+.dept-badge-blue {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    color: #60A5FA;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+.code-emp {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: var(--color-orange);
+    background: rgba(242, 140, 82, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.link-edit-btn {
+    background: transparent;
+    border: none;
+    color: #38BDF8;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: var(--transition);
+}
+
+.link-edit-btn:hover {
+    color: var(--color-orange);
+}
+
+.placeholder-box {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.placeholder-msg {
     color: var(--color-text-muted);
-    line-height: 1.4;
+    font-size: 0.95rem;
 }
 
 /* ============================================
    LIGHT MODE OVERRIDES
    ============================================ */
 
-body.light-mode .sec-modal-title {
-    color: #2A2A2A;
+body.light-mode .admin-unlocked-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #ECE7E0;
+    box-shadow: 0 20px 50px rgba(42, 42, 42, 0.12);
 }
 
-body.light-mode .sec-modal-subtitle {
-    color: #8A8A8A;
+body.light-mode .admin-subnav-bar {
+    border-bottom-color: #ECE7E0;
 }
 
-body.light-mode .btn-cancel-link {
+body.light-mode .radio-label {
     color: #6A6A6A;
 }
 
-body.light-mode .btn-cancel-link:hover {
+body.light-mode .subnav-radio-item input[type="radio"]:checked + .radio-label {
     color: #D4731A;
 }
 
-body.light-mode .admin-unlocked-card {
-    background: rgba(255, 255, 255, 0.75);
-    border-color: #ECE7E0;
-    box-shadow: 0 10px 30px rgba(42, 42, 42, 0.06);
+body.light-mode .subview-blue-title {
+    color: #0284C7;
 }
 
-body.light-mode .unlocked-header {
-    border-color: #ECE7E0;
+body.light-mode .field-lbl {
+    color: #4A4A4A;
 }
 
-body.light-mode .setting-item-box {
-    background: rgba(42, 42, 42, 0.03);
+body.light-mode .field-inp,
+body.light-mode .field-sel {
+    background: #FFFFFF;
     border-color: #ECE7E0;
-}
-
-body.light-mode .setting-item-box h3 {
     color: #2A2A2A;
 }
 
-body.light-mode .setting-item-box p {
-    color: #8A8A8A;
+body.light-mode select.field-sel option {
+    background-color: #FFFFFF;
+    color: #2A2A2A;
+}
+
+body.light-mode .admin-table th {
+    background: rgba(2, 132, 199, 0.1);
+    color: #0284C7;
+    border-bottom-color: rgba(2, 132, 199, 0.25);
+}
+
+body.light-mode .admin-table td {
+    border-bottom-color: #F3EFEA;
+    color: #2A2A2A;
+}
+
+body.light-mode .admin-table tbody tr:hover {
+    background: rgba(2, 132, 199, 0.03);
+}
+
+body.light-mode .disabled-inp {
+    background: #E5E7EB !important;
+    color: #6B7280 !important;
+}
+
+body.light-mode .admin-btn-action.secondary {
+    background: #F3EFEA;
+    border-color: #ECE7E0;
+    color: #2A2A2A;
 }

@@ -50,33 +50,224 @@
         </div>
     </header>
 
-    <!-- ── Main Locked / Unlocked Content ── -->
+    <!-- ── Main Unlocked Content ── -->
     <main class="admin-page-main">
         <div class="admin-unlocked-card" id="admin-unlocked-view" style="display: none;">
-            <div class="unlocked-header">
-                <div class="unlocked-icon-badge">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+            
+            <!-- ── Top Radio Navigation Bar (Images 2, 3, 4) ── -->
+            <div class="admin-subnav-bar">
+                <label class="subnav-radio-item">
+                    <input type="radio" name="adminSubNav" value="add-user" checked onchange="switchAdminSubView('add-user')">
+                    <span class="radio-label">Add User.</span>
+                </label>
+                <label class="subnav-radio-item">
+                    <input type="radio" name="adminSubNav" value="user-mgmt" onchange="switchAdminSubView('user-mgmt')">
+                    <span class="radio-label">User Management.</span>
+                </label>
+                <label class="subnav-radio-item">
+                    <input type="radio" name="adminSubNav" value="assign-client" onchange="switchAdminSubView('assign-client')">
+                    <span class="radio-label">Assign Client.</span>
+                </label>
+                <label class="subnav-radio-item">
+                    <input type="radio" name="adminSubNav" value="group-head" onchange="switchAdminSubView('group-head')">
+                    <span class="radio-label">Group Head.</span>
+                </label>
+                <label class="subnav-radio-item">
+                    <input type="radio" name="adminSubNav" value="leave-group" onchange="switchAdminSubView('leave-group')">
+                    <span class="radio-label">Leave Group.</span>
+                </label>
+                <label class="subnav-radio-item">
+                    <input type="radio" name="adminSubNav" value="leave-mgmt" onchange="switchAdminSubView('leave-mgmt')">
+                    <span class="radio-label">Leave Management.</span>
+                </label>
+                <label class="subnav-radio-item">
+                    <input type="radio" name="adminSubNav" value="leave-list" onchange="switchAdminSubView('leave-list')">
+                    <span class="radio-label">Leave List.</span>
+                </label>
+            </div>
+
+            <!-- ── SUB-VIEW 1: ADD USER (Image 2) ── -->
+            <div class="subview-panel active" id="subview-add-user">
+                <div class="subview-title-row">
+                    <h3 class="subview-blue-title">ADD USER</h3>
                 </div>
-                <div>
-                    <h2 class="unlocked-title">Admin Settings Unlocked</h2>
-                    <p class="unlocked-sub">System configuration & user permission management</p>
+
+                <form id="form-add-user" onsubmit="handleAddUserSubmit(event)" class="admin-form-box">
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER NAME :</label>
+                        <input type="text" id="add-user-name" class="field-inp" placeholder="User Name" required>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">IMEI NUMBER :</label>
+                        <input type="text" id="add-imei" class="field-inp" placeholder="IMEI Number">
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER NUMBER :</label>
+                        <input type="text" id="add-phone" class="field-inp" placeholder="Mobile Number">
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER ADDRESS :</label>
+                        <input type="text" id="add-address" class="field-inp" placeholder="Address">
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">APP TYPE :</label>
+                        <select id="add-app-type" class="field-sel">
+                            <option value="MARKETING" selected>MARKETING</option>
+                            <option value="Sales">Sales</option>
+                            <option value="grouphead">grouphead</option>
+                            <option value="DIRECTOR">DIRECTOR</option>
+                        </select>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER DEPT :</label>
+                        <select id="add-user-dept" class="field-sel">
+                            <option value="ACCOUNTS" selected>ACCOUNTS</option>
+                            <option value="SALES">SALES</option>
+                            <option value="PRODUCTION">PRODUCTION</option>
+                            <option value="MANAGEMENT">MANAGEMENT</option>
+                            <option value="HSE">HSE</option>
+                            <option value="PURCHASE">PURCHASE</option>
+                            <option value="MARKETING">MARKETING</option>
+                            <option value="TESTING">TESTING</option>
+                            <option value="IT">IT</option>
+                        </select>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER DSGN :</label>
+                        <select id="add-user-dsgn" class="field-sel">
+                            <option value="ASSISTANT MANAGER" selected>ASSISTANT MANAGER</option>
+                            <option value="EXECUTIVE">EXECUTIVE</option>
+                            <option value="ASSOCIATE VICE PRESIDENT">ASSOCIATE VICE PRESIDENT</option>
+                            <option value="SR. MANAGER">SR. MANAGER</option>
+                            <option value="COORDINATOR">COORDINATOR</option>
+                            <option value="MANAGER">MANAGER</option>
+                            <option value="TEST">TEST</option>
+                        </select>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">EMP CODE :</label>
+                        <input type="text" id="add-emp-code" class="field-inp" placeholder="Emp Code (e.g. S0357)">
+                    </div>
+
+                    <div class="form-actions-center">
+                        <button type="submit" class="admin-btn-action primary">Add User</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ── SUB-VIEW 2: USER MANAGEMENT / USER LIST (Image 3) ── -->
+            <div class="subview-panel" id="subview-user-mgmt">
+                <div class="subview-title-row">
+                    <h3 class="subview-blue-title">USER LIST</h3>
+                </div>
+
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>SR NO</th>
+                                <th>ID</th>
+                                <th>USER NAME</th>
+                                <th>ADDRESS.</th>
+                                <th>USER NUMBER</th>
+                                <th>IMEI NUMBER</th>
+                                <th>APP TYPE</th>
+                                <th>DEPARTMENT</th>
+                                <th>DESIGNATION</th>
+                                <th>EMP CODE</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-list-tbody">
+                            <!-- Populated dynamically via js/admin-page.js -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="settings-placeholders-grid">
-                <div class="setting-item-box">
-                    <h3>User Roles & Permissions</h3>
-                    <p>Manage system administrators and staff access rights</p>
+            <!-- ── SUB-VIEW 3: EDIT DETAILS (Image 4) ── -->
+            <div class="subview-panel" id="subview-edit-user">
+                <div class="subview-title-row">
+                    <h3 class="subview-blue-title">EDIT DETAILS</h3>
                 </div>
-                <div class="setting-item-box">
-                    <h3>API & Fleet Track Keys</h3>
-                    <p>Configure telemetry and location gateway links</p>
+
+                <form id="form-edit-user" onsubmit="handleEditUserSubmit(event)" class="admin-form-box">
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER ID :</label>
+                        <input type="text" id="edit-user-id" class="field-inp disabled-inp" readonly>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER NAME :</label>
+                        <input type="text" id="edit-user-name" class="field-inp" required>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">IMEI NUMBER :</label>
+                        <input type="text" id="edit-imei" class="field-inp">
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER NUMBER :</label>
+                        <input type="text" id="edit-phone" class="field-inp">
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">USER ADDRESS :</label>
+                        <input type="text" id="edit-address" class="field-inp">
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">APP TYPE :</label>
+                        <select id="edit-app-type" class="field-sel">
+                            <option value="Sales">Sales</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="grouphead">grouphead</option>
+                            <option value="DIRECTOR">DIRECTOR</option>
+                        </select>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">EMP DEPT :</label>
+                        <select id="edit-dept" class="field-sel">
+                            <option value="PRODUCTION">PRODUCTION</option>
+                            <option value="SALES">SALES</option>
+                            <option value="MANAGEMENT">MANAGEMENT</option>
+                            <option value="HSE">HSE</option>
+                            <option value="PURCHASE">PURCHASE</option>
+                            <option value="MARKETING">MARKETING</option>
+                            <option value="TESTING">TESTING</option>
+                            <option value="IT">IT</option>
+                        </select>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">EMP DESG :</label>
+                        <select id="edit-dsgn" class="field-sel">
+                            <option value="COORDINATOR">COORDINATOR</option>
+                            <option value="EXECUTIVE">EXECUTIVE</option>
+                            <option value="ASSOCIATE VICE PRESIDENT">ASSOCIATE VICE PRESIDENT</option>
+                            <option value="SR. MANAGER">SR. MANAGER</option>
+                            <option value="MANAGER">MANAGER</option>
+                            <option value="TEST">TEST</option>
+                        </select>
+                    </div>
+                    <div class="form-row-compact">
+                        <label class="field-lbl">EMP CODE :</label>
+                        <input type="text" id="edit-emp-code" class="field-inp">
+                    </div>
+
+                    <div class="form-actions-row">
+                        <button type="button" class="admin-btn-action secondary" onclick="switchAdminSubView('user-mgmt')">BACK</button>
+                        <button type="submit" class="admin-btn-action primary">UPDATE DETAILS</button>
+                        <button type="button" class="admin-btn-action danger" onclick="handleDeleteUser()">DELETE</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ── SUB-VIEWS 4-7 PLACEHOLDERS ── -->
+            <div class="subview-panel" id="subview-placeholder">
+                <div class="subview-title-row">
+                    <h3 class="subview-blue-title" id="placeholder-title">MODULE</h3>
                 </div>
-                <div class="setting-item-box">
-                    <h3>Company Profile</h3>
-                    <p>PCS Ready Mix Concrete organization parameters</p>
+                <div class="placeholder-box">
+                    <p class="placeholder-msg">Module coming soon as requested.</p>
                 </div>
             </div>
+
         </div>
     </main>
 
