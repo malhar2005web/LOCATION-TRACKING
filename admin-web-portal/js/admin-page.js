@@ -318,15 +318,7 @@ function renderLeaveMgmtTable() {
             <td><input type="number" class="table-num-inp" value="${lm.sl}"></td>
             <td><input type="number" class="table-num-inp" value="${lm.ol}"></td>
             <td><input type="number" class="table-num-inp" value="${lm.wp}"></td>
-            <td>
-                <div class="toshow-cell-flex">
-                    <label class="toggle-switch" title="Toggle App Visibility (TOSHOW)">
-                        <input type="checkbox" ${lm.toShow ? 'checked' : ''} onchange="handleToggleToShow('${lm.empCode}', this)">
-                        <span class="toggle-slider"></span>
-                    </label>
-                    <span class="toshow-status-tag ${lm.toShow ? 'visible' : 'hidden'}">${lm.toShow ? 'Visible' : 'Hidden'}</span>
-                </div>
-            </td>
+            <td></td>
         </tr>
     `).join('');
 }
