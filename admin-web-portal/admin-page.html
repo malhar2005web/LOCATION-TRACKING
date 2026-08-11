@@ -54,7 +54,7 @@
     <main class="admin-page-main">
         <div class="admin-unlocked-card" id="admin-unlocked-view" style="display: none;">
             
-            <!-- ── Top Radio Navigation Bar (Images 2, 3, 4) ── -->
+            <!-- ── Top Radio Navigation Bar (Images 2, 3, 4, 5) ── -->
             <div class="admin-subnav-bar">
                 <label class="subnav-radio-item">
                     <input type="radio" name="adminSubNav" value="add-user" checked onchange="switchAdminSubView('add-user')">
@@ -86,7 +86,7 @@
                 </label>
             </div>
 
-            <!-- ── SUB-VIEW 1: ADD USER (Image 2) ── -->
+            <!-- ── SUB-VIEW 1: ADD USER ── -->
             <div class="subview-panel active" id="subview-add-user">
                 <div class="subview-title-row">
                     <h3 class="subview-blue-title">ADD USER</h3>
@@ -155,7 +155,7 @@
                 </form>
             </div>
 
-            <!-- ── SUB-VIEW 2: USER MANAGEMENT / USER LIST (Image 3) ── -->
+            <!-- ── SUB-VIEW 2: USER MANAGEMENT / USER LIST ── -->
             <div class="subview-panel" id="subview-user-mgmt">
                 <div class="subview-title-row">
                     <h3 class="subview-blue-title">USER LIST</h3>
@@ -185,7 +185,7 @@
                 </div>
             </div>
 
-            <!-- ── SUB-VIEW 3: EDIT DETAILS (Image 4) ── -->
+            <!-- ── SUB-VIEW 3: EDIT DETAILS ── -->
             <div class="subview-panel" id="subview-edit-user">
                 <div class="subview-title-row">
                     <h3 class="subview-blue-title">EDIT DETAILS</h3>
@@ -258,18 +258,317 @@
                 </form>
             </div>
 
-            <!-- ── SUB-VIEWS 4-7 PLACEHOLDERS ── -->
-            <div class="subview-panel" id="subview-placeholder">
-                <div class="subview-title-row">
-                    <h3 class="subview-blue-title" id="placeholder-title">MODULE</h3>
+            <!-- ── SUB-VIEW 4: ASSIGN CLIENT (Image 1) ── -->
+            <div class="subview-panel" id="subview-assign-client">
+                
+                <!-- Selector Section -->
+                <div class="selector-top-row">
+                    <div class="sel-group">
+                        <select id="ac-filter-by-user" class="field-sel sel-sm">
+                            <option value="BY USER" selected>BY USER</option>
+                            <option value="BY DEPT">BY DEPT</option>
+                        </select>
+                    </div>
+                    <div class="sel-group">
+                        <label class="sub-blue-lbl">SELECT USER.</label>
+                        <select id="ac-select-user" class="listbox-sel" multiple size="3">
+                            <option value="Paresh" selected>Paresh</option>
+                            <option value="demo group">demo group</option>
+                        </select>
+                    </div>
+                    <div class="sel-group flex-1">
+                        <label class="sub-blue-lbl">SELECT CLIENT</label>
+                        <div class="client-multiselect-box" id="ac-client-box">
+                            <!-- Multi-select / tags -->
+                            <span class="client-tag">SKYWAY HEAD OFFICE (HO)</span>
+                            <span class="client-tag">PIONEER HOUSING PUNE</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="placeholder-box">
-                    <p class="placeholder-msg">Module coming soon as requested.</p>
+
+                <!-- Table View -->
+                <div class="admin-table-container margin-top-md">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="chk-all-clients" onchange="toggleSelectAllClients(this)"></th>
+                                <th>SR_NO</th>
+                                <th>CUSTOMER_NAME</th>
+                                <th>SALES_PERSON</th>
+                                <th>MARKETING_PERSON</th>
+                                <th>HEAD_PERSON</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assign-client-tbody">
+                            <!-- Rendered dynamically via js/admin-page.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-actions-row">
+                    <button type="button" class="admin-btn-action primary" onclick="handleAssignClientAction('assign')">ASSIGN</button>
+                    <button type="button" class="admin-btn-action secondary" onclick="handleAssignClientAction('unassign')">UNASSIGN</button>
+                    <button type="button" class="admin-btn-action danger" onclick="handleAssignClientAction('delete')">DELETE</button>
+                </div>
+            </div>
+
+            <!-- ── SUB-VIEW 5: GROUP HEAD (Image 3) ── -->
+            <div class="subview-panel" id="subview-group-head">
+                
+                <!-- Selector Section -->
+                <div class="selector-top-row">
+                    <div class="sel-group">
+                        <label class="sub-blue-lbl">SELECT USER</label>
+                        <select id="gh-select-user" class="listbox-sel" multiple size="3">
+                            <option value="Paresh" selected>Paresh</option>
+                            <option value="demo group">demo group</option>
+                        </select>
+                    </div>
+                    <div class="sel-group flex-1">
+                        <label class="sub-blue-lbl">SELECT HEAD</label>
+                        <textarea class="field-ta" rows="2" placeholder="Baliram Badad, Chetan Desai, Devendra Dubey, Kunal Koul, Rakesh Mishra..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div class="admin-table-container margin-top-md">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="chk-all-gh"></th>
+                                <th>SR_NO</th>
+                                <th>GROUP_HEAD</th>
+                                <th>USER_LIST</th>
+                            </tr>
+                        </thead>
+                        <tbody id="group-head-tbody">
+                            <!-- Rendered dynamically via js/admin-page.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-actions-row">
+                    <button type="button" class="admin-btn-action primary" onclick="handleGroupHeadAction('assign')">ASSIGN</button>
+                    <button type="button" class="admin-btn-action secondary" onclick="handleGroupHeadAction('unassign')">UNASSIGN</button>
+                </div>
+            </div>
+
+            <!-- ── SUB-VIEW 6: LEAVE GROUP ── -->
+            <div class="subview-panel" id="subview-leave-group">
+                <div class="subview-title-row">
+                    <h3 class="subview-blue-title">LEAVE GROUP MANAGEMENT</h3>
+                </div>
+
+                <div class="selector-top-row">
+                    <div class="sel-group">
+                        <label class="sub-blue-lbl">SELECT GROUP</label>
+                        <select id="lg-select-group" class="field-sel">
+                            <option value="Sales Team Leave Group">Sales Team Leave Group</option>
+                            <option value="Marketing Team Leave Group">Marketing Team Leave Group</option>
+                        </select>
+                    </div>
+                    <div class="sel-group flex-1">
+                        <label class="sub-blue-lbl">SELECT USER</label>
+                        <select id="lg-select-user" class="listbox-sel" multiple size="2">
+                            <option value="Paresh">Paresh</option>
+                            <option value="demo group" selected>demo group</option>
+                            <option value="Aakash Kol">Aakash Kol</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions-row margin-top-md">
+                    <button type="button" class="admin-btn-action primary" onclick="showToast('Users assigned to Leave Group', 'success')">ASSIGN TO GROUP</button>
+                    <button type="button" class="admin-btn-action secondary" onclick="showToast('Users unassigned from Leave Group', 'info')">UNASSIGN</button>
+                </div>
+            </div>
+
+            <!-- ── SUB-VIEW 7: LEAVE MANAGEMENT (Image 4) ── -->
+            <div class="subview-panel" id="subview-leave-mgmt">
+                <div class="subview-title-row">
+                    <h3 class="subview-blue-title">SELECT USER TO EDIT</h3>
+                </div>
+
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>SR NO</th>
+                                <th>EMP CODE</th>
+                                <th>EMP NAME</th>
+                                <th>EMP DEPT</th>
+                                <th>EL</th>
+                                <th>CL</th>
+                                <th>SL</th>
+                                <th>OL</th>
+                                <th>WP</th>
+                                <th>TOSHOW</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leave-mgmt-tbody">
+                            <!-- Rendered dynamically via js/admin-page.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-actions-center margin-top-md">
+                    <button type="button" class="admin-btn-action primary" onclick="saveLeaveManagementData()">SAVE LEAVE QUOTAS</button>
+                </div>
+            </div>
+
+            <!-- ── SUB-VIEW 8: LEAVE LIST (Image 5) ── -->
+            <div class="subview-panel" id="subview-leave-list">
+                <div class="subview-title-row">
+                    <h3 class="subview-blue-title">LEAVE LIST</h3>
+                </div>
+
+                <!-- Add Holiday / Festival Row -->
+                <div class="holiday-add-box">
+                    <input type="date" id="new-holiday-date" class="field-inp">
+                    <input type="text" id="new-holiday-name" class="field-inp" placeholder="Festival Name (e.g. Diwali)">
+                    <button type="button" class="admin-btn-action primary" onclick="handleAddHolidaySubmit()">Add Festival</button>
+                </div>
+
+                <div class="admin-table-container margin-top-md" style="max-width: 650px; margin-left: auto; margin-right: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>SR NO</th>
+                                <th>date</th>
+                                <th>Festival</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leave-list-tbody">
+                            <!-- Rendered dynamically via js/admin-page.js -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
         </div>
     </main>
+
+    <!-- ── UPDATE CLIENT DETAILS MODAL (Image 2) ── -->
+    <div class="modal-overlay" id="modal-update-client">
+        <div class="modal-card update-client-modal-card">
+            
+            <div class="popover-header">
+                <h3 class="popover-title" style="color: #38BDF8;">UPDATE CLIENT DETAILS</h3>
+                <button class="popover-close" onclick="closeUpdateClientModal()">&times;</button>
+            </div>
+
+            <form id="form-update-client-details" onsubmit="handleUpdateClientDetailsSubmit(event)">
+                <div class="update-client-grid">
+                    
+                    <!-- Left Column -->
+                    <div class="grid-col">
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Client Name</label>
+                            <input type="text" id="uc-client-name" class="field-inp" value="SKYWAY HEAD OFFICE (HO)" required>
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">PAN No.</label>
+                            <input type="text" id="uc-pan" class="field-inp" placeholder="PAN Number">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Mobile No.</label>
+                            <input type="text" id="uc-mobile" class="field-inp" placeholder="Mobile No">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Email Address</label>
+                            <input type="email" id="uc-email" class="field-inp" placeholder="Email Address">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Name of Directors / Partners/ Proprietor</label>
+                            <div class="directors-pair">
+                                <input type="text" id="uc-dir1" class="field-inp" placeholder="Director 1">
+                                <input type="text" id="uc-dir2" class="field-inp" placeholder="Director 2">
+                            </div>
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Contact Person</label>
+                            <input type="text" id="uc-contact-person" class="field-inp" placeholder="Contact Person">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Landline No.</label>
+                            <input type="text" id="uc-landline-1" class="field-inp" placeholder="Landline No">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Bank Account No.</label>
+                            <input type="text" id="uc-bank-acc" class="field-inp" placeholder="Bank Account No">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">IFSC Code</label>
+                            <input type="text" id="uc-ifsc" class="field-inp" placeholder="IFSC Code">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Two Reference Details</label>
+                            <div class="directors-pair">
+                                <input type="text" id="uc-ref1" class="field-inp" placeholder="Ref 1">
+                                <input type="text" id="uc-ref2" class="field-inp" placeholder="Ref 2">
+                            </div>
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">GPS LATITUDE,</label>
+                            <input type="text" id="uc-lat" class="field-inp" placeholder="GPS Latitude">
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="grid-col">
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Office Address</label>
+                            <textarea id="uc-office-addr" class="field-ta" rows="2">B/4, 09TH FLOOR, HDIL KALEDONIA, SAHAR ROAD, ANDHERI (EAST), MUMBAI - 400 069</textarea>
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">GST No.</label>
+                            <input type="text" id="uc-gst" class="field-inp" placeholder="GST Number">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Landline No.</label>
+                            <input type="text" id="uc-landline-2" class="field-inp" placeholder="Landline No">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Site Details</label>
+                            <input type="text" id="uc-site-details" class="field-inp" placeholder="Site Details">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Directors 3 & 4</label>
+                            <div class="directors-pair">
+                                <input type="text" id="uc-dir3" class="field-inp" placeholder="Director 3">
+                                <input type="text" id="uc-dir4" class="field-inp" placeholder="Director 4">
+                            </div>
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Contact No.</label>
+                            <input type="text" id="uc-contact-no" class="field-inp" placeholder="Contact No">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Bank Name</label>
+                            <input type="text" id="uc-bank-name" class="field-inp" placeholder="Bank Name">
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">Bank Address</label>
+                            <textarea id="uc-bank-addr" class="field-ta" rows="2" placeholder="Bank Address"></textarea>
+                        </div>
+                        <div class="form-row-compact">
+                            <label class="field-lbl">GPS LONGITUDE</label>
+                            <input type="text" id="uc-lng" class="field-inp" placeholder="GPS Longitude">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="popover-actions" style="justify-content: center; margin-top: 20px;">
+                    <button type="submit" class="popover-btn primary">Submit</button>
+                    <span class="or-txt">or</span>
+                    <button type="button" class="popover-cancel" onclick="closeUpdateClientModal()">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
 
     <!-- ── ADMIN PASSWORD POPUP MODAL OVERLAY (Opens automatically) ── -->
     <div class="modal-overlay open" id="admin-pass-modal">
