@@ -428,6 +428,14 @@ body.light-mode .disabled-inp {
     color: #6B7280 !important;
 }
 
+body.light-mode .sec-modal-title {
+    color: #2A2A2A !important;
+}
+
+body.light-mode .sec-modal-subtitle {
+    color: #6A6A6A !important;
+}
+
 body.light-mode .admin-btn-action.secondary {
     background: #F3EFEA;
     border-color: #ECE7E0;
