@@ -42,6 +42,34 @@ let GROUP_HEAD_DATA = [
     }
 ];
 
+// Sample Leave Group dataset matching Image 2 screenshot
+let LEAVE_GROUP_DATA = [
+    {
+        srNo: 1,
+        checked: true,
+        groupHead: 'Amit Sandal',
+        userList: 'Baliram Badad,Sebastian Chettiar,Kunal Koul,Rakesh Mishra,Sunil Patil,Dyaneshwar Nagare,Prakash Kokane,Sanket Tambe,Uttam Bhandri,Abhishek Pareenja,Swapnil Kandale,Sandeep Chikane,Aditya Dubey,Milind Subhash Aait,Bikash Chowdhury,Shivaram Jadhav,Paresh,demo admin2,demo group'
+    },
+    {
+        srNo: 2,
+        checked: false,
+        groupHead: 'Baliram Badad',
+        userList: 'Vishal Mishra,Paresh Raval,Sunil Patil,Dyaneshwar Nagare,Rahul Mishra,Sanket Tambe,Uttam Bhandri,Prakash Kokane,DIPAK RAMCHANDRA GOMANE,Swapnil Kandale,Sandeep Chikane,Milind Subhash Aait,Bikash Chowdhury,Shivaram Jadhav,Sahdab Subhani,Paresh,demo admin2,demo group'
+    },
+    {
+        srNo: 3,
+        checked: false,
+        groupHead: 'Chetan Desai',
+        userList: 'Devendra Dubey,Avinash Jadhav,Hemant Patil,Mandodhar Navale,Parshuram Pawar,Ankush Jamdar,Mahesh Salvi,Mahesh Gurav,Aashish Chavan,Chandrakant Ghadigaonkar,Anil Barpode,Dhruv R Shakhsat,Avadhut Ayare,Sandesh Gujar,Shankar S Ghadi,DIPAK RAMCHANDRA GOMANE,Shirish Gaikwad,Vikas Kadam,Jayesh Kokare,Rahul Ahire,Vikrant Dhawade,Hitesh shivgan,Ravindra Jogdand,Rushikesh Kadam,Paresh,demo admin2,demo group'
+    },
+    {
+        srNo: 4,
+        checked: false,
+        groupHead: 'Kunal Koul',
+        userList: 'Rakesh Mishra,Devendra Dubey,Sunil Patil,Prakash Kokane,Abhishek Pareenja,Saurabh Kumar Maurya,Sandeep Chikane,Aditya Dubey,Paresh,demo admin2,demo group'
+    }
+];
+
 // Sample Leave Management dataset matching Image 4 screenshot
 let LEAVE_MGMT_DATA = [
     { srNo: 1, empCode: 'EMP001', empName: 'demo group', empDept: 'Operations', el: 12, cl: 7, sl: 7, ol: 2, wp: 0, toShow: true },
@@ -77,6 +105,7 @@ function handleVerifyAdminPassword(e) {
         renderUserListTable();
         renderAssignClientsTable();
         renderGroupHeadTable();
+        renderLeaveGroupTable();
         renderLeaveMgmtTable();
         renderLeaveListTable();
     } else {
@@ -108,6 +137,7 @@ function switchAdminSubView(viewKey) {
         renderGroupHeadTable();
     } else if (viewKey === 'leave-group') {
         document.getElementById('subview-leave-group')?.classList.add('active');
+        renderLeaveGroupTable();
     } else if (viewKey === 'leave-mgmt') {
         document.getElementById('subview-leave-mgmt')?.classList.add('active');
         renderLeaveMgmtTable();
@@ -175,6 +205,30 @@ function renderGroupHeadTable() {
             <td><div class="scrollable-names-box">${gh.userList}</div></td>
         </tr>
     `).join('');
+}
+
+/* ── Render Leave Group (Image 2) ── */
+function renderLeaveGroupTable() {
+    const tbody = document.getElementById('leave-group-tbody');
+    if (!tbody) return;
+
+    tbody.innerHTML = LEAVE_GROUP_DATA.map(lg => `
+        <tr>
+            <td><input type="checkbox" class="chk-lg-row" ${lg.checked ? 'checked' : ''}></td>
+            <td class="col-srno">${lg.srNo}</td>
+            <td><strong>${lg.groupHead}</strong></td>
+            <td><div class="scrollable-names-box">${lg.userList}</div></td>
+        </tr>
+    `).join('');
+}
+
+function handleLeaveGroupAction(action) {
+    showToast(`Leave Group ${action} operation completed!`, 'success');
+}
+
+function toggleSelectAllLeaveGroup(masterChk) {
+    const checkboxes = document.querySelectorAll('.chk-lg-row');
+    checkboxes.forEach(c => c.checked = masterChk.checked);
 }
 
 /* ── Render Leave Management (Image 4) ── */

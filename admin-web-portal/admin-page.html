@@ -354,33 +354,44 @@
                 </div>
             </div>
 
-            <!-- ── SUB-VIEW 6: LEAVE GROUP ── -->
+            <!-- ── SUB-VIEW 6: LEAVE GROUP (Matches Original Screenshot) ── -->
             <div class="subview-panel" id="subview-leave-group">
-                <div class="subview-title-row">
-                    <h3 class="subview-blue-title">LEAVE GROUP MANAGEMENT</h3>
-                </div>
-
+                
+                <!-- Selector Section -->
                 <div class="selector-top-row">
                     <div class="sel-group">
-                        <label class="sub-blue-lbl">SELECT GROUP</label>
-                        <select id="lg-select-group" class="field-sel">
-                            <option value="Sales Team Leave Group">Sales Team Leave Group</option>
-                            <option value="Marketing Team Leave Group">Marketing Team Leave Group</option>
+                        <label class="sub-blue-lbl">SELECT USER</label>
+                        <select id="lg-select-user" class="listbox-sel" multiple size="3">
+                            <option value="Paresh" selected>Paresh</option>
+                            <option value="demo group">demo group</option>
                         </select>
                     </div>
                     <div class="sel-group flex-1">
-                        <label class="sub-blue-lbl">SELECT USER</label>
-                        <select id="lg-select-user" class="listbox-sel" multiple size="2">
-                            <option value="Paresh">Paresh</option>
-                            <option value="demo group" selected>demo group</option>
-                            <option value="Aakash Kol">Aakash Kol</option>
-                        </select>
+                        <label class="sub-blue-lbl">SELECT HEAD</label>
+                        <textarea id="lg-select-head-ta" class="field-ta" rows="2" placeholder="Baliram Badad, Chetan Desai, Devendra Dubey, Kunal Koul, Rakesh Mishra..."></textarea>
                     </div>
                 </div>
 
-                <div class="form-actions-row margin-top-md">
-                    <button type="button" class="admin-btn-action primary" onclick="showToast('Users assigned to Leave Group', 'success')">ASSIGN TO GROUP</button>
-                    <button type="button" class="admin-btn-action secondary" onclick="showToast('Users unassigned from Leave Group', 'info')">UNASSIGN</button>
+                <!-- Table View -->
+                <div class="admin-table-container margin-top-md">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="chk-all-lg" onchange="toggleSelectAllLeaveGroup(this)"></th>
+                                <th>SR_NO</th>
+                                <th>GROUP_HEAD</th>
+                                <th>USER_LIST</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leave-group-tbody">
+                            <!-- Rendered dynamically via js/admin-page.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-actions-row">
+                    <button type="button" class="admin-btn-action primary" onclick="handleLeaveGroupAction('assign')">ASSIGN</button>
+                    <button type="button" class="admin-btn-action secondary" onclick="handleLeaveGroupAction('unassign')">UNASSIGN</button>
                 </div>
             </div>
 
