@@ -147,17 +147,40 @@ function switchAdminSubView(viewKey) {
     }
 }
 
-/* ── Render User List (Image 3) ── */
-function renderUserListTable() {
+let currentDeptFilter = 'ALL';
+let currentSearchText = '';
+
+/* ── Render User List (Image 3 + Modern Toolbar Filter) ── */
+function renderUserListTable(customList = null) {
     const tbody = document.getElementById('user-list-tbody');
     if (!tbody) return;
 
-    if (!USER_LIST || USER_LIST.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="11" class="empty-table-msg">No users registered</td></tr>`;
+    let listToRender = customList || USER_LIST;
+
+    // Apply department chip filter
+    if (currentDeptFilter !== 'ALL') {
+        listToRender = listToRender.filter(u => u.dept.toUpperCase() === currentDeptFilter.toUpperCase());
+    }
+
+    // Apply search filter
+    if (currentSearchText.trim() !== '') {
+        const q = currentSearchText.toLowerCase();
+        listToRender = listToRender.filter(u => 
+            u.name.toLowerCase().includes(q) ||
+            u.phone.toLowerCase().includes(q) ||
+            u.dept.toLowerCase().includes(q) ||
+            u.dsgn.toLowerCase().includes(q) ||
+            u.empCode.toLowerCase().includes(q) ||
+            u.address.toLowerCase().includes(q)
+        );
+    }
+
+    if (!listToRender || listToRender.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="11" class="empty-table-msg">No matching users found</td></tr>`;
         return;
     }
 
-    tbody.innerHTML = USER_LIST.map(u => `
+    tbody.innerHTML = listToRender.map(u => `
         <tr>
             <td class="col-srno">${u.srNo}</td>
             <td><strong>${u.id}</strong></td>
@@ -169,9 +192,52 @@ function renderUserListTable() {
             <td><span class="dept-badge-blue">${u.dept}</span></td>
             <td>${u.dsgn}</td>
             <td><code class="code-emp">${u.empCode}</code></td>
-            <td><button class="link-edit-btn" onclick="openEditUserDetails('${u.id}')">Edit..</button></td>
+            <td><button type="button" class="link-edit-btn" onclick="openEditUserDetails('${u.id}')">Edit..</button></td>
         </tr>
     `).join('');
+}
+
+function handleLiveSearchFilter() {
+    const input = document.getElementById('admin-live-search');
+    if (input) {
+        currentSearchText = input.value;
+        renderUserListTable();
+    }
+}
+
+function clearLiveSearch() {
+    const input = document.getElementById('admin-live-search');
+    if (input) {
+        input.value = '';
+        currentSearchText = '';
+        renderUserListTable();
+    }
+}
+
+function filterByDeptChip(deptName, btnElem) {
+    currentDeptFilter = deptName;
+    document.querySelectorAll('.dept-chip').forEach(c => c.classList.remove('active'));
+    if (btnElem) btnElem.classList.add('active');
+    renderUserListTable();
+}
+
+function exportUserListToCSV() {
+    let csv = 'SR NO,ID,USER NAME,ADDRESS,USER NUMBER,IMEI NUMBER,APP TYPE,DEPARTMENT,DESIGNATION,EMP CODE\n';
+    USER_LIST.forEach(u => {
+        csv += `"${u.srNo}","${u.id}","${u.name}","${u.address}","${u.phone}","${u.imei}","${u.appType}","${u.dept}","${u.dsgn}","${u.empCode}"\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `User_List_Export_${new Date().toISOString().slice(0,10)}.csv`);
+    a.click();
+    showToast('User List exported to CSV / Excel', 'success');
+}
+
+function exportUserListToPDF() {
+    window.print();
 }
 
 /* ── Render Assign Client (Image 1) ── */
@@ -333,7 +399,14 @@ function openEditUserDetails(userId) {
     document.getElementById('edit-dsgn').value = user.dsgn;
     document.getElementById('edit-emp-code').value = user.empCode;
 
-    switchAdminSubView('edit-user');
+    // Open Slide-Over Drawer (Suggestion 3)
+    const drawerOverlay = document.getElementById('drawer-edit-user-overlay');
+    if (drawerOverlay) drawerOverlay.classList.add('open');
+}
+
+function closeEditUserDrawer() {
+    const drawerOverlay = document.getElementById('drawer-edit-user-overlay');
+    if (drawerOverlay) drawerOverlay.classList.remove('open');
 }
 
 function handleEditUserSubmit(e) {
@@ -350,7 +423,8 @@ function handleEditUserSubmit(e) {
         USER_LIST[idx].empCode = document.getElementById('edit-emp-code').value.trim();
 
         showToast(`User "${USER_LIST[idx].name}" updated!`, 'success');
-        switchAdminSubView('user-mgmt');
+        closeEditUserDrawer();
+        renderUserListTable();
     }
 }
 
@@ -360,7 +434,8 @@ function handleDeleteUser() {
     if (idx !== -1) {
         USER_LIST.splice(idx, 1);
         showToast('User deleted from system', 'info');
-        switchAdminSubView('user-mgmt');
+        closeEditUserDrawer();
+        renderUserListTable();
     }
 }
 
