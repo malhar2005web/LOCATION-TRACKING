@@ -79,14 +79,14 @@ let LEAVE_MGMT_DATA = [
     { srNo: 5, empCode: 'S0451', empName: 'Aditya Dubey', empDept: 'SALES', el: 12, cl: 7, sl: 7, ol: 0, wp: 0, toShow: true }
 ];
 
-// Sample Leave List (Festivals) dataset matching Image 5 screenshot
+// Sample Leave List (Festivals) dataset matching Image 5 screenshot (DD/MM/YYYY Format)
 let FESTIVAL_LEAVES_DATA = [
-    { srNo: 1, date: '2026/01/26', festival: 'Republic Day' },
-    { srNo: 2, date: '2026/03/25', festival: 'Holi' },
-    { srNo: 3, date: '2026/08/15', festival: 'Independence Day' },
-    { srNo: 4, date: '2026/10/02', festival: 'Gandhi Jayanti' },
-    { srNo: 5, date: '2026/11/01', festival: 'Diwali' },
-    { srNo: 6, date: '2026/12/25', festival: 'Christmas' }
+    { srNo: 1, date: '26/01/2026', festival: 'Republic Day' },
+    { srNo: 2, date: '25/03/2026', festival: 'Holi' },
+    { srNo: 3, date: '15/08/2026', festival: 'Independence Day' },
+    { srNo: 4, date: '02/10/2026', festival: 'Gandhi Jayanti' },
+    { srNo: 5, date: '01/11/2026', festival: 'Diwali' },
+    { srNo: 6, date: '25/12/2026', festival: 'Christmas' }
 ];
 
 /* ── Password Verification ── */
@@ -319,13 +319,25 @@ function renderLeaveMgmtTable() {
             <td><input type="number" class="table-num-inp" value="${lm.ol}"></td>
             <td><input type="number" class="table-num-inp" value="${lm.wp}"></td>
             <td>
-                <label class="toggle-switch">
-                    <input type="checkbox" ${lm.toShow ? 'checked' : ''}>
-                    <span class="toggle-slider"></span>
-                </label>
+                <div class="toshow-cell-flex">
+                    <label class="toggle-switch" title="Toggle App Visibility (TOSHOW)">
+                        <input type="checkbox" ${lm.toShow ? 'checked' : ''} onchange="handleToggleToShow('${lm.empCode}', this)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toshow-status-tag ${lm.toShow ? 'visible' : 'hidden'}">${lm.toShow ? 'Visible' : 'Hidden'}</span>
+                </div>
             </td>
         </tr>
     `).join('');
+}
+
+function handleToggleToShow(empCode, chk) {
+    const user = LEAVE_MGMT_DATA.find(l => l.empCode === empCode);
+    if (user) {
+        user.toShow = chk.checked;
+        showToast(`Leave quota for "${user.empName}" is now ${chk.checked ? 'VISIBLE in Mobile App' : 'HIDDEN from Mobile App'}`, chk.checked ? 'success' : 'info');
+        renderLeaveMgmtTable();
+    }
 }
 
 /* ── Render Leave List (Image 5) ── */
@@ -464,9 +476,12 @@ function handleAddHolidaySubmit() {
         return;
     }
 
+    const [yy, mm, dd] = d.split('-');
+    const formattedDate = `${dd}/${mm}/${yy}`;
+
     FESTIVAL_LEAVES_DATA.push({
         srNo: FESTIVAL_LEAVES_DATA.length + 1,
-        date: d.replace(/-/g, '/'),
+        date: formattedDate,
         festival: name
     });
 

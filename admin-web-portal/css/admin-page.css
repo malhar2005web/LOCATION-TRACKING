@@ -930,3 +930,34 @@ body.light-mode .drawer-title {
 body.light-mode .drawer-subtitle {
     color: #64748B;
 }
+
+/* ── TOSHOW Cell Status Tag ── */
+.toshow-cell-flex {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toshow-status-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
+}
+
+.toshow-status-tag.visible {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #10B981;
+}
+
+.toshow-status-tag.hidden {
+    background: rgba(100, 116, 139, 0.15);
+    border: 1px solid rgba(100, 116, 139, 0.35);
+    color: #94A3B8;
+}
+
+body.light-mode .drawer-subtitle {
+    color: #64748B;
+}
