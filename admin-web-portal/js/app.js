@@ -1,6 +1,6 @@
 /**
- * FleetTrackOn Admin Portal Logic
- * Tab switching & authentication handlers
+ * Sky-Diary Admin Portal Logic
+ * Implements smooth interactive navigation, login validation, theme toggles, and toast alerts.
  */
 
 function switchTab(role) {
