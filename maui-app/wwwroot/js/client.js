@@ -65,6 +65,25 @@ function updateThemeToggleUI() {
     }
 }
 
+/**
+ * Get normalized gemptype for API requests
+ * Valid types: "admin", "agent", "superuser", "grouphead", "emp"
+ */
+function getGempType() {
+    const session = typeof getSession === 'function' ? getSession() : null;
+    let role = (session && (session.role || (session.userData && session.userData.userType))) || 'grouphead';
+
+    role = String(role).toLowerCase().trim().replace(/[\s_\-]+/g, '');
+
+    if (role === 'admin') return 'admin';
+    if (role === 'agent') return 'agent';
+    if (role === 'emp' || role === 'employee') return 'emp';
+    if (role === 'superuser' || role === 'super') return 'superuser';
+
+    // Default to 'grouphead' for client/grouphead/group/head/fallback
+    return 'grouphead';
+}
+
 // ── Greeting management ──
 function updateGreeting() {
     try {
@@ -1376,7 +1395,7 @@ async function submitOthers() {
 
     const session = getSession();
     const userid = (session && session.userData && session.userData.clientId) || '';
-    const gemptype = (session && session.role) || 'client';
+    const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
@@ -1416,108 +1435,135 @@ async function submitOthers() {
         }
     }
 
-    showToast('Submitting activity details...', 'info');
+    const executeSubmission = async () => {
+        showToast('Submitting activity details...', 'info');
 
-    if (navigator.onLine) {
-        try {
-            console.log('[Others] Submitting to third-party API...');
-            await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dsrBody)
-            });
-            console.log('[Others] Third-party API registration success.');
-        } catch (e) {
-            console.error('[Others] Third-party API failed:', e);
-        }
-    } else {
-        showToast('Offline Mode: Activity saved locally.', 'info');
-    }
+        if (navigator.onLine) {
+            try {
+                console.log('[Others] Submitting to third-party API...');
+                await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dsrBody)
+                });
+                console.log('[Others] Third-party API registration success.');
 
-    // Save DSR record locally (offline-first)
-    if (typeof DsrDb !== 'undefined') {
-        const localDsr = {
-            client_id: userid,
-            client_name: gempname,
-            customer_name: customerName,
-            office_address: officeAddress,
-            site_name: siteDetails,
-            contact_person: contactPerson,
-            contact_no: contactNumber,
-            last_remark: remark,
-            visited_for: todayStatus,
-            followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
-            latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
-            longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
-            sync_status: 'Pending',
-            created_timestamp: new Date().toISOString()
-        };
-
-        DsrDb.saveDsr(localDsr, (saved) => {
-            console.log('[Others] DSR saved locally:', saved);
-            syncDSRs();
-        });
-    }
-
-    if (todayStatus && followupDate && hours && minutes) {
-        let reminderType = 'General Reminder';
-        if (todayStatus === 'Follow Up') reminderType = 'Follow Up';
-        else if (todayStatus === 'Document Submission') reminderType = 'Document Submission';
-        else if (todayStatus === 'Bill Submission') reminderType = 'Bill Submission';
-        else if (todayStatus === 'Payment Collection') reminderType = 'Payment Collection';
-        else if (todayStatus === 'Document Collection') reminderType = 'Document Collection';
-
-        const reminderTime = hours + ":" + minutes;
-        const remId = 'REM_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-
-        const newReminder = {
-            id: remId,
-            client_name: customerName,
-            contact_person: contactPerson,
-            contact_number: contactNumber,
-            reminder_type: reminderType,
-            reminder_date: followupDate,
-            reminder_time: reminderTime,
-            remark: remark,
-            source_module: 'Others',
-            created_timestamp: new Date().toISOString(),
-            updated_timestamp: new Date().toISOString(),
-            status: 'Pending',
-            sync_status: 'Pending'
-        };
-
-        ReminderDb.saveReminder(newReminder, (saved) => {
-            console.log('[Others] Reminder created locally:', saved);
-
-            const dateParts = followupDate.split('-');
-            const dateObj = new Date(
-                parseInt(dateParts[0], 10),
-                parseInt(dateParts[1], 10) - 1,
-                parseInt(dateParts[2], 10),
-                parseInt(hours, 10),
-                parseInt(minutes, 10),
-                0
-            );
-
-            if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
-                window.AlarmBridge.scheduleReminderNotification(
-                    remId, customerName, reminderType, remark, reminderTime, dateObj.getTime()
-                );
+                // Also trigger iamatevent for OTHERS so server DAY END SUMMARY 2 displays the row!
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gotiamatdate: currentDateTime,
+                        gotempname: gempname || (session && session.userData && session.userData.name) || 'demo group',
+                        gotempid: userid,
+                        gotinoutstatus: "OTHERS",
+                        gotiamatclient: customerName || "Others",
+                        gotiamatlat: parseFloat(dsrBody.gpsLatitude) || 0.0,
+                        gotiamatlong: parseFloat(dsrBody.gpsLongitude) || 0.0,
+                        gimeinumber: (session && session.userData && session.userData.deviceId) || ""
+                    })
+                }).catch(err => console.error('iamatevent OTHERS error:', err));
+            } catch (e) {
+                console.error('[Others] Third-party API failed:', e);
             }
+        } else {
+            showToast('Offline Mode: Activity saved locally.', 'info');
+        }
 
-            refreshRemindersCount();
-            syncReminders();
-        });
-    }
+        // Save DSR record locally (offline-first & populates Day End Summary)
+        if (typeof DsrDb !== 'undefined') {
+            const localDsr = {
+                client_id: userid,
+                client_name: gempname,
+                customer_name: customerName,
+                office_address: officeAddress,
+                site_name: siteDetails,
+                contact_person: contactPerson,
+                contact_no: contactNumber,
+                last_remark: remark,
+                visited_for: todayStatus || 'Others',
+                followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
+                latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
+                longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
+                sync_status: 'Pending',
+                created_timestamp: new Date().toISOString()
+            };
 
-    const currentDsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10) + 1;
-    const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
-    localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
-    localStorage.setItem('visitsToday', currentVisits.toString());
-    updateMetricsUI();
+            DsrDb.saveDsr(localDsr, (saved) => {
+                console.log('[Others] DSR saved locally:', saved);
+                syncDSRs();
+            });
+        }
 
-    showToast('Activity submitted successfully!', 'success');
-    showView('client-view');
+        if (todayStatus && followupDate && hours && minutes) {
+            let reminderType = 'General Reminder';
+            if (todayStatus === 'Follow Up') reminderType = 'Follow Up';
+            else if (todayStatus === 'Document Submission') reminderType = 'Document Submission';
+            else if (todayStatus === 'Bill Submission') reminderType = 'Bill Submission';
+            else if (todayStatus === 'Payment Collection') reminderType = 'Payment Collection';
+            else if (todayStatus === 'Document Collection') reminderType = 'Document Collection';
+
+            const reminderTime = hours + ":" + minutes;
+            const remId = 'REM_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+            const newReminder = {
+                id: remId,
+                client_name: customerName,
+                contact_person: contactPerson,
+                contact_number: contactNumber,
+                reminder_type: reminderType,
+                reminder_date: followupDate,
+                reminder_time: reminderTime,
+                remark: remark,
+                source_module: 'Others',
+                created_timestamp: new Date().toISOString(),
+                updated_timestamp: new Date().toISOString(),
+                status: 'Pending',
+                sync_status: 'Pending'
+            };
+
+            ReminderDb.saveReminder(newReminder, (saved) => {
+                console.log('[Others] Reminder created locally:', saved);
+
+                const dateParts = followupDate.split('-');
+                const dateObj = new Date(
+                    parseInt(dateParts[0], 10),
+                    parseInt(dateParts[1], 10) - 1,
+                    parseInt(dateParts[2], 10),
+                    parseInt(hours, 10),
+                    parseInt(minutes, 10),
+                    0
+                );
+
+                if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
+                    window.AlarmBridge.scheduleReminderNotification(
+                        remId, customerName, reminderType, remark, reminderTime, dateObj.getTime()
+                    );
+                }
+
+                refreshRemindersCount();
+                syncReminders();
+            });
+        }
+
+        const currentDsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10) + 1;
+        const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
+        localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
+        localStorage.setItem('visitsToday', currentVisits.toString());
+        updateMetricsUI();
+
+        resetOthersForm();
+        showToast('Activity submitted successfully!', 'success');
+
+        // Trigger Checkout success modal (user clicks OK -> sends Checkout & returns to Home Screen)
+        const latNum = parseFloat(dsrBody.gpsLatitude) || 18.4748182;
+        const lngNum = parseFloat(dsrBody.gpsLongitude) || 73.8119225;
+        const clientDisplayName = customerName || 'Others';
+        showDsrSuccessModal('Activity Submitted!', '', clientDisplayName, latNum, lngNum);
+    };
+
+    // Show Payload Inspector Modal Window before sending!
+    showApiPayloadModal('Others Activity Check-In', `${API_BASE_URL}/updateleaddeatils_sky`, dsrBody, executeSubmission);
 }
 
 function handleLeaveApplication() {
@@ -2081,6 +2127,10 @@ function handleStartEndDayReport() {
     openReportView('start-end', 'client');
 }
 
+function handleDSRClientReport() {
+    openReportView('dsr-client', 'client');
+}
+
 function handleDSRSummaryReportAdmin() {
     openReportView('dsr-summary', 'admin');
 }
@@ -2091,6 +2141,10 @@ function handleDSRUpdatedListAdmin() {
 
 function handleStartEndDayReportAdmin() {
     openReportView('start-end', 'admin');
+}
+
+function handleDSRClientReportAdmin() {
+    openReportView('dsr-client', 'admin');
 }
 
 function handleLeaveStatusAdmin() {
@@ -2118,7 +2172,8 @@ async function openReportView(reportType, source) {
     const viewMap = {
         'start-end': 'start-end-day-report-view',
         'dsr-summary': 'dsr-summary-report-view',
-        'dsr-list': 'dsr-updated-list-view'
+        'dsr-list': 'dsr-updated-list-view',
+        'dsr-client': 'dsr-client-report-view'
     };
 
     const viewId = viewMap[reportType];
@@ -2134,7 +2189,8 @@ function setReportDateDefaults(reportType) {
     const prefixMap = {
         'start-end': 'start-end',
         'dsr-summary': 'dsr-summary',
-        'dsr-list': 'dsr-list'
+        'dsr-list': 'dsr-list',
+        'dsr-client': 'dsr-client'
     };
     const prefix = prefixMap[reportType];
     const fromEl = document.getElementById(`${prefix}-from`);
@@ -2159,7 +2215,8 @@ async function populateReportUsers(reportType) {
     const prefixMap = {
         'start-end': 'start-end',
         'dsr-summary': 'dsr-summary',
-        'dsr-list': 'dsr-list'
+        'dsr-list': 'dsr-list',
+        'dsr-client': 'dsr-client'
     };
     const select = document.getElementById(`${prefixMap[reportType]}-user`);
     if (!select) return;
@@ -2201,6 +2258,10 @@ function fetchDSRListReportData() {
     return fetchReportData('dsr-list');
 }
 
+function fetchDSRClientReportData() {
+    return fetchReportData('dsr-client');
+}
+
 async function fetchReportData(reportType) {
     const config = getReportConfig(reportType);
     if (!config) return;
@@ -2214,6 +2275,70 @@ async function fetchReportData(reportType) {
     const selectedUserId = userEl && userEl.value ? userEl.value : 'All';
     const selectedFromDate = fromEl ? fromEl.value : '';
     const selectedTillDate = tillEl ? tillEl.value : '';
+
+    if (reportType === 'dsr-client') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR client report data...</td></tr>`;
+
+        const session = getSession();
+        const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+
+        const payload = {
+            startdatep: selectedFromDate,
+            enddatep: selectedTillDate,
+            userv: selectedUserId || 'All',
+            clientv: 'All',
+            gempname: empid
+        };
+
+        if (navigator.onLine) {
+            try {
+                console.log('[Reports] Fetching DSR Client Report from Skyway API...', payload);
+                const res = await fetch(`${API_BASE_URL}/getdsrleadreport_v1`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                console.log('[Reports] getdsrleadreport_v1 response:', data);
+
+                let records = [];
+                if (data && Array.isArray(data.trackerid)) {
+                    records = data.trackerid;
+                } else if (Array.isArray(data)) {
+                    records = data;
+                } else if (data && typeof data === 'object') {
+                    records = data.output || data.records || [];
+                }
+
+                config.render(tbody, records);
+                return;
+            } catch (err) {
+                console.error('[Reports] Failed to fetch getdsrleadreport_v1:', err);
+                showToast(`Failed to fetch DSR Client Report: ${err.message}`, 'error');
+            }
+        }
+
+        // Offline fallback from local database
+        if (typeof DsrDb !== 'undefined') {
+            DsrDb.getDsrs((localList) => {
+                const mappedLocal = localList.map(local => ({
+                    assignedemp: local.client_name || local.client_id || empid,
+                    leaddatetime: local.created_timestamp,
+                    leadname: local.customer_name || '--',
+                    leadsitename: local.site_name || '--',
+                    officeaddres: local.office_address || '--',
+                    contactperson: local.contact_person || '--',
+                    contactno: local.contact_no || '--',
+                    remark: local.last_remark || '--',
+                    nextfollowup: local.followup || '--'
+                }));
+                config.render(tbody, mappedLocal);
+            });
+        } else {
+            tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Offline: Local data unavailable.</td></tr>`;
+        }
+        return;
+    }
 
     const params = new URLSearchParams({
         clientId: selectedUserId,
@@ -2439,6 +2564,13 @@ function getReportConfig(reportType) {
             endpoint: '/api/client/reports/dsr-list',
             colspan: 11,
             render: renderDsrListReportRows
+        },
+        'dsr-client': {
+            prefix: 'dsr-client',
+            tableId: 'dsr-client-report-table',
+            endpoint: `${API_BASE_URL}/getdsrleadreport_v1`,
+            colspan: 10,
+            render: renderDsrClientReportRows
         }
     };
     return configs[reportType] || null;
@@ -2523,7 +2655,7 @@ function renderDsrSummaryReportRows(tbody, records, response) {
 
 function renderDsrListReportRows(tbody, records) {
     if (!records.length) {
-        tbody.innerHTML = '<tr><td colspan="11" class="table-empty">No DSR update records found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" class="table-empty">No DSR updated records found.</td></tr>';
         return;
     }
 
@@ -2539,7 +2671,29 @@ function renderDsrListReportRows(tbody, records) {
             <td>${reportEscape(row.contact_no || '--')}</td>
             <td>${reportEscape(row.last_remark || '--')}</td>
             <td>${reportEscape(row.visited_for || '--')}</td>
-            <td>${row.followup ? reportEscape(row.followup) : '--'}</td>
+            <td>${reportEscape(row.followup || '--')}</td>
+        </tr>
+    `).join('');
+}
+
+function renderDsrClientReportRows(tbody, records) {
+    if (!records || !records.length) {
+        tbody.innerHTML = '<tr><td colspan="10" class="table-empty">No DSR client records found.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = records.map((row, index) => `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${reportEscape(row.assignedemp || row.assigned_emp || row.gempname || row.visited_by || '--')}</td>
+            <td>${reportEscape(formatReportDateTime(row.leaddatetime || row.created_timestamp || row.registered_on || row.currentdatetime))}</td>
+            <td>${reportEscape(row.leadname || row.outletname || row.client || row.client_name || row.customer_name || '--')}</td>
+            <td>${reportEscape(row.leadsitename || row.site_name || row.sitename || '--')}</td>
+            <td>${reportEscape(row.officeaddres || row.office_address || row.address || '--')}</td>
+            <td>${reportEscape(row.contactperson || row.contact_person || '--')}</td>
+            <td>${reportEscape(row.contactno || row.contact_no || row.ncontact || '--')}</td>
+            <td>${reportEscape(row.remark || row.nremark || row.last_remark || '--')}</td>
+            <td>${reportEscape(row.nextfollowup || row.nfollowup || row.followup || '--')}</td>
         </tr>
     `).join('');
 }
@@ -2974,7 +3128,7 @@ async function submitDSR() {
 
     const session = getSession();
     const userid = (session && session.userData && session.userData.clientId) || '';
-    const gemptype = (session && session.role) || 'client';
+    const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
 
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
@@ -3159,16 +3313,28 @@ async function submitDSR() {
     }
 
     // Show Custom Modal alert -> User taps OK -> triggers CHECKOUT & returns to Home Screen
-    showDsrSuccessModal(timeStr, name, latNum, lngNum);
+    showDsrSuccessModal('DSR Submitted!', timeStr, name, latNum, lngNum);
 }
 
 let pendingCheckoutData = null;
 
-function showDsrSuccessModal(timeStr, clientName, lat, lng) {
+function showDsrSuccessModal(title, timeStr, clientName, lat, lng) {
     pendingCheckoutData = { clientName, lat, lng };
+
+    const titleEl = document.getElementById('dsr-success-modal-title');
+    if (titleEl) {
+        titleEl.textContent = title || 'DSR Submitted!';
+    }
+
     const msgEl = document.getElementById('dsr-success-modal-msg');
     if (msgEl) {
-        msgEl.textContent = timeStr ? `You filled the DSR form in ${timeStr}.` : 'DSR submitted successfully!';
+        if (timeStr) {
+            msgEl.textContent = `You filled the form in ${timeStr}.`;
+        } else if (title) {
+            msgEl.textContent = `${title} successfully!`;
+        } else {
+            msgEl.textContent = 'Submitted successfully!';
+        }
     }
     const modalEl = document.getElementById('dsr-success-modal');
     if (modalEl) {
@@ -3230,8 +3396,17 @@ async function onDsrSuccessOkClick() {
             console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
             console.log('[CHECKOUT TEST] Payload:', JSON.stringify(payload));
 
-            console.log('[CHECKOUT TEST] Awaiting startendday CHECKOUT...');
-            const startenddayRes = await fetch(`${API_BASE_URL}/startendday`, {
+            // Execute both iamatevent and startendday in parallel so iamatevent CHECKOUT is never blocked!
+            const p1 = fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(r => r.text()).catch(err => {
+                console.error('[CHECKOUT] iamatevent failed:', err);
+                return 'error';
+            });
+
+            const p2 = fetch(`${API_BASE_URL}/startendday`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -3242,20 +3417,14 @@ async function onDsrSuccessOkClick() {
                     gpsLatitude: latVal,
                     gpsLongitude: lngVal
                 })
+            }).then(r => r.text()).catch(err => {
+                console.error('[CHECKOUT] startendday failed:', err);
+                return 'error';
             });
-            const startenddayText = await startenddayRes.text();
-            console.log('[CHECKOUT TEST] startendday status:', startenddayRes.status, startenddayText);
 
-            console.log('[CHECKOUT TEST] Awaiting iamatevent CHECKOUT...');
-            const res = await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const resText = await res.text();
-            console.log('[CHECKOUT TEST] iamatevent response text:', resText);
-
-            showToast(`CHECKOUT Sent! startendday: ${startenddayRes.status} | iamatevent: ${resText.slice(0, 40)}`, 'success');
+            const [resIamAt, resStartEnd] = await Promise.all([p1, p2]);
+            console.log('[CHECKOUT] Parallel checkout responses -> iamatevent:', resIamAt, '| startendday:', resStartEnd);
+            showToast('CHECKOUT Sent Successfully!', 'success');
         } catch (err) {
             console.error('[CHECKOUT TEST] Error sending checkout:', err);
             showToast(`CHECKOUT Error: ${err.message}`, 'error');
@@ -3440,7 +3609,7 @@ async function syncDSRs() {
 
         const session = getSession();
         const defaultUserid = (session && session.userData && session.userData.clientId) || '';
-        const defaultGempType = (session && session.role) || 'client';
+        const defaultGempType = getGempType();
         const defaultGempName = (session && session.userData && session.userData.name) || '';
         const defaultDeviceId = (session && session.userData && session.userData.deviceId) || '';
         const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
@@ -4116,6 +4285,110 @@ function bindNewClientProgressListeners() {
     });
 }
 
+/**
+ * Display a Glassmorphic Inspector Window showing exact API Request Body payload
+ */
+function showApiPayloadModal(title, endpoint, payload, onProceed) {
+    const existingModal = document.getElementById('api-payload-modal');
+    if (existingModal) existingModal.remove();
+
+    const formattedJson = JSON.stringify(payload, null, 2);
+
+    const overlay = document.createElement('div');
+    overlay.id = 'api-payload-modal';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    `;
+
+    const card = document.createElement('div');
+    card.style.cssText = `
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        width: 100%;
+        max-width: 480px;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    `;
+
+    card.innerHTML = `
+        <div style="background: linear-gradient(135deg, #f97316, #ea580c); padding: 16px 20px; color: white; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9;">📡 API Payload Inspector</div>
+                <div style="font-size: 16px; font-weight: 800; margin-top: 2px;">${title}</div>
+            </div>
+            <span style="background: rgba(255,255,255,0.25); font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px;">POST</span>
+        </div>
+        <div style="padding: 10px 16px; background: #fff7ed; border-bottom: 1px solid #ffedd5; font-size: 11.5px; color: #c2410c; font-family: monospace; word-break: break-all;">
+            <strong>Endpoint:</strong> ${endpoint}
+        </div>
+        <div style="padding: 14px; flex: 1; overflow-y: auto; background: #0f172a;">
+            <pre style="margin: 0; font-family: 'Fira Code', Consolas, Monaco, monospace; font-size: 12px; color: #38bdf8; white-space: pre-wrap; word-break: break-all; line-height: 1.5;">${escapeHtmlHelper(formattedJson)}</pre>
+        </div>
+        <div style="padding: 14px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+            <button id="btn-copy-payload" style="background: #e2e8f0; color: #334155; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer;">
+                📋 Copy JSON
+            </button>
+            <div style="display: flex; gap: 8px;">
+                <button id="btn-cancel-payload" style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer;">
+                    Cancel
+                </button>
+                <button id="btn-proceed-payload" style="background: #f97316; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);">
+                    Send to Server 🚀
+                </button>
+            </div>
+        </div>
+    `;
+
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+
+    document.getElementById('btn-copy-payload').onclick = function() {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(formattedJson).then(() => {
+                showToast('JSON Payload copied!', 'success');
+            }).catch(() => {
+                showToast('Copied JSON Payload', 'info');
+            });
+        } else {
+            showToast('JSON Payload generated', 'info');
+        }
+    };
+
+    document.getElementById('btn-cancel-payload').onclick = function() {
+        overlay.remove();
+        showToast('Registration cancelled by user', 'info');
+    };
+
+    document.getElementById('btn-proceed-payload').onclick = function() {
+        overlay.remove();
+        if (typeof onProceed === 'function') {
+            onProceed();
+        }
+    };
+}
+
+function escapeHtmlHelper(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 async function submitNewClient() {
     if (!isDayStarted) {
         showToast('Please start your workday first by tapping "Day Start".', 'warning');
@@ -4173,7 +4446,7 @@ async function submitNewClient() {
 
     const session = getSession();
     const userid = (session && session.userData && session.userData.clientId) || '';
-    const gemptype = (session && session.role) || 'client';
+    const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
 
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
@@ -4184,131 +4457,176 @@ async function submitNewClient() {
     const minEl = document.getElementById('new-client-followup-minutes');
     if (hourEl) hours = hourEl.value;
     if (minEl) minutes = minEl.value;
+    const panNumber = (document.getElementById('new-client-pan') && document.getElementById('new-client-pan').value.trim()) || '';
+    const gstNumber = (document.getElementById('new-client-gst') && document.getElementById('new-client-gst').value.trim()) || '';
 
-    const dsrBody = {
+    const newClientBody = {
         userid: userid,
         gemptype: gemptype,
-        currentdatetime: currentDateTime,
-        intime: "00:00:00",
-        outtime: "00:00:00",
+        assignedemp: "All",
+        CustomerName: clientName,
+        CustomerType: "New Client",
+        PANNumber: panNumber,
+        GSTNumber: gstNumber,
+        officeaddress: officeAddress,
+        MobileNumber: contactNumber,
+        landlinenumber: "",
+        EmailAddress: email || "",
+        FullName1: contactPerson,
+        FullName2: "",
+        FullName3: "",
+        FullName4: "",
         outletname: clientName,
         nleadname: clientName,
         ncontact: contactNumber,
-        nremark: remark,
+        nlanddine: "",
+        BankAccount: "",
+        BankName: "",
+        BankAddress: "",
+        ifsccode: "",
+        onereference1: "",
+        onereference2: "",
+        currentdatetime: currentDateTime,
+        intime_h: "00",
+        intime_m: "00",
+        outtime_h: "00",
+        outtime_m: "00",
+        ocos: "",
+        ncns: "",
+        nremark: remark || "",
         nfollowup: followupDate || "",
-        nfollowuptime: followupDate ? (hours + ":" + minutes) : "",
-        assignedemp: "All",
-        gpsLatitude: document.getElementById('new-client-lat').value || "0.0",
-        gpsLongitude: document.getElementById('new-client-lng').value || "0.0",
-        l_nremark: remark,
-        n_nremark: remark,
-        leaddatetime: currentDateTime,
-        officeaddres: officeAddress,
-        contactperson: contactPerson,
-        gempname: gempname,
-        follow_rem: remark,
-        lleadno: "" // Empty for new client registration!
+        nfollowuptime_h: hours,
+        nfollowuptime_m: minutes,
+        c_assignedto: "",
+        gpsLatitude: (document.getElementById('new-client-lat') && document.getElementById('new-client-lat').value) || "0.0",
+        gpsLongitude: (document.getElementById('new-client-lng') && document.getElementById('new-client-lng').value) || "0.0"
     };
 
-    showToast('Submitting New Client Registration...', 'info');
+    const executeSubmission = async () => {
+        showToast('Submitting New Client Registration...', 'info');
 
-    // 1. Submit to FleetTrackon APIs if online
-    if (navigator.onLine) {
-        try {
-            console.log('[NewClient] Submitting to third-party API...');
-            await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dsrBody)
-            });
-            console.log('[NewClient] Third-party API registration success.');
-        } catch (e) {
-            console.error('[NewClient] Third-party API failed:', e);
-        }
-    } else {
-        showToast('Offline Mode: DSR saved locally.', 'info');
-    }
+        // 1. Submit to FleetTrackon generatenewlead API if online
+        if (navigator.onLine) {
+            try {
+                console.log('[NewClient] Submitting to generatenewlead API...', newClientBody);
+                await fetch(`${API_BASE_URL}/generatenewlead`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newClientBody)
+                });
+                console.log('[NewClient] Third-party generatenewlead API registration success.');
 
-    // Save DSR record locally
-    if (typeof DsrDb !== 'undefined') {
-        const localDsr = {
-            client_id: userid,
-            client_name: gempname,
-            customer_name: clientName,
-            office_address: officeAddress,
-            site_name: siteDetails,
-            contact_person: contactPerson,
-            contact_no: contactNumber,
-            last_remark: remark,
-            visited_for: 'New Registration',
-            followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
-            latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
-            longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
-            sync_status: 'Pending',
-            created_timestamp: new Date().toISOString()
-        };
-
-        DsrDb.saveDsr(localDsr, (saved) => {
-            console.log('[NewClient] DSR saved locally:', saved);
-            syncDSRs();
-        });
-    }
-
-    // 2. Automatically create Follow-up Reminder if date is entered
-    if (followupDate) {
-        const reminderTime = hours + ":" + minutes;
-        const remId = 'REM_' + Date.now();
-        const reminderType = 'New Client Follow Up';
-
-        const newReminder = {
-            id: remId,
-            client_id: userid,
-            client_name: clientName,
-            contact_person: contactPerson,
-            contact_number: contactNumber,
-            reminder_type: reminderType,
-            reminder_date: followupDate,
-            reminder_time: reminderTime,
-            remark: remark,
-            source_module: 'NewClient',
-            created_timestamp: new Date().toISOString(),
-            updated_timestamp: new Date().toISOString(),
-            status: 'Pending',
-            sync_status: 'Pending'
-        };
-
-        ReminderDb.saveReminder(newReminder, (saved) => {
-            console.log('[NewClient] Reminder created locally:', saved);
-
-            const dateParts = followupDate.split('-');
-            const dateObj = new Date(
-                parseInt(dateParts[0], 10),
-                parseInt(dateParts[1], 10) - 1,
-                parseInt(dateParts[2], 10),
-                parseInt(hours, 10),
-                parseInt(minutes, 10),
-                0
-            );
-
-            if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
-                window.AlarmBridge.scheduleReminderNotification(
-                    remId, clientName, reminderType, remark, reminderTime, dateObj.getTime()
-                );
+                // Also trigger iamatevent for NEW_CLIENT so server DAY END SUMMARY 2 displays the row!
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gotiamatdate: currentDateTime,
+                        gotempname: gempname || (session && session.userData && session.userData.name) || 'demo group',
+                        gotempid: userid,
+                        gotinoutstatus: "NEW_CLIENT",
+                        gotiamatclient: clientName || "",
+                        gotiamatlat: parseFloat(newClientBody.gpsLatitude) || 0.0,
+                        gotiamatlong: parseFloat(newClientBody.gpsLongitude) || 0.0,
+                        gimeinumber: (session && session.userData && session.userData.deviceId) || ""
+                    })
+                }).catch(err => console.error('iamatevent NEW_CLIENT error:', err));
+            } catch (e) {
+                console.error('[NewClient] Third-party generatenewlead API failed:', e);
             }
+        } else {
+            showToast('Offline Mode: DSR saved locally.', 'info');
+        }
 
-            refreshRemindersCount();
-            syncReminders();
-        });
-    }
+        // Save DSR record locally
+        if (typeof DsrDb !== 'undefined') {
+            const localDsr = {
+                client_id: userid,
+                client_name: gempname,
+                customer_name: clientName,
+                office_address: officeAddress,
+                site_name: siteDetails,
+                contact_person: contactPerson,
+                contact_no: contactNumber,
+                last_remark: remark,
+                visited_for: 'New Registration',
+                followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
+                latitude: parseFloat(newClientBody.gpsLatitude) || 0.0,
+                longitude: parseFloat(newClientBody.gpsLongitude) || 0.0,
+                sync_status: 'Pending',
+                created_timestamp: new Date().toISOString()
+            };
 
-    const currentDsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10) + 1;
-    const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
-    localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
-    localStorage.setItem('visitsToday', currentVisits.toString());
-    updateMetricsUI();
+            DsrDb.saveDsr(localDsr, (saved) => {
+                console.log('[NewClient] DSR saved locally:', saved);
+                syncDSRs();
+            });
+        }
 
-    showToast('New client registered successfully!', 'success');
-    showView('client-view');
+        // 2. Automatically create Follow-up Reminder if date is entered
+        if (followupDate) {
+            const reminderTime = hours + ":" + minutes;
+            const remId = 'REM_' + Date.now();
+            const reminderType = 'New Client Follow Up';
+
+            const newReminder = {
+                id: remId,
+                client_id: userid,
+                client_name: clientName,
+                contact_person: contactPerson,
+                contact_number: contactNumber,
+                reminder_type: reminderType,
+                reminder_date: followupDate,
+                reminder_time: reminderTime,
+                remark: remark,
+                source_module: 'NewClient',
+                created_timestamp: new Date().toISOString(),
+                updated_timestamp: new Date().toISOString(),
+                status: 'Pending',
+                sync_status: 'Pending'
+            };
+
+            ReminderDb.saveReminder(newReminder, (saved) => {
+                console.log('[NewClient] Reminder created locally:', saved);
+
+                const dateParts = followupDate.split('-');
+                const dateObj = new Date(
+                    parseInt(dateParts[0], 10),
+                    parseInt(dateParts[1], 10) - 1,
+                    parseInt(dateParts[2], 10),
+                    parseInt(hours, 10),
+                    parseInt(minutes, 10),
+                    0
+                );
+
+                if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
+                    window.AlarmBridge.scheduleReminderNotification(
+                        remId, clientName, reminderType, remark, reminderTime, dateObj.getTime()
+                    );
+                }
+
+                refreshRemindersCount();
+                syncReminders();
+            });
+        }
+
+        const currentDsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10) + 1;
+        const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
+        localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
+        localStorage.setItem('visitsToday', currentVisits.toString());
+        updateMetricsUI();
+
+        resetNewClientForm();
+        showToast('New client registered successfully!', 'success');
+
+        // Trigger Checkout success modal (user clicks OK -> sends Checkout & returns to Home Screen)
+        const latNum = parseFloat(newClientBody.gpsLatitude) || 18.4748182;
+        const lngNum = parseFloat(newClientBody.gpsLongitude) || 73.8119225;
+        showDsrSuccessModal('New Client Registered!', '', clientName, latNum, lngNum);
+    };
+
+    // Show Payload Inspector Modal Window before sending!
+    showApiPayloadModal('New Client Registration', `${API_BASE_URL}/generatenewlead`, newClientBody, executeSubmission);
 }
 
 /**
@@ -4497,5 +4815,33 @@ function updateDsrRemarkCounter() {
         counterField.textContent = `${len} / 250`;
     }
 }
+
+// ── Global Window Bindings for WebView Event Handlers ──
+window.handleDayToggle = handleDayToggle;
+window.handleDayStart = handleDayStart;
+window.handleDayEnd = handleDayEnd;
+window.handleCheckIn = handleCheckIn;
+window.handleOthersCheckIn = handleOthersCheckIn;
+window.handleNewClient = handleNewClient;
+window.handleLeavePage = handleLeavePage;
+window.handleLeaveApplication = handleLeaveApplication;
+window.handleLeaveStatus = handleLeaveStatus;
+window.handleReports = handleReports;
+window.handleReminders = handleReminders;
+window.submitDSR = submitDSR;
+window.submitOthers = submitOthers;
+window.submitNewClient = submitNewClient;
+window.submitLeave = submitLeave;
+window.showDsrSuccessModal = showDsrSuccessModal;
+window.onDsrSuccessOkClick = onDsrSuccessOkClick;
+window.openDSRForm = openDSRForm;
+window.openBookingForm = openBookingForm;
+window.openDsrReviewScreen = openDsrReviewScreen;
+window.closeDsrReviewScreen = closeDsrReviewScreen;
+window.confirmAndSubmitDSR = confirmAndSubmitDSR;
+window.handleDSRClientReport = handleDSRClientReport;
+window.handleDSRClientReportAdmin = handleDSRClientReportAdmin;
+window.fetchDSRClientReportData = fetchDSRClientReportData;
+window.renderDsrClientReportRows = renderDsrClientReportRows;
 
 

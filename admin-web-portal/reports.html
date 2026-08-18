@@ -128,16 +128,13 @@
 
         <!-- ── Report Tabs ── -->
         <div class="report-tabs">
-            <button class="report-tab" data-tab="travel-path" onclick="switchReportTab('travel-path', this)">Travel
-                Path</button>
-            <button class="report-tab" data-tab="dsr-summary" onclick="switchReportTab('dsr-summary', this)">DSR
-                Summary</button>
-            <button class="report-tab" data-tab="checkin-status" onclick="switchReportTab('checkin-status', this)">Check
-                In/Out Status</button>
-            <button class="report-tab active" data-tab="day-end-summary"
-                onclick="switchReportTab('day-end-summary', this)">Day End Summary 2</button>
-            <button class="report-tab" data-tab="day-start-end" onclick="switchReportTab('day-start-end', this)">Day
-                Start/End Report</button>
+            <button class="report-tab" data-tab="travel-path" onclick="switchReportTab('travel-path', this)">Travel Path</button>
+            <button class="report-tab" data-tab="dsr-summary" onclick="switchReportTab('dsr-summary', this)">DSR Summary</button>
+            <button class="report-tab" data-tab="checkin-status" onclick="switchReportTab('checkin-status', this)">Check In/Out Status</button>
+            <button class="report-tab active" data-tab="day-end-summary" onclick="switchReportTab('day-end-summary', this)">Day End Summary 2</button>
+            <button class="report-tab" data-tab="day-start-end" onclick="switchReportTab('day-start-end', this)">Day Start/End Report</button>
+            <button class="report-tab" data-tab="booking-report" onclick="switchReportTab('booking-report', this)">Booking Report</button>
+            <button class="report-tab" data-tab="dsr-client" onclick="switchReportTab('dsr-client', this)">DSR Client Report</button>
         </div>
 
         <!-- ── Report Header Info ── -->
@@ -158,100 +155,7 @@
                 </thead>
                 <tbody id="report-tbody">
                     <tr>
-                        <td>84</td>
-                        <td>demo group</td>
-                        <td>08/08/2026 06:40</td>
-                        <td>06:40:00</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="activity-badge start">START</span></td>
-                        <td></td>
-                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
-                            411051</td>
-                        <td>18.4748056, 73.8119057</td>
-                    </tr>
-                    <tr>
-                        <td>85</td>
-                        <td>demo group</td>
-                        <td>08/08/2026 06:40</td>
-                        <td></td>
-                        <td>06:40:35</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="activity-badge checkin">CHECKIN</span></td>
-                        <td></td>
-                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
-                            411051</td>
-                        <td>18.4748056, 73.8119057</td>
-                    </tr>
-                    <tr>
-                        <td>86</td>
-                        <td>demo group</td>
-                        <td>08/08/2026 06:40</td>
-                        <td></td>
-                        <td></td>
-                        <td>06:40:44</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="activity-badge dsr">DSR_UPDATE</span></td>
-                        <td>PIONEER HOUSING</td>
-                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
-                            411051</td>
-                        <td>18.4748056, 73.8119057</td>
-                    </tr>
-                    <tr>
-                        <td>87</td>
-                        <td>demo group</td>
-                        <td>08/08/2026 06:41</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>06:41:00</td>
-                        <td></td>
-                        <td>0:0:25</td>
-                        <td><span class="activity-badge checkout">CHECKOUT</span></td>
-                        <td></td>
-                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
-                            411051</td>
-                        <td>18.4748056, 73.8119057</td>
-                    </tr>
-                    <tr>
-                        <td>88</td>
-                        <td>demo group</td>
-                        <td>08/08/2026 06:41</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>06:41:00</td>
-                        <td>0 Hrs 1 Min</td>
-                        <td><span class="activity-badge end">END</span></td>
-                        <td></td>
-                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
-                            411051</td>
-                        <td>18.4748056, 73.8119057</td>
-                    </tr>
-                    <tr>
-                        <td>89</td>
-                        <td>demo group</td>
-                        <td>08/08/2026 06:41</td>
-                        <td></td>
-                        <td>06:41:15</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="activity-badge checkin">CHECKIN</span></td>
-                        <td></td>
-                        <td>0.02 KM from: Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra
-                            411051</td>
-                        <td>18.4748056, 73.8119057</td>
+                        <td colspan="13" style="text-align: center; padding: 24px; color: var(--text-sub);">Loading live report data from API...</td>
                     </tr>
                 </tbody>
             </table>

@@ -786,6 +786,19 @@
                         <span class="action-card-submenu-arrow">›</span>
                     </div>
 
+                    <div class="action-card-submenu" onclick="handleDSRClientReport()">
+                        <div class="action-card-submenu-left">
+                            <div class="action-card-icon-wrapper icon-orange">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                            </div>
+                            <div class="action-card-submenu-details">
+                                <h3 class="action-card-submenu-title">DSR Client Report</h3>
+                                <p class="action-card-submenu-desc">View registered client details and followup history</p>
+                            </div>
+                        </div>
+                        <span class="action-card-submenu-arrow">›</span>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -1003,6 +1016,73 @@
                             <tbody>
                                 <tr>
                                     <td colspan="11" class="table-empty">No records found. Click Get Data.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- VIEW: DSR Client Report                      -->
+    <!-- ============================================ -->
+    <div id="dsr-client-report-view" class="view dsr-premium-space-view">
+        <div class="bg-blob blob1"></div>
+        <div class="bg-blob blob2"></div>
+        <div class="bg-blob blob3"></div>
+
+        <div class="page-container dsr-page-container glass-shell">
+            <div class="inline-back-row">
+                <button type="button" class="inline-back-btn" onclick="goBackFromReport()" title="Back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2 class="inline-page-title">DSR Client Report</h2>
+            </div>
+
+            <div class="page-content">
+                <div class="glass-form-card" style="padding: 16px; margin-bottom: 16px;">
+                    <div class="filter-row-layout">
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">Select User</label>
+                            <select id="dsr-client-user" class="glass-select filter-select">
+                                <option value="All">All</option>
+                            </select>
+                        </div>
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">From</label>
+                            <input type="date" id="dsr-client-from" class="glass-input filter-input">
+                        </div>
+                        <div class="input-group-filter">
+                            <label class="input-label-filter">Till</label>
+                            <input type="date" id="dsr-client-till" class="glass-input filter-input">
+                        </div>
+                        <button class="btn-primary filter-btn" onclick="fetchDSRClientReportData()">Get Data</button>
+                    </div>
+                </div>
+
+                <div class="glass-table-container">
+                    <div class="table-responsive">
+                        <table class="report-table" id="dsr-client-report-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">SR NO</th>
+                                    <th>ASSIGNED EMP</th>
+                                    <th>REGISTERED ON</th>
+                                    <th>CLIENT</th>
+                                    <th>SITE NAME</th>
+                                    <th>OFFICE ADDRES</th>
+                                    <th>CONTACT PERSON</th>
+                                    <th>CONTACT</th>
+                                    <th>CURRENT REMARK</th>
+                                    <th>FOLLOWUP</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="10" class="table-empty">No records found. Click Get Data.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1518,7 +1598,7 @@
             </div>
 
             <div class="page-content">
-                <div class="glass-form-card" style="padding: 20px;">
+                <div class="glass-form-card">
                     <h3 class="form-title">NEW CLIENT REGISTRATION</h3>
                     
                     <!-- Progress Bar -->
@@ -1809,29 +1889,27 @@
                     <span>Client Information</span>
                 </div>
 
-                <div class="list-group glass floaty">
-                    <div class="field">
-                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
-                        <div class="field-text">
-                            <label>Customer Name <span style="color:#ef4444;">*</span></label>
-                            <input type="text" id="others-customer-name" class="value-input" placeholder="Customer Name">
-                        </div>
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <div class="field-text" style="width:100%;">
+                        <label>Customer Name <span style="color:#ef4444;">*</span></label>
+                        <input type="text" id="others-customer-name" class="value-input" placeholder="Customer Name">
                     </div>
+                </div>
 
-                    <div class="field">
-                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-                        <div class="field-text">
-                            <label>Office Address</label>
-                            <textarea id="others-office-address" class="notes" placeholder="Office Address" rows="2" style="min-height:40px; height:40px; resize:none;"></textarea>
-                        </div>
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                    <div class="field-text" style="width:100%;">
+                        <label>Office Address</label>
+                        <textarea id="others-office-address" class="notes" placeholder="Office Address" rows="2" style="min-height:40px; height:40px; resize:none;"></textarea>
                     </div>
+                </div>
 
-                    <div class="field">
-                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-                        <div class="field-text">
-                            <label>Site Details</label>
-                            <input type="text" id="others-site-details" class="value-input" placeholder="Site Details">
-                        </div>
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <div class="field-text" style="width:100%;">
+                        <label>Site Details</label>
+                        <input type="text" id="others-site-details" class="value-input" placeholder="Site Details">
                     </div>
                 </div>
 
@@ -1840,21 +1918,19 @@
                     <span>Contact Information</span>
                 </div>
 
-                <div class="list-group glass floaty">
-                    <div class="field">
-                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
-                        <div class="field-text">
-                            <label>Contact Person</label>
-                            <input type="text" id="others-contact-person" class="value-input" placeholder="Contact Person">
-                        </div>
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <div class="field-text" style="width:100%;">
+                        <label>Contact Person</label>
+                        <input type="text" id="others-contact-person" class="value-input" placeholder="Contact Person">
                     </div>
+                </div>
 
-                    <div class="field">
-                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.35 1.79.68 2.63a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.45-1.45a2 2 0 0 1 2.11-.45c.84.33 1.73.56 2.63.68A2 2 0 0 1 22 16.92z"/></svg></div>
-                        <div class="field-text">
-                            <label>Contact Number</label>
-                            <input type="tel" id="others-contact-number" class="value-input" placeholder="Contact Number">
-                        </div>
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.35 1.79.68 2.63a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.45-1.45a2 2 0 0 1 2.11-.45c.84.33 1.73.56 2.63.68A2 2 0 0 1 22 16.92z"/></svg></div>
+                    <div class="field-text" style="width:100%;">
+                        <label>Contact Number</label>
+                        <input type="tel" id="others-contact-number" class="value-input" placeholder="Contact Number">
                     </div>
                 </div>
 
@@ -2273,20 +2349,33 @@
                     <span>Duration</span>
                 </div>
 
-                <div class="list-group glass floaty">
-                    <div class="field">
-                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg></div>
-                        <div class="field-text">
-                            <label>Leave Required From <span style="color:#ef4444;">*</span></label>
-                            <input type="date" id="leave-from-date" class="value-input" onchange="calculateTotalLeaveDays()">
-                        </div>
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
                     </div>
-                    <div class="field">
-                        <div class="field-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect></svg></div>
-                        <div class="field-text">
-                            <label>Leave Required Till <span style="color:#ef4444;">*</span></label>
-                            <input type="date" id="leave-till-date" class="value-input" onchange="calculateTotalLeaveDays()">
-                        </div>
+                    <div class="field-text" style="width: 100%;">
+                        <label>Leave Required From <span style="color:#ef4444;">*</span></label>
+                        <input type="date" id="leave-from-date" class="value-input" onchange="calculateTotalLeaveDays()">
+                    </div>
+                </div>
+
+                <div class="field glass floaty" style="margin-bottom: 14px; position: relative;">
+                    <div class="field-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="field-text" style="width: 100%;">
+                        <label>Leave Required Till <span style="color:#ef4444;">*</span></label>
+                        <input type="date" id="leave-till-date" class="value-input" onchange="calculateTotalLeaveDays()">
                     </div>
                 </div>
 
@@ -2443,7 +2532,7 @@
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
             </div>
-            <h3 class="custom-modal-title">DSR Submitted!</h3>
+            <h3 class="custom-modal-title" id="dsr-success-modal-title">DSR Submitted!</h3>
             <p class="custom-modal-body" id="dsr-success-modal-msg">You filled the DSR form in 11 sec.</p>
             <button type="button" class="custom-modal-btn" onclick="onDsrSuccessOkClick()">OK</button>
         </div>
@@ -2523,19 +2612,6 @@
         }
     </style>
     
-    <!-- DSR Submission Success Modal -->
-    <div id="dsr-success-modal" class="modal-overlay" style="display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); align-items: center; justify-content: center; padding: 20px;">
-        <div class="glass-modal-card" style="background: #FFFFFF; border-radius: 24px; padding: 28px 24px; max-width: 320px; width: 100%; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, rgba(72,187,120,0.15), rgba(72,187,120,0.3)); color: #38A169; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-            <h3 style="font-size: 18px; font-weight: 800; color: #1E2430; margin: 0 0 8px;">DSR Submitted!</h3>
-            <p id="dsr-success-modal-msg" style="font-size: 13.5px; color: #6A7180; margin: 0 0 20px; line-height: 1.4;">DSR submitted successfully!</p>
-            <button type="button" onclick="onDsrSuccessOkClick()" style="width: 100%; padding: 13px; font-weight: 750; font-size: 15px; color: #FFFFFF; background: linear-gradient(145deg, #FF7A1A, #F0630A); border: none; border-radius: 16px; box-shadow: 0 8px 20px rgba(240, 99, 10, 0.3); cursor: pointer;">
-                OK
-            </button>
-        </div>
-    </div>
     
     <!-- App Scripts -->
 

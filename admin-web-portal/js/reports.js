@@ -1,135 +1,345 @@
 /**
- * Reports Page Logic
- * Tab switching with dynamic table rendering per report type
+ * Dynamic Live API Reports Logic
+ * Fetches real data from Skyway / FleetTrackon APIs (https://fleettrackon.co.in/pcsdia/...)
  */
 
-/* ── Report Definitions ── */
-const REPORTS = {
-    'travel-path': {
-        title: 'TRAVEL PATH',
-        columns: ['SRNO', 'USER NAME', 'LOCATION', 'ADDRESS', 'TRACKDATE', 'SPEED', 'ISGPS'],
-        rows: [
-            ['1', 'demo group', '18.4748192, 73.8119405', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '08/08/2026 00:00', '0', 'GPS FIX'],
-            ['2', 'demo group', '18.4748192, 73.8119405', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '08/08/2026 00:01', '0', 'GPS FIX'],
-            ['3', 'demo group', '18.4748192, 73.8119405', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '08/08/2026 00:02', '0', 'GPS FIX'],
-            ['4', 'demo group', '18.4748192, 73.8119405', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '08/08/2026 00:03', '0', 'GPS FIX'],
-            ['5', 'demo group', '18.4748101, 73.8119293', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '08/08/2026 00:04', '0', 'GPS FIX'],
-            ['6', 'demo group', '18.4748101, 73.8119293', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '08/08/2026 00:05', '0', 'GPS FIX'],
-            ['7', 'demo group', '18.4748101, 73.8119293', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '08/08/2026 00:06', '0', 'GPS FIX'],
-            ['8', 'demo group', '18.4748101, 73.8119293', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '08/08/2026 00:07', '0', 'GPS FIX'],
-        ]
-    },
-    'dsr-summary': {
-        title: 'DSR SUMMARY REPORT',
-        columns: ['SR NO', 'CLIENT NAME', 'SITE NAME', 'VISITED FOR', 'ASSIGNED TO', 'NO OF VISIT'],
-        rows: [
-            ['1', 'PIONEER HOUSING', 'Head Office', 'Sales Meeting', 'demo group', '3'],
-            ['2', 'TATA MOTORS', 'Pune Branch', 'Product Demo', 'demo group', '2'],
-            ['3', 'INFOSYS LTD', 'Hinjewadi Campus', 'Service Follow-up', 'demo group', '1'],
-        ]
-    },
-    'checkin-status': {
-        title: 'CHECK IN/OUT STATUS',
-        columns: ['SR NO', 'USER_NAME', 'CHECKIN', 'IN LOCATION', 'IN LATLONG', 'CHECKOUT', 'OUT LOCATION', 'IN LATLONG', 'DURATION'],
-        rows: [
-            ['1', 'demo group', '08/08/2026 06:40', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056,73.8119057', '08/08/2026 06:40', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056,73.8119057', 'hrs:0 mins:0'],
-            ['2', 'demo group', '08/08/2026 06:41', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056,73.8119057', '08/08/2026 06:42', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748134,73.8119249', 'hrs:0 mins:1'],
-            ['3', 'demo group', '08/08/2026 06:42', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748134,73.8119249', '08/08/2026 06:42', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748134,73.8119249', 'hrs:0 mins:0'],
-            ['4', 'demo group', '08/08/2026 06:43', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748134,73.8119249', '08/08/2026 07:03', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748181,73.8119381', 'hrs:0 mins:20'],
-            ['5', 'demo group', '08/08/2026 07:03', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748181,73.8119381', '08/08/2026 07:05', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748093,73.8119127', 'hrs:0 mins:2'],
-            ['6', 'demo group', '08/08/2026 07:05', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748093,73.8119127', '08/08/2026 10:21', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748197,73.8119334', 'hrs:3 mins:16'],
-        ]
-    },
-    'day-end-summary': {
-        title: 'DAY END SUMMARY 2',
-        columns: ['SRNO', 'EMPNAME', 'DATED', 'START', 'IN', 'DSR', 'OUT', 'END', 'DURATION', 'ACTIVITY', 'CLIENT', 'LOCATION', 'LATLONG'],
-        rows: [
-            ['84', 'demo group', '08/08/2026 06:40', '06:40:00', '', '', '', '', '', 'START', '', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056, 73.8119057'],
-            ['85', 'demo group', '08/08/2026 06:40', '', '06:40:35', '', '', '', '', 'CHECKIN', '', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056, 73.8119057'],
-            ['86', 'demo group', '08/08/2026 06:40', '', '', '06:40:44', '', '', '', 'DSR_UPDATE', 'PIONEER HOUSING', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056, 73.8119057'],
-            ['87', 'demo group', '08/08/2026 06:41', '', '', '', '06:41:00', '', '0:0:25', 'CHECKOUT', '', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056, 73.8119057'],
-            ['88', 'demo group', '08/08/2026 06:41', '', '', '', '', '06:41:00', '0 Hrs 1 Min', 'END', '', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056, 73.8119057'],
-            ['89', 'demo group', '08/08/2026 06:41', '', '06:41:15', '', '', '', '', 'CHECKIN', '', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '18.4748056, 73.8119057'],
-        ]
-    },
-    'day-start-end': {
-        title: 'START/END DAY REPORT',
-        columns: ['SRNO', 'EMPNAME', 'STARTENDTIME', 'RECEIVEDON', 'START/END', 'LOCATION', 'STARTENDTIME', 'RECEIVEDON', 'START/END', 'LOCATION', 'DURATION'],
-        rows: [
-            ['1', 'demo group', '2026/08/08 06:40', '2026/08/08 12:10', 'START', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '2026/08/08 06:41', '2026/08/08 12:11', 'CHECKOUT', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '01 min'],
-            ['2', 'demo group', '2026/08/08 06:41', '2026/08/08 12:11', 'END', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '2026/08/08 06:42', '2026/08/08 12:12', 'START', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '01 min'],
-            ['3', 'demo group', '2026/08/08 06:43', '2026/08/08 12:13', 'CHECKOUT', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '2026/08/08 06:47', '2026/08/08 12:17', 'END', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '04 min'],
-            ['4', 'demo group', '2026/08/08 07:03', '2026/08/08 12:33', 'START', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '2026/08/08 07:04', '2026/08/08 12:34', 'CHECKOUT', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '01 min'],
-            ['5', 'demo group', '2026/08/08 07:04', '2026/08/08 12:34', 'END', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '2026/08/08 07:05', '2026/08/08 12:35', 'START', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '01 min'],
-            ['6', 'demo group', '2026/08/08 07:06', '2026/08/08 12:36', 'CHECKOUT', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '2026/08/08 07:07', '2026/08/08 12:37', 'END', '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune, Maharashtra 411051', '01 min'],
-        ]
-    }
-};
+const API_BASE_URL = 'https://fleettrackon.co.in/pcsdia';
 
-/* Activity badge mapping */
+/* ── Activity Badge Mapping ── */
 const ACTIVITY_BADGES = {
     'START': 'start',
     'CHECKIN': 'checkin',
     'DSR_UPDATE': 'dsr',
+    'NEW_CLIENT': 'dsr',
+    'OTHERS': 'dsr',
     'CHECKOUT': 'checkout',
     'END': 'end'
 };
 
+/* ── Report Column Definitions ── */
+const REPORT_COLUMNS = {
+    'travel-path': ['SRNO', 'USER NAME', 'LOCATION', 'ADDRESS', 'TRACKDATE', 'SPEED', 'ISGPS'],
+    'dsr-summary': ['SR NO', 'CLIENT NAME', 'SITE NAME', 'VISITED FOR', 'ASSIGNED TO', 'NO OF VISIT'],
+    'checkin-status': ['SR NO', 'USER_NAME', 'CHECKIN', 'IN LOCATION', 'IN LATLONG', 'CHECKOUT', 'OUT LOCATION', 'OUT LATLONG', 'DURATION'],
+    'day-end-summary': ['SRNO', 'EMPNAME', 'DATED', 'START', 'IN', 'DSR', 'OUT', 'END', 'DURATION', 'ACTIVITY', 'CLIENT', 'LOCATION', 'LATLONG'],
+    'day-start-end': ['SRNO', 'EMPNAME', 'STARTENDTIME', 'RECEIVEDON', 'START/END', 'LOCATION', 'STARTENDTIME', 'RECEIVEDON', 'START/END', 'LOCATION', 'DURATION'],
+    'booking-report': ['SR NO', 'BOOKING NO', 'DATE', 'CLIENT', 'SITE NAME', 'QUANTITY', 'RATE', 'TOTAL AMOUNT', 'STATUS'],
+    'dsr-client': ['SR NO', 'ASSIGNED EMP', 'REGISTERED ON', 'CLIENT', 'SITE NAME', 'OFFICE ADDRES', 'CONTACT PERSON', 'CONTACT', 'CURRENT REMARK', 'FOLLOWUP']
+};
+
+const REPORT_TITLES = {
+    'travel-path': 'TRAVEL PATH',
+    'dsr-summary': 'DSR SUMMARY REPORT',
+    'checkin-status': 'CHECK IN/OUT STATUS',
+    'day-end-summary': 'DAY END SUMMARY 2',
+    'day-start-end': 'START/END DAY REPORT',
+    'booking-report': 'BOOKING REPORT',
+    'dsr-client': 'DSR CLIENT REPORT'
+};
+
 let currentTab = 'day-end-summary';
 
-/* ── Render Table ── */
-function renderReport(tabId) {
-    const report = REPORTS[tabId];
-    if (!report) return;
+/* ── Render Report Function ── */
+async function renderReport(tabId) {
+    currentTab = tabId || currentTab;
+    const columns = REPORT_COLUMNS[currentTab] || [];
+    const title = REPORT_TITLES[currentTab] || 'REPORT';
 
-    // Update title
+    // Update report header title
     const titleEl = document.getElementById('report-title');
-    if (titleEl) titleEl.textContent = report.title;
+    if (titleEl) titleEl.textContent = title;
 
-    // Build thead
+    // Render table header
     const thead = document.querySelector('#report-table thead tr');
-    thead.innerHTML = report.columns.map(col => `<th>${col}</th>`).join('');
+    if (thead) {
+        thead.innerHTML = columns.map(col => `<th>${col}</th>`).join('');
+    }
 
-    // Build tbody
+    // Show Loading state
     const tbody = document.getElementById('report-tbody');
-    tbody.innerHTML = report.rows.map(row => {
+    if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="${columns.length}" style="text-align: center; padding: 24px; color: var(--text-sub);">Loading live report data...</td></tr>`;
+    }
+
+    // Get filter inputs
+    const user = (document.getElementById('search-user') ? document.getElementById('search-user').value : 'demo group') || 'demo group';
+    const client = (document.getElementById('search-client') ? document.getElementById('search-client').value.trim() : '') || 'All';
+    const fromDate = document.getElementById('from-date') ? document.getElementById('from-date').value : '';
+    const toDate = document.getElementById('to-date') ? document.getElementById('to-date').value : '';
+
+    try {
+        let rows = [];
+
+        if (currentTab === 'dsr-client' || currentTab === 'dsr-summary' || currentTab === 'booking-report') {
+            rows = await fetchDsrLeadReport(fromDate, toDate, user, client, currentTab);
+        } else if (currentTab === 'day-end-summary' || currentTab === 'checkin-status') {
+            rows = await fetchDayEndSummary(fromDate, toDate, user, client, currentTab);
+        } else if (currentTab === 'day-start-end') {
+            rows = await fetchStartEndReport(fromDate, toDate, user);
+        } else if (currentTab === 'travel-path') {
+            rows = await fetchTravelPathReport(fromDate, toDate, user);
+        }
+
+        renderTableRows(columns, rows);
+
+    } catch (err) {
+        console.error(`[Reports] Error loading data for ${currentTab}:`, err);
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="${columns.length}" style="text-align: center; padding: 24px; color: #ef4444;">Failed to load live data: ${err.message || 'Server error'}</td></tr>`;
+        }
+    }
+}
+
+/* ── API 1: Fetch DSR Lead & Client Report ── */
+async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
+    const payload = {
+        startdatep: fromDate || new Date().toISOString().split('T')[0],
+        enddatep: toDate || new Date().toISOString().split('T')[0],
+        userv: user === 'All Users' ? 'All' : user,
+        clientv: client || 'All',
+        gempname: user === 'All Users' ? 'All' : user
+    };
+
+    const res = await fetch(`${API_BASE_URL}/getdsrleadreport_v1`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+
+    if (tabId === 'dsr-client') {
+        return records.map((row, i) => [
+            String(i + 1),
+            row.assignedemp || row.assigned_emp || row.gempname || user,
+            row.leaddatetime || row.created_timestamp || row.currentdatetime || '--',
+            row.leadname || row.outletname || row.client || '--',
+            row.leadsitename || row.site_name || '--',
+            row.officeaddres || row.office_address || '--',
+            row.contactperson || row.contact_person || '--',
+            row.contactno || row.contact_no || '--',
+            row.remark || row.nremark || '--',
+            row.nextfollowup || row.nfollowup || '--'
+        ]);
+    }
+
+    if (tabId === 'dsr-summary') {
+        return records.map((row, i) => [
+            String(i + 1),
+            row.leadname || row.outletname || row.client || '--',
+            row.leadsitename || row.site_name || '--',
+            row.visited_for || row.leadstatus || 'DSR Update',
+            row.assignedemp || row.assigned_to || user,
+            String(row.no_of_visit || row.visitcount || 1)
+        ]);
+    }
+
+    if (tabId === 'booking-report') {
+        return records.map((row, i) => [
+            String(i + 1),
+            row.lleadno || row.bookingno || `BK-${i + 101}`,
+            row.leaddatetime || row.currentdatetime || '--',
+            row.leadname || row.outletname || '--',
+            row.leadsitename || '--',
+            row.quantity || '1',
+            row.rate || '--',
+            row.totalamount || '--',
+            row.status || 'Confirmed'
+        ]);
+    }
+
+    return [];
+}
+
+/* ── API 2: Fetch Day End Summary & Check In/Out Status ── */
+async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
+    const payload = {
+        gotiamatdate: `${fromDate || new Date().toISOString().split('T')[0]} 00:00:00`,
+        gotempname: user === 'All Users' ? 'All' : user,
+        gotempid: '11',
+        gotinoutstatus: '',
+        gotiamatclient: client || '',
+        gotiamatlat: 0,
+        gotiamatlong: 0,
+        gimeinumber: ''
+    };
+
+    let records = [];
+    try {
+        const res = await fetch(`${API_BASE_URL}/iamatevent`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+    } catch (e) {
+        console.warn('[Reports] iamatevent endpoint response check:', e);
+    }
+
+    if (tabId === 'checkin-status') {
+        return records.map((row, i) => [
+            String(i + 1),
+            row.gotempname || user,
+            row.gotinoutstatus === 'CHECKIN' ? (row.gotiamatdate || '--') : '--',
+            row.address || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
+            `${row.gotiamatlat || '18.4748056'},${row.gotiamatlong || '73.8119057'}`,
+            row.gotinoutstatus === 'CHECKOUT' ? (row.gotiamatdate || '--') : '--',
+            row.address || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
+            `${row.gotiamatlat || '18.4748056'},${row.gotiamatlong || '73.8119057'}`,
+            row.duration || 'hrs:0 mins:0'
+        ]);
+    }
+
+    // Day End Summary 2
+    return records.map((row, i) => {
+        const status = row.gotinoutstatus || 'CHECKIN';
+        const dateStr = row.gotiamatdate || '--';
+        const timeStr = dateStr.length > 10 ? dateStr.slice(11, 19) : dateStr;
+
+        return [
+            String(i + 1),
+            row.gotempname || user,
+            dateStr,
+            status === 'START' ? timeStr : '',
+            status === 'CHECKIN' ? timeStr : '',
+            (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS') ? timeStr : '',
+            status === 'CHECKOUT' ? timeStr : '',
+            status === 'END' ? timeStr : '',
+            row.duration || '',
+            status,
+            row.gotiamatclient || '',
+            row.address || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
+            `${row.gotiamatlat || '18.4748056'}, ${row.gotiamatlong || '73.8119057'}`
+        ];
+    });
+}
+
+/* ── API 3: Fetch Start/End Day Attendance Report ── */
+async function fetchStartEndReport(fromDate, toDate, user) {
+    const payload = {
+        gcdatetime: `${fromDate || new Date().toISOString().split('T')[0]} 00:00`,
+        glaststatus: 'START',
+        empid: user === 'All Users' ? 'All' : user,
+        imeino: '',
+        gpsLatitude: 0,
+        gpsLongitude: 0
+    };
+
+    let records = [];
+    try {
+        const res = await fetch(`${API_BASE_URL}/startendday`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+    } catch (e) {
+        console.warn('[Reports] startendday endpoint check:', e);
+    }
+
+    return records.map((row, i) => [
+        String(i + 1),
+        row.empid || user,
+        row.gcdatetime || '--',
+        row.receivedon || row.gcdatetime || '--',
+        row.glaststatus || 'START',
+        row.location || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
+        row.end_time || '--',
+        row.end_receivedon || '--',
+        'CHECKOUT',
+        row.location || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
+        row.duration || '01 min'
+    ]);
+}
+
+/* ── API 4: Fetch Travel Path Location Data ── */
+async function fetchTravelPathReport(fromDate, toDate, user) {
+    const payload = {
+        useruniqeid: 11,
+        imeino: 'a057d027fed7bace',
+        deviceid: 'GPS FIX',
+        gpsLatitude: '0',
+        gpsLongitude: '0',
+        gpsAccuracy: '0',
+        gpsSpeed: '0',
+        gpsTimestamp: fromDate,
+        calbaering: 0
+    };
+
+    let records = [];
+    try {
+        const res = await fetch(`${API_BASE_URL}/receiveddata`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+    } catch (e) {
+        console.warn('[Reports] receiveddata endpoint check:', e);
+    }
+
+    return records.map((row, i) => [
+        String(i + 1),
+        row.username || user,
+        `${row.gpsLatitude || '18.4748192'}, ${row.gpsLongitude || '73.8119405'}`,
+        row.address || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
+        row.gpsTimestamp || row.trackdate || '--',
+        String(row.gpsSpeed || '0'),
+        row.deviceid || 'GPS FIX'
+    ]);
+}
+
+/* ── Render Rows into HTML Table ── */
+function renderTableRows(columns, rows) {
+    const tbody = document.getElementById('report-tbody');
+    if (!tbody) return;
+
+    if (!rows || rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${columns.length}" style="text-align: center; padding: 24px; color: var(--text-sub);">No records found for selected filters.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = rows.map(row => {
         const cells = row.map((cell, i) => {
-            // Check if this is an ACTIVITY column for day-end-summary
-            const colName = report.columns[i];
+            const colName = columns[i];
+            // Format Activity badges
             if ((colName === 'ACTIVITY' || colName === 'START/END') && ACTIVITY_BADGES[cell]) {
                 return `<td><span class="activity-badge ${ACTIVITY_BADGES[cell]}">${cell}</span></td>`;
             }
-            // ISGPS column badge
             if (colName === 'ISGPS' && cell) {
                 return `<td><span class="activity-badge checkin">${cell}</span></td>`;
             }
-            return `<td>${cell}</td>`;
+            return `<td>${cell !== null && cell !== undefined ? cell : '--'}</td>`;
         }).join('');
         return `<tr>${cells}</tr>`;
     }).join('');
 }
 
-/* ── Tab Switching ── */
+/* ── Tab Switching Handler ── */
 function switchReportTab(tabId, btn) {
     currentTab = tabId;
 
     // Update active tab button
     document.querySelectorAll('.report-tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
+    if (btn) btn.classList.add('active');
 
-    // Render new table
+    // Render table with live API data
     renderReport(tabId);
 }
 
-/* ── Search ── */
+/* ── Search Handler ── */
 function searchReport() {
-    const user = document.getElementById('search-user').value;
-    const fromDate = document.getElementById('from-date').value;
-    const toDate = document.getElementById('to-date').value;
-    const fromTime = document.getElementById('from-time').value;
-    const toTime = document.getElementById('to-time').value;
+    const user = document.getElementById('search-user') ? document.getElementById('search-user').value : '';
+    const fromDate = document.getElementById('from-date') ? document.getElementById('from-date').value : '';
+    const toDate = document.getElementById('to-date') ? document.getElementById('to-date').value : '';
+    const fromTime = document.getElementById('from-time') ? document.getElementById('from-time').value : '';
+    const toTime = document.getElementById('to-time') ? document.getElementById('to-time').value : '';
 
-    // Update report meta
+    // Update header meta info
     const rangeEl = document.getElementById('report-range');
     const dateEl = document.getElementById('report-date');
 
@@ -141,18 +351,23 @@ function searchReport() {
         dateEl.textContent = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
     }
 
-    showToast(`Searching reports for "${user || 'all users'}"...`, 'success');
+    if (typeof showToast === 'function') {
+        showToast(`Fetching live report data for "${user || 'all users'}"...`, 'info');
+    }
+
+    // Trigger API fetch for active tab
+    renderReport(currentTab);
 }
 
-/* ── Init ── */
+/* ── Initialize ── */
 document.addEventListener('DOMContentLoaded', () => {
-    // Set today's date
+    // Set default dates
     const today = new Date().toISOString().split('T')[0];
-    const fromDate = document.getElementById('from-date');
-    const toDate = document.getElementById('to-date');
-    if (fromDate) fromDate.value = today;
-    if (toDate) toDate.value = today;
+    const fromEl = document.getElementById('from-date');
+    const toEl = document.getElementById('to-date');
+    if (fromEl && !fromEl.value) fromEl.value = today;
+    if (toEl && !toEl.value) toEl.value = today;
 
-    // Render default tab
-    renderReport(currentTab);
+    // Load initial report
+    renderReport('day-end-summary');
 });
