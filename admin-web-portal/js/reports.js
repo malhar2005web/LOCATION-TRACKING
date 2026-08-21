@@ -137,12 +137,52 @@ function formatCellDateIST(dateVal) {
     return formatted.replace(',', '');
 }
 
+/**
+ * Converts a UTC time string ("HH:mm:ss" or "HH:mm") to IST (+5 hours 30 minutes)
+ */
+function convertTimeStringToIST(timeStr) {
+    if (!timeStr || timeStr === '--' || typeof timeStr !== 'string' || !timeStr.trim()) return '';
+
+    const trimmed = timeStr.trim();
+    if (trimmed.includes('T') || trimmed.includes('-') || trimmed.includes('/')) {
+        return formatCellDateIST(trimmed);
+    }
+
+    const parts = trimmed.split(':');
+    if (parts.length < 2) return timeStr;
+
+    let h = parseInt(parts[0], 10);
+    let m = parseInt(parts[1], 10);
+    let s = parts.length > 2 ? parseInt(parts[2], 10) : 0;
+
+    if (isNaN(h) || isNaN(m)) return timeStr;
+
+    // Add +5 Hours 30 Minutes
+    m += 30;
+    if (m >= 60) {
+        m -= 60;
+        h += 1;
+    }
+    h += 5;
+    if (h >= 24) {
+        h -= 24;
+    }
+
+    const hh = String(h).padStart(2, '0');
+    const mm = String(m).padStart(2, '0');
+    if (parts.length > 2 && !isNaN(s)) {
+        const ss = String(s).padStart(2, '0');
+        return `${hh}:${mm}:${ss}`;
+    }
+    return `${hh}:${mm}`;
+}
+
 function getTimeOnlyIST(dateVal) {
     if (!dateVal || dateVal === '--') return '';
     const formattedStr = formatCellDateIST(dateVal);
     if (formattedStr.includes(' ')) {
         const parts = formattedStr.split(' ');
-        return parts[1]; // e.g. "04:37" or "04:54:54"
+        return parts[1];
     }
     return formattedStr;
 }
@@ -173,10 +213,10 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         return records.map((row, i) => [
             String(row.sris || i + 1),
             row.empname || row.gempname || user,
-            formatCellDateIST(row.checkintime || row.datetimeis || '--'),
+            convertTimeStringToIST(row.checkintime || row.datetimeis || '--'),
             row.gpsaddress || row.address || '--',
             `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
-            formatCellDateIST(row.checkouttime || '--'),
+            convertTimeStringToIST(row.checkouttime || '--'),
             row.gpsaddress || row.address || '--',
             `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
             row.duration || '--'
@@ -207,15 +247,21 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         const dateStr = formatCellDateIST(rawDate);
         const timeOnly = getTimeOnlyIST(rawDate);
 
+        const startdayIST = convertTimeStringToIST(row.startday || (status === 'START' ? timeOnly : ''));
+        const checkintimeIST = convertTimeStringToIST(row.checkintime || (status === 'CHECKIN' ? timeOnly : ''));
+        const dsrtimeIST = convertTimeStringToIST(row.dsrtime || (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS' ? timeOnly : ''));
+        const checkouttimeIST = convertTimeStringToIST(row.checkouttime || (status === 'CHECKOUT' ? timeOnly : ''));
+        const enddayIST = convertTimeStringToIST(row.endday || (status === 'END' ? timeOnly : ''));
+
         return [
             String(row.srno || i + 1),
             row.empname || user,
             dateStr,
-            row.startday || (status === 'START' ? timeOnly : ''),
-            row.checkintime || (status === 'CHECKIN' ? timeOnly : ''),
-            row.dsrtime || (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS' ? timeOnly : ''),
-            row.checkouttime || (status === 'CHECKOUT' ? timeOnly : ''),
-            row.endday || (status === 'END' ? timeOnly : ''),
+            startdayIST,
+            checkintimeIST,
+            dsrtimeIST,
+            checkouttimeIST,
+            enddayIST,
             row.duration || '',
             status,
             row.clientname || row.client || '',
