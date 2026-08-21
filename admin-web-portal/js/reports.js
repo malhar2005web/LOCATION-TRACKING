@@ -210,17 +210,32 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         const data = await res.json();
         const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
 
-        return records.map((row, i) => [
-            String(row.sris || i + 1),
-            row.empname || row.gempname || user,
-            convertTimeStringToIST(row.checkintime || row.datetimeis || '--'),
-            row.gpsaddress || row.address || '--',
-            `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
-            convertTimeStringToIST(row.checkouttime || '--'),
-            row.gpsaddress || row.address || '--',
-            `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
-            row.duration || '--'
-        ]);
+        return records.map((row, i) => {
+            let durationStr = '--';
+            if (row.checkin && row.checkout) {
+                const dIn = new Date(row.checkin);
+                const dOut = new Date(row.checkout);
+                const diffMs = dOut - dIn;
+                if (diffMs >= 0) {
+                    const totalMins = Math.floor(diffMs / 60000);
+                    const hrs = Math.floor(totalMins / 60);
+                    const mins = totalMins % 60;
+                    durationStr = `hrs:${hrs} mins:${mins}`;
+                }
+            }
+
+            return [
+                String(row.srno || i + 1),
+                row.username || row.empname || user,
+                formatCellDateIST(row.checkin || '--'),
+                row.addressin || row.glocation || '--',
+                row.latin || `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
+                formatCellDateIST(row.checkout || '--'),
+                row.addressout || row.glocation || '--',
+                row.latout || `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
+                durationStr
+            ];
+        });
     }
 
     // DAY END SUMMARY 2 (getiamatsummaryrtp_2)
@@ -377,16 +392,16 @@ async function fetchStartEndReport(fromDate, toDate, user) {
     const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
 
     return records.map((row, i) => [
-        String(i + 1),
-        row.empname || row.gempname || user,
-        formatCellDateIST(row.starttime || row.startend_time || row.datetimeis || '--'),
+        String(row.srno || i + 1),
+        row.empname || user,
+        formatCellDateIST(row.startendtime || row.starttime || '--'),
         formatCellDateIST(row.receivedon || '--'),
-        row.activity || row.status || 'START',
-        row.gpsaddress || row.location || '--',
-        formatCellDateIST(row.endtime || row.checkouttime || '--'),
+        row.statusis || row.activity || 'START',
+        row.gaddress || row.gpsaddress || '--',
+        formatCellDateIST(row.end_startendtime || row.checkouttime || '--'),
         formatCellDateIST(row.end_receivedon || '--'),
         'END',
-        row.gpsaddress || row.location || '--',
+        row.end_gaddress || row.gaddress || '--',
         row.duration || '--'
     ]);
 }
@@ -413,10 +428,10 @@ async function fetchTravelPathReport(fromDate, toDate, user) {
     return records.map((row, i) => [
         String(i + 1),
         row.username || row.empname || user,
-        `${row.gpsLatitude || row.latitude || '18.4748056'}, ${row.gpsLongitude || row.longitude || '73.8119057'}`,
-        row.address || row.gpsaddress || '--',
-        formatCellDateIST(row.trackdate || row.createddatetime || row.datetimeis || '--'),
-        String(row.gpsSpeed || row.speed || '0'),
+        `${row.glatitude || row.latitude || '18.4748056'}, ${row.glongitude || row.longitude || '73.8119057'}`,
+        row.glocation || row.address || '--',
+        formatCellDateIST(row.gpsdatetime || row.trackdate || row.datetimeis || '--'),
+        String(row.gspeed || row.speed || '0'),
         row.deviceid || 'GPS FIX'
     ]);
 }
