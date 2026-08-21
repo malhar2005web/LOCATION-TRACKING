@@ -103,6 +103,17 @@ async function renderReport(tabId) {
     }
 }
 
+function formatCellDate(dateVal) {
+    if (!dateVal || dateVal === '--') return '--';
+    if (typeof dateVal === 'string' && dateVal.includes('T')) {
+        const parts = dateVal.split('T');
+        const d = parts[0];
+        const t = parts[1].slice(0, 5);
+        return `${d} ${t}`;
+    }
+    return String(dateVal);
+}
+
 /* ── API 1: Fetch Day End Summary 2 & Check In/Out Status ── */
 async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
     const sDateFormatted = formatDateForApi(fromDate);
@@ -129,10 +140,10 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         return records.map((row, i) => [
             String(row.sris || i + 1),
             row.empname || row.gempname || user,
-            row.checkintime || row.datetimeis || '--',
+            formatCellDate(row.checkintime || row.datetimeis || '--'),
             row.gpsaddress || row.address || '--',
             `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
-            row.checkouttime || '--',
+            formatCellDate(row.checkouttime || '--'),
             row.gpsaddress || row.address || '--',
             `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
             row.duration || '--'
@@ -159,17 +170,19 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
 
     return records.map((row, i) => {
         const status = row.activity || 'CHECKIN';
-        const dateStr = row.datetimeis || row.dated || '--';
+        const rawDate = row.datetimeis || row.dated || '--';
+        const dateStr = formatCellDate(rawDate);
+        const timeOnly = rawDate.length > 10 ? rawDate.slice(11, 19) : rawDate;
 
         return [
             String(row.srno || i + 1),
             row.empname || user,
             dateStr,
-            row.startday || (status === 'START' ? dateStr : ''),
-            row.checkintime || (status === 'CHECKIN' ? dateStr : ''),
-            row.dsrtime || (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS' ? dateStr : ''),
-            row.checkouttime || (status === 'CHECKOUT' ? dateStr : ''),
-            row.endday || (status === 'END' ? dateStr : ''),
+            row.startday || (status === 'START' ? timeOnly : ''),
+            row.checkintime || (status === 'CHECKIN' ? timeOnly : ''),
+            row.dsrtime || (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS' ? timeOnly : ''),
+            row.checkouttime || (status === 'CHECKOUT' ? timeOnly : ''),
+            row.endday || (status === 'END' ? timeOnly : ''),
             row.duration || '',
             status,
             row.clientname || row.client || '',

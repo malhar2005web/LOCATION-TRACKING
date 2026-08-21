@@ -234,38 +234,54 @@ select.filter-input option {
     border-collapse: collapse;
     font-size: 0.8rem;
     min-width: 1200px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .report-table thead th {
-    background: rgba(242, 140, 82, 0.12);
+    background: rgba(242, 140, 82, 0.14);
     color: var(--color-orange);
     font-weight: 600;
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    padding: 14px 12px;
-    text-align: left;
+    padding: 12px 10px;
+    text-align: center;
     white-space: nowrap;
-    border-bottom: 1px solid rgba(242, 140, 82, 0.2);
+    border-bottom: 2px solid rgba(242, 140, 82, 0.3);
+    border-right: 1px solid rgba(242, 140, 82, 0.2);
     position: sticky;
     top: 0;
 }
 
+.report-table thead th:last-child {
+    border-right: none;
+}
+
 .report-table tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     transition: background 0.15s ease;
 }
 
+.report-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
 .report-table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(242, 140, 82, 0.08);
 }
 
 .report-table tbody td {
-    padding: 12px;
+    padding: 10px 12px;
     color: var(--color-text-secondary);
     font-size: 0.8rem;
     vertical-align: middle;
     line-height: 1.4;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+}
+
+.report-table tbody td:last-child {
+    border-right: none;
 }
 
 .report-table tbody tr:last-child {
@@ -372,22 +388,40 @@ body.light-mode .table-wrapper {
     border-color: #ECE7E0;
 }
 
+body.light-mode .report-table {
+    border-color: #E2DCD2;
+}
+
 body.light-mode .report-table thead th {
-    background: rgba(242, 140, 82, 0.08);
-    color: #D4731A;
-    border-bottom-color: #ECE7E0;
+    background: rgba(242, 140, 82, 0.14);
+    color: #C86208;
+    border-bottom-color: #D6CFC3;
+    border-right: 1px solid rgba(200, 98, 8, 0.18);
+}
+
+body.light-mode .report-table thead th:last-child {
+    border-right: none;
 }
 
 body.light-mode .report-table tbody tr {
-    border-bottom-color: #ECE7E0;
+    border-bottom: 1px solid #E6E0D6;
+}
+
+body.light-mode .report-table tbody tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.02);
 }
 
 body.light-mode .report-table tbody tr:hover {
-    background: rgba(242, 140, 82, 0.03);
+    background: rgba(242, 140, 82, 0.08);
 }
 
 body.light-mode .report-table tbody td {
-    color: #4A4A4A;
+    color: #333333;
+    border-right: 1px solid #E6E0D6;
+}
+
+body.light-mode .report-table tbody td:last-child {
+    border-right: none;
 }
 
 body.light-mode .back-btn {
