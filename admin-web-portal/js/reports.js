@@ -103,83 +103,89 @@ async function renderReport(tabId) {
     }
 }
 
-function formatCellDateIST(dateVal) {
-    if (!dateVal || dateVal === '--') return '--';
-    
-    let dt = null;
-    if (typeof dateVal === 'string') {
-        if (dateVal.includes('T') || dateVal.endsWith('Z')) {
-            dt = new Date(dateVal);
-        } else if (dateVal.match(/^\d{4}[\/-]\d{2}[\/-]\d{2}/)) {
-            const formattedIso = dateVal.replaceAll('/', '-').replace(' ', 'T') + 'Z';
-            dt = new Date(formattedIso);
+/**
+ * Master Indian Standard Time (IST GMT+5:30) Converter
+ * Converts any date string ("2026-08-20T23:07:00.000Z"), date-time ("21/08/2026 04:37"),
+ * or time string ("04:54:54" / "04:37") to Indian Standard Time (GMT+5:30).
+ */
+function formatToIndianTime(val) {
+    if (!val || val === '--' || typeof val !== 'string' || !val.trim()) return val || '--';
+
+    const trimmed = val.trim();
+
+    // Pure Time String like "04:37:00" or "04:54" or "05:08:18"
+    if (trimmed.match(/^\d{1,2}:\d{2}(:\d{2})?$/)) {
+        const parts = trimmed.split(':');
+        let h = parseInt(parts[0], 10);
+        let m = parseInt(parts[1], 10);
+        let s = parts.length > 2 ? parseInt(parts[2], 10) : null;
+
+        if (!isNaN(h) && !isNaN(m)) {
+            m += 30;
+            if (m >= 60) {
+                m -= 60;
+                h += 1;
+            }
+            h += 5;
+            if (h >= 24) {
+                h -= 24;
+            }
+            const hh = String(h).padStart(2, '0');
+            const mm = String(m).padStart(2, '0');
+            if (s !== null && !isNaN(s)) {
+                const ss = String(s).padStart(2, '0');
+                return `${hh}:${mm}:${ss}`;
+            }
+            return `${hh}:${mm}`;
         }
-    } else if (dateVal instanceof Date) {
-        dt = dateVal;
     }
 
-    if (!dt || isNaN(dt.getTime())) {
-        return String(dateVal);
+    // Date-Time string like "21/08/2026 04:37" or "2026-08-21 04:37"
+    if (trimmed.includes(' ') && !trimmed.includes('T')) {
+        const parts = trimmed.split(' ');
+        const convertedTime = formatToIndianTime(parts[1]);
+        return `${parts[0]} ${convertedTime}`;
     }
 
-    // Convert UTC to IST (Asia/Kolkata GMT+5:30)
-    const options = {
-        timeZone: 'Asia/Kolkata',
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    };
+    // ISO Timestamp like "2026-08-20T23:07:00.000Z"
+    let dt = null;
+    if (trimmed.includes('T') || trimmed.endsWith('Z')) {
+        dt = new Date(trimmed);
+    } else if (trimmed.match(/^\d{4}[\/-]\d{2}[\/-]\d{2}/)) {
+        const formattedIso = trimmed.replaceAll('/', '-').replace(' ', 'T') + 'Z';
+        dt = new Date(formattedIso);
+    }
 
-    const formatted = new Intl.DateTimeFormat('en-GB', options).format(dt);
-    return formatted.replace(',', '');
+    if (dt && !isNaN(dt.getTime())) {
+        const options = {
+            timeZone: 'Asia/Kolkata',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        };
+        const formatted = new Intl.DateTimeFormat('en-GB', options).format(dt);
+        const parts = formatted.replace(',', '').split(' ');
+        const convertedTime = formatToIndianTime(parts[1]);
+        return `${parts[0]} ${convertedTime}`;
+    }
+
+    return trimmed;
 }
 
-/**
- * Converts a UTC time string ("HH:mm:ss" or "HH:mm") to IST (+5 hours 30 minutes)
- */
+function formatCellDateIST(dateVal) {
+    return formatToIndianTime(dateVal);
+}
+
 function convertTimeStringToIST(timeStr) {
-    if (!timeStr || timeStr === '--' || typeof timeStr !== 'string' || !timeStr.trim()) return '';
-
-    const trimmed = timeStr.trim();
-    if (trimmed.includes('T') || trimmed.includes('-') || trimmed.includes('/')) {
-        return formatCellDateIST(trimmed);
-    }
-
-    const parts = trimmed.split(':');
-    if (parts.length < 2) return timeStr;
-
-    let h = parseInt(parts[0], 10);
-    let m = parseInt(parts[1], 10);
-    let s = parts.length > 2 ? parseInt(parts[2], 10) : 0;
-
-    if (isNaN(h) || isNaN(m)) return timeStr;
-
-    // Add +5 Hours 30 Minutes
-    m += 30;
-    if (m >= 60) {
-        m -= 60;
-        h += 1;
-    }
-    h += 5;
-    if (h >= 24) {
-        h -= 24;
-    }
-
-    const hh = String(h).padStart(2, '0');
-    const mm = String(m).padStart(2, '0');
-    if (parts.length > 2 && !isNaN(s)) {
-        const ss = String(s).padStart(2, '0');
-        return `${hh}:${mm}:${ss}`;
-    }
-    return `${hh}:${mm}`;
+    return formatToIndianTime(timeStr);
 }
 
 function getTimeOnlyIST(dateVal) {
     if (!dateVal || dateVal === '--') return '';
-    const formattedStr = formatCellDateIST(dateVal);
+    const formattedStr = formatToIndianTime(dateVal);
     if (formattedStr.includes(' ')) {
         const parts = formattedStr.split(' ');
         return parts[1];
