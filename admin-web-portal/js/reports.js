@@ -103,15 +103,48 @@ async function renderReport(tabId) {
     }
 }
 
-function formatCellDate(dateVal) {
+function formatCellDateIST(dateVal) {
     if (!dateVal || dateVal === '--') return '--';
-    if (typeof dateVal === 'string' && dateVal.includes('T')) {
-        const parts = dateVal.split('T');
-        const d = parts[0];
-        const t = parts[1].slice(0, 5);
-        return `${d} ${t}`;
+    
+    let dt = null;
+    if (typeof dateVal === 'string') {
+        if (dateVal.includes('T') || dateVal.endsWith('Z')) {
+            dt = new Date(dateVal);
+        } else if (dateVal.match(/^\d{4}[\/-]\d{2}[\/-]\d{2}/)) {
+            const formattedIso = dateVal.replaceAll('/', '-').replace(' ', 'T') + 'Z';
+            dt = new Date(formattedIso);
+        }
+    } else if (dateVal instanceof Date) {
+        dt = dateVal;
     }
-    return String(dateVal);
+
+    if (!dt || isNaN(dt.getTime())) {
+        return String(dateVal);
+    }
+
+    // Convert UTC to IST (Asia/Kolkata GMT+5:30)
+    const options = {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+
+    const formatted = new Intl.DateTimeFormat('en-GB', options).format(dt);
+    return formatted.replace(',', '');
+}
+
+function getTimeOnlyIST(dateVal) {
+    if (!dateVal || dateVal === '--') return '';
+    const formattedStr = formatCellDateIST(dateVal);
+    if (formattedStr.includes(' ')) {
+        const parts = formattedStr.split(' ');
+        return parts[1]; // e.g. "04:37" or "04:54:54"
+    }
+    return formattedStr;
 }
 
 /* ── API 1: Fetch Day End Summary 2 & Check In/Out Status ── */
@@ -140,10 +173,10 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         return records.map((row, i) => [
             String(row.sris || i + 1),
             row.empname || row.gempname || user,
-            formatCellDate(row.checkintime || row.datetimeis || '--'),
+            formatCellDateIST(row.checkintime || row.datetimeis || '--'),
             row.gpsaddress || row.address || '--',
             `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
-            formatCellDate(row.checkouttime || '--'),
+            formatCellDateIST(row.checkouttime || '--'),
             row.gpsaddress || row.address || '--',
             `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
             row.duration || '--'
@@ -171,8 +204,8 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
     return records.map((row, i) => {
         const status = row.activity || 'CHECKIN';
         const rawDate = row.datetimeis || row.dated || '--';
-        const dateStr = formatCellDate(rawDate);
-        const timeOnly = rawDate.length > 10 ? rawDate.slice(11, 19) : rawDate;
+        const dateStr = formatCellDateIST(rawDate);
+        const timeOnly = getTimeOnlyIST(rawDate);
 
         return [
             String(row.srno || i + 1),
@@ -218,14 +251,14 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
         return records.map((row, i) => [
             String(i + 1),
             row.assignedemp || row.assigned_emp || row.gempname || user,
-            row.leaddatetime || row.created_timestamp || row.currentdatetime || '--',
+            formatCellDateIST(row.leaddatetime || row.created_timestamp || row.currentdatetime || '--'),
             row.leadname || row.outletname || row.client || '--',
             row.leadsitename || row.site_name || '--',
             row.officeaddres || row.office_address || '--',
             row.contactperson || row.contact_person || '--',
             row.contactno || row.contact_no || '--',
             row.remark || row.nremark || '--',
-            row.nextfollowup || row.nfollowup || '--'
+            formatCellDateIST(row.nextfollowup || row.nfollowup || '--')
         ]);
     }
 
@@ -233,7 +266,7 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
         return records.map((row, i) => [
             String(i + 1),
             row.lleadno || row.bookingno || `BK-${i + 101}`,
-            row.leaddatetime || row.currentdatetime || '--',
+            formatCellDateIST(row.leaddatetime || row.currentdatetime || '--'),
             row.leadname || row.outletname || '--',
             row.leadsitename || '--',
             row.quantity || '1',
@@ -300,12 +333,12 @@ async function fetchStartEndReport(fromDate, toDate, user) {
     return records.map((row, i) => [
         String(i + 1),
         row.empname || row.gempname || user,
-        row.starttime || row.startend_time || row.datetimeis || '--',
-        row.receivedon || '--',
+        formatCellDateIST(row.starttime || row.startend_time || row.datetimeis || '--'),
+        formatCellDateIST(row.receivedon || '--'),
         row.activity || row.status || 'START',
         row.gpsaddress || row.location || '--',
-        row.endtime || row.checkouttime || '--',
-        row.end_receivedon || '--',
+        formatCellDateIST(row.endtime || row.checkouttime || '--'),
+        formatCellDateIST(row.end_receivedon || '--'),
         'END',
         row.gpsaddress || row.location || '--',
         row.duration || '--'
@@ -336,7 +369,7 @@ async function fetchTravelPathReport(fromDate, toDate, user) {
         row.username || row.empname || user,
         `${row.gpsLatitude || row.latitude || '18.4748056'}, ${row.gpsLongitude || row.longitude || '73.8119057'}`,
         row.address || row.gpsaddress || '--',
-        row.trackdate || row.createddatetime || row.datetimeis || '--',
+        formatCellDateIST(row.trackdate || row.createddatetime || row.datetimeis || '--'),
         String(row.gpsSpeed || row.speed || '0'),
         row.deviceid || 'GPS FIX'
     ]);
