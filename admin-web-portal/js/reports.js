@@ -20,7 +20,7 @@ const ACTIVITY_BADGES = {
 const REPORT_COLUMNS = {
     'travel-path': ['SRNO', 'USER NAME', 'LOCATION', 'ADDRESS', 'TRACKDATE', 'SPEED', 'ISGPS'],
     'dsr-summary': ['SR NO', 'CLIENT NAME', 'SITE NAME', 'VISITED FOR', 'ASSIGNED TO', 'NO OF VISIT'],
-    'checkin-status': ['SR NO', 'USER_NAME', 'CHECKIN', 'IN LOCATION', 'IN LATLONG', 'CHECKOUT', 'OUT LOCATION', 'OUT LATLONG', 'DURATION'],
+    'checkin-status': ['SR NO', 'EMPNAME', 'CHECKIN', 'IN LOCATION', 'IN LATLONG', 'CHECKOUT', 'OUT LOCATION', 'OUT LATLONG', 'DURATION'],
     'day-end-summary': ['SRNO', 'EMPNAME', 'DATED', 'START', 'IN', 'DSR', 'OUT', 'END', 'DURATION', 'ACTIVITY', 'CLIENT', 'LOCATION', 'LATLONG'],
     'day-start-end': ['SRNO', 'EMPNAME', 'STARTENDTIME', 'RECEIVEDON', 'START/END', 'LOCATION', 'STARTENDTIME', 'RECEIVEDON', 'START/END', 'LOCATION', 'DURATION'],
     'booking-report': ['SR NO', 'BOOKING NO', 'DATE', 'CLIENT', 'SITE NAME', 'QUANTITY', 'RATE', 'TOTAL AMOUNT', 'STATUS'],
@@ -38,6 +38,17 @@ const REPORT_TITLES = {
 };
 
 let currentTab = 'day-end-summary';
+
+function formatDateForApi(dateStr) {
+    if (!dateStr) {
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = String(today.getMonth() + 1).padStart(2, '0');
+        const d = String(today.getDate()).padStart(2, '0');
+        return `${y}/${m}/${d}`;
+    }
+    return dateStr.replaceAll('-', '/');
+}
 
 /* ── Render Report Function ── */
 async function renderReport(tabId) {
@@ -58,7 +69,7 @@ async function renderReport(tabId) {
     // Show Loading state
     const tbody = document.getElementById('report-tbody');
     if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="${columns.length}" style="text-align: center; padding: 24px; color: var(--text-sub);">Loading live report data...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${columns.length}" style="text-align: center; padding: 24px; color: var(--text-sub);">Loading live report data from server...</td></tr>`;
     }
 
     // Get filter inputs
@@ -70,10 +81,12 @@ async function renderReport(tabId) {
     try {
         let rows = [];
 
-        if (currentTab === 'dsr-client' || currentTab === 'dsr-summary' || currentTab === 'booking-report') {
-            rows = await fetchDsrLeadReport(fromDate, toDate, user, client, currentTab);
-        } else if (currentTab === 'day-end-summary' || currentTab === 'checkin-status') {
+        if (currentTab === 'day-end-summary' || currentTab === 'checkin-status') {
             rows = await fetchDayEndSummary(fromDate, toDate, user, client, currentTab);
+        } else if (currentTab === 'dsr-client' || currentTab === 'booking-report') {
+            rows = await fetchDsrLeadReport(fromDate, toDate, user, client, currentTab);
+        } else if (currentTab === 'dsr-summary') {
+            rows = await fetchDsrSummaryReport(fromDate, toDate, user, client);
         } else if (currentTab === 'day-start-end') {
             rows = await fetchStartEndReport(fromDate, toDate, user);
         } else if (currentTab === 'travel-path') {
@@ -90,14 +103,93 @@ async function renderReport(tabId) {
     }
 }
 
-/* ── API 1: Fetch DSR Lead & Client Report ── */
-async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
+/* ── API 1: Fetch Day End Summary 2 & Check In/Out Status ── */
+async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
+    const sDateFormatted = formatDateForApi(fromDate);
+    const eDateFormatted = formatDateForApi(toDate);
+    const usernameis = (user === 'All Users' || !user) ? 'All' : user;
+    const sessionUser = 'skywaydigital';
+
+    if (tabId === 'checkin-status') {
+        const payload = {
+            startdatep: `${sDateFormatted} 00:00`,
+            enddatep: `${eDateFormatted} 23:59`,
+            userv: usernameis,
+            clientv: client || 'All',
+            gempname: sessionUser
+        };
+        const res = await fetch(`${API_BASE_URL}/getinoutdetails_v1`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+
+        return records.map((row, i) => [
+            String(row.sris || i + 1),
+            row.empname || row.gempname || user,
+            row.checkintime || row.datetimeis || '--',
+            row.gpsaddress || row.address || '--',
+            `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
+            row.checkouttime || '--',
+            row.gpsaddress || row.address || '--',
+            `${row.glatitude || '18.4748056'},${row.glongitude || '73.8119057'}`,
+            row.duration || '--'
+        ]);
+    }
+
+    // DAY END SUMMARY 2 (getiamatsummaryrtp_2)
     const payload = {
-        startdatep: fromDate || new Date().toISOString().split('T')[0],
-        enddatep: toDate || new Date().toISOString().split('T')[0],
+        startdate: sDateFormatted,
+        enddate: `${sDateFormatted} 23:59`,
+        gempname: sessionUser,
+        username: usernameis
+    };
+
+    console.log('[Reports] Fetching getiamatsummaryrtp_2:', payload);
+    const res = await fetch(`${API_BASE_URL}/getiamatsummaryrtp_2`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    console.log('[Reports] getiamatsummaryrtp_2 response:', data);
+    const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+
+    return records.map((row, i) => {
+        const status = row.activity || 'CHECKIN';
+        const dateStr = row.datetimeis || row.dated || '--';
+
+        return [
+            String(row.srno || i + 1),
+            row.empname || user,
+            dateStr,
+            row.startday || (status === 'START' ? dateStr : ''),
+            row.checkintime || (status === 'CHECKIN' ? dateStr : ''),
+            row.dsrtime || (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS' ? dateStr : ''),
+            row.checkouttime || (status === 'CHECKOUT' ? dateStr : ''),
+            row.endday || (status === 'END' ? dateStr : ''),
+            row.duration || '',
+            status,
+            row.clientname || row.client || '',
+            row.gpsaddress || '--',
+            (row.glatitude && row.glongitude) ? `${row.glatitude}, ${row.glongitude}` : (row.latlong || '--')
+        ];
+    });
+}
+
+/* ── API 2: Fetch DSR Lead & Client Report ── */
+async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
+    const sDateFormatted = formatDateForApi(fromDate);
+    const eDateFormatted = formatDateForApi(toDate);
+
+    const payload = {
+        startdatep: `${sDateFormatted} 00:00`,
+        enddatep: `${eDateFormatted} 23:59`,
         userv: user === 'All Users' ? 'All' : user,
         clientv: client || 'All',
-        gempname: user === 'All Users' ? 'All' : user
+        gempname: 'skywaydigital'
     };
 
     const res = await fetch(`${API_BASE_URL}/getdsrleadreport_v1`, {
@@ -124,17 +216,6 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
         ]);
     }
 
-    if (tabId === 'dsr-summary') {
-        return records.map((row, i) => [
-            String(i + 1),
-            row.leadname || row.outletname || row.client || '--',
-            row.leadsitename || row.site_name || '--',
-            row.visited_for || row.leadstatus || 'DSR Update',
-            row.assignedemp || row.assigned_to || user,
-            String(row.no_of_visit || row.visitcount || 1)
-        ]);
-    }
-
     if (tabId === 'booking-report') {
         return records.map((row, i) => [
             String(i + 1),
@@ -152,143 +233,98 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
     return [];
 }
 
-/* ── API 2: Fetch Day End Summary & Check In/Out Status ── */
-async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
+/* ── API 3: Fetch DSR Summary Report ── */
+async function fetchDsrSummaryReport(fromDate, toDate, user, client) {
+    const sDateFormatted = formatDateForApi(fromDate);
+    const eDateFormatted = formatDateForApi(toDate);
+
     const payload = {
-        gotiamatdate: `${fromDate || new Date().toISOString().split('T')[0]} 00:00:00`,
-        gotempname: user === 'All Users' ? 'All' : user,
-        gotempid: '11',
-        gotinoutstatus: '',
-        gotiamatclient: client || '',
-        gotiamatlat: 0,
-        gotiamatlong: 0,
-        gimeinumber: ''
+        startdatep: `${sDateFormatted} 00:00`,
+        enddatep: `${eDateFormatted} 23:59`,
+        userv: user === 'All Users' ? 'All' : user,
+        clientv: client || 'All',
+        gempname: 'skywaydigital'
     };
 
-    let records = [];
-    try {
-        const res = await fetch(`${API_BASE_URL}/iamatevent`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-    } catch (e) {
-        console.warn('[Reports] iamatevent endpoint response check:', e);
-    }
-
-    if (tabId === 'checkin-status') {
-        return records.map((row, i) => [
-            String(i + 1),
-            row.gotempname || user,
-            row.gotinoutstatus === 'CHECKIN' ? (row.gotiamatdate || '--') : '--',
-            row.address || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
-            `${row.gotiamatlat || '18.4748056'},${row.gotiamatlong || '73.8119057'}`,
-            row.gotinoutstatus === 'CHECKOUT' ? (row.gotiamatdate || '--') : '--',
-            row.address || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
-            `${row.gotiamatlat || '18.4748056'},${row.gotiamatlong || '73.8119057'}`,
-            row.duration || 'hrs:0 mins:0'
-        ]);
-    }
-
-    // Day End Summary 2
-    return records.map((row, i) => {
-        const status = row.gotinoutstatus || 'CHECKIN';
-        const dateStr = row.gotiamatdate || '--';
-        const timeStr = dateStr.length > 10 ? dateStr.slice(11, 19) : dateStr;
-
-        return [
-            String(i + 1),
-            row.gotempname || user,
-            dateStr,
-            status === 'START' ? timeStr : '',
-            status === 'CHECKIN' ? timeStr : '',
-            (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS') ? timeStr : '',
-            status === 'CHECKOUT' ? timeStr : '',
-            status === 'END' ? timeStr : '',
-            row.duration || '',
-            status,
-            row.gotiamatclient || '',
-            row.address || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
-            `${row.gotiamatlat || '18.4748056'}, ${row.gotiamatlong || '73.8119057'}`
-        ];
+    const res = await fetch(`${API_BASE_URL}/dailyreportformatsummary_v1`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
     });
-}
-
-/* ── API 3: Fetch Start/End Day Attendance Report ── */
-async function fetchStartEndReport(fromDate, toDate, user) {
-    const payload = {
-        gcdatetime: `${fromDate || new Date().toISOString().split('T')[0]} 00:00`,
-        glaststatus: 'START',
-        empid: user === 'All Users' ? 'All' : user,
-        imeino: '',
-        gpsLatitude: 0,
-        gpsLongitude: 0
-    };
-
-    let records = [];
-    try {
-        const res = await fetch(`${API_BASE_URL}/startendday`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-    } catch (e) {
-        console.warn('[Reports] startendday endpoint check:', e);
-    }
+    const data = await res.json();
+    const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
 
     return records.map((row, i) => [
         String(i + 1),
-        row.empid || user,
-        row.gcdatetime || '--',
-        row.receivedon || row.gcdatetime || '--',
-        row.glaststatus || 'START',
-        row.location || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
-        row.end_time || '--',
-        row.end_receivedon || '--',
-        'CHECKOUT',
-        row.location || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
-        row.duration || '01 min'
+        row.vendorname || row.clientname || row.client || '--',
+        row.sitename || row.site_name || '--',
+        row.visitedfor || row.visited_for || 'DSR Update',
+        row.assignedto || row.assignedemp || user,
+        String(row.noofvisite || row.visitcount || 1)
     ]);
 }
 
-/* ── API 4: Fetch Travel Path Location Data ── */
-async function fetchTravelPathReport(fromDate, toDate, user) {
+/* ── API 4: Fetch Start/End Day Attendance Report ── */
+async function fetchStartEndReport(fromDate, toDate, user) {
+    const sDateFormatted = formatDateForApi(fromDate);
+    const eDateFormatted = formatDateForApi(toDate);
+
     const payload = {
-        useruniqeid: 11,
-        imeino: 'a057d027fed7bace',
-        deviceid: 'GPS FIX',
-        gpsLatitude: '0',
-        gpsLongitude: '0',
-        gpsAccuracy: '0',
-        gpsSpeed: '0',
-        gpsTimestamp: fromDate,
-        calbaering: 0
+        startdate: `${sDateFormatted} 00:00`,
+        enddate: `${eDateFormatted} 23:59`,
+        gempname: 'skywaydigital',
+        username: user === 'All Users' ? 'All' : user
     };
 
-    let records = [];
-    try {
-        const res = await fetch(`${API_BASE_URL}/receiveddata`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-    } catch (e) {
-        console.warn('[Reports] receiveddata endpoint check:', e);
-    }
+    const res = await fetch(`${API_BASE_URL}/getcheckinoutrtp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
 
     return records.map((row, i) => [
         String(i + 1),
-        row.username || user,
-        `${row.gpsLatitude || '18.4748192'}, ${row.gpsLongitude || '73.8119405'}`,
-        row.address || '0.02 KM from : Sai Virat Society, Sun City Rd, Sun City, Anand Nagar, Pune',
-        row.gpsTimestamp || row.trackdate || '--',
-        String(row.gpsSpeed || '0'),
+        row.empname || row.gempname || user,
+        row.starttime || row.startend_time || row.datetimeis || '--',
+        row.receivedon || '--',
+        row.activity || row.status || 'START',
+        row.gpsaddress || row.location || '--',
+        row.endtime || row.checkouttime || '--',
+        row.end_receivedon || '--',
+        'END',
+        row.gpsaddress || row.location || '--',
+        row.duration || '--'
+    ]);
+}
+
+/* ── API 5: Fetch Travel Path Location Data ── */
+async function fetchTravelPathReport(fromDate, toDate, user) {
+    const sDateFormatted = formatDateForApi(fromDate);
+    const eDateFormatted = formatDateForApi(toDate);
+
+    const payload = {
+        username: user === 'All Users' ? 'All' : user,
+        startdatetime: `${sDateFormatted} 00:00`,
+        enddatetime: `${eDateFormatted} 23:59`
+    };
+
+    const res = await fetch(`${API_BASE_URL}/getusertracking`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+
+    return records.map((row, i) => [
+        String(i + 1),
+        row.username || row.empname || user,
+        `${row.gpsLatitude || row.latitude || '18.4748056'}, ${row.gpsLongitude || row.longitude || '73.8119057'}`,
+        row.address || row.gpsaddress || '--',
+        row.trackdate || row.createddatetime || row.datetimeis || '--',
+        String(row.gpsSpeed || row.speed || '0'),
         row.deviceid || 'GPS FIX'
     ]);
 }
@@ -361,12 +397,12 @@ function searchReport() {
 
 /* ── Initialize ── */
 document.addEventListener('DOMContentLoaded', () => {
-    // Set default dates
+    // Set default dates to today
     const today = new Date().toISOString().split('T')[0];
     const fromEl = document.getElementById('from-date');
     const toEl = document.getElementById('to-date');
-    if (fromEl && !fromEl.value) fromEl.value = today;
-    if (toEl && !toEl.value) toEl.value = today;
+    if (fromEl) fromEl.value = today;
+    if (toEl) toEl.value = today;
 
     // Load initial report
     renderReport('day-end-summary');
