@@ -241,6 +241,12 @@ const LeaveDb = {
             return;
         }
 
+        if (!self.db) {
+            console.warn('[LeaveDb] Database not initialized yet.');
+            if (callback) callback([]);
+            return;
+        }
+
         self.db.transaction(tx => {
             tx.executeSql(`SELECT * FROM leaves WHERE sync_status = 'Pending'`, [], (tx, results) => {
                 const list = [];

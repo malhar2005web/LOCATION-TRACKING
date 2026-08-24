@@ -137,7 +137,7 @@ function onDeviceReady(source) {
             if (session && session.token) {
                 console.log('[App] Resuming session:', session.role);
                 
-                if (session.role === 'client' && session.userData) {
+                if ((session.role === 'client' || session.role === 'grouphead' || session.role === 'agent' || session.role === 'emp') && session.userData) {
                     enterClientSession(session.userData);
                 } else if (session.role === 'admin' && session.userData) {
                     initAdminDashboard(session.userData);

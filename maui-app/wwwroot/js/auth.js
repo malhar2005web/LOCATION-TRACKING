@@ -222,7 +222,7 @@ async function handleClientLogin() {
         };
 
         // Save session locally (token not needed from our custom backend)
-        saveSession('skyway-direct', 'grouphead', clientData);
+        saveSession('skyway-direct', 'client', clientData);
 
         // Permanently lock the device to this client ID (cleared only via app data wipe in system settings)
         localStorage.setItem('registered_client_id', clientData.clientId);

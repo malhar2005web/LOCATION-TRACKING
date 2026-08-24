@@ -164,6 +164,12 @@ const ReminderDb = {
             return;
         }
 
+        if (!self.db) {
+            console.warn('[ReminderDb] Database not initialized yet.');
+            if (callback) callback([]);
+            return;
+        }
+
         self.db.transaction(tx => {
             tx.executeSql(`SELECT * FROM reminders WHERE sync_status = 'Pending'`, [], (tx, results) => {
                 const list = [];

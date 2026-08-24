@@ -176,6 +176,12 @@ const DsrDb = {
             return;
         }
 
+        if (!self.db) {
+            console.warn('[DsrDb] Database not initialized yet.');
+            if (callback) callback([]);
+            return;
+        }
+
         self.db.transaction(tx => {
             tx.executeSql(`SELECT * FROM dsrs WHERE sync_status = 'Pending'`, [], (tx, results) => {
                 const list = [];
