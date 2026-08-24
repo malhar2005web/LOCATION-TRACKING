@@ -28,8 +28,8 @@ namespace LOCATION_TRACKING
             builder.Services.AddSingleton<LocationTracker.Services.Gps.IGpsService, LocationTracker.Services.Gps.GpsService>();
             builder.Services.AddSingleton<LocationTracker.Services.Notification.INotificationService, LocationTracker.Services.Notification.NotificationService>();
 
+            builder.Services.AddBlazorWebViewDeveloperTools();
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
 

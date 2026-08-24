@@ -1495,7 +1495,7 @@ async function submitOthers() {
             });
         }
 
-        if (todayStatus && followupDate && hours && minutes) {
+        if (todayStatus && todayStatus !== 'Visit Done' && followupDate && hours && minutes) {
             let reminderType = 'General Reminder';
             if (todayStatus === 'Follow Up') reminderType = 'Follow Up';
             else if (todayStatus === 'Document Submission') reminderType = 'Document Submission';
@@ -1718,6 +1718,30 @@ function submitLeave() {
 
     showToast('Saving leave request...', 'info');
 
+    // Trigger API 14 (empleave_n_v0) to submit leave directly to Skyway backend server
+    if (navigator.onLine) {
+        const leavePayload = {
+            department: (session && session.userData && session.userData.dept) || "SALES",
+            name: empName,
+            totalleave: String(totalDays),
+            requiredfrom: fromDateVal,
+            leavetype: type,
+            fullhalf: fullHalf,
+            reason: reason,
+            requiredtill: tillDateVal,
+            in_absence: absence,
+            clientid: clientId || "27"
+        };
+        console.log('[Leave API 14] Submitting empleave_n_v0 payload:', leavePayload);
+        fetch(`${API_BASE_URL}/empleave_n_v0`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(leavePayload)
+        }).then(r => r.json()).then(data => {
+            console.log('[Leave API 14] empleave_n_v0 response:', data);
+        }).catch(err => console.error('[Leave API 14] empleave_n_v0 error:', err));
+    }
+
     LeaveDb.saveLeave(leave, () => {
         showToast('Leave request saved successfully.', 'success');
         resetLeaveForm();
@@ -1761,8 +1785,66 @@ function normalizeDateOnly(value) {
     return String(value).includes('T') ? String(value).split('T')[0] : String(value).slice(0, 10);
 }
 
+async function fetchLeaveBalances() {
+    const session = getSession();
+    const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+    const userid = (session && session.userData && session.userData.userId) || localStorage.getItem('user_id') || '11';
+    const clientId = (session && session.userData && session.userData.clientId) || localStorage.getItem('client_id') || '27';
+
+    const payload = {
+        empname: empName,
+        clientid: String(clientId),
+        userid: String(userid)
+    };
+
+    if (navigator.onLine) {
+        try {
+            console.log('[Leave API 12 & 13] Fetching totalleaves_check and totalleaves_applied...', payload);
+
+            // API 12: Balance Leaves Check
+            const p1 = fetch(`${API_BASE_URL}/totalleaves_check`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(r => r.json()).catch(err => {
+                console.error('[Leave API 12] Error:', err);
+                return null;
+            });
+
+            // API 13: Total Leaves Applied
+            const p2 = fetch(`${API_BASE_URL}/totalleaves_applied`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(r => r.json()).catch(err => {
+                console.error('[Leave API 13] Error:', err);
+                return null;
+            });
+
+            const [dataBalance, dataApplied] = await Promise.all([p1, p2]);
+            console.log('[Leave API 12 & 13] Responses -> Balance:', dataBalance, '| Applied:', dataApplied);
+
+            if (dataApplied && (dataApplied.total_applied !== undefined || dataApplied.count !== undefined || dataApplied.trackerid)) {
+                const appliedCount = dataApplied.total_applied || dataApplied.count || (Array.isArray(dataApplied.trackerid) ? dataApplied.trackerid.length : 0);
+                const appliedEl = document.getElementById('stat-leaves-applied');
+                if (appliedEl && appliedCount > 0) {
+                    appliedEl.textContent = String(appliedCount);
+                }
+            }
+        } catch (err) {
+            console.error('[Leave Balances API] Error:', err);
+        }
+    }
+}
+
 async function fetchLeaveHistory() {
     renderLeaveHistorySkeletons();
+
+    // Trigger API 12 & API 13 for leave balances
+    fetchLeaveBalances();
+
+    const session = getSession();
+    const empName = (session && session.userData && session.userData.name) || 'demo group';
 
     if (leaveStatusSource === 'admin') {
         try {
@@ -1789,27 +1871,48 @@ async function fetchLeaveHistory() {
 
     if (navigator.onLine) {
         try {
-            const response = await apiRequest('/api/client/leaves', 'GET');
-            if (response && response.success && response.leaves) {
-                let savedCount = 0;
-                if (response.leaves.length === 0) {
-                    fetchLocalAndRender();
-                } else {
-                    for (const sLeave of response.leaves) {
-                        const localRecord = normalizeServerLeave(sLeave);
-                        LeaveDb.saveLeave(localRecord, () => {
-                            savedCount++;
-                            if (savedCount === response.leaves.length) {
-                                fetchLocalAndRender();
-                            }
-                        });
-                    }
-                }
+            console.log('[Leave API 15] Fetching getleavereport for:', empName);
+            const res = await fetch(`${API_BASE_URL}/getleavereport`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gempname: empName })
+            });
+            const data = await res.json();
+            console.log('[Leave API 15] getleavereport response:', data);
+
+            let serverLeaves = [];
+            if (data && Array.isArray(data.trackerid)) {
+                serverLeaves = data.trackerid;
+            } else if (Array.isArray(data)) {
+                serverLeaves = data;
+            } else if (data && typeof data === 'object') {
+                serverLeaves = data.output || data.records || [];
+            }
+
+            if (serverLeaves.length > 0) {
+                currentLeavesList = serverLeaves.map((s, idx) => ({
+                    id: s.id || `LV-SRV-${idx + 1}`,
+                    client_id: s.clientid || s.gempclientid || '27',
+                    employee_name: s.name || s.empname || s.gempname || empName,
+                    leave_type: s.leavetype || s.leave_type || 'Casual Leave',
+                    full_half_day: s.fullhalf || s.full_half_day || 'Full Day',
+                    start_date: s.requiredfrom || s.start_date || '--',
+                    end_date: s.requiredtill || s.end_date || '--',
+                    total_days: parseFloat(s.totalleave || s.total_days) || 1,
+                    reason: s.reason || '--',
+                    in_absence: s.in_absence || '--',
+                    status: s.status || s.leavestatus || 'Pending',
+                    sync_status: 'Synced',
+                    created_timestamp: s.created_timestamp || s.leaddatetime || new Date().toISOString(),
+                    updated_timestamp: new Date().toISOString()
+                }));
+                applyLeavesFilters();
+                return;
             } else {
                 fetchLocalAndRender();
             }
         } catch (err) {
-            console.error('[FetchLeaveHistory] Failed to fetch from API:', err);
+            console.error('[Leave API 15] getleavereport failed:', err);
             fetchLocalAndRender();
         }
     } else {
@@ -2340,6 +2443,114 @@ async function fetchReportData(reportType) {
         return;
     }
 
+    // API 16: DSR Summary Report (dailyreportformatsummary_v3)
+    if (reportType === 'dsr-summary') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR Summary Report...</td></tr>`;
+        const session = getSession();
+        const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+        const gemptype = (session && session.role) || 'grouphead';
+
+        const payload16 = {
+            gemptype: gemptype,
+            gempname: empName,
+            sum_from: selectedFromDate,
+            sum_till: selectedTillDate,
+            dsruser: selectedUserId || 'All'
+        };
+
+        if (navigator.onLine) {
+            try {
+                console.log('[Reports API 16] Fetching dailyreportformatsummary_v3...', payload16);
+                const res = await fetch(`${API_BASE_URL}/dailyreportformatsummary_v3`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload16)
+                });
+                const data = await res.json();
+                console.log('[Reports API 16] dailyreportformatsummary_v3 response:', data);
+
+                let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+                if (records.length > 0) {
+                    config.render(tbody, records, data);
+                    return;
+                }
+            } catch (err) {
+                console.error('[Reports API 16] Error fetching dailyreportformatsummary_v3:', err);
+            }
+        }
+    }
+
+    // API 17: DSR Updated List (getdsrleadreport_vo1)
+    if (reportType === 'dsr-list') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR Updated List...</td></tr>`;
+        const session = getSession();
+        const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+        const gemptype = (session && session.role) || 'grouphead';
+
+        const payload17 = {
+            aim: 'aim',
+            gempname: empName,
+            gemptype: gemptype,
+            gempcluster: ''
+        };
+
+        if (navigator.onLine) {
+            try {
+                console.log('[Reports API 17] Fetching getdsrleadreport_vo1...', payload17);
+                const res = await fetch(`${API_BASE_URL}/getdsrleadreport_vo1`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload17)
+                });
+                const data = await res.json();
+                console.log('[Reports API 17] getdsrleadreport_vo1 response:', data);
+
+                let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+                if (records.length > 0) {
+                    config.render(tbody, records, data);
+                    return;
+                }
+            } catch (err) {
+                console.error('[Reports API 17] Error fetching getdsrleadreport_vo1:', err);
+            }
+        }
+    }
+
+    // API 18: Start End Day Report (getcheckinoutrtp)
+    if (reportType === 'start-end') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading Start End Day Report...</td></tr>`;
+        const session = getSession();
+        const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+
+        const payload18 = {
+            startdate: selectedFromDate,
+            enddate: selectedTillDate,
+            gempname: empName,
+            username: selectedUserId || 'All'
+        };
+
+        if (navigator.onLine) {
+            try {
+                console.log('[Reports API 18] Fetching getcheckinoutrtp...', payload18);
+                const res = await fetch(`${API_BASE_URL}/getcheckinoutrtp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload18)
+                });
+                const data = await res.json();
+                console.log('[Reports API 18] getcheckinoutrtp response:', data);
+
+                let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+                if (records.length > 0) {
+                    config.render(tbody, records, data);
+                    return;
+                }
+            } catch (err) {
+                console.error('[Reports API 18] Error fetching getcheckinoutrtp:', err);
+            }
+        }
+    }
+
     const params = new URLSearchParams({
         clientId: selectedUserId,
         fromDate: selectedFromDate,
@@ -2728,12 +2939,62 @@ function reportEscape(value) {
     return div.innerHTML;
 }
 
+async function fetchTodayFollowupAlerts() {
+    const session = getSession();
+    const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+    const gemptype = (session && session.role) || 'grouphead';
+
+    if (navigator.onLine) {
+        try {
+            console.log('[Reminders API 19] Fetching getfollowupalert for:', empName);
+            const res = await fetch(`${API_BASE_URL}/getfollowupalert`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gemptype: gemptype,
+                    gempname: empName
+                })
+            });
+            const data = await res.json();
+            console.log('[Reminders API 19] getfollowupalert response:', data);
+
+            const serverAlerts = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+            if (serverAlerts.length > 0 && typeof ReminderDb !== 'undefined') {
+                for (const alert of serverAlerts) {
+                    const alertDate = alert.nextfollowup || alert.followup || new Date().toISOString().split('T')[0];
+                    const alertTime = alert.nfollowuptime || alert.followuptime || '11:00';
+                    const newRem = {
+                        id: `REM-SRV-${alert.leadno || alert.id || Date.now()}`,
+                        client_name: alert.leadname || alert.client || alert.outletname || 'Client',
+                        reminder_type: alert.visited_for || alert.leadstatus || 'Follow Up',
+                        reminder_date: alertDate.includes('T') ? alertDate.split('T')[0] : alertDate.slice(0, 10),
+                        reminder_time: alertTime,
+                        notes: alert.remark || alert.nremark || 'Follow up meeting scheduled',
+                        status: 'Pending',
+                        sync_status: 'Synced',
+                        created_timestamp: new Date().toISOString()
+                    };
+                    ReminderDb.saveReminder(newRem, () => {});
+                }
+            }
+        } catch (err) {
+            console.error('[Reminders API 19] Error fetching getfollowupalert:', err);
+        }
+    }
+}
+
 /**
  * Handle "Reminders" button action
  */
 function handleReminders() {
     showView('reminders-view');
-    applyRemindersFilter();
+    fetchTodayFollowupAlerts().then(() => {
+        applyRemindersFilter();
+        refreshRemindersCount();
+    }).catch(() => {
+        applyRemindersFilter();
+        refreshRemindersCount();
+    });
 }
 
 /**
@@ -3236,7 +3497,7 @@ async function submitDSR() {
         });
     }
 
-    if (status && followupDate && hours && minutes) {
+    if (status && status !== 'Visit Done' && followupDate && hours && minutes) {
         let reminderType = 'General Reminder';
         if (status === 'Follow Up') reminderType = 'Follow Up';
         else if (status === 'Document Submission') reminderType = 'Document Submission';

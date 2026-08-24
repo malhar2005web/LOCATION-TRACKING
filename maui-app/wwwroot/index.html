@@ -6,84 +6,16 @@
     <title>Sky-Diary</title>
     <base href="/" />
     <script>
-        // Global error diagnostics overlay
+        // Global error logging
         (function() {
-            function showOverlay(title, message, details) {
-                var overlay = document.createElement('div');
-                overlay.style.position = 'fixed';
-                overlay.style.top = '0';
-                overlay.style.left = '0';
-                overlay.style.width = '100vw';
-                overlay.style.height = '100vh';
-                overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.95)';
-                overlay.style.color = '#ff6b6b';
-                overlay.style.padding = '20px';
-                overlay.style.boxSizing = 'border-box';
-                overlay.style.zIndex = '9999999';
-                overlay.style.fontFamily = 'monospace';
-                overlay.style.fontSize = '14px';
-                overlay.style.overflowY = 'auto';
-                overlay.style.whiteSpace = 'pre-wrap';
-                overlay.style.lineHeight = '1.5';
-
-                var html = '<h3 style="color: #ff4d4d; margin-top: 0; font-size: 18px; border-bottom: 2px solid #ff4d4d; padding-bottom: 8px;">🚨 ' + title + '</h3>';
-                html += '<p><strong>Message:</strong> ' + message + '</p>';
-                if (details) {
-                    html += '<p><strong>Details:</strong></p>';
-                    html += '<pre style="background: #222; color: #eee; padding: 12px; border-radius: 6px; border: 1px solid #444; font-size: 12px; overflow-x: auto;">' + details + '</pre>';
-                }
-                html += '<div style="margin-top: 20px; display: flex; gap: 10px;">';
-                html += '<button id="btn-copy-err" style="background: #ff4d4d; color: white; border: none; padding: 10px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">Copy Error Info</button>';
-                html += '<button id="btn-dismiss-err" style="background: #444; color: white; border: none; padding: 10px 16px; border-radius: 4px; font-weight: bold; cursor: pointer;">Dismiss</button>';
-                html += '</div>';
-
-                overlay.innerHTML = html;
-                document.documentElement.appendChild(overlay);
-
-                // Setup actions
-                setTimeout(function() {
-                    var copyBtn = document.getElementById('btn-copy-err');
-                    var dismissBtn = document.getElementById('btn-dismiss-err');
-                    
-                    if (copyBtn) {
-                        copyBtn.onclick = function() {
-                            var textToCopy = title + '\nMessage: ' + message + '\nDetails: ' + (details || '');
-                            navigator.clipboard.writeText(textToCopy)
-                                .then(function() { alert('Error copied to clipboard!'); })
-                                .catch(function() { alert('Failed to copy. Please screenshot.'); });
-                        };
-                    }
-                    if (dismissBtn) {
-                        dismissBtn.onclick = function() {
-                            overlay.remove();
-                        };
-                    }
-                }, 100);
-            }
-
             window.onerror = function(msg, src, line, col, err) {
-                var details = 'Source: ' + src + '\nLine: ' + line + ', Col: ' + col;
-                if (err && err.stack) {
-                    details += '\nStack Trace:\n' + err.stack;
-                }
-                showOverlay('JavaScript Runtime Error', msg, details);
+                console.error('[Global Error]', msg, src, line, col, err);
                 return false;
             };
 
             window.addEventListener('unhandledrejection', function(event) {
-                var reason = event.reason;
-                var msg = reason ? (reason.message || String(reason)) : 'Unknown rejection reason';
-                if (msg.indexOf('Blazor has already started') !== -1) {
-                    return;
-                }
-                var details = '';
-                if (reason && reason.stack) {
-                    details += 'Stack Trace:\n' + reason.stack;
-                }
-                showOverlay('Unhandled Promise Rejection', msg, details);
+                console.error('[Unhandled Promise Rejection]', event.reason);
             });
-
-            window.showOverlay = showOverlay;
         })();
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -125,7 +57,7 @@
         <span class="dismiss">🗙</span>
     </div>
 
-    <script src="_framework/blazor.webview.js" autostart="false"></script>
+    <script src="_framework/blazor.webview.js"></script>
 
     <!-- JS-to-C# Bridge for Storage and Native Setting Redirects -->
     <script>
@@ -259,16 +191,16 @@
     </script>
 
     <!-- Original Cordova App Scripts -->
-    <script src="js/time-guard.js?v=1.1.1"></script>
-    <script src="js/api.js?v=1.1.1"></script>
-    <script src="js/storage.js?v=1.1.1"></script>
-    <script src="js/reminderDb.js?v=1.1.1"></script>
-    <script src="js/leaveDb.js?v=1.1.1"></script>
-    <script src="js/dsrDb.js?v=1.1.1"></script>
-    <script src="js/auth.js?v=1.1.1"></script>
-    <script src="js/client.js?v=1.1.1"></script>
-    <script src="js/admin.js?v=1.1.1"></script>
-    <script src="js/app.js?v=1.1.1"></script>
+    <script src="js/time-guard.js?v=1.1.2"></script>
+    <script src="js/api.js?v=1.1.2"></script>
+    <script src="js/storage.js?v=1.1.2"></script>
+    <script src="js/reminderDb.js?v=1.1.2"></script>
+    <script src="js/leaveDb.js?v=1.1.2"></script>
+    <script src="js/dsrDb.js?v=1.1.2"></script>
+    <script src="js/auth.js?v=1.1.2"></script>
+    <script src="js/client.js?v=1.1.2"></script>
+    <script src="js/admin.js?v=1.1.2"></script>
+    <script src="js/app.js?v=1.1.2"></script>
     <!-- SVG Filter for Liquid Glass Refraction -->
     <svg width="0" height="0" style="position: absolute;">
       <filter id="liquid-glass-filter" color-interpolation-filters="linearRGB">
