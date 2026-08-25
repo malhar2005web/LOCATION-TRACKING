@@ -1,0 +1,14 @@
+<api type="release" assembly-name="Xamarin.AndroidX.SlidingPaneLayout" mvid="029cbcbe958f4ed891e6c8fc56915c82">
+  <module assembly-name="Xamarin.AndroidX.SlidingPaneLayout" mvid="029cbcbe958f4ed891e6c8fc56915c82" mvid-bytes="vrycAo+V2E6R5sj8VpFcgg==">
+    <duplicates>
+      <entry java-name="androidx/slidingpanelayout/widget/SlidingPaneLayout$PanelSlideListener" managed-type-name="AndroidX.SlidingPaneLayout.Widget.SlidingPaneLayout/IPanelSlideListenerInvoker" token="33554447" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/slidingpanelayout/widget/SlidingPaneLayout" java-name="androidx/slidingpanelayout/widget/SlidingPaneLayout" managed-type-name="AndroidX.SlidingPaneLayout.Widget.SlidingPaneLayout" token="33554443" />
+      <entry key="androidx/slidingpanelayout/widget/SlidingPaneLayout$LayoutParams" java-name="androidx/slidingpanelayout/widget/SlidingPaneLayout$LayoutParams" managed-type-name="AndroidX.SlidingPaneLayout.Widget.SlidingPaneLayout/LayoutParams" token="33554445" />
+      <entry key="androidx/slidingpanelayout/widget/SlidingPaneLayout$PanelSlideListener" java-name="androidx/slidingpanelayout/widget/SlidingPaneLayout$PanelSlideListener" managed-type-name="AndroidX.SlidingPaneLayout.Widget.SlidingPaneLayout/IPanelSlideListener" token="33554446" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/slidingpanelayout/widget/SlidingPaneLayout_PanelSlideListenerImplementor" java-name="mono/androidx/slidingpanelayout/widget/SlidingPaneLayout_PanelSlideListenerImplementor" managed-type-name="AndroidX.SlidingPaneLayout.Widget.SlidingPaneLayout/IPanelSlideListenerImplementor" token="33554451" />
+      <entry key="androidx/slidingpanelayout/widget/SlidingPaneLayout$SimplePanelSlideListener" java-name="androidx/slidingpanelayout/widget/SlidingPaneLayout$SimplePanelSlideListener" managed-type-name="AndroidX.SlidingPaneLayout.Widget.SlidingPaneLayout/SimplePanelSlideListener" token="33554452" />
+    </types-scratch>
+  </module>
+</api>

@@ -1,0 +1,17 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Lifecycle.LiveData.Core" mvid="d1448f36a17e4ff58f0bdf606e75ec4e">
+  <module assembly-name="Xamarin.AndroidX.Lifecycle.LiveData.Core" mvid="d1448f36a17e4ff58f0bdf606e75ec4e" mvid-bytes="No9E0X6h9U+PC99gbnXsTg==">
+    <duplicates>
+      <entry java-name="androidx/lifecycle/Observer" managed-type-name="AndroidX.Lifecycle.IObserverInvoker" token="33554441" />
+      <entry java-name="androidx/lifecycle/LiveData$ObserverWrapper" managed-type-name="AndroidX.Lifecycle.LiveData/ObserverWrapperInvoker" token="33554449" />
+      <entry java-name="androidx/lifecycle/LiveData" managed-type-name="AndroidX.Lifecycle.LiveDataInvoker" token="33554443" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/lifecycle/Observer" java-name="androidx/lifecycle/Observer" managed-type-name="AndroidX.Lifecycle.IObserver" token="33554440" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/LiveData" java-name="androidx/lifecycle/LiveData" managed-type-name="AndroidX.Lifecycle.LiveData" token="33554442" />
+      <entry key="androidx/lifecycle/LiveData$LifecycleBoundObserver" java-name="androidx/lifecycle/LiveData$LifecycleBoundObserver" managed-type-name="AndroidX.Lifecycle.LiveData/LifecycleBoundObserver" token="33554447" />
+      <entry key="androidx/lifecycle/LiveData$ObserverWrapper" java-name="androidx/lifecycle/LiveData$ObserverWrapper" managed-type-name="AndroidX.Lifecycle.LiveData/ObserverWrapper" token="33554448" />
+      <entry key="androidx/lifecycle/LiveDataKt" java-name="androidx/lifecycle/LiveDataKt" managed-type-name="AndroidX.Lifecycle.LiveDataKt" token="33554444" />
+      <entry key="androidx/lifecycle/MutableLiveData" java-name="androidx/lifecycle/MutableLiveData" managed-type-name="AndroidX.Lifecycle.MutableLiveData" token="33554445" />
+    </types-scratch>
+  </module>
+</api>

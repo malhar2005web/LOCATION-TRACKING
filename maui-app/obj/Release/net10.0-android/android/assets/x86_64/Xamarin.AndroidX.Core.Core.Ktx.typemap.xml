@@ -1,0 +1,63 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Core.Core.Ktx" mvid="47b848f62a38440ea226310b7d442a35">
+  <module assembly-name="Xamarin.AndroidX.Core.Core.Ktx" mvid="47b848f62a38440ea226310b7d442a35" mvid-bytes="9ki4RzgqDkSiJjELfUQqNQ==">
+    <types-scratch>
+      <entry key="androidx/core/widget/TextViewKt" java-name="androidx/core/widget/TextViewKt" managed-type-name="AndroidX.Core.Widget.TextViewKt" token="33554435" />
+      <entry key="androidx/core/view/MenuKt" java-name="androidx/core/view/MenuKt" managed-type-name="AndroidX.Core.View.MenuKt" token="33554436" />
+      <entry key="androidx/core/view/ViewGroupKt" java-name="androidx/core/view/ViewGroupKt" managed-type-name="AndroidX.Core.View.ViewGroupKt" token="33554437" />
+      <entry key="androidx/core/view/ViewKt" java-name="androidx/core/view/ViewKt" managed-type-name="AndroidX.Core.View.ViewKt" token="33554438" />
+      <entry key="androidx/core/util/AndroidXConsumerKt" java-name="androidx/core/util/AndroidXConsumerKt" managed-type-name="AndroidX.Core.Util.AndroidXConsumerKt" token="33554439" />
+      <entry key="androidx/core/util/AtomicFileKt" java-name="androidx/core/util/AtomicFileKt" managed-type-name="AndroidX.Core.Util.AtomicFileKt" token="33554440" />
+      <entry key="androidx/core/util/ConsumerKt" java-name="androidx/core/util/ConsumerKt" managed-type-name="AndroidX.Core.Util.ConsumerKt" token="33554441" />
+      <entry key="androidx/core/util/HalfKt" java-name="androidx/core/util/HalfKt" managed-type-name="AndroidX.Core.Util.HalfKt" token="33554442" />
+      <entry key="androidx/core/util/LongSparseArrayKt" java-name="androidx/core/util/LongSparseArrayKt" managed-type-name="AndroidX.Core.Util.LongSparseArrayKt" token="33554443" />
+      <entry key="androidx/core/util/LruCacheKt" java-name="androidx/core/util/LruCacheKt" managed-type-name="AndroidX.Core.Util.LruCacheKt" token="33554444" />
+      <entry key="androidx/core/util/PairKt" java-name="androidx/core/util/PairKt" managed-type-name="AndroidX.Core.Util.PairKt" token="33554445" />
+      <entry key="androidx/core/util/RangeKt" java-name="androidx/core/util/RangeKt" managed-type-name="AndroidX.Core.Util.RangeKt" token="33554446" />
+      <entry key="androidx/core/util/RunnableKt" java-name="androidx/core/util/RunnableKt" managed-type-name="AndroidX.Core.Util.RunnableKt" token="33554447" />
+      <entry key="androidx/core/util/SizeKt" java-name="androidx/core/util/SizeKt" managed-type-name="AndroidX.Core.Util.SizeKt" token="33554448" />
+      <entry key="androidx/core/util/SparseArrayKt" java-name="androidx/core/util/SparseArrayKt" managed-type-name="AndroidX.Core.Util.SparseArrayKt" token="33554449" />
+      <entry key="androidx/core/util/SparseBooleanArrayKt" java-name="androidx/core/util/SparseBooleanArrayKt" managed-type-name="AndroidX.Core.Util.SparseBooleanArrayKt" token="33554450" />
+      <entry key="androidx/core/util/SparseIntArrayKt" java-name="androidx/core/util/SparseIntArrayKt" managed-type-name="AndroidX.Core.Util.SparseIntArrayKt" token="33554451" />
+      <entry key="androidx/core/util/SparseLongArrayKt" java-name="androidx/core/util/SparseLongArrayKt" managed-type-name="AndroidX.Core.Util.SparseLongArrayKt" token="33554452" />
+      <entry key="androidx/core/transition/TransitionKt" java-name="androidx/core/transition/TransitionKt" managed-type-name="AndroidX.Core.Transition.TransitionKt" token="33554453" />
+      <entry key="androidx/core/text/CharSequenceKt" java-name="androidx/core/text/CharSequenceKt" managed-type-name="AndroidX.Core.Text.CharSequenceKt" token="33554454" />
+      <entry key="androidx/core/text/HtmlKt" java-name="androidx/core/text/HtmlKt" managed-type-name="AndroidX.Core.Text.HtmlKt" token="33554455" />
+      <entry key="androidx/core/text/LocaleKt" java-name="androidx/core/text/LocaleKt" managed-type-name="AndroidX.Core.Text.LocaleKt" token="33554456" />
+      <entry key="androidx/core/text/SpannableStringBuilderKt" java-name="androidx/core/text/SpannableStringBuilderKt" managed-type-name="AndroidX.Core.Text.SpannableStringBuilderKt" token="33554457" />
+      <entry key="androidx/core/text/SpannableStringKt" java-name="androidx/core/text/SpannableStringKt" managed-type-name="AndroidX.Core.Text.SpannableStringKt" token="33554458" />
+      <entry key="androidx/core/text/SpannedStringKt" java-name="androidx/core/text/SpannedStringKt" managed-type-name="AndroidX.Core.Text.SpannedStringKt" token="33554459" />
+      <entry key="androidx/core/text/StringKt" java-name="androidx/core/text/StringKt" managed-type-name="AndroidX.Core.Text.StringKt" token="33554460" />
+      <entry key="androidx/core/os/BundleKt" java-name="androidx/core/os/BundleKt" managed-type-name="AndroidX.Core.OS.BundleKt" token="33554461" />
+      <entry key="androidx/core/os/HandlerKt" java-name="androidx/core/os/HandlerKt" managed-type-name="AndroidX.Core.OS.HandlerKt" token="33554462" />
+      <entry key="androidx/core/os/OutcomeReceiverKt" java-name="androidx/core/os/OutcomeReceiverKt" managed-type-name="AndroidX.Core.OS.OutcomeReceiverKt" token="33554463" />
+      <entry key="androidx/core/os/PersistableBundleKt" java-name="androidx/core/os/PersistableBundleKt" managed-type-name="AndroidX.Core.OS.PersistableBundleKt" token="33554464" />
+      <entry key="androidx/core/os/TraceKt" java-name="androidx/core/os/TraceKt" managed-type-name="AndroidX.Core.OS.TraceKt" token="33554465" />
+      <entry key="androidx/core/net/UriKt" java-name="androidx/core/net/UriKt" managed-type-name="AndroidX.Core.Net.UriKt" token="33554466" />
+      <entry key="androidx/core/location/LocationKt" java-name="androidx/core/location/LocationKt" managed-type-name="AndroidX.Core.Location.LocationKt" token="33554467" />
+      <entry key="androidx/core/graphics/BitmapKt" java-name="androidx/core/graphics/BitmapKt" managed-type-name="AndroidX.Core.Graphics.BitmapKt" token="33554468" />
+      <entry key="androidx/core/graphics/CanvasKt" java-name="androidx/core/graphics/CanvasKt" managed-type-name="AndroidX.Core.Graphics.CanvasKt" token="33554469" />
+      <entry key="androidx/core/graphics/ColorKt" java-name="androidx/core/graphics/ColorKt" managed-type-name="AndroidX.Core.Graphics.ColorKt" token="33554470" />
+      <entry key="androidx/core/graphics/ImageDecoderKt" java-name="androidx/core/graphics/ImageDecoderKt" managed-type-name="AndroidX.Core.Graphics.ImageDecoderKt" token="33554471" />
+      <entry key="androidx/core/graphics/MatrixKt" java-name="androidx/core/graphics/MatrixKt" managed-type-name="AndroidX.Core.Graphics.MatrixKt" token="33554472" />
+      <entry key="androidx/core/graphics/PaintKt" java-name="androidx/core/graphics/PaintKt" managed-type-name="AndroidX.Core.Graphics.PaintKt" token="33554473" />
+      <entry key="androidx/core/graphics/PathKt" java-name="androidx/core/graphics/PathKt" managed-type-name="AndroidX.Core.Graphics.PathKt" token="33554474" />
+      <entry key="androidx/core/graphics/PictureKt" java-name="androidx/core/graphics/PictureKt" managed-type-name="AndroidX.Core.Graphics.PictureKt" token="33554475" />
+      <entry key="androidx/core/graphics/PointKt" java-name="androidx/core/graphics/PointKt" managed-type-name="AndroidX.Core.Graphics.PointKt" token="33554476" />
+      <entry key="androidx/core/graphics/PorterDuffKt" java-name="androidx/core/graphics/PorterDuffKt" managed-type-name="AndroidX.Core.Graphics.PorterDuffKt" token="33554477" />
+      <entry key="androidx/core/graphics/RectKt" java-name="androidx/core/graphics/RectKt" managed-type-name="AndroidX.Core.Graphics.RectKt" token="33554478" />
+      <entry key="androidx/core/graphics/RegionKt" java-name="androidx/core/graphics/RegionKt" managed-type-name="AndroidX.Core.Graphics.RegionKt" token="33554479" />
+      <entry key="androidx/core/graphics/ShaderKt" java-name="androidx/core/graphics/ShaderKt" managed-type-name="AndroidX.Core.Graphics.ShaderKt" token="33554480" />
+      <entry key="androidx/core/graphics/drawable/BitmapDrawableKt" java-name="androidx/core/graphics/drawable/BitmapDrawableKt" managed-type-name="AndroidX.Core.Graphics.Drawable.BitmapDrawableKt" token="33554481" />
+      <entry key="androidx/core/graphics/drawable/ColorDrawableKt" java-name="androidx/core/graphics/drawable/ColorDrawableKt" managed-type-name="AndroidX.Core.Graphics.Drawable.ColorDrawableKt" token="33554482" />
+      <entry key="androidx/core/graphics/drawable/DrawableKt" java-name="androidx/core/graphics/drawable/DrawableKt" managed-type-name="AndroidX.Core.Graphics.Drawable.DrawableKt" token="33554483" />
+      <entry key="androidx/core/graphics/drawable/IconKt" java-name="androidx/core/graphics/drawable/IconKt" managed-type-name="AndroidX.Core.Graphics.Drawable.IconKt" token="33554484" />
+      <entry key="androidx/core/database/CursorKt" java-name="androidx/core/database/CursorKt" managed-type-name="AndroidX.Core.Database.CursorKt" token="33554485" />
+      <entry key="androidx/core/database/sqlite/SQLiteDatabaseKt" java-name="androidx/core/database/sqlite/SQLiteDatabaseKt" managed-type-name="AndroidX.Core.Database.Sqlite.SQLiteDatabaseKt" token="33554486" />
+      <entry key="androidx/core/content/ContentValuesKt" java-name="androidx/core/content/ContentValuesKt" managed-type-name="AndroidX.Core.Content.ContentValuesKt" token="33554487" />
+      <entry key="androidx/core/content/ContextKt" java-name="androidx/core/content/ContextKt" managed-type-name="AndroidX.Core.Content.ContextKt" token="33554488" />
+      <entry key="androidx/core/content/SharedPreferencesKt" java-name="androidx/core/content/SharedPreferencesKt" managed-type-name="AndroidX.Core.Content.SharedPreferencesKt" token="33554489" />
+      <entry key="androidx/core/content/res/TypedArrayKt" java-name="androidx/core/content/res/TypedArrayKt" managed-type-name="AndroidX.Core.Content.Resources.TypedArrayKt" token="33554490" />
+      <entry key="androidx/core/animation/AnimatorKt" java-name="androidx/core/animation/AnimatorKt" managed-type-name="AndroidX.Core.Animation.AnimatorKt" token="33554491" />
+    </types-scratch>
+  </module>
+</api>

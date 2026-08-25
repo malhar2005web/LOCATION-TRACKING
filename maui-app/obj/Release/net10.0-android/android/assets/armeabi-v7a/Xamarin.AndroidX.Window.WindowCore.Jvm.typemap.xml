@@ -1,0 +1,17 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Window.WindowCore.Jvm" mvid="9f1955a207674a35a15f3d5ca6bd7df6">
+  <module assembly-name="Xamarin.AndroidX.Window.WindowCore.Jvm" mvid="9f1955a207674a35a15f3d5ca6bd7df6" mvid-bytes="olUZn2cHNUqhXz1cpr199g==">
+    <duplicates>
+      <entry java-name="androidx/window/core/ExperimentalWindowCoreApi" managed-type-name="AndroidX.Window.Core.IExperimentalWindowCoreApiInvoker" token="33554440" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/window/core/ExperimentalWindowCoreApi" java-name="androidx/window/core/ExperimentalWindowCoreApi" managed-type-name="AndroidX.Window.Core.IExperimentalWindowCoreApi" token="33554439" skip-in-java-to-managed="True" />
+      <entry key="androidx/window/core/layout/WindowHeightSizeClass" java-name="androidx/window/core/layout/WindowHeightSizeClass" managed-type-name="AndroidX.Window.Core.Layout.WindowHeightSizeClass" token="33554441" />
+      <entry key="androidx/window/core/layout/WindowHeightSizeClass$Companion" java-name="androidx/window/core/layout/WindowHeightSizeClass$Companion" managed-type-name="AndroidX.Window.Core.Layout.WindowHeightSizeClass/Companion" token="33554446" />
+      <entry key="androidx/window/core/layout/WindowSizeClass" java-name="androidx/window/core/layout/WindowSizeClass" managed-type-name="AndroidX.Window.Core.Layout.WindowSizeClass" token="33554442" />
+      <entry key="androidx/window/core/layout/WindowSizeClass$Companion" java-name="androidx/window/core/layout/WindowSizeClass$Companion" managed-type-name="AndroidX.Window.Core.Layout.WindowSizeClass/Companion" token="33554447" />
+      <entry key="androidx/window/core/layout/WindowSizeClassSelectors" java-name="androidx/window/core/layout/WindowSizeClassSelectors" managed-type-name="AndroidX.Window.Core.Layout.WindowSizeClassSelectors" token="33554443" />
+      <entry key="androidx/window/core/layout/WindowWidthSizeClass" java-name="androidx/window/core/layout/WindowWidthSizeClass" managed-type-name="AndroidX.Window.Core.Layout.WindowWidthSizeClass" token="33554444" />
+      <entry key="androidx/window/core/layout/WindowWidthSizeClass$Companion" java-name="androidx/window/core/layout/WindowWidthSizeClass$Companion" managed-type-name="AndroidX.Window.Core.Layout.WindowWidthSizeClass/Companion" token="33554448" />
+    </types-scratch>
+  </module>
+</api>

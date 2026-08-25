@@ -1,0 +1,722 @@
+<api type="release" assembly-name="Xamarin.Kotlin.StdLib" mvid="e6096c518e8f43d1bec48838654e74d8">
+  <module assembly-name="Xamarin.Kotlin.StdLib" mvid="e6096c518e8f43d1bec48838654e74d8" mvid-bytes="UWwJ5o+O0UO+xIg4ZU502A==">
+    <duplicates>
+      <entry java-name="kotlin/DeepRecursiveScope" managed-type-name="Kotlin.DeepRecursiveScopeInvoker" token="33554502" />
+      <entry java-name="kotlin/BuilderInference" managed-type-name="Kotlin.IBuilderInferenceInvoker" token="33554516" />
+      <entry java-name="kotlin/ConsistentCopyVisibility" managed-type-name="Kotlin.IConsistentCopyVisibilityInvoker" token="33554518" />
+      <entry java-name="kotlin/ContextFunctionTypeParams" managed-type-name="Kotlin.IContextFunctionTypeParamsInvoker" token="33554520" />
+      <entry java-name="kotlin/Deprecated" managed-type-name="Kotlin.IDeprecatedInvoker" token="33554522" />
+      <entry java-name="kotlin/DeprecatedSinceKotlin" managed-type-name="Kotlin.IDeprecatedSinceKotlinInvoker" token="33554524" />
+      <entry java-name="kotlin/DslMarker" managed-type-name="Kotlin.IDslMarkerInvoker" token="33554526" />
+      <entry java-name="kotlin/ExperimentalMultiplatform" managed-type-name="Kotlin.IExperimentalMultiplatformInvoker" token="33554528" />
+      <entry java-name="kotlin/ExperimentalStdlibApi" managed-type-name="Kotlin.IExperimentalStdlibApiInvoker" token="33554530" />
+      <entry java-name="kotlin/ExperimentalSubclassOptIn" managed-type-name="Kotlin.IExperimentalSubclassOptInInvoker" token="33554532" />
+      <entry java-name="kotlin/ExperimentalUnsignedTypes" managed-type-name="Kotlin.IExperimentalUnsignedTypesInvoker" token="33554534" />
+      <entry java-name="kotlin/ExposedCopyVisibility" managed-type-name="Kotlin.IExposedCopyVisibilityInvoker" token="33554536" />
+      <entry java-name="kotlin/ExtensionFunctionType" managed-type-name="Kotlin.IExtensionFunctionTypeInvoker" token="33554538" />
+      <entry java-name="kotlin/Function" managed-type-name="Kotlin.IFunctionInvoker" token="33554540" />
+      <entry java-name="kotlin/IgnorableReturnValue" managed-type-name="Kotlin.IIgnorableReturnValueInvoker" token="33554543" />
+      <entry java-name="kotlin/Lazy" managed-type-name="Kotlin.ILazyInvoker" token="33554545" />
+      <entry java-name="kotlin/Metadata" managed-type-name="Kotlin.IMetadataInvoker" token="33554548" />
+      <entry java-name="kotlin/MustUseReturnValue" managed-type-name="Kotlin.IMustUseReturnValueInvoker" token="33554550" />
+      <entry java-name="kotlin/OptIn" managed-type-name="Kotlin.IOptInInvoker" token="33554552" />
+      <entry java-name="kotlin/OptionalExpectation" managed-type-name="Kotlin.IOptionalExpectationInvoker" token="33554554" />
+      <entry java-name="kotlin/OverloadResolutionByLambdaReturnType" managed-type-name="Kotlin.IOverloadResolutionByLambdaReturnTypeInvoker" token="33554556" />
+      <entry java-name="kotlin/ParameterName" managed-type-name="Kotlin.IParameterNameInvoker" token="33554558" />
+      <entry java-name="kotlin/PublishedApi" managed-type-name="Kotlin.IPublishedApiInvoker" token="33554560" />
+      <entry java-name="kotlin/ReplaceWith" managed-type-name="Kotlin.IReplaceWithInvoker" token="33554562" />
+      <entry java-name="kotlin/RequiresOptIn" managed-type-name="Kotlin.IRequiresOptInInvoker" token="33554565" />
+      <entry java-name="kotlin/SinceKotlin" managed-type-name="Kotlin.ISinceKotlinInvoker" token="33554567" />
+      <entry java-name="kotlin/SubclassOptInRequired" managed-type-name="Kotlin.ISubclassOptInRequiredInvoker" token="33554569" />
+      <entry java-name="kotlin/Suppress" managed-type-name="Kotlin.ISuppressInvoker" token="33554571" />
+      <entry java-name="kotlin/UnsafeVariance" managed-type-name="Kotlin.IUnsafeVarianceInvoker" token="33554573" />
+      <entry java-name="kotlin/uuid/ExperimentalUuidApi" managed-type-name="Kotlin.Uuid.IExperimentalUuidApiInvoker" token="33554629" />
+      <entry java-name="kotlin/time/AbstractDoubleTimeSource" managed-type-name="Kotlin.Time.AbstractDoubleTimeSourceInvoker" token="33554634" />
+      <entry java-name="kotlin/time/AbstractLongTimeSource" managed-type-name="Kotlin.Time.AbstractLongTimeSourceInvoker" token="33554636" />
+      <entry java-name="kotlin/time/Clock" managed-type-name="Kotlin.Time.IClockInvoker" token="33554647" />
+      <entry java-name="kotlin/time/ComparableTimeMark" managed-type-name="Kotlin.Time.IComparableTimeMarkInvoker" token="33554650" />
+      <entry java-name="kotlin/time/ExperimentalTime" managed-type-name="Kotlin.Time.IExperimentalTimeInvoker" token="33554652" />
+      <entry java-name="kotlin/time/TimeMark" managed-type-name="Kotlin.Time.ITimeMarkInvoker" token="33554659" />
+      <entry java-name="kotlin/time/TimeSource$WithComparableMarks" managed-type-name="Kotlin.Time.ITimeSourceWithComparableMarksInvoker" token="33554663" />
+      <entry java-name="kotlin/time/TimeSource" managed-type-name="Kotlin.Time.ITimeSourceInvoker" token="33554665" />
+      <entry java-name="kotlin/text/MatchGroupCollection" managed-type-name="Kotlin.Text.IMatchGroupCollectionInvoker" token="33554690" />
+      <entry java-name="kotlin/text/MatchNamedGroupCollection" managed-type-name="Kotlin.Text.IMatchNamedGroupCollectionInvoker" token="33554692" />
+      <entry java-name="kotlin/text/MatchResult" managed-type-name="Kotlin.Text.IMatchResultInvoker" token="33554696" />
+      <entry java-name="kotlin/sequences/Sequence" managed-type-name="Kotlin.Sequences.ISequenceInvoker" token="33554713" />
+      <entry java-name="kotlin/sequences/SequenceScope" managed-type-name="Kotlin.Sequences.SequenceScopeInvoker" token="33554715" />
+      <entry java-name="kotlin/reflect/KAnnotatedElement" managed-type-name="Kotlin.Reflect.IKAnnotatedElementInvoker" token="33554719" />
+      <entry java-name="kotlin/reflect/KCallable" managed-type-name="Kotlin.Reflect.IKCallableInvoker" token="33554722" />
+      <entry java-name="kotlin/reflect/KClass" managed-type-name="Kotlin.Reflect.IKClassInvoker" token="33554725" />
+      <entry java-name="kotlin/reflect/KClassifier" managed-type-name="Kotlin.Reflect.IKClassifierInvoker" token="33554727" />
+      <entry java-name="kotlin/reflect/KDeclarationContainer" managed-type-name="Kotlin.Reflect.IKDeclarationContainerInvoker" token="33554729" />
+      <entry java-name="kotlin/reflect/KFunction" managed-type-name="Kotlin.Reflect.IKFunctionInvoker" token="33554732" />
+      <entry java-name="kotlin/reflect/KMutableProperty$Setter" managed-type-name="Kotlin.Reflect.IKMutablePropertySetterInvoker" token="33554734" />
+      <entry java-name="kotlin/reflect/KMutableProperty" managed-type-name="Kotlin.Reflect.IKMutablePropertyInvoker" token="33554736" />
+      <entry java-name="kotlin/reflect/KMutableProperty0$Setter" managed-type-name="Kotlin.Reflect.IKMutableProperty0SetterInvoker" token="33554738" />
+      <entry java-name="kotlin/reflect/KMutableProperty0" managed-type-name="Kotlin.Reflect.IKMutableProperty0Invoker" token="33554740" />
+      <entry java-name="kotlin/reflect/KMutableProperty1$Setter" managed-type-name="Kotlin.Reflect.IKMutableProperty1SetterInvoker" token="33554742" />
+      <entry java-name="kotlin/reflect/KMutableProperty1" managed-type-name="Kotlin.Reflect.IKMutableProperty1Invoker" token="33554744" />
+      <entry java-name="kotlin/reflect/KMutableProperty2$Setter" managed-type-name="Kotlin.Reflect.IKMutableProperty2SetterInvoker" token="33554746" />
+      <entry java-name="kotlin/reflect/KMutableProperty2" managed-type-name="Kotlin.Reflect.IKMutableProperty2Invoker" token="33554748" />
+      <entry java-name="kotlin/reflect/KParameter" managed-type-name="Kotlin.Reflect.IKParameterInvoker" token="33554752" />
+      <entry java-name="kotlin/reflect/KProperty$Accessor" managed-type-name="Kotlin.Reflect.IKPropertyAccessorInvoker" token="33554754" />
+      <entry java-name="kotlin/reflect/KProperty$Getter" managed-type-name="Kotlin.Reflect.IKPropertyGetterInvoker" token="33554757" />
+      <entry java-name="kotlin/reflect/KProperty" managed-type-name="Kotlin.Reflect.IKPropertyInvoker" token="33554759" />
+      <entry java-name="kotlin/reflect/KProperty0$Getter" managed-type-name="Kotlin.Reflect.IKProperty0GetterInvoker" token="33554761" />
+      <entry java-name="kotlin/reflect/KProperty0" managed-type-name="Kotlin.Reflect.IKProperty0Invoker" token="33554763" />
+      <entry java-name="kotlin/reflect/KProperty1$Getter" managed-type-name="Kotlin.Reflect.IKProperty1GetterInvoker" token="33554765" />
+      <entry java-name="kotlin/reflect/KProperty1" managed-type-name="Kotlin.Reflect.IKProperty1Invoker" token="33554767" />
+      <entry java-name="kotlin/reflect/KProperty2$Getter" managed-type-name="Kotlin.Reflect.IKProperty2GetterInvoker" token="33554769" />
+      <entry java-name="kotlin/reflect/KProperty2" managed-type-name="Kotlin.Reflect.IKProperty2Invoker" token="33554771" />
+      <entry java-name="kotlin/reflect/KType" managed-type-name="Kotlin.Reflect.IKTypeInvoker" token="33554774" />
+      <entry java-name="kotlin/reflect/KTypeParameter" managed-type-name="Kotlin.Reflect.IKTypeParameterInvoker" token="33554776" />
+      <entry java-name="kotlin/random/Random" managed-type-name="Kotlin.Random.RandomInvoker" token="33554790" />
+      <entry java-name="kotlin/properties/PropertyDelegateProvider" managed-type-name="Kotlin.Properties.IPropertyDelegateProviderInvoker" token="33554795" />
+      <entry java-name="kotlin/properties/ReadOnlyProperty" managed-type-name="Kotlin.Properties.IReadOnlyPropertyInvoker" token="33554797" />
+      <entry java-name="kotlin/properties/ReadWriteProperty" managed-type-name="Kotlin.Properties.IReadWritePropertyInvoker" token="33554799" />
+      <entry java-name="kotlin/properties/ObservableProperty" managed-type-name="Kotlin.Properties.ObservablePropertyInvoker" token="33554801" />
+      <entry java-name="kotlin/jvm/ImplicitlyActualizedByJvmDeclaration" managed-type-name="Kotlin.Jvm.IImplicitlyActualizedByJvmDeclarationInvoker" token="33554805" />
+      <entry java-name="kotlin/jvm/JvmDefault" managed-type-name="Kotlin.Jvm.IJvmDefaultInvoker" token="33554807" />
+      <entry java-name="kotlin/jvm/JvmDefaultWithCompatibility" managed-type-name="Kotlin.Jvm.IJvmDefaultWithCompatibilityInvoker" token="33554809" />
+      <entry java-name="kotlin/jvm/JvmDefaultWithoutCompatibility" managed-type-name="Kotlin.Jvm.IJvmDefaultWithoutCompatibilityInvoker" token="33554811" />
+      <entry java-name="kotlin/jvm/JvmExposeBoxed" managed-type-name="Kotlin.Jvm.IJvmExposeBoxedInvoker" token="33554813" />
+      <entry java-name="kotlin/jvm/JvmField" managed-type-name="Kotlin.Jvm.IJvmFieldInvoker" token="33554815" />
+      <entry java-name="kotlin/jvm/JvmInline" managed-type-name="Kotlin.Jvm.IJvmInlineInvoker" token="33554817" />
+      <entry java-name="kotlin/jvm/JvmMultifileClass" managed-type-name="Kotlin.Jvm.IJvmMultifileClassInvoker" token="33554819" />
+      <entry java-name="kotlin/jvm/JvmName" managed-type-name="Kotlin.Jvm.IJvmNameInvoker" token="33554821" />
+      <entry java-name="kotlin/jvm/JvmOverloads" managed-type-name="Kotlin.Jvm.IJvmOverloadsInvoker" token="33554823" />
+      <entry java-name="kotlin/jvm/JvmRecord" managed-type-name="Kotlin.Jvm.IJvmRecordInvoker" token="33554825" />
+      <entry java-name="kotlin/jvm/JvmSerializableLambda" managed-type-name="Kotlin.Jvm.IJvmSerializableLambdaInvoker" token="33554827" />
+      <entry java-name="kotlin/jvm/JvmStatic" managed-type-name="Kotlin.Jvm.IJvmStaticInvoker" token="33554829" />
+      <entry java-name="kotlin/jvm/JvmSuppressWildcards" managed-type-name="Kotlin.Jvm.IJvmSuppressWildcardsInvoker" token="33554831" />
+      <entry java-name="kotlin/jvm/JvmSynthetic" managed-type-name="Kotlin.Jvm.IJvmSyntheticInvoker" token="33554833" />
+      <entry java-name="kotlin/jvm/JvmWildcard" managed-type-name="Kotlin.Jvm.IJvmWildcardInvoker" token="33554835" />
+      <entry java-name="kotlin/jvm/PurelyImplements" managed-type-name="Kotlin.Jvm.IPurelyImplementsInvoker" token="33554838" />
+      <entry java-name="kotlin/jvm/Strictfp" managed-type-name="Kotlin.Jvm.IStrictfpInvoker" token="33554840" />
+      <entry java-name="kotlin/jvm/Synchronized" managed-type-name="Kotlin.Jvm.ISynchronizedInvoker" token="33554842" />
+      <entry java-name="kotlin/jvm/Throws" managed-type-name="Kotlin.Jvm.IThrowsInvoker" token="33554844" />
+      <entry java-name="kotlin/jvm/Transient" managed-type-name="Kotlin.Jvm.ITransientInvoker" token="33554846" />
+      <entry java-name="kotlin/jvm/Volatile" managed-type-name="Kotlin.Jvm.IVolatileInvoker" token="33554848" />
+      <entry java-name="kotlin/jvm/internal/CallableReference" managed-type-name="Kotlin.Jvm.Internal.CallableReferenceInvoker" token="33554880" />
+      <entry java-name="kotlin/jvm/internal/ClassBasedDeclarationContainer" managed-type-name="Kotlin.Jvm.Internal.IClassBasedDeclarationContainerInvoker" token="33554891" />
+      <entry java-name="kotlin/jvm/internal/FunctionAdapter" managed-type-name="Kotlin.Jvm.Internal.IFunctionAdapterInvoker" token="33554893" />
+      <entry java-name="kotlin/jvm/internal/FunctionBase" managed-type-name="Kotlin.Jvm.Internal.IFunctionBaseInvoker" token="33554895" />
+      <entry java-name="kotlin/jvm/internal/KTypeBase" managed-type-name="Kotlin.Jvm.Internal.IKTypeBaseInvoker" token="33554897" />
+      <entry java-name="kotlin/jvm/internal/RepeatableContainer" managed-type-name="Kotlin.Jvm.Internal.IRepeatableContainerInvoker" token="33554903" />
+      <entry java-name="kotlin/jvm/internal/SerializedIr" managed-type-name="Kotlin.Jvm.Internal.ISerializedIrInvoker" token="33554905" />
+      <entry java-name="kotlin/jvm/internal/SourceDebugExtension" managed-type-name="Kotlin.Jvm.Internal.ISourceDebugExtensionInvoker" token="33554907" />
+      <entry java-name="kotlin/jvm/internal/Lambda" managed-type-name="Kotlin.Jvm.Internal.LambdaInvoker" token="33554909" />
+      <entry java-name="kotlin/jvm/internal/MutablePropertyReference" managed-type-name="Kotlin.Jvm.Internal.MutablePropertyReferenceInvoker" token="33554916" />
+      <entry java-name="kotlin/jvm/internal/MutablePropertyReference0" managed-type-name="Kotlin.Jvm.Internal.MutablePropertyReference0Invoker" token="33554918" />
+      <entry java-name="kotlin/jvm/internal/MutablePropertyReference1" managed-type-name="Kotlin.Jvm.Internal.MutablePropertyReference1Invoker" token="33554920" />
+      <entry java-name="kotlin/jvm/internal/MutablePropertyReference2" managed-type-name="Kotlin.Jvm.Internal.MutablePropertyReference2Invoker" token="33554922" />
+      <entry java-name="kotlin/jvm/internal/PrimitiveSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.PrimitiveSpreadBuilderInvoker" token="33554925" />
+      <entry java-name="kotlin/jvm/internal/PropertyReference" managed-type-name="Kotlin.Jvm.Internal.PropertyReferenceInvoker" token="33554927" />
+      <entry java-name="kotlin/jvm/internal/PropertyReference0" managed-type-name="Kotlin.Jvm.Internal.PropertyReference0Invoker" token="33554929" />
+      <entry java-name="kotlin/jvm/internal/PropertyReference1" managed-type-name="Kotlin.Jvm.Internal.PropertyReference1Invoker" token="33554931" />
+      <entry java-name="kotlin/jvm/internal/PropertyReference2" managed-type-name="Kotlin.Jvm.Internal.PropertyReference2Invoker" token="33554933" />
+      <entry java-name="kotlin/jvm/internal/markers/KMappedMarker" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMappedMarkerInvoker" token="33554959" />
+      <entry java-name="kotlin/jvm/internal/markers/KMutableCollection" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableCollectionInvoker" token="33554961" />
+      <entry java-name="kotlin/jvm/internal/markers/KMutableIterable" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableIterableInvoker" token="33554963" />
+      <entry java-name="kotlin/jvm/internal/markers/KMutableIterator" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableIteratorInvoker" token="33554965" />
+      <entry java-name="kotlin/jvm/internal/markers/KMutableList" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableListInvoker" token="33554967" />
+      <entry java-name="kotlin/jvm/internal/markers/KMutableListIterator" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableListIteratorInvoker" token="33554969" />
+      <entry java-name="kotlin/jvm/internal/markers/KMutableMap$Entry" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableMapEntryInvoker" token="33554971" />
+      <entry java-name="kotlin/jvm/internal/markers/KMutableMap" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableMapInvoker" token="33554973" />
+      <entry java-name="kotlin/jvm/internal/markers/KMutableSet" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableSetInvoker" token="33554975" />
+      <entry java-name="kotlin/jvm/functions/Function0" managed-type-name="Kotlin.Jvm.Functions.IFunction0Invoker" token="33554977" />
+      <entry java-name="kotlin/jvm/functions/Function1" managed-type-name="Kotlin.Jvm.Functions.IFunction1Invoker" token="33554979" />
+      <entry java-name="kotlin/jvm/functions/Function10" managed-type-name="Kotlin.Jvm.Functions.IFunction10Invoker" token="33554981" />
+      <entry java-name="kotlin/jvm/functions/Function11" managed-type-name="Kotlin.Jvm.Functions.IFunction11Invoker" token="33554983" />
+      <entry java-name="kotlin/jvm/functions/Function12" managed-type-name="Kotlin.Jvm.Functions.IFunction12Invoker" token="33554985" />
+      <entry java-name="kotlin/jvm/functions/Function13" managed-type-name="Kotlin.Jvm.Functions.IFunction13Invoker" token="33554987" />
+      <entry java-name="kotlin/jvm/functions/Function14" managed-type-name="Kotlin.Jvm.Functions.IFunction14Invoker" token="33554989" />
+      <entry java-name="kotlin/jvm/functions/Function15" managed-type-name="Kotlin.Jvm.Functions.IFunction15Invoker" token="33554991" />
+      <entry java-name="kotlin/jvm/functions/Function16" managed-type-name="Kotlin.Jvm.Functions.IFunction16Invoker" token="33554993" />
+      <entry java-name="kotlin/jvm/functions/Function17" managed-type-name="Kotlin.Jvm.Functions.IFunction17Invoker" token="33554995" />
+      <entry java-name="kotlin/jvm/functions/Function18" managed-type-name="Kotlin.Jvm.Functions.IFunction18Invoker" token="33554997" />
+      <entry java-name="kotlin/jvm/functions/Function19" managed-type-name="Kotlin.Jvm.Functions.IFunction19Invoker" token="33554999" />
+      <entry java-name="kotlin/jvm/functions/Function2" managed-type-name="Kotlin.Jvm.Functions.IFunction2Invoker" token="33555001" />
+      <entry java-name="kotlin/jvm/functions/Function20" managed-type-name="Kotlin.Jvm.Functions.IFunction20Invoker" token="33555003" />
+      <entry java-name="kotlin/jvm/functions/Function21" managed-type-name="Kotlin.Jvm.Functions.IFunction21Invoker" token="33555005" />
+      <entry java-name="kotlin/jvm/functions/Function22" managed-type-name="Kotlin.Jvm.Functions.IFunction22Invoker" token="33555007" />
+      <entry java-name="kotlin/jvm/functions/Function3" managed-type-name="Kotlin.Jvm.Functions.IFunction3Invoker" token="33555009" />
+      <entry java-name="kotlin/jvm/functions/Function4" managed-type-name="Kotlin.Jvm.Functions.IFunction4Invoker" token="33555011" />
+      <entry java-name="kotlin/jvm/functions/Function5" managed-type-name="Kotlin.Jvm.Functions.IFunction5Invoker" token="33555013" />
+      <entry java-name="kotlin/jvm/functions/Function6" managed-type-name="Kotlin.Jvm.Functions.IFunction6Invoker" token="33555015" />
+      <entry java-name="kotlin/jvm/functions/Function7" managed-type-name="Kotlin.Jvm.Functions.IFunction7Invoker" token="33555017" />
+      <entry java-name="kotlin/jvm/functions/Function8" managed-type-name="Kotlin.Jvm.Functions.IFunction8Invoker" token="33555019" />
+      <entry java-name="kotlin/jvm/functions/Function9" managed-type-name="Kotlin.Jvm.Functions.IFunction9Invoker" token="33555021" />
+      <entry java-name="kotlin/jvm/functions/FunctionN" managed-type-name="Kotlin.Jvm.Functions.IFunctionNInvoker" token="33555023" />
+      <entry java-name="kotlin/js/ExperimentalJsCollectionsApi" managed-type-name="Kotlin.JS.IExperimentalJsCollectionsApiInvoker" token="33555030" />
+      <entry java-name="kotlin/js/ExperimentalJsExport" managed-type-name="Kotlin.JS.IExperimentalJsExportInvoker" token="33555032" />
+      <entry java-name="kotlin/js/ExperimentalJsFileName" managed-type-name="Kotlin.JS.IExperimentalJsFileNameInvoker" token="33555034" />
+      <entry java-name="kotlin/js/ExperimentalJsReflectionCreateInstance" managed-type-name="Kotlin.JS.IExperimentalJsReflectionCreateInstanceInvoker" token="33555036" />
+      <entry java-name="kotlin/js/ExperimentalJsStatic" managed-type-name="Kotlin.JS.IExperimentalJsStaticInvoker" token="33555038" />
+      <entry java-name="kotlin/io/path/CopyActionContext" managed-type-name="Kotlin.IO.Path.ICopyActionContextInvoker" token="33555058" />
+      <entry java-name="kotlin/io/path/ExperimentalPathApi" managed-type-name="Kotlin.IO.Path.IExperimentalPathApiInvoker" token="33555060" />
+      <entry java-name="kotlin/io/path/FileVisitorBuilder" managed-type-name="Kotlin.IO.Path.IFileVisitorBuilderInvoker" token="33555062" />
+      <entry java-name="kotlin/io/encoding/ExperimentalEncodingApi" managed-type-name="Kotlin.IO.Encoding.IExperimentalEncodingApiInvoker" token="33555074" />
+      <entry java-name="kotlin/experimental/ExpectRefinement" managed-type-name="Kotlin.Experimental.IExpectRefinementInvoker" token="33555087" />
+      <entry java-name="kotlin/experimental/ExperimentalNativeApi" managed-type-name="Kotlin.Experimental.IExperimentalNativeApiInvoker" token="33555089" />
+      <entry java-name="kotlin/experimental/ExperimentalObjCName" managed-type-name="Kotlin.Experimental.IExperimentalObjCNameInvoker" token="33555091" />
+      <entry java-name="kotlin/experimental/ExperimentalObjCRefinement" managed-type-name="Kotlin.Experimental.IExperimentalObjCRefinementInvoker" token="33555093" />
+      <entry java-name="kotlin/experimental/ExperimentalTypeInference" managed-type-name="Kotlin.Experimental.IExperimentalTypeInferenceInvoker" token="33555095" />
+      <entry java-name="kotlin/enums/EnumEntries" managed-type-name="Kotlin.Enums.IEnumEntriesInvoker" token="33555099" />
+      <entry java-name="kotlin/coroutines/AbstractCoroutineContextElement" managed-type-name="Kotlin.Coroutines.AbstractCoroutineContextElementInvoker" token="33555101" />
+      <entry java-name="kotlin/coroutines/Continuation" managed-type-name="Kotlin.Coroutines.IContinuationInvoker" token="33555106" />
+      <entry java-name="mono/internal/kotlin/coroutines/ContinuationInterceptor" managed-type-name="Kotlin.Coroutines.ContinuationInterceptorConsts" token="33555110" />
+      <entry java-name="kotlin/coroutines/ContinuationInterceptor" managed-type-name="Kotlin.Coroutines.IContinuationInterceptorInvoker" token="33555112" />
+      <entry java-name="kotlin/coroutines/CoroutineContext$Element" managed-type-name="Kotlin.Coroutines.ICoroutineContextElementInvoker" token="33555116" />
+      <entry java-name="kotlin/coroutines/CoroutineContext$Key" managed-type-name="Kotlin.Coroutines.ICoroutineContextKeyInvoker" token="33555118" />
+      <entry java-name="kotlin/coroutines/CoroutineContext" managed-type-name="Kotlin.Coroutines.ICoroutineContextInvoker" token="33555120" />
+      <entry java-name="kotlin/coroutines/RestrictsSuspension" managed-type-name="Kotlin.Coroutines.IRestrictsSuspensionInvoker" token="33555122" />
+      <entry java-name="kotlin/coroutines/jvm/internal/CoroutineStackFrame" managed-type-name="Kotlin.Coroutines.Jvm.Internal.ICoroutineStackFrameInvoker" token="33555129" />
+      <entry java-name="kotlin/contracts/CallsInPlace" managed-type-name="Kotlin.Contracts.ICallsInPlaceInvoker" token="33555137" />
+      <entry java-name="kotlin/contracts/ConditionalEffect" managed-type-name="Kotlin.Contracts.IConditionalEffectInvoker" token="33555139" />
+      <entry java-name="kotlin/contracts/ContractBuilder" managed-type-name="Kotlin.Contracts.IContractBuilderInvoker" token="33555142" />
+      <entry java-name="kotlin/contracts/Effect" managed-type-name="Kotlin.Contracts.IEffectInvoker" token="33555144" />
+      <entry java-name="kotlin/contracts/ExperimentalContracts" managed-type-name="Kotlin.Contracts.IExperimentalContractsInvoker" token="33555146" />
+      <entry java-name="kotlin/contracts/Returns" managed-type-name="Kotlin.Contracts.IReturnsInvoker" token="33555149" />
+      <entry java-name="kotlin/contracts/ReturnsNotNull" managed-type-name="Kotlin.Contracts.IReturnsNotNullInvoker" token="33555151" />
+      <entry java-name="kotlin/contracts/SimpleEffect" managed-type-name="Kotlin.Contracts.ISimpleEffectInvoker" token="33555153" />
+      <entry java-name="kotlin/concurrent/atomics/ExperimentalAtomicApi" managed-type-name="Kotlin.Concurrent.Atomics.IExperimentalAtomicApiInvoker" token="33555163" />
+      <entry java-name="kotlin/annotation/MustBeDocumented" managed-type-name="Kotlin.Annotation.IMustBeDocumentedInvoker" token="33555169" />
+      <entry java-name="kotlin/annotation/Repeatable" managed-type-name="Kotlin.Annotation.IRepeatableInvoker" token="33555171" />
+      <entry java-name="kotlin/annotation/Retention" managed-type-name="Kotlin.Annotation.IRetentionInvoker" token="33555173" />
+      <entry java-name="kotlin/annotation/Target" managed-type-name="Kotlin.Annotation.ITargetInvoker" token="33555175" />
+      <entry java-name="kotlin/ranges/ClosedFloatingPointRange" managed-type-name="Kotlin.Ranges.IClosedFloatingPointRangeInvoker" token="33555190" />
+      <entry java-name="kotlin/ranges/ClosedRange" managed-type-name="Kotlin.Ranges.IClosedRangeInvoker" token="33555193" />
+      <entry java-name="kotlin/ranges/OpenEndRange" managed-type-name="Kotlin.Ranges.IOpenEndRangeInvoker" token="33555200" />
+      <entry java-name="kotlin/collections/AbstractCollection" managed-type-name="Kotlin.Collections.AbstractCollectionInvoker" token="33555214" />
+      <entry java-name="kotlin/collections/AbstractIterator" managed-type-name="Kotlin.Collections.AbstractIteratorInvoker" token="33555216" />
+      <entry java-name="kotlin/collections/AbstractList" managed-type-name="Kotlin.Collections.AbstractList" token="33555217" />
+      <entry java-name="kotlin/collections/AbstractMap" managed-type-name="Kotlin.Collections.AbstractMapInvoker" token="33555219" />
+      <entry java-name="kotlin/collections/AbstractMutableCollection" managed-type-name="Kotlin.Collections.AbstractMutableCollectionInvoker" token="33555221" />
+      <entry java-name="kotlin/collections/AbstractMutableList" managed-type-name="Kotlin.Collections.AbstractMutableListInvoker" token="33555223" />
+      <entry java-name="kotlin/collections/AbstractMutableMap" managed-type-name="Kotlin.Collections.AbstractMutableMapInvoker" token="33555225" />
+      <entry java-name="kotlin/collections/AbstractMutableSet" managed-type-name="Kotlin.Collections.AbstractMutableSetInvoker" token="33555227" />
+      <entry java-name="kotlin/collections/AbstractSet" managed-type-name="Kotlin.Collections.AbstractSet" token="33555228" />
+      <entry java-name="kotlin/collections/BooleanIterator" managed-type-name="Kotlin.Collections.BooleanIteratorInvoker" token="33555232" />
+      <entry java-name="kotlin/collections/ByteIterator" managed-type-name="Kotlin.Collections.ByteIteratorInvoker" token="33555234" />
+      <entry java-name="kotlin/collections/CharIterator" managed-type-name="Kotlin.Collections.CharIteratorInvoker" token="33555236" />
+      <entry java-name="kotlin/collections/DoubleIterator" managed-type-name="Kotlin.Collections.DoubleIteratorInvoker" token="33555239" />
+      <entry java-name="kotlin/collections/FloatIterator" managed-type-name="Kotlin.Collections.FloatIteratorInvoker" token="33555241" />
+      <entry java-name="kotlin/collections/Grouping" managed-type-name="Kotlin.Collections.IGroupingInvoker" token="33555244" />
+      <entry java-name="kotlin/collections/IntIterator" managed-type-name="Kotlin.Collections.IntIteratorInvoker" token="33555247" />
+      <entry java-name="kotlin/collections/LongIterator" managed-type-name="Kotlin.Collections.LongIteratorInvoker" token="33555249" />
+      <entry java-name="kotlin/collections/ShortIterator" managed-type-name="Kotlin.Collections.ShortIteratorInvoker" token="33555254" />
+      <entry java-name="kotlin/collections/builders/AbstractMapBuilderEntrySet" managed-type-name="Kotlin.Collections.Builders.AbstractMapBuilderEntrySetInvoker" token="33555269" />
+    </duplicates>
+    <types-scratch>
+      <entry key="kotlin/ArrayIntrinsicsKt" java-name="kotlin/ArrayIntrinsicsKt" managed-type-name="Kotlin.ArrayIntrinsicsKt" token="33554491" />
+      <entry key="kotlin/CharCodeJVMKt" java-name="kotlin/CharCodeJVMKt" managed-type-name="Kotlin.CharCodeJVMKt" token="33554493" />
+      <entry key="kotlin/CharCodeKt" java-name="kotlin/CharCodeKt" managed-type-name="Kotlin.CharCodeKt" token="33554494" />
+      <entry key="kotlin/CompareToKt" java-name="kotlin/CompareToKt" managed-type-name="Kotlin.CompareToKt" token="33554495" />
+      <entry key="kotlin/ContextParametersKt" java-name="kotlin/ContextParametersKt" managed-type-name="Kotlin.ContextParametersKt" token="33554498" />
+      <entry key="kotlin/DeepRecursiveFunction" java-name="kotlin/DeepRecursiveFunction" managed-type-name="Kotlin.DeepRecursiveFunction" token="33554499" />
+      <entry key="kotlin/DeepRecursiveKt" java-name="kotlin/DeepRecursiveKt" managed-type-name="Kotlin.DeepRecursiveKt" token="33554500" />
+      <entry key="kotlin/DeepRecursiveScope" java-name="kotlin/DeepRecursiveScope" managed-type-name="Kotlin.DeepRecursiveScope" token="33554501" />
+      <entry key="kotlin/DeprecationLevel" java-name="kotlin/DeprecationLevel" managed-type-name="Kotlin.DeprecationLevel" token="33554505" />
+      <entry key="kotlin/ExceptionsKt" java-name="kotlin/ExceptionsKt" managed-type-name="Kotlin.ExceptionsKt" token="33554507" />
+      <entry key="kotlin/HashCodeKt" java-name="kotlin/HashCodeKt" managed-type-name="Kotlin.HashCodeKt" token="33554514" />
+      <entry key="kotlin/BuilderInference" java-name="kotlin/BuilderInference" managed-type-name="Kotlin.IBuilderInference" token="33554515" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ConsistentCopyVisibility" java-name="kotlin/ConsistentCopyVisibility" managed-type-name="Kotlin.IConsistentCopyVisibility" token="33554517" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ContextFunctionTypeParams" java-name="kotlin/ContextFunctionTypeParams" managed-type-name="Kotlin.IContextFunctionTypeParams" token="33554519" skip-in-java-to-managed="True" />
+      <entry key="kotlin/Deprecated" java-name="kotlin/Deprecated" managed-type-name="Kotlin.IDeprecated" token="33554521" skip-in-java-to-managed="True" />
+      <entry key="kotlin/DeprecatedSinceKotlin" java-name="kotlin/DeprecatedSinceKotlin" managed-type-name="Kotlin.IDeprecatedSinceKotlin" token="33554523" skip-in-java-to-managed="True" />
+      <entry key="kotlin/DslMarker" java-name="kotlin/DslMarker" managed-type-name="Kotlin.IDslMarker" token="33554525" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ExperimentalMultiplatform" java-name="kotlin/ExperimentalMultiplatform" managed-type-name="Kotlin.IExperimentalMultiplatform" token="33554527" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ExperimentalStdlibApi" java-name="kotlin/ExperimentalStdlibApi" managed-type-name="Kotlin.IExperimentalStdlibApi" token="33554529" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ExperimentalSubclassOptIn" java-name="kotlin/ExperimentalSubclassOptIn" managed-type-name="Kotlin.IExperimentalSubclassOptIn" token="33554531" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ExperimentalUnsignedTypes" java-name="kotlin/ExperimentalUnsignedTypes" managed-type-name="Kotlin.IExperimentalUnsignedTypes" token="33554533" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ExposedCopyVisibility" java-name="kotlin/ExposedCopyVisibility" managed-type-name="Kotlin.IExposedCopyVisibility" token="33554535" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ExtensionFunctionType" java-name="kotlin/ExtensionFunctionType" managed-type-name="Kotlin.IExtensionFunctionType" token="33554537" skip-in-java-to-managed="True" />
+      <entry key="kotlin/Function" java-name="kotlin/Function" managed-type-name="Kotlin.IFunction" token="33554539" skip-in-java-to-managed="True" />
+      <entry key="kotlin/IgnorableReturnValue" java-name="kotlin/IgnorableReturnValue" managed-type-name="Kotlin.IIgnorableReturnValue" token="33554542" skip-in-java-to-managed="True" />
+      <entry key="kotlin/Lazy" java-name="kotlin/Lazy" managed-type-name="Kotlin.ILazy" token="33554544" skip-in-java-to-managed="True" />
+      <entry key="kotlin/Metadata$DefaultImpls" java-name="kotlin/Metadata$DefaultImpls" managed-type-name="Kotlin.MetadataDefaultImpls" token="33554546" />
+      <entry key="kotlin/Metadata" java-name="kotlin/Metadata" managed-type-name="Kotlin.IMetadata" token="33554547" skip-in-java-to-managed="True" />
+      <entry key="kotlin/MustUseReturnValue" java-name="kotlin/MustUseReturnValue" managed-type-name="Kotlin.IMustUseReturnValue" token="33554549" skip-in-java-to-managed="True" />
+      <entry key="kotlin/OptIn" java-name="kotlin/OptIn" managed-type-name="Kotlin.IOptIn" token="33554551" skip-in-java-to-managed="True" />
+      <entry key="kotlin/OptionalExpectation" java-name="kotlin/OptionalExpectation" managed-type-name="Kotlin.IOptionalExpectation" token="33554553" skip-in-java-to-managed="True" />
+      <entry key="kotlin/OverloadResolutionByLambdaReturnType" java-name="kotlin/OverloadResolutionByLambdaReturnType" managed-type-name="Kotlin.IOverloadResolutionByLambdaReturnType" token="33554555" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ParameterName" java-name="kotlin/ParameterName" managed-type-name="Kotlin.IParameterName" token="33554557" skip-in-java-to-managed="True" />
+      <entry key="kotlin/PublishedApi" java-name="kotlin/PublishedApi" managed-type-name="Kotlin.IPublishedApi" token="33554559" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ReplaceWith" java-name="kotlin/ReplaceWith" managed-type-name="Kotlin.IReplaceWith" token="33554561" skip-in-java-to-managed="True" />
+      <entry key="kotlin/RequiresOptIn$Level" java-name="kotlin/RequiresOptIn$Level" managed-type-name="Kotlin.RequiresOptInLevel" token="33554563" />
+      <entry key="kotlin/RequiresOptIn" java-name="kotlin/RequiresOptIn" managed-type-name="Kotlin.IRequiresOptIn" token="33554564" skip-in-java-to-managed="True" />
+      <entry key="kotlin/SinceKotlin" java-name="kotlin/SinceKotlin" managed-type-name="Kotlin.ISinceKotlin" token="33554566" skip-in-java-to-managed="True" />
+      <entry key="kotlin/SubclassOptInRequired" java-name="kotlin/SubclassOptInRequired" managed-type-name="Kotlin.ISubclassOptInRequired" token="33554568" skip-in-java-to-managed="True" />
+      <entry key="kotlin/Suppress" java-name="kotlin/Suppress" managed-type-name="Kotlin.ISuppress" token="33554570" skip-in-java-to-managed="True" />
+      <entry key="kotlin/UnsafeVariance" java-name="kotlin/UnsafeVariance" managed-type-name="Kotlin.IUnsafeVariance" token="33554572" skip-in-java-to-managed="True" />
+      <entry key="kotlin/KotlinNullPointerException" java-name="kotlin/KotlinNullPointerException" managed-type-name="Kotlin.KotlinNullPointerException" token="33554574" />
+      <entry key="kotlin/KotlinVersion" java-name="kotlin/KotlinVersion" managed-type-name="Kotlin.KotlinVersion" token="33554575" />
+      <entry key="kotlin/LateinitKt" java-name="kotlin/LateinitKt" managed-type-name="Kotlin.LateinitKt" token="33554576" />
+      <entry key="kotlin/LazyKt" java-name="kotlin/LazyKt" managed-type-name="Kotlin.LazyKt" token="33554577" />
+      <entry key="kotlin/LazyThreadSafetyMode" java-name="kotlin/LazyThreadSafetyMode" managed-type-name="Kotlin.LazyThreadSafetyMode" token="33554578" />
+      <entry key="kotlin/NotImplementedError" java-name="kotlin/NotImplementedError" managed-type-name="Kotlin.NotImplementedError" token="33554581" />
+      <entry key="kotlin/NoWhenBranchMatchedException" java-name="kotlin/NoWhenBranchMatchedException" managed-type-name="Kotlin.NoWhenBranchMatchedException" token="33554582" />
+      <entry key="kotlin/NumbersKt" java-name="kotlin/NumbersKt" managed-type-name="Kotlin.NumbersKt" token="33554583" />
+      <entry key="kotlin/Pair" java-name="kotlin/Pair" managed-type-name="Kotlin.Pair" token="33554587" />
+      <entry key="kotlin/PreconditionsKt" java-name="kotlin/PreconditionsKt" managed-type-name="Kotlin.PreconditionsKt" token="33554589" />
+      <entry key="kotlin/PropertyReferenceDelegatesKt" java-name="kotlin/PropertyReferenceDelegatesKt" managed-type-name="Kotlin.PropertyReferenceDelegatesKt" token="33554590" />
+      <entry key="kotlin/Result" java-name="kotlin/Result" managed-type-name="Kotlin.Result" token="33554594" />
+      <entry key="kotlin/ResultKt" java-name="kotlin/ResultKt" managed-type-name="Kotlin.ResultKt" token="33554595" />
+      <entry key="kotlin/StandardKt" java-name="kotlin/StandardKt" managed-type-name="Kotlin.StandardKt" token="33554597" />
+      <entry key="kotlin/SuspendKt" java-name="kotlin/SuspendKt" managed-type-name="Kotlin.SuspendKt" token="33554600" />
+      <entry key="kotlin/ThrowsKt" java-name="kotlin/ThrowsKt" managed-type-name="Kotlin.ThrowsKt" token="33554601" />
+      <entry key="kotlin/Triple" java-name="kotlin/Triple" managed-type-name="Kotlin.Triple" token="33554602" />
+      <entry key="kotlin/TuplesKt" java-name="kotlin/TuplesKt" managed-type-name="Kotlin.TuplesKt" token="33554603" />
+      <entry key="kotlin/TypeAliasesKt" java-name="kotlin/TypeAliasesKt" managed-type-name="Kotlin.TypeAliasesKt" token="33554604" />
+      <entry key="kotlin/TypeCastException" java-name="kotlin/TypeCastException" managed-type-name="Kotlin.TypeCastException" token="33554605" />
+      <entry key="kotlin/UByte" java-name="kotlin/UByte" managed-type-name="Kotlin.UByte" token="33554606" />
+      <entry key="kotlin/UByteArray" java-name="kotlin/UByteArray" managed-type-name="Kotlin.UByteArray" token="33554607" />
+      <entry key="kotlin/UByteArrayKt" java-name="kotlin/UByteArrayKt" managed-type-name="Kotlin.UByteArrayKt" token="33554608" />
+      <entry key="kotlin/UByteKt" java-name="kotlin/UByteKt" managed-type-name="Kotlin.UByteKt" token="33554609" />
+      <entry key="kotlin/UInt" java-name="kotlin/UInt" managed-type-name="Kotlin.UInt" token="33554610" />
+      <entry key="kotlin/UIntArray" java-name="kotlin/UIntArray" managed-type-name="Kotlin.UIntArray" token="33554611" />
+      <entry key="kotlin/UIntArrayKt" java-name="kotlin/UIntArrayKt" managed-type-name="Kotlin.UIntArrayKt" token="33554612" />
+      <entry key="kotlin/UIntKt" java-name="kotlin/UIntKt" managed-type-name="Kotlin.UIntKt" token="33554613" />
+      <entry key="kotlin/ULong" java-name="kotlin/ULong" managed-type-name="Kotlin.ULong" token="33554614" />
+      <entry key="kotlin/ULongArray" java-name="kotlin/ULongArray" managed-type-name="Kotlin.ULongArray" token="33554615" />
+      <entry key="kotlin/ULongArrayKt" java-name="kotlin/ULongArrayKt" managed-type-name="Kotlin.ULongArrayKt" token="33554616" />
+      <entry key="kotlin/ULongKt" java-name="kotlin/ULongKt" managed-type-name="Kotlin.ULongKt" token="33554617" />
+      <entry key="kotlin/UninitializedPropertyAccessException" java-name="kotlin/UninitializedPropertyAccessException" managed-type-name="Kotlin.UninitializedPropertyAccessException" token="33554618" />
+      <entry key="kotlin/Unit" java-name="kotlin/Unit" managed-type-name="Kotlin.Unit" token="33554619" />
+      <entry key="kotlin/UnsignedKt" java-name="kotlin/UnsignedKt" managed-type-name="Kotlin.UnsignedKt" token="33554621" />
+      <entry key="kotlin/UNumbersKt" java-name="kotlin/UNumbersKt" managed-type-name="Kotlin.UNumbersKt" token="33554622" />
+      <entry key="kotlin/UShort" java-name="kotlin/UShort" managed-type-name="Kotlin.UShort" token="33554623" />
+      <entry key="kotlin/UShortArray" java-name="kotlin/UShortArray" managed-type-name="Kotlin.UShortArray" token="33554624" />
+      <entry key="kotlin/UShortArrayKt" java-name="kotlin/UShortArrayKt" managed-type-name="Kotlin.UShortArrayKt" token="33554625" />
+      <entry key="kotlin/UShortKt" java-name="kotlin/UShortKt" managed-type-name="Kotlin.UShortKt" token="33554626" />
+      <entry key="kotlin/uuid/ExperimentalUuidApi" java-name="kotlin/uuid/ExperimentalUuidApi" managed-type-name="Kotlin.Uuid.IExperimentalUuidApi" token="33554628" skip-in-java-to-managed="True" />
+      <entry key="kotlin/uuid/Uuid" java-name="kotlin/uuid/Uuid" managed-type-name="Kotlin.Uuid.Uuid" token="33554630" />
+      <entry key="kotlin/uuid/Uuid$Companion" java-name="kotlin/uuid/Uuid$Companion" managed-type-name="Kotlin.Uuid.Uuid/CompanionStatic" token="33554631" />
+      <entry key="kotlin/uuid/UuidKt" java-name="kotlin/uuid/UuidKt" managed-type-name="Kotlin.Uuid.UuidKt" token="33554632" />
+      <entry key="kotlin/time/AbstractDoubleTimeSource" java-name="kotlin/time/AbstractDoubleTimeSource" managed-type-name="Kotlin.Time.AbstractDoubleTimeSource" token="33554633" />
+      <entry key="kotlin/time/AbstractLongTimeSource" java-name="kotlin/time/AbstractLongTimeSource" managed-type-name="Kotlin.Time.AbstractLongTimeSource" token="33554635" />
+      <entry key="kotlin/time/ClocksKt" java-name="kotlin/time/ClocksKt" managed-type-name="Kotlin.Time.ClocksKt" token="33554637" />
+      <entry key="kotlin/time/Duration" java-name="kotlin/time/Duration" managed-type-name="Kotlin.Time.Duration" token="33554638" />
+      <entry key="kotlin/time/Duration$Companion" java-name="kotlin/time/Duration$Companion" managed-type-name="Kotlin.Time.Duration/CompanionStatic" token="33554639" />
+      <entry key="kotlin/time/DurationJvmKt" java-name="kotlin/time/DurationJvmKt" managed-type-name="Kotlin.Time.DurationJvmKt" token="33554640" />
+      <entry key="kotlin/time/DurationKt" java-name="kotlin/time/DurationKt" managed-type-name="Kotlin.Time.DurationKt" token="33554641" />
+      <entry key="kotlin/time/DurationUnit" java-name="kotlin/time/DurationUnit" managed-type-name="Kotlin.Time.DurationUnit" token="33554642" />
+      <entry key="kotlin/time/DurationUnitKt" java-name="kotlin/time/DurationUnitKt" managed-type-name="Kotlin.Time.DurationUnitKt" token="33554643" />
+      <entry key="kotlin/time/Clock$System" java-name="kotlin/time/Clock$System" managed-type-name="Kotlin.Time.ClockSystem" token="33554645" />
+      <entry key="kotlin/time/Clock" java-name="kotlin/time/Clock" managed-type-name="Kotlin.Time.IClock" token="33554646" skip-in-java-to-managed="True" />
+      <entry key="kotlin/time/ComparableTimeMark$DefaultImpls" java-name="kotlin/time/ComparableTimeMark$DefaultImpls" managed-type-name="Kotlin.Time.ComparableTimeMarkDefaultImpls" token="33554648" />
+      <entry key="kotlin/time/ComparableTimeMark" java-name="kotlin/time/ComparableTimeMark" managed-type-name="Kotlin.Time.IComparableTimeMark" token="33554649" skip-in-java-to-managed="True" />
+      <entry key="kotlin/time/ExperimentalTime" java-name="kotlin/time/ExperimentalTime" managed-type-name="Kotlin.Time.IExperimentalTime" token="33554651" skip-in-java-to-managed="True" />
+      <entry key="kotlin/time/Instant" java-name="kotlin/time/Instant" managed-type-name="Kotlin.Time.Instant" token="33554653" />
+      <entry key="kotlin/time/Instant$Companion" java-name="kotlin/time/Instant$Companion" managed-type-name="Kotlin.Time.Instant/CompanionStatic" token="33554654" />
+      <entry key="kotlin/time/InstantJvmKt" java-name="kotlin/time/InstantJvmKt" managed-type-name="Kotlin.Time.InstantJvmKt" token="33554655" />
+      <entry key="kotlin/time/InstantKt" java-name="kotlin/time/InstantKt" managed-type-name="Kotlin.Time.InstantKt" token="33554656" />
+      <entry key="kotlin/time/TimeMark$DefaultImpls" java-name="kotlin/time/TimeMark$DefaultImpls" managed-type-name="Kotlin.Time.TimeMarkDefaultImpls" token="33554657" />
+      <entry key="kotlin/time/TimeMark" java-name="kotlin/time/TimeMark" managed-type-name="Kotlin.Time.ITimeMark" token="33554658" skip-in-java-to-managed="True" />
+      <entry key="kotlin/time/TimeSource$Monotonic" java-name="kotlin/time/TimeSource$Monotonic" managed-type-name="Kotlin.Time.TimeSourceMonotonic" token="33554660" />
+      <entry key="kotlin/time/TimeSource$Monotonic$ValueTimeMark" java-name="kotlin/time/TimeSource$Monotonic$ValueTimeMark" managed-type-name="Kotlin.Time.TimeSourceMonotonic/ValueTimeMark" token="33554661" />
+      <entry key="kotlin/time/TimeSource$WithComparableMarks" java-name="kotlin/time/TimeSource$WithComparableMarks" managed-type-name="Kotlin.Time.ITimeSourceWithComparableMarks" token="33554662" skip-in-java-to-managed="True" />
+      <entry key="kotlin/time/TimeSource" java-name="kotlin/time/TimeSource" managed-type-name="Kotlin.Time.ITimeSource" token="33554664" skip-in-java-to-managed="True" />
+      <entry key="kotlin/time/LongSaturatedMathKt" java-name="kotlin/time/LongSaturatedMathKt" managed-type-name="Kotlin.Time.LongSaturatedMathKt" token="33554666" />
+      <entry key="kotlin/time/MeasureTimeKt" java-name="kotlin/time/MeasureTimeKt" managed-type-name="Kotlin.Time.MeasureTimeKt" token="33554667" />
+      <entry key="kotlin/time/MonoTimeSourceKt" java-name="kotlin/time/MonoTimeSourceKt" managed-type-name="Kotlin.Time.MonoTimeSourceKt" token="33554668" />
+      <entry key="kotlin/time/TestTimeSource" java-name="kotlin/time/TestTimeSource" managed-type-name="Kotlin.Time.TestTimeSource" token="33554669" />
+      <entry key="kotlin/time/TimedValue" java-name="kotlin/time/TimedValue" managed-type-name="Kotlin.Time.TimedValue" token="33554670" />
+      <entry key="kotlin/time/jdk8/DurationConversionsJDK8Kt" java-name="kotlin/time/jdk8/DurationConversionsJDK8Kt" managed-type-name="Kotlin.Time.Jdk8.DurationConversionsJDK8Kt" token="33554671" />
+      <entry key="kotlin/time/jdk8/InstantConversionsJDK8Kt" java-name="kotlin/time/jdk8/InstantConversionsJDK8Kt" managed-type-name="Kotlin.Time.Jdk8.InstantConversionsJDK8Kt" token="33554672" />
+      <entry key="kotlin/text/CharCategory" java-name="kotlin/text/CharCategory" managed-type-name="Kotlin.Text.CharCategory" token="33554673" />
+      <entry key="kotlin/text/CharCategory$Companion" java-name="kotlin/text/CharCategory$Companion" managed-type-name="Kotlin.Text.CharCategory/CompanionStatic" token="33554674" />
+      <entry key="kotlin/text/CharDirectionality" java-name="kotlin/text/CharDirectionality" managed-type-name="Kotlin.Text.CharDirectionality" token="33554675" />
+      <entry key="kotlin/text/CharDirectionality$Companion" java-name="kotlin/text/CharDirectionality$Companion" managed-type-name="Kotlin.Text.CharDirectionality/CompanionStatic" token="33554676" />
+      <entry key="kotlin/text/Charsets" java-name="kotlin/text/Charsets" managed-type-name="Kotlin.Text.Charsets" token="33554677" />
+      <entry key="kotlin/text/CharsetsKt" java-name="kotlin/text/CharsetsKt" managed-type-name="Kotlin.Text.CharsetsKt" token="33554678" />
+      <entry key="kotlin/text/CharsKt" java-name="kotlin/text/CharsKt" managed-type-name="Kotlin.Text.CharsKt" token="33554679" />
+      <entry key="kotlin/text/HexExtensionsKt" java-name="kotlin/text/HexExtensionsKt" managed-type-name="Kotlin.Text.HexExtensionsKt" token="33554680" />
+      <entry key="kotlin/text/HexFormat" java-name="kotlin/text/HexFormat" managed-type-name="Kotlin.Text.HexFormat" token="33554681" />
+      <entry key="kotlin/text/HexFormat$Builder" java-name="kotlin/text/HexFormat$Builder" managed-type-name="Kotlin.Text.HexFormat/Builder" token="33554682" />
+      <entry key="kotlin/text/HexFormat$BytesHexFormat" java-name="kotlin/text/HexFormat$BytesHexFormat" managed-type-name="Kotlin.Text.HexFormat/BytesHexFormat" token="33554683" />
+      <entry key="kotlin/text/HexFormat$BytesHexFormat$Builder" java-name="kotlin/text/HexFormat$BytesHexFormat$Builder" managed-type-name="Kotlin.Text.HexFormat/BytesHexFormat/Builder" token="33554684" />
+      <entry key="kotlin/text/HexFormat$Companion" java-name="kotlin/text/HexFormat$Companion" managed-type-name="Kotlin.Text.HexFormat/CompanionStatic" token="33554685" />
+      <entry key="kotlin/text/HexFormat$NumberHexFormat" java-name="kotlin/text/HexFormat$NumberHexFormat" managed-type-name="Kotlin.Text.HexFormat/NumberHexFormat" token="33554686" />
+      <entry key="kotlin/text/HexFormat$NumberHexFormat$Builder" java-name="kotlin/text/HexFormat$NumberHexFormat$Builder" managed-type-name="Kotlin.Text.HexFormat/NumberHexFormat/Builder" token="33554687" />
+      <entry key="kotlin/text/HexFormatKt" java-name="kotlin/text/HexFormatKt" managed-type-name="Kotlin.Text.HexFormatKt" token="33554688" />
+      <entry key="kotlin/text/MatchGroupCollection" java-name="kotlin/text/MatchGroupCollection" managed-type-name="Kotlin.Text.IMatchGroupCollection" token="33554689" skip-in-java-to-managed="True" />
+      <entry key="kotlin/text/MatchNamedGroupCollection" java-name="kotlin/text/MatchNamedGroupCollection" managed-type-name="Kotlin.Text.IMatchNamedGroupCollection" token="33554691" skip-in-java-to-managed="True" />
+      <entry key="kotlin/text/MatchResult$DefaultImpls" java-name="kotlin/text/MatchResult$DefaultImpls" managed-type-name="Kotlin.Text.MatchResultDefaultImpls" token="33554693" />
+      <entry key="kotlin/text/MatchResult$Destructured" java-name="kotlin/text/MatchResult$Destructured" managed-type-name="Kotlin.Text.MatchResultDestructured" token="33554694" />
+      <entry key="kotlin/text/MatchResult" java-name="kotlin/text/MatchResult" managed-type-name="Kotlin.Text.IMatchResult" token="33554695" skip-in-java-to-managed="True" />
+      <entry key="kotlin/text/MatchGroup" java-name="kotlin/text/MatchGroup" managed-type-name="Kotlin.Text.MatchGroup" token="33554697" />
+      <entry key="kotlin/text/Regex" java-name="kotlin/text/Regex" managed-type-name="Kotlin.Text.Regex" token="33554698" />
+      <entry key="kotlin/text/Regex$Companion" java-name="kotlin/text/Regex$Companion" managed-type-name="Kotlin.Text.Regex/CompanionStatic" token="33554699" />
+      <entry key="kotlin/text/RegexKt" java-name="kotlin/text/RegexKt" managed-type-name="Kotlin.Text.RegexKt" token="33554700" />
+      <entry key="kotlin/text/RegexOption" java-name="kotlin/text/RegexOption" managed-type-name="Kotlin.Text.RegexOption" token="33554701" />
+      <entry key="kotlin/text/StringsKt" java-name="kotlin/text/StringsKt" managed-type-name="Kotlin.Text.StringsKt" token="33554702" />
+      <entry key="kotlin/text/TypeAliasesKt" java-name="kotlin/text/TypeAliasesKt" managed-type-name="Kotlin.Text.TypeAliasesKt" token="33554703" />
+      <entry key="kotlin/text/Typography" java-name="kotlin/text/Typography" managed-type-name="Kotlin.Text.Typography" token="33554704" />
+      <entry key="kotlin/text/UHexExtensionsKt" java-name="kotlin/text/UHexExtensionsKt" managed-type-name="Kotlin.Text.UHexExtensionsKt" token="33554705" />
+      <entry key="kotlin/text/UStringsKt" java-name="kotlin/text/UStringsKt" managed-type-name="Kotlin.Text.UStringsKt" token="33554706" />
+      <entry key="kotlin/text/_OneToManyTitlecaseMappingsKt" java-name="kotlin/text/_OneToManyTitlecaseMappingsKt" managed-type-name="Kotlin.Text._OneToManyTitlecaseMappingsKt" token="33554707" />
+      <entry key="kotlin/text/jdk8/RegexExtensionsJDK8Kt" java-name="kotlin/text/jdk8/RegexExtensionsJDK8Kt" managed-type-name="Kotlin.Text.Jdk8.RegexExtensionsJDK8Kt" token="33554708" />
+      <entry key="kotlin/system/ProcessKt" java-name="kotlin/system/ProcessKt" managed-type-name="Kotlin.System.ProcessKt" token="33554709" />
+      <entry key="kotlin/system/TimingKt" java-name="kotlin/system/TimingKt" managed-type-name="Kotlin.System.TimingKt" token="33554710" />
+      <entry key="kotlin/streams/jdk8/StreamsKt" java-name="kotlin/streams/jdk8/StreamsKt" managed-type-name="Kotlin.Streams.Jdk8.StreamsKt" token="33554711" />
+      <entry key="kotlin/sequences/Sequence" java-name="kotlin/sequences/Sequence" managed-type-name="Kotlin.Sequences.ISequence" token="33554712" skip-in-java-to-managed="True" />
+      <entry key="kotlin/sequences/SequenceScope" java-name="kotlin/sequences/SequenceScope" managed-type-name="Kotlin.Sequences.SequenceScope" token="33554714" />
+      <entry key="kotlin/sequences/SequencesKt" java-name="kotlin/sequences/SequencesKt" managed-type-name="Kotlin.Sequences.SequencesKt" token="33554716" />
+      <entry key="kotlin/sequences/USequencesKt" java-name="kotlin/sequences/USequencesKt" managed-type-name="Kotlin.Sequences.USequencesKt" token="33554717" />
+      <entry key="kotlin/reflect/KAnnotatedElement" java-name="kotlin/reflect/KAnnotatedElement" managed-type-name="Kotlin.Reflect.IKAnnotatedElement" token="33554718" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KCallable$DefaultImpls" java-name="kotlin/reflect/KCallable$DefaultImpls" managed-type-name="Kotlin.Reflect.KCallableDefaultImpls" token="33554720" />
+      <entry key="kotlin/reflect/KCallable" java-name="kotlin/reflect/KCallable" managed-type-name="Kotlin.Reflect.IKCallable" token="33554721" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KClass$DefaultImpls" java-name="kotlin/reflect/KClass$DefaultImpls" managed-type-name="Kotlin.Reflect.KClassDefaultImpls" token="33554723" />
+      <entry key="kotlin/reflect/KClass" java-name="kotlin/reflect/KClass" managed-type-name="Kotlin.Reflect.IKClass" token="33554724" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KClassifier" java-name="kotlin/reflect/KClassifier" managed-type-name="Kotlin.Reflect.IKClassifier" token="33554726" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KDeclarationContainer" java-name="kotlin/reflect/KDeclarationContainer" managed-type-name="Kotlin.Reflect.IKDeclarationContainer" token="33554728" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KFunction$DefaultImpls" java-name="kotlin/reflect/KFunction$DefaultImpls" managed-type-name="Kotlin.Reflect.KFunctionDefaultImpls" token="33554730" />
+      <entry key="kotlin/reflect/KFunction" java-name="kotlin/reflect/KFunction" managed-type-name="Kotlin.Reflect.IKFunction" token="33554731" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KMutableProperty$Setter" java-name="kotlin/reflect/KMutableProperty$Setter" managed-type-name="Kotlin.Reflect.IKMutablePropertySetter" token="33554733" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KMutableProperty" java-name="kotlin/reflect/KMutableProperty" managed-type-name="Kotlin.Reflect.IKMutableProperty" token="33554735" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KMutableProperty0$Setter" java-name="kotlin/reflect/KMutableProperty0$Setter" managed-type-name="Kotlin.Reflect.IKMutableProperty0Setter" token="33554737" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KMutableProperty0" java-name="kotlin/reflect/KMutableProperty0" managed-type-name="Kotlin.Reflect.IKMutableProperty0" token="33554739" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KMutableProperty1$Setter" java-name="kotlin/reflect/KMutableProperty1$Setter" managed-type-name="Kotlin.Reflect.IKMutableProperty1Setter" token="33554741" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KMutableProperty1" java-name="kotlin/reflect/KMutableProperty1" managed-type-name="Kotlin.Reflect.IKMutableProperty1" token="33554743" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KMutableProperty2$Setter" java-name="kotlin/reflect/KMutableProperty2$Setter" managed-type-name="Kotlin.Reflect.IKMutableProperty2Setter" token="33554745" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KMutableProperty2" java-name="kotlin/reflect/KMutableProperty2" managed-type-name="Kotlin.Reflect.IKMutableProperty2" token="33554747" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KParameter$DefaultImpls" java-name="kotlin/reflect/KParameter$DefaultImpls" managed-type-name="Kotlin.Reflect.KParameterDefaultImpls" token="33554749" />
+      <entry key="kotlin/reflect/KParameter$Kind" java-name="kotlin/reflect/KParameter$Kind" managed-type-name="Kotlin.Reflect.KParameterKind" token="33554750" />
+      <entry key="kotlin/reflect/KParameter" java-name="kotlin/reflect/KParameter" managed-type-name="Kotlin.Reflect.IKParameter" token="33554751" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty$Accessor" java-name="kotlin/reflect/KProperty$Accessor" managed-type-name="Kotlin.Reflect.IKPropertyAccessor" token="33554753" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty$DefaultImpls" java-name="kotlin/reflect/KProperty$DefaultImpls" managed-type-name="Kotlin.Reflect.KPropertyDefaultImpls" token="33554755" />
+      <entry key="kotlin/reflect/KProperty$Getter" java-name="kotlin/reflect/KProperty$Getter" managed-type-name="Kotlin.Reflect.IKPropertyGetter" token="33554756" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty" java-name="kotlin/reflect/KProperty" managed-type-name="Kotlin.Reflect.IKProperty" token="33554758" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty0$Getter" java-name="kotlin/reflect/KProperty0$Getter" managed-type-name="Kotlin.Reflect.IKProperty0Getter" token="33554760" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty0" java-name="kotlin/reflect/KProperty0" managed-type-name="Kotlin.Reflect.IKProperty0" token="33554762" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty1$Getter" java-name="kotlin/reflect/KProperty1$Getter" managed-type-name="Kotlin.Reflect.IKProperty1Getter" token="33554764" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty1" java-name="kotlin/reflect/KProperty1" managed-type-name="Kotlin.Reflect.IKProperty1" token="33554766" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty2$Getter" java-name="kotlin/reflect/KProperty2$Getter" managed-type-name="Kotlin.Reflect.IKProperty2Getter" token="33554768" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KProperty2" java-name="kotlin/reflect/KProperty2" managed-type-name="Kotlin.Reflect.IKProperty2" token="33554770" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KType$DefaultImpls" java-name="kotlin/reflect/KType$DefaultImpls" managed-type-name="Kotlin.Reflect.KTypeDefaultImpls" token="33554772" />
+      <entry key="kotlin/reflect/KType" java-name="kotlin/reflect/KType" managed-type-name="Kotlin.Reflect.IKType" token="33554773" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KTypeParameter" java-name="kotlin/reflect/KTypeParameter" managed-type-name="Kotlin.Reflect.IKTypeParameter" token="33554775" skip-in-java-to-managed="True" />
+      <entry key="kotlin/reflect/KClasses" java-name="kotlin/reflect/KClasses" managed-type-name="Kotlin.Reflect.KClasses" token="33554777" />
+      <entry key="kotlin/reflect/KClassesImplKt" java-name="kotlin/reflect/KClassesImplKt" managed-type-name="Kotlin.Reflect.KClassesImplKt" token="33554778" />
+      <entry key="kotlin/reflect/KTypeProjection" java-name="kotlin/reflect/KTypeProjection" managed-type-name="Kotlin.Reflect.KTypeProjection" token="33554779" />
+      <entry key="kotlin/reflect/KTypeProjection$Companion" java-name="kotlin/reflect/KTypeProjection$Companion" managed-type-name="Kotlin.Reflect.KTypeProjection/CompanionStatic" token="33554780" />
+      <entry key="kotlin/reflect/KTypeProjection$WhenMappings" java-name="kotlin/reflect/KTypeProjection$WhenMappings" managed-type-name="Kotlin.Reflect.KTypeProjection/WhenMappings" token="33554781" />
+      <entry key="kotlin/reflect/KVariance" java-name="kotlin/reflect/KVariance" managed-type-name="Kotlin.Reflect.KVariance" token="33554782" />
+      <entry key="kotlin/reflect/KVisibility" java-name="kotlin/reflect/KVisibility" managed-type-name="Kotlin.Reflect.KVisibility" token="33554783" />
+      <entry key="kotlin/reflect/TypeOfKt" java-name="kotlin/reflect/TypeOfKt" managed-type-name="Kotlin.Reflect.TypeOfKt" token="33554784" />
+      <entry key="kotlin/reflect/TypesJVMKt" java-name="kotlin/reflect/TypesJVMKt" managed-type-name="Kotlin.Reflect.TypesJVMKt" token="33554785" />
+      <entry key="kotlin/reflect/TypesJVMKt$WhenMappings" java-name="kotlin/reflect/TypesJVMKt$WhenMappings" managed-type-name="Kotlin.Reflect.TypesJVMKt/WhenMappings" token="33554786" />
+      <entry key="kotlin/random/PlatformRandomKt" java-name="kotlin/random/PlatformRandomKt" managed-type-name="Kotlin.Random.PlatformRandomKt" token="33554787" />
+      <entry key="kotlin/random/Random" java-name="kotlin/random/Random" managed-type-name="Kotlin.Random.Random" token="33554788" />
+      <entry key="kotlin/random/Random$Default" java-name="kotlin/random/Random$Default" managed-type-name="Kotlin.Random.Random/DefaultStatic" token="33554789" />
+      <entry key="kotlin/random/RandomKt" java-name="kotlin/random/RandomKt" managed-type-name="Kotlin.Random.RandomKt" token="33554791" />
+      <entry key="kotlin/random/URandomKt" java-name="kotlin/random/URandomKt" managed-type-name="Kotlin.Random.URandomKt" token="33554792" />
+      <entry key="kotlin/properties/Delegates" java-name="kotlin/properties/Delegates" managed-type-name="Kotlin.Properties.Delegates" token="33554793" />
+      <entry key="kotlin/properties/PropertyDelegateProvider" java-name="kotlin/properties/PropertyDelegateProvider" managed-type-name="Kotlin.Properties.IPropertyDelegateProvider" token="33554794" skip-in-java-to-managed="True" />
+      <entry key="kotlin/properties/ReadOnlyProperty" java-name="kotlin/properties/ReadOnlyProperty" managed-type-name="Kotlin.Properties.IReadOnlyProperty" token="33554796" skip-in-java-to-managed="True" />
+      <entry key="kotlin/properties/ReadWriteProperty" java-name="kotlin/properties/ReadWriteProperty" managed-type-name="Kotlin.Properties.IReadWriteProperty" token="33554798" skip-in-java-to-managed="True" />
+      <entry key="kotlin/properties/ObservableProperty" java-name="kotlin/properties/ObservableProperty" managed-type-name="Kotlin.Properties.ObservableProperty" token="33554800" />
+      <entry key="kotlin/math/MathKt" java-name="kotlin/math/MathKt" managed-type-name="Kotlin.Math.MathKt" token="33554802" />
+      <entry key="kotlin/math/UMathKt" java-name="kotlin/math/UMathKt" managed-type-name="Kotlin.Math.UMathKt" token="33554803" />
+      <entry key="kotlin/jvm/ImplicitlyActualizedByJvmDeclaration" java-name="kotlin/jvm/ImplicitlyActualizedByJvmDeclaration" managed-type-name="Kotlin.Jvm.IImplicitlyActualizedByJvmDeclaration" token="33554804" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmDefault" java-name="kotlin/jvm/JvmDefault" managed-type-name="Kotlin.Jvm.IJvmDefault" token="33554806" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmDefaultWithCompatibility" java-name="kotlin/jvm/JvmDefaultWithCompatibility" managed-type-name="Kotlin.Jvm.IJvmDefaultWithCompatibility" token="33554808" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmDefaultWithoutCompatibility" java-name="kotlin/jvm/JvmDefaultWithoutCompatibility" managed-type-name="Kotlin.Jvm.IJvmDefaultWithoutCompatibility" token="33554810" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmExposeBoxed" java-name="kotlin/jvm/JvmExposeBoxed" managed-type-name="Kotlin.Jvm.IJvmExposeBoxed" token="33554812" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmField" java-name="kotlin/jvm/JvmField" managed-type-name="Kotlin.Jvm.IJvmField" token="33554814" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmInline" java-name="kotlin/jvm/JvmInline" managed-type-name="Kotlin.Jvm.IJvmInline" token="33554816" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmMultifileClass" java-name="kotlin/jvm/JvmMultifileClass" managed-type-name="Kotlin.Jvm.IJvmMultifileClass" token="33554818" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmName" java-name="kotlin/jvm/JvmName" managed-type-name="Kotlin.Jvm.IJvmName" token="33554820" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmOverloads" java-name="kotlin/jvm/JvmOverloads" managed-type-name="Kotlin.Jvm.IJvmOverloads" token="33554822" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmRecord" java-name="kotlin/jvm/JvmRecord" managed-type-name="Kotlin.Jvm.IJvmRecord" token="33554824" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmSerializableLambda" java-name="kotlin/jvm/JvmSerializableLambda" managed-type-name="Kotlin.Jvm.IJvmSerializableLambda" token="33554826" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmStatic" java-name="kotlin/jvm/JvmStatic" managed-type-name="Kotlin.Jvm.IJvmStatic" token="33554828" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmSuppressWildcards" java-name="kotlin/jvm/JvmSuppressWildcards" managed-type-name="Kotlin.Jvm.IJvmSuppressWildcards" token="33554830" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmSynthetic" java-name="kotlin/jvm/JvmSynthetic" managed-type-name="Kotlin.Jvm.IJvmSynthetic" token="33554832" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmWildcard" java-name="kotlin/jvm/JvmWildcard" managed-type-name="Kotlin.Jvm.IJvmWildcard" token="33554834" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/PurelyImplements" java-name="kotlin/jvm/PurelyImplements" managed-type-name="Kotlin.Jvm.IPurelyImplements" token="33554837" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/Strictfp" java-name="kotlin/jvm/Strictfp" managed-type-name="Kotlin.Jvm.IStrictfp" token="33554839" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/Synchronized" java-name="kotlin/jvm/Synchronized" managed-type-name="Kotlin.Jvm.ISynchronized" token="33554841" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/Throws" java-name="kotlin/jvm/Throws" managed-type-name="Kotlin.Jvm.IThrows" token="33554843" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/Transient" java-name="kotlin/jvm/Transient" managed-type-name="Kotlin.Jvm.ITransient" token="33554845" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/Volatile" java-name="kotlin/jvm/Volatile" managed-type-name="Kotlin.Jvm.IVolatile" token="33554847" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/JvmClassMappingKt" java-name="kotlin/jvm/JvmClassMappingKt" managed-type-name="Kotlin.Jvm.JvmClassMappingKt" token="33554849" />
+      <entry key="kotlin/jvm/KotlinReflectionNotSupportedError" java-name="kotlin/jvm/KotlinReflectionNotSupportedError" managed-type-name="Kotlin.Jvm.KotlinReflectionNotSupportedError" token="33554865" />
+      <entry key="kotlin/jvm/optionals/OptionalsKt" java-name="kotlin/jvm/optionals/OptionalsKt" managed-type-name="Kotlin.Jvm.Optionals.OptionalsKt" token="33554872" />
+      <entry key="kotlin/jvm/jdk8/JvmRepeatableKt" java-name="kotlin/jvm/jdk8/JvmRepeatableKt" managed-type-name="Kotlin.Jvm.Jdk8.JvmRepeatableKt" token="33554873" />
+      <entry key="kotlin/jvm/internal/AdaptedFunctionReference" java-name="kotlin/jvm/internal/AdaptedFunctionReference" managed-type-name="Kotlin.Jvm.Internal.AdaptedFunctionReference" token="33554874" />
+      <entry key="kotlin/jvm/internal/ArrayIteratorKt" java-name="kotlin/jvm/internal/ArrayIteratorKt" managed-type-name="Kotlin.Jvm.Internal.ArrayIteratorKt" token="33554875" />
+      <entry key="kotlin/jvm/internal/ArrayIteratorsKt" java-name="kotlin/jvm/internal/ArrayIteratorsKt" managed-type-name="Kotlin.Jvm.Internal.ArrayIteratorsKt" token="33554876" />
+      <entry key="kotlin/jvm/internal/BooleanSpreadBuilder" java-name="kotlin/jvm/internal/BooleanSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.BooleanSpreadBuilder" token="33554877" />
+      <entry key="kotlin/jvm/internal/ByteSpreadBuilder" java-name="kotlin/jvm/internal/ByteSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.ByteSpreadBuilder" token="33554878" />
+      <entry key="kotlin/jvm/internal/CallableReference" java-name="kotlin/jvm/internal/CallableReference" managed-type-name="Kotlin.Jvm.Internal.CallableReference" token="33554879" />
+      <entry key="kotlin/jvm/internal/CharSpreadBuilder" java-name="kotlin/jvm/internal/CharSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.CharSpreadBuilder" token="33554881" />
+      <entry key="kotlin/jvm/internal/ClassReference" java-name="kotlin/jvm/internal/ClassReference" managed-type-name="Kotlin.Jvm.Internal.ClassReference" token="33554882" />
+      <entry key="kotlin/jvm/internal/ClassReference$Companion" java-name="kotlin/jvm/internal/ClassReference$Companion" managed-type-name="Kotlin.Jvm.Internal.ClassReference/CompanionStatic" token="33554883" />
+      <entry key="kotlin/jvm/internal/CollectionToArray" java-name="kotlin/jvm/internal/CollectionToArray" managed-type-name="Kotlin.Jvm.Internal.CollectionToArray" token="33554884" />
+      <entry key="kotlin/jvm/internal/DefaultConstructorMarker" java-name="kotlin/jvm/internal/DefaultConstructorMarker" managed-type-name="Kotlin.Jvm.Internal.DefaultConstructorMarker" token="33554885" />
+      <entry key="kotlin/jvm/internal/DoubleSpreadBuilder" java-name="kotlin/jvm/internal/DoubleSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.DoubleSpreadBuilder" token="33554886" />
+      <entry key="kotlin/jvm/internal/FloatSpreadBuilder" java-name="kotlin/jvm/internal/FloatSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.FloatSpreadBuilder" token="33554887" />
+      <entry key="kotlin/jvm/internal/FunctionReference" java-name="kotlin/jvm/internal/FunctionReference" managed-type-name="Kotlin.Jvm.Internal.FunctionReference" token="33554888" />
+      <entry key="kotlin/jvm/internal/FunInterfaceConstructorReference" java-name="kotlin/jvm/internal/FunInterfaceConstructorReference" managed-type-name="Kotlin.Jvm.Internal.FunInterfaceConstructorReference" token="33554889" />
+      <entry key="kotlin/jvm/internal/ClassBasedDeclarationContainer" java-name="kotlin/jvm/internal/ClassBasedDeclarationContainer" managed-type-name="Kotlin.Jvm.Internal.IClassBasedDeclarationContainer" token="33554890" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/FunctionAdapter" java-name="kotlin/jvm/internal/FunctionAdapter" managed-type-name="Kotlin.Jvm.Internal.IFunctionAdapter" token="33554892" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/FunctionBase" java-name="kotlin/jvm/internal/FunctionBase" managed-type-name="Kotlin.Jvm.Internal.IFunctionBase" token="33554894" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/KTypeBase" java-name="kotlin/jvm/internal/KTypeBase" managed-type-name="Kotlin.Jvm.Internal.IKTypeBase" token="33554896" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/InlineMarker" java-name="kotlin/jvm/internal/InlineMarker" managed-type-name="Kotlin.Jvm.Internal.InlineMarker" token="33554898" />
+      <entry key="kotlin/jvm/internal/Intrinsics" java-name="kotlin/jvm/internal/Intrinsics" managed-type-name="Kotlin.Jvm.Internal.Intrinsics" token="33554899" />
+      <entry key="kotlin/jvm/internal/Intrinsics$Kotlin" java-name="kotlin/jvm/internal/Intrinsics$Kotlin" managed-type-name="Kotlin.Jvm.Internal.Intrinsics/Kotlin" token="33554900" />
+      <entry key="kotlin/jvm/internal/IntSpreadBuilder" java-name="kotlin/jvm/internal/IntSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.IntSpreadBuilder" token="33554901" />
+      <entry key="kotlin/jvm/internal/RepeatableContainer" java-name="kotlin/jvm/internal/RepeatableContainer" managed-type-name="Kotlin.Jvm.Internal.IRepeatableContainer" token="33554902" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/SerializedIr" java-name="kotlin/jvm/internal/SerializedIr" managed-type-name="Kotlin.Jvm.Internal.ISerializedIr" token="33554904" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/SourceDebugExtension" java-name="kotlin/jvm/internal/SourceDebugExtension" managed-type-name="Kotlin.Jvm.Internal.ISourceDebugExtension" token="33554906" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/Lambda" java-name="kotlin/jvm/internal/Lambda" managed-type-name="Kotlin.Jvm.Internal.Lambda" token="33554908" />
+      <entry key="kotlin/jvm/internal/LocalVariableReference" java-name="kotlin/jvm/internal/LocalVariableReference" managed-type-name="Kotlin.Jvm.Internal.LocalVariableReference" token="33554910" />
+      <entry key="kotlin/jvm/internal/LocalVariableReferencesKt" java-name="kotlin/jvm/internal/LocalVariableReferencesKt" managed-type-name="Kotlin.Jvm.Internal.LocalVariableReferencesKt" token="33554911" />
+      <entry key="kotlin/jvm/internal/LongSpreadBuilder" java-name="kotlin/jvm/internal/LongSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.LongSpreadBuilder" token="33554912" />
+      <entry key="kotlin/jvm/internal/MagicApiIntrinsics" java-name="kotlin/jvm/internal/MagicApiIntrinsics" managed-type-name="Kotlin.Jvm.Internal.MagicApiIntrinsics" token="33554913" />
+      <entry key="kotlin/jvm/internal/MutableLocalVariableReference" java-name="kotlin/jvm/internal/MutableLocalVariableReference" managed-type-name="Kotlin.Jvm.Internal.MutableLocalVariableReference" token="33554914" />
+      <entry key="kotlin/jvm/internal/MutablePropertyReference" java-name="kotlin/jvm/internal/MutablePropertyReference" managed-type-name="Kotlin.Jvm.Internal.MutablePropertyReference" token="33554915" />
+      <entry key="kotlin/jvm/internal/MutablePropertyReference0" java-name="kotlin/jvm/internal/MutablePropertyReference0" managed-type-name="Kotlin.Jvm.Internal.MutablePropertyReference0" token="33554917" />
+      <entry key="kotlin/jvm/internal/MutablePropertyReference1" java-name="kotlin/jvm/internal/MutablePropertyReference1" managed-type-name="Kotlin.Jvm.Internal.MutablePropertyReference1" token="33554919" />
+      <entry key="kotlin/jvm/internal/MutablePropertyReference2" java-name="kotlin/jvm/internal/MutablePropertyReference2" managed-type-name="Kotlin.Jvm.Internal.MutablePropertyReference2" token="33554921" />
+      <entry key="kotlin/jvm/internal/PackageReference" java-name="kotlin/jvm/internal/PackageReference" managed-type-name="Kotlin.Jvm.Internal.PackageReference" token="33554923" />
+      <entry key="kotlin/jvm/internal/PrimitiveSpreadBuilder" java-name="kotlin/jvm/internal/PrimitiveSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.PrimitiveSpreadBuilder" token="33554924" />
+      <entry key="kotlin/jvm/internal/PropertyReference" java-name="kotlin/jvm/internal/PropertyReference" managed-type-name="Kotlin.Jvm.Internal.PropertyReference" token="33554926" />
+      <entry key="kotlin/jvm/internal/PropertyReference0" java-name="kotlin/jvm/internal/PropertyReference0" managed-type-name="Kotlin.Jvm.Internal.PropertyReference0" token="33554928" />
+      <entry key="kotlin/jvm/internal/PropertyReference1" java-name="kotlin/jvm/internal/PropertyReference1" managed-type-name="Kotlin.Jvm.Internal.PropertyReference1" token="33554930" />
+      <entry key="kotlin/jvm/internal/PropertyReference2" java-name="kotlin/jvm/internal/PropertyReference2" managed-type-name="Kotlin.Jvm.Internal.PropertyReference2" token="33554932" />
+      <entry key="kotlin/jvm/internal/Ref" java-name="kotlin/jvm/internal/Ref" managed-type-name="Kotlin.Jvm.Internal.Ref" token="33554934" />
+      <entry key="kotlin/jvm/internal/Ref$BooleanRef" java-name="kotlin/jvm/internal/Ref$BooleanRef" managed-type-name="Kotlin.Jvm.Internal.Ref/BooleanRef" token="33554935" />
+      <entry key="kotlin/jvm/internal/Ref$ByteRef" java-name="kotlin/jvm/internal/Ref$ByteRef" managed-type-name="Kotlin.Jvm.Internal.Ref/ByteRef" token="33554936" />
+      <entry key="kotlin/jvm/internal/Ref$CharRef" java-name="kotlin/jvm/internal/Ref$CharRef" managed-type-name="Kotlin.Jvm.Internal.Ref/CharRef" token="33554937" />
+      <entry key="kotlin/jvm/internal/Ref$DoubleRef" java-name="kotlin/jvm/internal/Ref$DoubleRef" managed-type-name="Kotlin.Jvm.Internal.Ref/DoubleRef" token="33554938" />
+      <entry key="kotlin/jvm/internal/Ref$FloatRef" java-name="kotlin/jvm/internal/Ref$FloatRef" managed-type-name="Kotlin.Jvm.Internal.Ref/FloatRef" token="33554939" />
+      <entry key="kotlin/jvm/internal/Ref$IntRef" java-name="kotlin/jvm/internal/Ref$IntRef" managed-type-name="Kotlin.Jvm.Internal.Ref/IntRef" token="33554940" />
+      <entry key="kotlin/jvm/internal/Ref$LongRef" java-name="kotlin/jvm/internal/Ref$LongRef" managed-type-name="Kotlin.Jvm.Internal.Ref/LongRef" token="33554941" />
+      <entry key="kotlin/jvm/internal/Ref$ObjectRef" java-name="kotlin/jvm/internal/Ref$ObjectRef" managed-type-name="Kotlin.Jvm.Internal.Ref/ObjectRef" token="33554942" />
+      <entry key="kotlin/jvm/internal/Ref$ShortRef" java-name="kotlin/jvm/internal/Ref$ShortRef" managed-type-name="Kotlin.Jvm.Internal.Ref/ShortRef" token="33554943" />
+      <entry key="kotlin/jvm/internal/Reflection" java-name="kotlin/jvm/internal/Reflection" managed-type-name="Kotlin.Jvm.Internal.Reflection" token="33554944" />
+      <entry key="kotlin/jvm/internal/ReflectionFactory" java-name="kotlin/jvm/internal/ReflectionFactory" managed-type-name="Kotlin.Jvm.Internal.ReflectionFactory" token="33554945" />
+      <entry key="kotlin/jvm/internal/ShortSpreadBuilder" java-name="kotlin/jvm/internal/ShortSpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.ShortSpreadBuilder" token="33554948" />
+      <entry key="kotlin/jvm/internal/SpreadBuilder" java-name="kotlin/jvm/internal/SpreadBuilder" managed-type-name="Kotlin.Jvm.Internal.SpreadBuilder" token="33554950" />
+      <entry key="kotlin/jvm/internal/TypeIntrinsics" java-name="kotlin/jvm/internal/TypeIntrinsics" managed-type-name="Kotlin.Jvm.Internal.TypeIntrinsics" token="33554951" />
+      <entry key="kotlin/jvm/internal/TypeParameterReference" java-name="kotlin/jvm/internal/TypeParameterReference" managed-type-name="Kotlin.Jvm.Internal.TypeParameterReference" token="33554952" />
+      <entry key="kotlin/jvm/internal/TypeParameterReference$Companion" java-name="kotlin/jvm/internal/TypeParameterReference$Companion" managed-type-name="Kotlin.Jvm.Internal.TypeParameterReference/CompanionStatic" token="33554953" />
+      <entry key="kotlin/jvm/internal/TypeParameterReference$Companion$WhenMappings" java-name="kotlin/jvm/internal/TypeParameterReference$Companion$WhenMappings" managed-type-name="Kotlin.Jvm.Internal.TypeParameterReference/CompanionStatic/WhenMappings" token="33554954" />
+      <entry key="kotlin/jvm/internal/TypeReference" java-name="kotlin/jvm/internal/TypeReference" managed-type-name="Kotlin.Jvm.Internal.TypeReference" token="33554955" />
+      <entry key="kotlin/jvm/internal/TypeReference$WhenMappings" java-name="kotlin/jvm/internal/TypeReference$WhenMappings" managed-type-name="Kotlin.Jvm.Internal.TypeReference/WhenMappings" token="33554956" />
+      <entry key="kotlin/jvm/internal/unsafe/MonitorKt" java-name="kotlin/jvm/internal/unsafe/MonitorKt" managed-type-name="Kotlin.Jvm.Internal.Unsafe.MonitorKt" token="33554957" />
+      <entry key="kotlin/jvm/internal/markers/KMappedMarker" java-name="kotlin/jvm/internal/markers/KMappedMarker" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMappedMarker" token="33554958" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/markers/KMutableCollection" java-name="kotlin/jvm/internal/markers/KMutableCollection" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableCollection" token="33554960" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/markers/KMutableIterable" java-name="kotlin/jvm/internal/markers/KMutableIterable" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableIterable" token="33554962" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/markers/KMutableIterator" java-name="kotlin/jvm/internal/markers/KMutableIterator" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableIterator" token="33554964" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/markers/KMutableList" java-name="kotlin/jvm/internal/markers/KMutableList" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableList" token="33554966" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/markers/KMutableListIterator" java-name="kotlin/jvm/internal/markers/KMutableListIterator" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableListIterator" token="33554968" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/markers/KMutableMap$Entry" java-name="kotlin/jvm/internal/markers/KMutableMap$Entry" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableMapEntry" token="33554970" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/markers/KMutableMap" java-name="kotlin/jvm/internal/markers/KMutableMap" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableMap" token="33554972" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/internal/markers/KMutableSet" java-name="kotlin/jvm/internal/markers/KMutableSet" managed-type-name="Kotlin.Jvm.Internal.Markers.IKMutableSet" token="33554974" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function0" java-name="kotlin/jvm/functions/Function0" managed-type-name="Kotlin.Jvm.Functions.IFunction0" token="33554976" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function1" java-name="kotlin/jvm/functions/Function1" managed-type-name="Kotlin.Jvm.Functions.IFunction1" token="33554978" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function10" java-name="kotlin/jvm/functions/Function10" managed-type-name="Kotlin.Jvm.Functions.IFunction10" token="33554980" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function11" java-name="kotlin/jvm/functions/Function11" managed-type-name="Kotlin.Jvm.Functions.IFunction11" token="33554982" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function12" java-name="kotlin/jvm/functions/Function12" managed-type-name="Kotlin.Jvm.Functions.IFunction12" token="33554984" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function13" java-name="kotlin/jvm/functions/Function13" managed-type-name="Kotlin.Jvm.Functions.IFunction13" token="33554986" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function14" java-name="kotlin/jvm/functions/Function14" managed-type-name="Kotlin.Jvm.Functions.IFunction14" token="33554988" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function15" java-name="kotlin/jvm/functions/Function15" managed-type-name="Kotlin.Jvm.Functions.IFunction15" token="33554990" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function16" java-name="kotlin/jvm/functions/Function16" managed-type-name="Kotlin.Jvm.Functions.IFunction16" token="33554992" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function17" java-name="kotlin/jvm/functions/Function17" managed-type-name="Kotlin.Jvm.Functions.IFunction17" token="33554994" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function18" java-name="kotlin/jvm/functions/Function18" managed-type-name="Kotlin.Jvm.Functions.IFunction18" token="33554996" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function19" java-name="kotlin/jvm/functions/Function19" managed-type-name="Kotlin.Jvm.Functions.IFunction19" token="33554998" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function2" java-name="kotlin/jvm/functions/Function2" managed-type-name="Kotlin.Jvm.Functions.IFunction2" token="33555000" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function20" java-name="kotlin/jvm/functions/Function20" managed-type-name="Kotlin.Jvm.Functions.IFunction20" token="33555002" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function21" java-name="kotlin/jvm/functions/Function21" managed-type-name="Kotlin.Jvm.Functions.IFunction21" token="33555004" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function22" java-name="kotlin/jvm/functions/Function22" managed-type-name="Kotlin.Jvm.Functions.IFunction22" token="33555006" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function3" java-name="kotlin/jvm/functions/Function3" managed-type-name="Kotlin.Jvm.Functions.IFunction3" token="33555008" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function4" java-name="kotlin/jvm/functions/Function4" managed-type-name="Kotlin.Jvm.Functions.IFunction4" token="33555010" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function5" java-name="kotlin/jvm/functions/Function5" managed-type-name="Kotlin.Jvm.Functions.IFunction5" token="33555012" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function6" java-name="kotlin/jvm/functions/Function6" managed-type-name="Kotlin.Jvm.Functions.IFunction6" token="33555014" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function7" java-name="kotlin/jvm/functions/Function7" managed-type-name="Kotlin.Jvm.Functions.IFunction7" token="33555016" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function8" java-name="kotlin/jvm/functions/Function8" managed-type-name="Kotlin.Jvm.Functions.IFunction8" token="33555018" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/Function9" java-name="kotlin/jvm/functions/Function9" managed-type-name="Kotlin.Jvm.Functions.IFunction9" token="33555020" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jvm/functions/FunctionN" java-name="kotlin/jvm/functions/FunctionN" managed-type-name="Kotlin.Jvm.Functions.IFunctionN" token="33555022" skip-in-java-to-managed="True" />
+      <entry key="kotlin/js/ExperimentalJsCollectionsApi" java-name="kotlin/js/ExperimentalJsCollectionsApi" managed-type-name="Kotlin.JS.IExperimentalJsCollectionsApi" token="33555029" skip-in-java-to-managed="True" />
+      <entry key="kotlin/js/ExperimentalJsExport" java-name="kotlin/js/ExperimentalJsExport" managed-type-name="Kotlin.JS.IExperimentalJsExport" token="33555031" skip-in-java-to-managed="True" />
+      <entry key="kotlin/js/ExperimentalJsFileName" java-name="kotlin/js/ExperimentalJsFileName" managed-type-name="Kotlin.JS.IExperimentalJsFileName" token="33555033" skip-in-java-to-managed="True" />
+      <entry key="kotlin/js/ExperimentalJsReflectionCreateInstance" java-name="kotlin/js/ExperimentalJsReflectionCreateInstance" managed-type-name="Kotlin.JS.IExperimentalJsReflectionCreateInstance" token="33555035" skip-in-java-to-managed="True" />
+      <entry key="kotlin/js/ExperimentalJsStatic" java-name="kotlin/js/ExperimentalJsStatic" managed-type-name="Kotlin.JS.IExperimentalJsStatic" token="33555037" skip-in-java-to-managed="True" />
+      <entry key="kotlin/jdk7/AutoCloseableKt" java-name="kotlin/jdk7/AutoCloseableKt" managed-type-name="Kotlin.Jdk7.AutoCloseableKt" token="33555039" />
+      <entry key="kotlin/io/AccessDeniedException" java-name="kotlin/io/AccessDeniedException" managed-type-name="Kotlin.IO.AccessDeniedException" token="33555040" />
+      <entry key="kotlin/io/ByteStreamsKt" java-name="kotlin/io/ByteStreamsKt" managed-type-name="Kotlin.IO.ByteStreamsKt" token="33555041" />
+      <entry key="kotlin/io/CloseableKt" java-name="kotlin/io/CloseableKt" managed-type-name="Kotlin.IO.CloseableKt" token="33555042" />
+      <entry key="kotlin/io/ConsoleKt" java-name="kotlin/io/ConsoleKt" managed-type-name="Kotlin.IO.ConsoleKt" token="33555043" />
+      <entry key="kotlin/io/ConstantsKt" java-name="kotlin/io/ConstantsKt" managed-type-name="Kotlin.IO.ConstantsKt" token="33555044" />
+      <entry key="kotlin/io/ExceptionsKt" java-name="kotlin/io/ExceptionsKt" managed-type-name="Kotlin.IO.ExceptionsKt" token="33555045" />
+      <entry key="kotlin/io/FileAlreadyExistsException" java-name="kotlin/io/FileAlreadyExistsException" managed-type-name="Kotlin.IO.FileAlreadyExistsException" token="33555046" />
+      <entry key="kotlin/io/FilesKt" java-name="kotlin/io/FilesKt" managed-type-name="Kotlin.IO.FilesKt" token="33555047" />
+      <entry key="kotlin/io/FileSystemException" java-name="kotlin/io/FileSystemException" managed-type-name="Kotlin.IO.FileSystemException" token="33555048" />
+      <entry key="kotlin/io/FileTreeWalk" java-name="kotlin/io/FileTreeWalk" managed-type-name="Kotlin.IO.FileTreeWalk" token="33555049" />
+      <entry key="kotlin/io/FileWalkDirection" java-name="kotlin/io/FileWalkDirection" managed-type-name="Kotlin.IO.FileWalkDirection" token="33555050" />
+      <entry key="kotlin/io/NoSuchFileException" java-name="kotlin/io/NoSuchFileException" managed-type-name="Kotlin.IO.NoSuchFileException" token="33555051" />
+      <entry key="kotlin/io/OnErrorAction" java-name="kotlin/io/OnErrorAction" managed-type-name="Kotlin.IO.OnErrorAction" token="33555052" />
+      <entry key="kotlin/io/SerializableKt" java-name="kotlin/io/SerializableKt" managed-type-name="Kotlin.IO.SerializableKt" token="33555053" />
+      <entry key="kotlin/io/TextStreamsKt" java-name="kotlin/io/TextStreamsKt" managed-type-name="Kotlin.IO.TextStreamsKt" token="33555054" />
+      <entry key="kotlin/io/path/CopyActionResult" java-name="kotlin/io/path/CopyActionResult" managed-type-name="Kotlin.IO.Path.CopyActionResult" token="33555055" />
+      <entry key="kotlin/io/path/CopyActionContext" java-name="kotlin/io/path/CopyActionContext" managed-type-name="Kotlin.IO.Path.ICopyActionContext" token="33555057" skip-in-java-to-managed="True" />
+      <entry key="kotlin/io/path/ExperimentalPathApi" java-name="kotlin/io/path/ExperimentalPathApi" managed-type-name="Kotlin.IO.Path.IExperimentalPathApi" token="33555059" skip-in-java-to-managed="True" />
+      <entry key="kotlin/io/path/FileVisitorBuilder" java-name="kotlin/io/path/FileVisitorBuilder" managed-type-name="Kotlin.IO.Path.IFileVisitorBuilder" token="33555061" skip-in-java-to-managed="True" />
+      <entry key="kotlin/io/path/OnErrorResult" java-name="kotlin/io/path/OnErrorResult" managed-type-name="Kotlin.IO.Path.OnErrorResult" token="33555063" />
+      <entry key="kotlin/io/path/PathsKt" java-name="kotlin/io/path/PathsKt" managed-type-name="Kotlin.IO.Path.PathsKt" token="33555064" />
+      <entry key="kotlin/io/path/PathTreeWalkKt" java-name="kotlin/io/path/PathTreeWalkKt" managed-type-name="Kotlin.IO.Path.PathTreeWalkKt" token="33555065" />
+      <entry key="kotlin/io/path/PathWalkOption" java-name="kotlin/io/path/PathWalkOption" managed-type-name="Kotlin.IO.Path.PathWalkOption" token="33555066" />
+      <entry key="kotlin/io/encoding/Base64" java-name="kotlin/io/encoding/Base64" managed-type-name="Kotlin.IO.Encoding.Base64" token="33555067" />
+      <entry key="kotlin/io/encoding/Base64$Default" java-name="kotlin/io/encoding/Base64$Default" managed-type-name="Kotlin.IO.Encoding.Base64/DefaultStatic" token="33555068" />
+      <entry key="kotlin/io/encoding/Base64$PaddingOption" java-name="kotlin/io/encoding/Base64$PaddingOption" managed-type-name="Kotlin.IO.Encoding.Base64/PaddingOption" token="33555069" />
+      <entry key="kotlin/io/encoding/Base64JVMKt" java-name="kotlin/io/encoding/Base64JVMKt" managed-type-name="Kotlin.IO.Encoding.Base64JVMKt" token="33555070" />
+      <entry key="kotlin/io/encoding/Base64Kt" java-name="kotlin/io/encoding/Base64Kt" managed-type-name="Kotlin.IO.Encoding.Base64Kt" token="33555071" />
+      <entry key="kotlin/io/encoding/ExperimentalEncodingApi" java-name="kotlin/io/encoding/ExperimentalEncodingApi" managed-type-name="Kotlin.IO.Encoding.IExperimentalEncodingApi" token="33555073" skip-in-java-to-managed="True" />
+      <entry key="kotlin/io/encoding/StreamEncodingKt" java-name="kotlin/io/encoding/StreamEncodingKt" managed-type-name="Kotlin.IO.Encoding.StreamEncodingKt" token="33555075" />
+      <entry key="kotlin/internal/PlatformImplementationsKt" java-name="kotlin/internal/PlatformImplementationsKt" managed-type-name="Kotlin.Internal.PlatformImplementationsKt" token="33555076" />
+      <entry key="kotlin/internal/ProgressionUtilKt" java-name="kotlin/internal/ProgressionUtilKt" managed-type-name="Kotlin.Internal.ProgressionUtilKt" token="33555077" />
+      <entry key="kotlin/internal/SerializationUtilKt" java-name="kotlin/internal/SerializationUtilKt" managed-type-name="Kotlin.Internal.SerializationUtilKt" token="33555078" />
+      <entry key="kotlin/internal/UProgressionUtilKt" java-name="kotlin/internal/UProgressionUtilKt" managed-type-name="Kotlin.Internal.UProgressionUtilKt" token="33555079" />
+      <entry key="kotlin/experimental/BitwiseOperationsKt" java-name="kotlin/experimental/BitwiseOperationsKt" managed-type-name="Kotlin.Experimental.BitwiseOperationsKt" token="33555080" />
+      <entry key="kotlin/experimental/ExpectRefinement" java-name="kotlin/experimental/ExpectRefinement" managed-type-name="Kotlin.Experimental.IExpectRefinement" token="33555086" skip-in-java-to-managed="True" />
+      <entry key="kotlin/experimental/ExperimentalNativeApi" java-name="kotlin/experimental/ExperimentalNativeApi" managed-type-name="Kotlin.Experimental.IExperimentalNativeApi" token="33555088" skip-in-java-to-managed="True" />
+      <entry key="kotlin/experimental/ExperimentalObjCName" java-name="kotlin/experimental/ExperimentalObjCName" managed-type-name="Kotlin.Experimental.IExperimentalObjCName" token="33555090" skip-in-java-to-managed="True" />
+      <entry key="kotlin/experimental/ExperimentalObjCRefinement" java-name="kotlin/experimental/ExperimentalObjCRefinement" managed-type-name="Kotlin.Experimental.IExperimentalObjCRefinement" token="33555092" skip-in-java-to-managed="True" />
+      <entry key="kotlin/experimental/ExperimentalTypeInference" java-name="kotlin/experimental/ExperimentalTypeInference" managed-type-name="Kotlin.Experimental.IExperimentalTypeInference" token="33555094" skip-in-java-to-managed="True" />
+      <entry key="kotlin/enums/EnumEntriesJVMKt" java-name="kotlin/enums/EnumEntriesJVMKt" managed-type-name="Kotlin.Enums.EnumEntriesJVMKt" token="33555096" />
+      <entry key="kotlin/enums/EnumEntriesKt" java-name="kotlin/enums/EnumEntriesKt" managed-type-name="Kotlin.Enums.EnumEntriesKt" token="33555097" />
+      <entry key="kotlin/enums/EnumEntries" java-name="kotlin/enums/EnumEntries" managed-type-name="Kotlin.Enums.IEnumEntries" token="33555098" skip-in-java-to-managed="True" />
+      <entry key="kotlin/coroutines/AbstractCoroutineContextElement" java-name="kotlin/coroutines/AbstractCoroutineContextElement" managed-type-name="Kotlin.Coroutines.AbstractCoroutineContextElement" token="33555100" />
+      <entry key="kotlin/coroutines/ContinuationKt" java-name="kotlin/coroutines/ContinuationKt" managed-type-name="Kotlin.Coroutines.ContinuationKt" token="33555102" />
+      <entry key="kotlin/coroutines/CoroutineContextImplKt" java-name="kotlin/coroutines/CoroutineContextImplKt" managed-type-name="Kotlin.Coroutines.CoroutineContextImplKt" token="33555103" />
+      <entry key="kotlin/coroutines/EmptyCoroutineContext" java-name="kotlin/coroutines/EmptyCoroutineContext" managed-type-name="Kotlin.Coroutines.EmptyCoroutineContext" token="33555104" />
+      <entry key="kotlin/coroutines/Continuation" java-name="kotlin/coroutines/Continuation" managed-type-name="Kotlin.Coroutines.IContinuation" token="33555105" skip-in-java-to-managed="True" />
+      <entry key="kotlin/coroutines/ContinuationInterceptor$DefaultImpls" java-name="kotlin/coroutines/ContinuationInterceptor$DefaultImpls" managed-type-name="Kotlin.Coroutines.ContinuationInterceptorDefaultImpls" token="33555107" />
+      <entry key="kotlin/coroutines/ContinuationInterceptor$Key" java-name="kotlin/coroutines/ContinuationInterceptor$Key" managed-type-name="Kotlin.Coroutines.ContinuationInterceptorKey" token="33555108" />
+      <entry key="mono/internal/kotlin/coroutines/ContinuationInterceptor" java-name="mono/internal/kotlin/coroutines/ContinuationInterceptor" managed-type-name="Kotlin.Coroutines.ContinuationInterceptor" token="33555109" />
+      <entry key="kotlin/coroutines/ContinuationInterceptor" java-name="kotlin/coroutines/ContinuationInterceptor" managed-type-name="Kotlin.Coroutines.IContinuationInterceptor" token="33555111" skip-in-java-to-managed="True" />
+      <entry key="kotlin/coroutines/CoroutineContext$DefaultImpls" java-name="kotlin/coroutines/CoroutineContext$DefaultImpls" managed-type-name="Kotlin.Coroutines.CoroutineContextDefaultImpls" token="33555113" />
+      <entry key="kotlin/coroutines/CoroutineContext$Element$DefaultImpls" java-name="kotlin/coroutines/CoroutineContext$Element$DefaultImpls" managed-type-name="Kotlin.Coroutines.CoroutineContextElementDefaultImpls" token="33555114" />
+      <entry key="kotlin/coroutines/CoroutineContext$Element" java-name="kotlin/coroutines/CoroutineContext$Element" managed-type-name="Kotlin.Coroutines.ICoroutineContextElement" token="33555115" skip-in-java-to-managed="True" />
+      <entry key="kotlin/coroutines/CoroutineContext$Key" java-name="kotlin/coroutines/CoroutineContext$Key" managed-type-name="Kotlin.Coroutines.ICoroutineContextKey" token="33555117" skip-in-java-to-managed="True" />
+      <entry key="kotlin/coroutines/CoroutineContext" java-name="kotlin/coroutines/CoroutineContext" managed-type-name="Kotlin.Coroutines.ICoroutineContext" token="33555119" skip-in-java-to-managed="True" />
+      <entry key="kotlin/coroutines/RestrictsSuspension" java-name="kotlin/coroutines/RestrictsSuspension" managed-type-name="Kotlin.Coroutines.IRestrictsSuspension" token="33555121" skip-in-java-to-managed="True" />
+      <entry key="kotlin/coroutines/jvm/internal/Boxing" java-name="kotlin/coroutines/jvm/internal/Boxing" managed-type-name="Kotlin.Coroutines.Jvm.Internal.Boxing" token="33555124" />
+      <entry key="kotlin/coroutines/jvm/internal/DebugMetadataKt" java-name="kotlin/coroutines/jvm/internal/DebugMetadataKt" managed-type-name="Kotlin.Coroutines.Jvm.Internal.DebugMetadataKt" token="33555125" />
+      <entry key="kotlin/coroutines/jvm/internal/DebugProbesKt" java-name="kotlin/coroutines/jvm/internal/DebugProbesKt" managed-type-name="Kotlin.Coroutines.Jvm.Internal.DebugProbesKt" token="33555126" />
+      <entry key="kotlin/coroutines/jvm/internal/GeneratedCodeMarkers" java-name="kotlin/coroutines/jvm/internal/GeneratedCodeMarkers" managed-type-name="Kotlin.Coroutines.Jvm.Internal.GeneratedCodeMarkers" token="33555127" />
+      <entry key="kotlin/coroutines/jvm/internal/CoroutineStackFrame" java-name="kotlin/coroutines/jvm/internal/CoroutineStackFrame" managed-type-name="Kotlin.Coroutines.Jvm.Internal.ICoroutineStackFrame" token="33555128" skip-in-java-to-managed="True" />
+      <entry key="kotlin/coroutines/jvm/internal/RunSuspendKt" java-name="kotlin/coroutines/jvm/internal/RunSuspendKt" managed-type-name="Kotlin.Coroutines.Jvm.Internal.RunSuspendKt" token="33555130" />
+      <entry key="kotlin/coroutines/jvm/internal/SpillingKt" java-name="kotlin/coroutines/jvm/internal/SpillingKt" managed-type-name="Kotlin.Coroutines.Jvm.Internal.SpillingKt" token="33555131" />
+      <entry key="kotlin/coroutines/intrinsics/IntrinsicsKt" java-name="kotlin/coroutines/intrinsics/IntrinsicsKt" managed-type-name="Kotlin.Coroutines.Intrinsics.IntrinsicsKt" token="33555132" />
+      <entry key="kotlin/coroutines/cancellation/CancellationExceptionKt" java-name="kotlin/coroutines/cancellation/CancellationExceptionKt" managed-type-name="Kotlin.Coroutines.Cancellation.CancellationExceptionKt" token="33555133" />
+      <entry key="kotlin/contracts/ContractBuilderKt" java-name="kotlin/contracts/ContractBuilderKt" managed-type-name="Kotlin.Contracts.ContractBuilderKt" token="33555134" />
+      <entry key="kotlin/contracts/CallsInPlace" java-name="kotlin/contracts/CallsInPlace" managed-type-name="Kotlin.Contracts.ICallsInPlace" token="33555136" skip-in-java-to-managed="True" />
+      <entry key="kotlin/contracts/ConditionalEffect" java-name="kotlin/contracts/ConditionalEffect" managed-type-name="Kotlin.Contracts.IConditionalEffect" token="33555138" skip-in-java-to-managed="True" />
+      <entry key="kotlin/contracts/ContractBuilder$DefaultImpls" java-name="kotlin/contracts/ContractBuilder$DefaultImpls" managed-type-name="Kotlin.Contracts.ContractBuilderDefaultImpls" token="33555140" />
+      <entry key="kotlin/contracts/ContractBuilder" java-name="kotlin/contracts/ContractBuilder" managed-type-name="Kotlin.Contracts.IContractBuilder" token="33555141" skip-in-java-to-managed="True" />
+      <entry key="kotlin/contracts/Effect" java-name="kotlin/contracts/Effect" managed-type-name="Kotlin.Contracts.IEffect" token="33555143" skip-in-java-to-managed="True" />
+      <entry key="kotlin/contracts/ExperimentalContracts" java-name="kotlin/contracts/ExperimentalContracts" managed-type-name="Kotlin.Contracts.IExperimentalContracts" token="33555145" skip-in-java-to-managed="True" />
+      <entry key="kotlin/contracts/InvocationKind" java-name="kotlin/contracts/InvocationKind" managed-type-name="Kotlin.Contracts.InvocationKind" token="33555147" />
+      <entry key="kotlin/contracts/Returns" java-name="kotlin/contracts/Returns" managed-type-name="Kotlin.Contracts.IReturns" token="33555148" skip-in-java-to-managed="True" />
+      <entry key="kotlin/contracts/ReturnsNotNull" java-name="kotlin/contracts/ReturnsNotNull" managed-type-name="Kotlin.Contracts.IReturnsNotNull" token="33555150" skip-in-java-to-managed="True" />
+      <entry key="kotlin/contracts/SimpleEffect" java-name="kotlin/contracts/SimpleEffect" managed-type-name="Kotlin.Contracts.ISimpleEffect" token="33555152" skip-in-java-to-managed="True" />
+      <entry key="kotlin/concurrent/LocksKt" java-name="kotlin/concurrent/LocksKt" managed-type-name="Kotlin.Concurrent.LocksKt" token="33555154" />
+      <entry key="kotlin/concurrent/ThreadsKt" java-name="kotlin/concurrent/ThreadsKt" managed-type-name="Kotlin.Concurrent.ThreadsKt" token="33555155" />
+      <entry key="kotlin/concurrent/TimersKt" java-name="kotlin/concurrent/TimersKt" managed-type-name="Kotlin.Concurrent.TimersKt" token="33555156" />
+      <entry key="kotlin/concurrent/VolatileKt" java-name="kotlin/concurrent/VolatileKt" managed-type-name="Kotlin.Concurrent.VolatileKt" token="33555157" />
+      <entry key="kotlin/concurrent/internal/AtomicIntrinsicsKt" java-name="kotlin/concurrent/internal/AtomicIntrinsicsKt" managed-type-name="Kotlin.Concurrent.Internal.AtomicIntrinsicsKt" token="33555158" />
+      <entry key="kotlin/concurrent/atomics/AtomicArraysKt" java-name="kotlin/concurrent/atomics/AtomicArraysKt" managed-type-name="Kotlin.Concurrent.Atomics.AtomicArraysKt" token="33555159" />
+      <entry key="kotlin/concurrent/atomics/AtomicsKt" java-name="kotlin/concurrent/atomics/AtomicsKt" managed-type-name="Kotlin.Concurrent.Atomics.AtomicsKt" token="33555160" />
+      <entry key="kotlin/concurrent/atomics/ExperimentalAtomicApi" java-name="kotlin/concurrent/atomics/ExperimentalAtomicApi" managed-type-name="Kotlin.Concurrent.Atomics.IExperimentalAtomicApi" token="33555162" skip-in-java-to-managed="True" />
+      <entry key="kotlin/comparisons/ComparisonsKt" java-name="kotlin/comparisons/ComparisonsKt" managed-type-name="Kotlin.Comparisons.ComparisonsKt" token="33555164" />
+      <entry key="kotlin/comparisons/UComparisonsKt" java-name="kotlin/comparisons/UComparisonsKt" managed-type-name="Kotlin.Comparisons.UComparisonsKt" token="33555165" />
+      <entry key="kotlin/annotation/AnnotationRetention" java-name="kotlin/annotation/AnnotationRetention" managed-type-name="Kotlin.Annotation.AnnotationRetention" token="33555166" />
+      <entry key="kotlin/annotation/AnnotationTarget" java-name="kotlin/annotation/AnnotationTarget" managed-type-name="Kotlin.Annotation.AnnotationTarget" token="33555167" />
+      <entry key="kotlin/annotation/MustBeDocumented" java-name="kotlin/annotation/MustBeDocumented" managed-type-name="Kotlin.Annotation.IMustBeDocumented" token="33555168" skip-in-java-to-managed="True" />
+      <entry key="kotlin/annotation/Repeatable" java-name="kotlin/annotation/Repeatable" managed-type-name="Kotlin.Annotation.IRepeatable" token="33555170" skip-in-java-to-managed="True" />
+      <entry key="kotlin/annotation/Retention" java-name="kotlin/annotation/Retention" managed-type-name="Kotlin.Annotation.IRetention" token="33555172" skip-in-java-to-managed="True" />
+      <entry key="kotlin/annotation/Target" java-name="kotlin/annotation/Target" managed-type-name="Kotlin.Annotation.ITarget" token="33555174" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ranges/ULongRange" java-name="kotlin/ranges/ULongRange" managed-type-name="Kotlin.Ranges.ULongRange" token="33555180" />
+      <entry key="kotlin/ranges/ULongRange$Companion" java-name="kotlin/ranges/ULongRange$Companion" managed-type-name="Kotlin.Ranges.ULongRange/CompanionStatic" token="33555181" />
+      <entry key="kotlin/ranges/UIntRange" java-name="kotlin/ranges/UIntRange" managed-type-name="Kotlin.Ranges.UIntRange" token="33555182" />
+      <entry key="kotlin/ranges/UIntRange$Companion" java-name="kotlin/ranges/UIntRange$Companion" managed-type-name="Kotlin.Ranges.UIntRange/CompanionStatic" token="33555183" />
+      <entry key="kotlin/ranges/CharProgression" java-name="kotlin/ranges/CharProgression" managed-type-name="Kotlin.Ranges.CharProgression" token="33555184" />
+      <entry key="kotlin/ranges/CharProgression$Companion" java-name="kotlin/ranges/CharProgression$Companion" managed-type-name="Kotlin.Ranges.CharProgression/CompanionStatic" token="33555185" />
+      <entry key="kotlin/ranges/CharRange" java-name="kotlin/ranges/CharRange" managed-type-name="Kotlin.Ranges.CharRange" token="33555186" />
+      <entry key="kotlin/ranges/CharRange$Companion" java-name="kotlin/ranges/CharRange$Companion" managed-type-name="Kotlin.Ranges.CharRange/CompanionStatic" token="33555187" />
+      <entry key="kotlin/ranges/ClosedFloatingPointRange$DefaultImpls" java-name="kotlin/ranges/ClosedFloatingPointRange$DefaultImpls" managed-type-name="Kotlin.Ranges.ClosedFloatingPointRangeDefaultImpls" token="33555188" />
+      <entry key="kotlin/ranges/ClosedFloatingPointRange" java-name="kotlin/ranges/ClosedFloatingPointRange" managed-type-name="Kotlin.Ranges.IClosedFloatingPointRange" token="33555189" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ranges/ClosedRange$DefaultImpls" java-name="kotlin/ranges/ClosedRange$DefaultImpls" managed-type-name="Kotlin.Ranges.ClosedRangeDefaultImpls" token="33555191" />
+      <entry key="kotlin/ranges/ClosedRange" java-name="kotlin/ranges/ClosedRange" managed-type-name="Kotlin.Ranges.IClosedRange" token="33555192" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ranges/IntProgression" java-name="kotlin/ranges/IntProgression" managed-type-name="Kotlin.Ranges.IntProgression" token="33555194" />
+      <entry key="kotlin/ranges/IntProgression$Companion" java-name="kotlin/ranges/IntProgression$Companion" managed-type-name="Kotlin.Ranges.IntProgression/CompanionStatic" token="33555195" />
+      <entry key="kotlin/ranges/IntRange" java-name="kotlin/ranges/IntRange" managed-type-name="Kotlin.Ranges.IntRange" token="33555196" />
+      <entry key="kotlin/ranges/IntRange$Companion" java-name="kotlin/ranges/IntRange$Companion" managed-type-name="Kotlin.Ranges.IntRange/CompanionStatic" token="33555197" />
+      <entry key="kotlin/ranges/OpenEndRange$DefaultImpls" java-name="kotlin/ranges/OpenEndRange$DefaultImpls" managed-type-name="Kotlin.Ranges.OpenEndRangeDefaultImpls" token="33555198" />
+      <entry key="kotlin/ranges/OpenEndRange" java-name="kotlin/ranges/OpenEndRange" managed-type-name="Kotlin.Ranges.IOpenEndRange" token="33555199" skip-in-java-to-managed="True" />
+      <entry key="kotlin/ranges/LongProgression" java-name="kotlin/ranges/LongProgression" managed-type-name="Kotlin.Ranges.LongProgression" token="33555201" />
+      <entry key="kotlin/ranges/LongProgression$Companion" java-name="kotlin/ranges/LongProgression$Companion" managed-type-name="Kotlin.Ranges.LongProgression/CompanionStatic" token="33555202" />
+      <entry key="kotlin/ranges/LongRange" java-name="kotlin/ranges/LongRange" managed-type-name="Kotlin.Ranges.LongRange" token="33555203" />
+      <entry key="kotlin/ranges/LongRange$Companion" java-name="kotlin/ranges/LongRange$Companion" managed-type-name="Kotlin.Ranges.LongRange/CompanionStatic" token="33555204" />
+      <entry key="kotlin/ranges/RangesKt" java-name="kotlin/ranges/RangesKt" managed-type-name="Kotlin.Ranges.RangesKt" token="33555205" />
+      <entry key="kotlin/ranges/UIntProgression" java-name="kotlin/ranges/UIntProgression" managed-type-name="Kotlin.Ranges.UIntProgression" token="33555206" />
+      <entry key="kotlin/ranges/UIntProgression$Companion" java-name="kotlin/ranges/UIntProgression$Companion" managed-type-name="Kotlin.Ranges.UIntProgression/CompanionStatic" token="33555207" />
+      <entry key="kotlin/ranges/ULongProgression" java-name="kotlin/ranges/ULongProgression" managed-type-name="Kotlin.Ranges.ULongProgression" token="33555208" />
+      <entry key="kotlin/ranges/ULongProgression$Companion" java-name="kotlin/ranges/ULongProgression$Companion" managed-type-name="Kotlin.Ranges.ULongProgression/CompanionStatic" token="33555209" />
+      <entry key="kotlin/ranges/URangesKt" java-name="kotlin/ranges/URangesKt" managed-type-name="Kotlin.Ranges.URangesKt" token="33555210" />
+      <entry key="kotlin/collections/AbstractSet" java-name="kotlin/collections/AbstractSet" managed-type-name="Kotlin.Collections.AbstractSetInvoker" token="33555211" />
+      <entry key="kotlin/collections/AbstractList" java-name="kotlin/collections/AbstractList" managed-type-name="Kotlin.Collections.AbstractListInvoker" token="33555212" />
+      <entry key="kotlin/collections/AbstractCollection" java-name="kotlin/collections/AbstractCollection" managed-type-name="Kotlin.Collections.AbstractCollection" token="33555213" />
+      <entry key="kotlin/collections/AbstractIterator" java-name="kotlin/collections/AbstractIterator" managed-type-name="Kotlin.Collections.AbstractIterator" token="33555215" />
+      <entry key="kotlin/collections/AbstractMap" java-name="kotlin/collections/AbstractMap" managed-type-name="Kotlin.Collections.AbstractMap" token="33555218" />
+      <entry key="kotlin/collections/AbstractMutableCollection" java-name="kotlin/collections/AbstractMutableCollection" managed-type-name="Kotlin.Collections.AbstractMutableCollection" token="33555220" />
+      <entry key="kotlin/collections/AbstractMutableList" java-name="kotlin/collections/AbstractMutableList" managed-type-name="Kotlin.Collections.AbstractMutableList" token="33555222" />
+      <entry key="kotlin/collections/AbstractMutableMap" java-name="kotlin/collections/AbstractMutableMap" managed-type-name="Kotlin.Collections.AbstractMutableMap" token="33555224" />
+      <entry key="kotlin/collections/AbstractMutableSet" java-name="kotlin/collections/AbstractMutableSet" managed-type-name="Kotlin.Collections.AbstractMutableSet" token="33555226" />
+      <entry key="kotlin/collections/ArrayDeque" java-name="kotlin/collections/ArrayDeque" managed-type-name="Kotlin.Collections.ArrayDeque" token="33555229" />
+      <entry key="kotlin/collections/ArraysKt" java-name="kotlin/collections/ArraysKt" managed-type-name="Kotlin.Collections.ArraysKt" token="33555230" />
+      <entry key="kotlin/collections/BooleanIterator" java-name="kotlin/collections/BooleanIterator" managed-type-name="Kotlin.Collections.BooleanIterator" token="33555231" />
+      <entry key="kotlin/collections/ByteIterator" java-name="kotlin/collections/ByteIterator" managed-type-name="Kotlin.Collections.ByteIterator" token="33555233" />
+      <entry key="kotlin/collections/CharIterator" java-name="kotlin/collections/CharIterator" managed-type-name="Kotlin.Collections.CharIterator" token="33555235" />
+      <entry key="kotlin/collections/CollectionsKt" java-name="kotlin/collections/CollectionsKt" managed-type-name="Kotlin.Collections.CollectionsKt" token="33555237" />
+      <entry key="kotlin/collections/DoubleIterator" java-name="kotlin/collections/DoubleIterator" managed-type-name="Kotlin.Collections.DoubleIterator" token="33555238" />
+      <entry key="kotlin/collections/FloatIterator" java-name="kotlin/collections/FloatIterator" managed-type-name="Kotlin.Collections.FloatIterator" token="33555240" />
+      <entry key="kotlin/collections/GroupingKt" java-name="kotlin/collections/GroupingKt" managed-type-name="Kotlin.Collections.GroupingKt" token="33555242" />
+      <entry key="kotlin/collections/Grouping" java-name="kotlin/collections/Grouping" managed-type-name="Kotlin.Collections.IGrouping" token="33555243" skip-in-java-to-managed="True" />
+      <entry key="kotlin/collections/IndexedValue" java-name="kotlin/collections/IndexedValue" managed-type-name="Kotlin.Collections.IndexedValue" token="33555245" />
+      <entry key="kotlin/collections/IntIterator" java-name="kotlin/collections/IntIterator" managed-type-name="Kotlin.Collections.IntIterator" token="33555246" />
+      <entry key="kotlin/collections/LongIterator" java-name="kotlin/collections/LongIterator" managed-type-name="Kotlin.Collections.LongIterator" token="33555248" />
+      <entry key="kotlin/collections/MapAccessorsKt" java-name="kotlin/collections/MapAccessorsKt" managed-type-name="Kotlin.Collections.MapAccessorsKt" token="33555250" />
+      <entry key="kotlin/collections/MapsKt" java-name="kotlin/collections/MapsKt" managed-type-name="Kotlin.Collections.MapsKt" token="33555251" />
+      <entry key="kotlin/collections/SetsKt" java-name="kotlin/collections/SetsKt" managed-type-name="Kotlin.Collections.SetsKt" token="33555252" />
+      <entry key="kotlin/collections/ShortIterator" java-name="kotlin/collections/ShortIterator" managed-type-name="Kotlin.Collections.ShortIterator" token="33555253" />
+      <entry key="kotlin/collections/SlidingWindowKt" java-name="kotlin/collections/SlidingWindowKt" managed-type-name="Kotlin.Collections.SlidingWindowKt" token="33555255" />
+      <entry key="kotlin/collections/TypeAliasesKt" java-name="kotlin/collections/TypeAliasesKt" managed-type-name="Kotlin.Collections.TypeAliasesKt" token="33555256" />
+      <entry key="kotlin/collections/UArraySortingKt" java-name="kotlin/collections/UArraySortingKt" managed-type-name="Kotlin.Collections.UArraySortingKt" token="33555257" />
+      <entry key="kotlin/collections/UCollectionsKt" java-name="kotlin/collections/UCollectionsKt" managed-type-name="Kotlin.Collections.UCollectionsKt" token="33555258" />
+      <entry key="kotlin/collections/unsigned/UArraysKt" java-name="kotlin/collections/unsigned/UArraysKt" managed-type-name="Kotlin.Collections.Unsigned.UArraysKt" token="33555259" />
+      <entry key="kotlin/collections/jdk8/CollectionsJDK8Kt" java-name="kotlin/collections/jdk8/CollectionsJDK8Kt" managed-type-name="Kotlin.Collections.Jdk8.CollectionsJDK8Kt" token="33555260" />
+      <entry key="kotlin/collections/builders/MapBuilder" java-name="kotlin/collections/builders/MapBuilder" managed-type-name="Kotlin.Collections.Builders.MapBuilder" token="33555261" />
+      <entry key="kotlin/collections/builders/MapBuilder$EntriesItr" java-name="kotlin/collections/builders/MapBuilder$EntriesItr" managed-type-name="Kotlin.Collections.Builders.MapBuilder/EntriesItr" token="33555262" />
+      <entry key="kotlin/collections/builders/MapBuilder$EntryRef" java-name="kotlin/collections/builders/MapBuilder$EntryRef" managed-type-name="Kotlin.Collections.Builders.MapBuilder/EntryRef" token="33555263" />
+      <entry key="kotlin/collections/builders/MapBuilder$Itr" java-name="kotlin/collections/builders/MapBuilder$Itr" managed-type-name="Kotlin.Collections.Builders.MapBuilder/Itr" token="33555264" />
+      <entry key="kotlin/collections/builders/MapBuilder$KeysItr" java-name="kotlin/collections/builders/MapBuilder$KeysItr" managed-type-name="Kotlin.Collections.Builders.MapBuilder/KeysItr" token="33555265" />
+      <entry key="kotlin/collections/builders/MapBuilder$ValuesItr" java-name="kotlin/collections/builders/MapBuilder$ValuesItr" managed-type-name="Kotlin.Collections.Builders.MapBuilder/ValuesItr" token="33555266" />
+      <entry key="kotlin/collections/builders/MapBuilderEntries" java-name="kotlin/collections/builders/MapBuilderEntries" managed-type-name="Kotlin.Collections.Builders.MapBuilderEntries" token="33555267" />
+      <entry key="kotlin/collections/builders/AbstractMapBuilderEntrySet" java-name="kotlin/collections/builders/AbstractMapBuilderEntrySet" managed-type-name="Kotlin.Collections.Builders.AbstractMapBuilderEntrySet" token="33555268" />
+      <entry key="kotlin/collections/builders/ListBuilder" java-name="kotlin/collections/builders/ListBuilder" managed-type-name="Kotlin.Collections.Builders.ListBuilder" token="33555270" />
+      <entry key="kotlin/collections/builders/ListBuilder$BuilderSubList" java-name="kotlin/collections/builders/ListBuilder$BuilderSubList" managed-type-name="Kotlin.Collections.Builders.ListBuilder/BuilderSubList" token="33555271" />
+      <entry key="kotlin/collections/builders/ListBuilderKt" java-name="kotlin/collections/builders/ListBuilderKt" managed-type-name="Kotlin.Collections.Builders.ListBuilderKt" token="33555272" />
+      <entry key="kotlin/collections/builders/MapBuilderKeys" java-name="kotlin/collections/builders/MapBuilderKeys" managed-type-name="Kotlin.Collections.Builders.MapBuilderKeys" token="33555273" />
+      <entry key="kotlin/collections/builders/MapBuilderValues" java-name="kotlin/collections/builders/MapBuilderValues" managed-type-name="Kotlin.Collections.Builders.MapBuilderValues" token="33555274" />
+      <entry key="kotlin/collections/builders/SerializedCollection" java-name="kotlin/collections/builders/SerializedCollection" managed-type-name="Kotlin.Collections.Builders.SerializedCollection" token="33555275" />
+      <entry key="kotlin/collections/builders/SetBuilder" java-name="kotlin/collections/builders/SetBuilder" managed-type-name="Kotlin.Collections.Builders.SetBuilder" token="33555276" />
+    </types-scratch>
+  </module>
+</api>

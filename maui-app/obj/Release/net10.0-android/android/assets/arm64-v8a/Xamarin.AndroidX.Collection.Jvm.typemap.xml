@@ -1,0 +1,138 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Collection.Jvm" mvid="586ea3969001461bb9a048678b4e2ca8">
+  <module assembly-name="Xamarin.AndroidX.Collection.Jvm" mvid="586ea3969001461bb9a048678b4e2ca8" mvid-bytes="lqNuWAGQG0a5oEhni04sqA==">
+    <duplicates>
+      <entry java-name="androidx/collection/DoubleList" managed-type-name="AndroidX.Collection.DoubleListInvoker" token="33554473" />
+      <entry java-name="androidx/collection/FloatFloatMap" managed-type-name="AndroidX.Collection.FloatFloatMapInvoker" token="33554477" />
+      <entry java-name="androidx/collection/FloatIntMap" managed-type-name="AndroidX.Collection.FloatIntMapInvoker" token="33554481" />
+      <entry java-name="androidx/collection/FloatList" managed-type-name="AndroidX.Collection.FloatListInvoker" token="33554484" />
+      <entry java-name="androidx/collection/FloatLongMap" managed-type-name="AndroidX.Collection.FloatLongMapInvoker" token="33554487" />
+      <entry java-name="androidx/collection/FloatObjectMap" managed-type-name="AndroidX.Collection.FloatObjectMapInvoker" token="33554490" />
+      <entry java-name="androidx/collection/FloatSet" managed-type-name="AndroidX.Collection.FloatSetInvoker" token="33554493" />
+      <entry java-name="androidx/collection/IntFloatMap" managed-type-name="AndroidX.Collection.IntFloatMapInvoker" token="33554496" />
+      <entry java-name="androidx/collection/IntIntMap" managed-type-name="AndroidX.Collection.IntIntMapInvoker" token="33554499" />
+      <entry java-name="androidx/collection/IntList" managed-type-name="AndroidX.Collection.IntListInvoker" token="33554503" />
+      <entry java-name="androidx/collection/IntLongMap" managed-type-name="AndroidX.Collection.IntLongMapInvoker" token="33554506" />
+      <entry java-name="androidx/collection/IntObjectMap" managed-type-name="AndroidX.Collection.IntObjectMapInvoker" token="33554509" />
+      <entry java-name="androidx/collection/IntSet" managed-type-name="AndroidX.Collection.IntSetInvoker" token="33554512" />
+      <entry java-name="androidx/collection/LongFloatMap" managed-type-name="AndroidX.Collection.LongFloatMapInvoker" token="33554515" />
+      <entry java-name="androidx/collection/LongIntMap" managed-type-name="AndroidX.Collection.LongIntMapInvoker" token="33554518" />
+      <entry java-name="androidx/collection/LongList" managed-type-name="AndroidX.Collection.LongListInvoker" token="33554521" />
+      <entry java-name="androidx/collection/LongLongMap" managed-type-name="AndroidX.Collection.LongLongMapInvoker" token="33554524" />
+      <entry java-name="androidx/collection/LongObjectMap" managed-type-name="AndroidX.Collection.LongObjectMapInvoker" token="33554528" />
+      <entry java-name="androidx/collection/LongSet" managed-type-name="AndroidX.Collection.LongSetInvoker" token="33554531" />
+      <entry java-name="androidx/collection/ObjectFloatMap" managed-type-name="AndroidX.Collection.ObjectFloatMapInvoker" token="33554564" />
+      <entry java-name="androidx/collection/ObjectIntMap" managed-type-name="AndroidX.Collection.ObjectIntMapInvoker" token="33554567" />
+      <entry java-name="androidx/collection/ObjectList" managed-type-name="AndroidX.Collection.ObjectListInvoker" token="33554570" />
+      <entry java-name="androidx/collection/ObjectLongMap" managed-type-name="AndroidX.Collection.ObjectLongMapInvoker" token="33554573" />
+      <entry java-name="androidx/collection/OrderedScatterSet" managed-type-name="AndroidX.Collection.OrderedScatterSetInvoker" token="33554576" />
+      <entry java-name="androidx/collection/ScatterMap" managed-type-name="AndroidX.Collection.ScatterMapInvoker" token="33554580" />
+      <entry java-name="androidx/collection/ScatterSet" managed-type-name="AndroidX.Collection.ScatterSetInvoker" token="33554583" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/collection/ArrayMap" java-name="androidx/collection/ArrayMap" managed-type-name="AndroidX.Collection.ArrayMap" token="33554466" />
+      <entry key="androidx/collection/ArrayMapKt" java-name="androidx/collection/ArrayMapKt" managed-type-name="AndroidX.Collection.ArrayMapKt" token="33554467" />
+      <entry key="androidx/collection/ArraySet" java-name="androidx/collection/ArraySet" managed-type-name="AndroidX.Collection.ArraySet" token="33554468" />
+      <entry key="androidx/collection/ArraySetKt" java-name="androidx/collection/ArraySetKt" managed-type-name="AndroidX.Collection.ArraySetKt" token="33554469" />
+      <entry key="androidx/collection/CircularArray" java-name="androidx/collection/CircularArray" managed-type-name="AndroidX.Collection.CircularArray" token="33554470" />
+      <entry key="androidx/collection/CircularIntArray" java-name="androidx/collection/CircularIntArray" managed-type-name="AndroidX.Collection.CircularIntArray" token="33554471" />
+      <entry key="androidx/collection/DoubleList" java-name="androidx/collection/DoubleList" managed-type-name="AndroidX.Collection.DoubleList" token="33554472" />
+      <entry key="androidx/collection/DoubleListKt" java-name="androidx/collection/DoubleListKt" managed-type-name="AndroidX.Collection.DoubleListKt" token="33554474" />
+      <entry key="androidx/collection/DoubleSetKt" java-name="androidx/collection/DoubleSetKt" managed-type-name="AndroidX.Collection.DoubleSetKt" token="33554475" />
+      <entry key="androidx/collection/FloatFloatMap" java-name="androidx/collection/FloatFloatMap" managed-type-name="AndroidX.Collection.FloatFloatMap" token="33554476" />
+      <entry key="androidx/collection/FloatFloatMapKt" java-name="androidx/collection/FloatFloatMapKt" managed-type-name="AndroidX.Collection.FloatFloatMapKt" token="33554478" />
+      <entry key="androidx/collection/FloatFloatPair" java-name="androidx/collection/FloatFloatPair" managed-type-name="AndroidX.Collection.FloatFloatPair" token="33554479" />
+      <entry key="androidx/collection/FloatIntMap" java-name="androidx/collection/FloatIntMap" managed-type-name="AndroidX.Collection.FloatIntMap" token="33554480" />
+      <entry key="androidx/collection/FloatIntMapKt" java-name="androidx/collection/FloatIntMapKt" managed-type-name="AndroidX.Collection.FloatIntMapKt" token="33554482" />
+      <entry key="androidx/collection/FloatList" java-name="androidx/collection/FloatList" managed-type-name="AndroidX.Collection.FloatList" token="33554483" />
+      <entry key="androidx/collection/FloatListKt" java-name="androidx/collection/FloatListKt" managed-type-name="AndroidX.Collection.FloatListKt" token="33554485" />
+      <entry key="androidx/collection/FloatLongMap" java-name="androidx/collection/FloatLongMap" managed-type-name="AndroidX.Collection.FloatLongMap" token="33554486" />
+      <entry key="androidx/collection/FloatLongMapKt" java-name="androidx/collection/FloatLongMapKt" managed-type-name="AndroidX.Collection.FloatLongMapKt" token="33554488" />
+      <entry key="androidx/collection/FloatObjectMap" java-name="androidx/collection/FloatObjectMap" managed-type-name="AndroidX.Collection.FloatObjectMap" token="33554489" />
+      <entry key="androidx/collection/FloatObjectMapKt" java-name="androidx/collection/FloatObjectMapKt" managed-type-name="AndroidX.Collection.FloatObjectMapKt" token="33554491" />
+      <entry key="androidx/collection/FloatSet" java-name="androidx/collection/FloatSet" managed-type-name="AndroidX.Collection.FloatSet" token="33554492" />
+      <entry key="androidx/collection/FloatSetKt" java-name="androidx/collection/FloatSetKt" managed-type-name="AndroidX.Collection.FloatSetKt" token="33554494" />
+      <entry key="androidx/collection/IntFloatMap" java-name="androidx/collection/IntFloatMap" managed-type-name="AndroidX.Collection.IntFloatMap" token="33554495" />
+      <entry key="androidx/collection/IntFloatMapKt" java-name="androidx/collection/IntFloatMapKt" managed-type-name="AndroidX.Collection.IntFloatMapKt" token="33554497" />
+      <entry key="androidx/collection/IntIntMap" java-name="androidx/collection/IntIntMap" managed-type-name="AndroidX.Collection.IntIntMap" token="33554498" />
+      <entry key="androidx/collection/IntIntMapKt" java-name="androidx/collection/IntIntMapKt" managed-type-name="AndroidX.Collection.IntIntMapKt" token="33554500" />
+      <entry key="androidx/collection/IntIntPair" java-name="androidx/collection/IntIntPair" managed-type-name="AndroidX.Collection.IntIntPair" token="33554501" />
+      <entry key="androidx/collection/IntList" java-name="androidx/collection/IntList" managed-type-name="AndroidX.Collection.IntList" token="33554502" />
+      <entry key="androidx/collection/IntListKt" java-name="androidx/collection/IntListKt" managed-type-name="AndroidX.Collection.IntListKt" token="33554504" />
+      <entry key="androidx/collection/IntLongMap" java-name="androidx/collection/IntLongMap" managed-type-name="AndroidX.Collection.IntLongMap" token="33554505" />
+      <entry key="androidx/collection/IntLongMapKt" java-name="androidx/collection/IntLongMapKt" managed-type-name="AndroidX.Collection.IntLongMapKt" token="33554507" />
+      <entry key="androidx/collection/IntObjectMap" java-name="androidx/collection/IntObjectMap" managed-type-name="AndroidX.Collection.IntObjectMap" token="33554508" />
+      <entry key="androidx/collection/IntObjectMapKt" java-name="androidx/collection/IntObjectMapKt" managed-type-name="AndroidX.Collection.IntObjectMapKt" token="33554510" />
+      <entry key="androidx/collection/IntSet" java-name="androidx/collection/IntSet" managed-type-name="AndroidX.Collection.IntSet" token="33554511" />
+      <entry key="androidx/collection/IntSetKt" java-name="androidx/collection/IntSetKt" managed-type-name="AndroidX.Collection.IntSetKt" token="33554513" />
+      <entry key="androidx/collection/LongFloatMap" java-name="androidx/collection/LongFloatMap" managed-type-name="AndroidX.Collection.LongFloatMap" token="33554514" />
+      <entry key="androidx/collection/LongFloatMapKt" java-name="androidx/collection/LongFloatMapKt" managed-type-name="AndroidX.Collection.LongFloatMapKt" token="33554516" />
+      <entry key="androidx/collection/LongIntMap" java-name="androidx/collection/LongIntMap" managed-type-name="AndroidX.Collection.LongIntMap" token="33554517" />
+      <entry key="androidx/collection/LongIntMapKt" java-name="androidx/collection/LongIntMapKt" managed-type-name="AndroidX.Collection.LongIntMapKt" token="33554519" />
+      <entry key="androidx/collection/LongList" java-name="androidx/collection/LongList" managed-type-name="AndroidX.Collection.LongList" token="33554520" />
+      <entry key="androidx/collection/LongListKt" java-name="androidx/collection/LongListKt" managed-type-name="AndroidX.Collection.LongListKt" token="33554522" />
+      <entry key="androidx/collection/LongLongMap" java-name="androidx/collection/LongLongMap" managed-type-name="AndroidX.Collection.LongLongMap" token="33554523" />
+      <entry key="androidx/collection/LongLongMapKt" java-name="androidx/collection/LongLongMapKt" managed-type-name="AndroidX.Collection.LongLongMapKt" token="33554525" />
+      <entry key="androidx/collection/LongLongPair" java-name="androidx/collection/LongLongPair" managed-type-name="AndroidX.Collection.LongLongPair" token="33554526" />
+      <entry key="androidx/collection/LongObjectMap" java-name="androidx/collection/LongObjectMap" managed-type-name="AndroidX.Collection.LongObjectMap" token="33554527" />
+      <entry key="androidx/collection/LongObjectMapKt" java-name="androidx/collection/LongObjectMapKt" managed-type-name="AndroidX.Collection.LongObjectMapKt" token="33554529" />
+      <entry key="androidx/collection/LongSet" java-name="androidx/collection/LongSet" managed-type-name="AndroidX.Collection.LongSet" token="33554530" />
+      <entry key="androidx/collection/LongSetKt" java-name="androidx/collection/LongSetKt" managed-type-name="AndroidX.Collection.LongSetKt" token="33554532" />
+      <entry key="androidx/collection/LongSparseArray" java-name="androidx/collection/LongSparseArray" managed-type-name="AndroidX.Collection.LongSparseArray" token="33554533" />
+      <entry key="androidx/collection/LongSparseArrayKt" java-name="androidx/collection/LongSparseArrayKt" managed-type-name="AndroidX.Collection.LongSparseArrayKt" token="33554534" />
+      <entry key="androidx/collection/LruCache" java-name="androidx/collection/LruCache" managed-type-name="AndroidX.Collection.LruCache" token="33554535" />
+      <entry key="androidx/collection/LruCacheKt" java-name="androidx/collection/LruCacheKt" managed-type-name="AndroidX.Collection.LruCacheKt" token="33554536" />
+      <entry key="androidx/collection/MutableDoubleList" java-name="androidx/collection/MutableDoubleList" managed-type-name="AndroidX.Collection.MutableDoubleList" token="33554537" />
+      <entry key="androidx/collection/MutableFloatFloatMap" java-name="androidx/collection/MutableFloatFloatMap" managed-type-name="AndroidX.Collection.MutableFloatFloatMap" token="33554538" />
+      <entry key="androidx/collection/MutableFloatIntMap" java-name="androidx/collection/MutableFloatIntMap" managed-type-name="AndroidX.Collection.MutableFloatIntMap" token="33554539" />
+      <entry key="androidx/collection/MutableFloatList" java-name="androidx/collection/MutableFloatList" managed-type-name="AndroidX.Collection.MutableFloatList" token="33554540" />
+      <entry key="androidx/collection/MutableFloatLongMap" java-name="androidx/collection/MutableFloatLongMap" managed-type-name="AndroidX.Collection.MutableFloatLongMap" token="33554541" />
+      <entry key="androidx/collection/MutableFloatObjectMap" java-name="androidx/collection/MutableFloatObjectMap" managed-type-name="AndroidX.Collection.MutableFloatObjectMap" token="33554542" />
+      <entry key="androidx/collection/MutableFloatSet" java-name="androidx/collection/MutableFloatSet" managed-type-name="AndroidX.Collection.MutableFloatSet" token="33554543" />
+      <entry key="androidx/collection/MutableIntFloatMap" java-name="androidx/collection/MutableIntFloatMap" managed-type-name="AndroidX.Collection.MutableIntFloatMap" token="33554544" />
+      <entry key="androidx/collection/MutableIntIntMap" java-name="androidx/collection/MutableIntIntMap" managed-type-name="AndroidX.Collection.MutableIntIntMap" token="33554545" />
+      <entry key="androidx/collection/MutableIntList" java-name="androidx/collection/MutableIntList" managed-type-name="AndroidX.Collection.MutableIntList" token="33554546" />
+      <entry key="androidx/collection/MutableIntLongMap" java-name="androidx/collection/MutableIntLongMap" managed-type-name="AndroidX.Collection.MutableIntLongMap" token="33554547" />
+      <entry key="androidx/collection/MutableIntObjectMap" java-name="androidx/collection/MutableIntObjectMap" managed-type-name="AndroidX.Collection.MutableIntObjectMap" token="33554548" />
+      <entry key="androidx/collection/MutableIntSet" java-name="androidx/collection/MutableIntSet" managed-type-name="AndroidX.Collection.MutableIntSet" token="33554549" />
+      <entry key="androidx/collection/MutableLongFloatMap" java-name="androidx/collection/MutableLongFloatMap" managed-type-name="AndroidX.Collection.MutableLongFloatMap" token="33554550" />
+      <entry key="androidx/collection/MutableLongIntMap" java-name="androidx/collection/MutableLongIntMap" managed-type-name="AndroidX.Collection.MutableLongIntMap" token="33554551" />
+      <entry key="androidx/collection/MutableLongList" java-name="androidx/collection/MutableLongList" managed-type-name="AndroidX.Collection.MutableLongList" token="33554552" />
+      <entry key="androidx/collection/MutableLongLongMap" java-name="androidx/collection/MutableLongLongMap" managed-type-name="AndroidX.Collection.MutableLongLongMap" token="33554553" />
+      <entry key="androidx/collection/MutableLongObjectMap" java-name="androidx/collection/MutableLongObjectMap" managed-type-name="AndroidX.Collection.MutableLongObjectMap" token="33554554" />
+      <entry key="androidx/collection/MutableLongSet" java-name="androidx/collection/MutableLongSet" managed-type-name="AndroidX.Collection.MutableLongSet" token="33554555" />
+      <entry key="androidx/collection/MutableObjectFloatMap" java-name="androidx/collection/MutableObjectFloatMap" managed-type-name="AndroidX.Collection.MutableObjectFloatMap" token="33554556" />
+      <entry key="androidx/collection/MutableObjectIntMap" java-name="androidx/collection/MutableObjectIntMap" managed-type-name="AndroidX.Collection.MutableObjectIntMap" token="33554557" />
+      <entry key="androidx/collection/MutableObjectList" java-name="androidx/collection/MutableObjectList" managed-type-name="AndroidX.Collection.MutableObjectList" token="33554558" />
+      <entry key="androidx/collection/MutableObjectLongMap" java-name="androidx/collection/MutableObjectLongMap" managed-type-name="AndroidX.Collection.MutableObjectLongMap" token="33554559" />
+      <entry key="androidx/collection/MutableOrderedScatterSet" java-name="androidx/collection/MutableOrderedScatterSet" managed-type-name="AndroidX.Collection.MutableOrderedScatterSet" token="33554560" />
+      <entry key="androidx/collection/MutableScatterMap" java-name="androidx/collection/MutableScatterMap" managed-type-name="AndroidX.Collection.MutableScatterMap" token="33554561" />
+      <entry key="androidx/collection/MutableScatterSet" java-name="androidx/collection/MutableScatterSet" managed-type-name="AndroidX.Collection.MutableScatterSet" token="33554562" />
+      <entry key="androidx/collection/ObjectFloatMap" java-name="androidx/collection/ObjectFloatMap" managed-type-name="AndroidX.Collection.ObjectFloatMap" token="33554563" />
+      <entry key="androidx/collection/ObjectFloatMapKt" java-name="androidx/collection/ObjectFloatMapKt" managed-type-name="AndroidX.Collection.ObjectFloatMapKt" token="33554565" />
+      <entry key="androidx/collection/ObjectIntMap" java-name="androidx/collection/ObjectIntMap" managed-type-name="AndroidX.Collection.ObjectIntMap" token="33554566" />
+      <entry key="androidx/collection/ObjectIntMapKt" java-name="androidx/collection/ObjectIntMapKt" managed-type-name="AndroidX.Collection.ObjectIntMapKt" token="33554568" />
+      <entry key="androidx/collection/ObjectList" java-name="androidx/collection/ObjectList" managed-type-name="AndroidX.Collection.ObjectList" token="33554569" />
+      <entry key="androidx/collection/ObjectListKt" java-name="androidx/collection/ObjectListKt" managed-type-name="AndroidX.Collection.ObjectListKt" token="33554571" />
+      <entry key="androidx/collection/ObjectLongMap" java-name="androidx/collection/ObjectLongMap" managed-type-name="AndroidX.Collection.ObjectLongMap" token="33554572" />
+      <entry key="androidx/collection/ObjectLongMapKt" java-name="androidx/collection/ObjectLongMapKt" managed-type-name="AndroidX.Collection.ObjectLongMapKt" token="33554574" />
+      <entry key="androidx/collection/OrderedScatterSet" java-name="androidx/collection/OrderedScatterSet" managed-type-name="AndroidX.Collection.OrderedScatterSet" token="33554575" />
+      <entry key="androidx/collection/OrderedScatterSetKt" java-name="androidx/collection/OrderedScatterSetKt" managed-type-name="AndroidX.Collection.OrderedScatterSetKt" token="33554577" />
+      <entry key="androidx/collection/PackingUtilsKt" java-name="androidx/collection/PackingUtilsKt" managed-type-name="AndroidX.Collection.PackingUtilsKt" token="33554578" />
+      <entry key="androidx/collection/ScatterMap" java-name="androidx/collection/ScatterMap" managed-type-name="AndroidX.Collection.ScatterMap" token="33554579" />
+      <entry key="androidx/collection/ScatterMapKt" java-name="androidx/collection/ScatterMapKt" managed-type-name="AndroidX.Collection.ScatterMapKt" token="33554581" />
+      <entry key="androidx/collection/ScatterSet" java-name="androidx/collection/ScatterSet" managed-type-name="AndroidX.Collection.ScatterSet" token="33554582" />
+      <entry key="androidx/collection/ScatterSetKt" java-name="androidx/collection/ScatterSetKt" managed-type-name="AndroidX.Collection.ScatterSetKt" token="33554584" />
+      <entry key="androidx/collection/SieveCache" java-name="androidx/collection/SieveCache" managed-type-name="AndroidX.Collection.SieveCache" token="33554585" />
+      <entry key="androidx/collection/SieveCacheKt" java-name="androidx/collection/SieveCacheKt" managed-type-name="AndroidX.Collection.SieveCacheKt" token="33554586" />
+      <entry key="androidx/collection/SimpleArrayMap" java-name="androidx/collection/SimpleArrayMap" managed-type-name="AndroidX.Collection.SimpleArrayMap" token="33554587" />
+      <entry key="androidx/collection/SimpleArrayMapKt" java-name="androidx/collection/SimpleArrayMapKt" managed-type-name="AndroidX.Collection.SimpleArrayMapKt" token="33554588" />
+      <entry key="androidx/collection/SparseArrayCompat" java-name="androidx/collection/SparseArrayCompat" managed-type-name="AndroidX.Collection.SparseArrayCompat" token="33554589" />
+      <entry key="androidx/collection/SparseArrayCompatKt" java-name="androidx/collection/SparseArrayCompatKt" managed-type-name="AndroidX.Collection.SparseArrayCompatKt" token="33554590" />
+      <entry key="androidx/collection/SparseArrayKt" java-name="androidx/collection/SparseArrayKt" managed-type-name="AndroidX.Collection.SparseArrayKt" token="33554591" />
+      <entry key="androidx/collection/internal/ContainerHelpersKt" java-name="androidx/collection/internal/ContainerHelpersKt" managed-type-name="AndroidX.Collection.Internal.ContainerHelpersKt" token="33554592" />
+      <entry key="androidx/collection/internal/LockExtKt" java-name="androidx/collection/internal/LockExtKt" managed-type-name="AndroidX.Collection.Internal.LockExtKt" token="33554593" />
+      <entry key="androidx/collection/internal/PackingHelpers_jvmKt" java-name="androidx/collection/internal/PackingHelpers_jvmKt" managed-type-name="AndroidX.Collection.Internal.PackingHelpers_jvmKt" token="33554594" />
+      <entry key="androidx/collection/internal/RuntimeHelpersKt" java-name="androidx/collection/internal/RuntimeHelpersKt" managed-type-name="AndroidX.Collection.Internal.RuntimeHelpersKt" token="33554595" />
+    </types-scratch>
+  </module>
+</api>

@@ -1,0 +1,9 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Lifecycle.Process" mvid="f1fcb726336d490aba3a324f61cf3e3f">
+  <module assembly-name="Xamarin.AndroidX.Lifecycle.Process" mvid="f1fcb726336d490aba3a324f61cf3e3f" mvid-bytes="Jrf88W0zCkm6OjJPYc8+Pw==">
+    <types-scratch>
+      <entry key="androidx/lifecycle/ProcessLifecycleInitializer" java-name="androidx/lifecycle/ProcessLifecycleInitializer" managed-type-name="AndroidX.Lifecycle.ProcessLifecycleInitializer" token="33554435" />
+      <entry key="androidx/lifecycle/ProcessLifecycleOwner" java-name="androidx/lifecycle/ProcessLifecycleOwner" managed-type-name="AndroidX.Lifecycle.ProcessLifecycleOwner" token="33554436" />
+      <entry key="androidx/lifecycle/ProcessLifecycleOwner$Companion" java-name="androidx/lifecycle/ProcessLifecycleOwner$Companion" managed-type-name="AndroidX.Lifecycle.ProcessLifecycleOwner/Companion" token="33554438" />
+    </types-scratch>
+  </module>
+</api>

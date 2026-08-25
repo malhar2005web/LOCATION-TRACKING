@@ -1,0 +1,55 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Transition" mvid="93d8b58dcb2d48239add74f5b83a9d56">
+  <module assembly-name="Xamarin.AndroidX.Transition" mvid="93d8b58dcb2d48239add74f5b83a9d56" mvid-bytes="jbXYky3LI0ia3XT1uDqdVg==">
+    <duplicates>
+      <entry java-name="androidx/transition/TransitionSeekController" managed-type-name="AndroidX.Transitions.ITransitionSeekControllerInvoker" token="33554479" />
+      <entry java-name="androidx/transition/PathMotion" managed-type-name="AndroidX.Transitions.PathMotionInvoker" token="33554481" />
+      <entry java-name="androidx/transition/Slide$GravityFlag" managed-type-name="AndroidX.Transitions.Slide/IGravityFlagInvoker" token="33554502" />
+      <entry java-name="androidx/transition/Transition$EpicenterCallback" managed-type-name="AndroidX.Transitions.Transition/EpicenterCallbackInvoker" token="33554504" />
+      <entry java-name="androidx/transition/Transition$MatchOrder" managed-type-name="AndroidX.Transitions.Transition/IMatchOrderInvoker" token="33554506" />
+      <entry java-name="androidx/transition/Transition$TransitionListener" managed-type-name="AndroidX.Transitions.Transition/ITransitionListenerInvoker" token="33554508" />
+      <entry java-name="androidx/transition/Transition" managed-type-name="AndroidX.Transitions.TransitionInvoker" token="33554487" />
+      <entry java-name="androidx/transition/TransitionPropagation" managed-type-name="AndroidX.Transitions.TransitionPropagationInvoker" token="33554492" />
+      <entry java-name="androidx/transition/Visibility$Mode" managed-type-name="AndroidX.Transitions.Visibility/IModeInvoker" token="33554518" />
+      <entry java-name="androidx/transition/Visibility" managed-type-name="AndroidX.Transitions.VisibilityInvoker" token="33554496" />
+      <entry java-name="androidx/transition/VisibilityPropagation" managed-type-name="AndroidX.Transitions.VisibilityPropagationInvoker" token="33554498" />
+    </duplicates>
+    <types-scratch>
+      <entry key="crc64a25b61d9f8ee364f/FloatArrayEvaluator" java-name="crc64a25b61d9f8ee364f/FloatArrayEvaluator" managed-type-name="AndroidX.Transitions.FloatArrayEvaluator" token="33554464" />
+      <entry key="crc64a25b61d9f8ee364f/TransitionUtils" java-name="crc64a25b61d9f8ee364f/TransitionUtils" managed-type-name="AndroidX.Transitions.TransitionUtils" token="33554465" />
+      <entry key="crc64a25b61d9f8ee364f/TransitionUtils_MatrixEvaluator" java-name="crc64a25b61d9f8ee364f/TransitionUtils_MatrixEvaluator" managed-type-name="AndroidX.Transitions.TransitionUtils/MatrixEvaluator" token="33554500" />
+      <entry key="crc64a25b61d9f8ee364f/RectEvaluator" java-name="crc64a25b61d9f8ee364f/RectEvaluator" managed-type-name="AndroidX.Transitions.RectEvaluator" token="33554466" />
+      <entry key="androidx/transition/ArcMotion" java-name="androidx/transition/ArcMotion" managed-type-name="AndroidX.Transitions.ArcMotion" token="33554467" />
+      <entry key="androidx/transition/AutoTransition" java-name="androidx/transition/AutoTransition" managed-type-name="AndroidX.Transitions.AutoTransition" token="33554468" />
+      <entry key="androidx/transition/ChangeBounds" java-name="androidx/transition/ChangeBounds" managed-type-name="AndroidX.Transitions.ChangeBounds" token="33554469" />
+      <entry key="androidx/transition/ChangeClipBounds" java-name="androidx/transition/ChangeClipBounds" managed-type-name="AndroidX.Transitions.ChangeClipBounds" token="33554470" />
+      <entry key="androidx/transition/ChangeImageTransform" java-name="androidx/transition/ChangeImageTransform" managed-type-name="AndroidX.Transitions.ChangeImageTransform" token="33554471" />
+      <entry key="androidx/transition/ChangeScroll" java-name="androidx/transition/ChangeScroll" managed-type-name="AndroidX.Transitions.ChangeScroll" token="33554472" />
+      <entry key="androidx/transition/ChangeTransform" java-name="androidx/transition/ChangeTransform" managed-type-name="AndroidX.Transitions.ChangeTransform" token="33554473" />
+      <entry key="androidx/transition/CircularPropagation" java-name="androidx/transition/CircularPropagation" managed-type-name="AndroidX.Transitions.CircularPropagation" token="33554474" />
+      <entry key="androidx/transition/Explode" java-name="androidx/transition/Explode" managed-type-name="AndroidX.Transitions.Explode" token="33554475" />
+      <entry key="androidx/transition/Fade" java-name="androidx/transition/Fade" managed-type-name="AndroidX.Transitions.Fade" token="33554476" />
+      <entry key="androidx/transition/FragmentTransitionSupport" java-name="androidx/transition/FragmentTransitionSupport" managed-type-name="AndroidX.Transitions.FragmentTransitionSupport" token="33554477" />
+      <entry key="androidx/transition/TransitionSeekController" java-name="androidx/transition/TransitionSeekController" managed-type-name="AndroidX.Transitions.ITransitionSeekController" token="33554478" skip-in-java-to-managed="True" />
+      <entry key="androidx/transition/PathMotion" java-name="androidx/transition/PathMotion" managed-type-name="AndroidX.Transitions.PathMotion" token="33554480" />
+      <entry key="androidx/transition/PatternPathMotion" java-name="androidx/transition/PatternPathMotion" managed-type-name="AndroidX.Transitions.PatternPathMotion" token="33554482" />
+      <entry key="androidx/transition/Scene" java-name="androidx/transition/Scene" managed-type-name="AndroidX.Transitions.Scene" token="33554483" />
+      <entry key="androidx/transition/SidePropagation" java-name="androidx/transition/SidePropagation" managed-type-name="AndroidX.Transitions.SidePropagation" token="33554484" />
+      <entry key="androidx/transition/Slide" java-name="androidx/transition/Slide" managed-type-name="AndroidX.Transitions.Slide" token="33554485" />
+      <entry key="androidx/transition/Slide$GravityFlag" java-name="androidx/transition/Slide$GravityFlag" managed-type-name="AndroidX.Transitions.Slide/IGravityFlag" token="33554501" skip-in-java-to-managed="True" />
+      <entry key="androidx/transition/Transition" java-name="androidx/transition/Transition" managed-type-name="AndroidX.Transitions.Transition" token="33554486" />
+      <entry key="androidx/transition/Transition$EpicenterCallback" java-name="androidx/transition/Transition$EpicenterCallback" managed-type-name="AndroidX.Transitions.Transition/EpicenterCallback" token="33554503" />
+      <entry key="androidx/transition/Transition$MatchOrder" java-name="androidx/transition/Transition$MatchOrder" managed-type-name="AndroidX.Transitions.Transition/IMatchOrder" token="33554505" skip-in-java-to-managed="True" />
+      <entry key="androidx/transition/Transition$TransitionListener" java-name="androidx/transition/Transition$TransitionListener" managed-type-name="AndroidX.Transitions.Transition/ITransitionListener" token="33554507" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/transition/Transition_TransitionListenerImplementor" java-name="mono/androidx/transition/Transition_TransitionListenerImplementor" managed-type-name="AndroidX.Transitions.Transition/ITransitionListenerImplementor" token="33554516" />
+      <entry key="androidx/transition/TransitionInflater" java-name="androidx/transition/TransitionInflater" managed-type-name="AndroidX.Transitions.TransitionInflater" token="33554488" />
+      <entry key="androidx/transition/TransitionListenerAdapter" java-name="androidx/transition/TransitionListenerAdapter" managed-type-name="AndroidX.Transitions.TransitionListenerAdapter" token="33554489" />
+      <entry key="androidx/transition/TransitionManager" java-name="androidx/transition/TransitionManager" managed-type-name="AndroidX.Transitions.TransitionManager" token="33554490" />
+      <entry key="androidx/transition/TransitionPropagation" java-name="androidx/transition/TransitionPropagation" managed-type-name="AndroidX.Transitions.TransitionPropagation" token="33554491" />
+      <entry key="androidx/transition/TransitionSet" java-name="androidx/transition/TransitionSet" managed-type-name="AndroidX.Transitions.TransitionSet" token="33554493" />
+      <entry key="androidx/transition/TransitionValues" java-name="androidx/transition/TransitionValues" managed-type-name="AndroidX.Transitions.TransitionValues" token="33554494" />
+      <entry key="androidx/transition/Visibility" java-name="androidx/transition/Visibility" managed-type-name="AndroidX.Transitions.Visibility" token="33554495" />
+      <entry key="androidx/transition/Visibility$Mode" java-name="androidx/transition/Visibility$Mode" managed-type-name="AndroidX.Transitions.Visibility/IMode" token="33554517" skip-in-java-to-managed="True" />
+      <entry key="androidx/transition/VisibilityPropagation" java-name="androidx/transition/VisibilityPropagation" managed-type-name="AndroidX.Transitions.VisibilityPropagation" token="33554497" />
+    </types-scratch>
+  </module>
+</api>

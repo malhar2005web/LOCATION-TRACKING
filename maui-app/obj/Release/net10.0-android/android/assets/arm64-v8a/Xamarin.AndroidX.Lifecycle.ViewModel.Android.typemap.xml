@@ -1,0 +1,52 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Lifecycle.ViewModel.Android" mvid="0be3ecfbdac84a15b13f7882634dac75">
+  <module assembly-name="Xamarin.AndroidX.Lifecycle.ViewModel.Android" mvid="0be3ecfbdac84a15b13f7882634dac75" mvid-bytes="++zjC8jaFUqxP3iCY02sdQ==">
+    <duplicates>
+      <entry java-name="androidx/lifecycle/HasDefaultViewModelProviderFactory" managed-type-name="AndroidX.Lifecycle.IHasDefaultViewModelProviderFactoryInvoker" token="33554445" />
+      <entry java-name="androidx/lifecycle/ViewModelStoreOwner" managed-type-name="AndroidX.Lifecycle.IViewModelStoreOwnerInvoker" token="33554447" />
+      <entry java-name="androidx/lifecycle/ViewModel" managed-type-name="AndroidX.Lifecycle.ViewModelInvoker" token="33554449" />
+      <entry java-name="mono/internal/androidx/lifecycle/ViewModelProvider$Factory" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/FactoryConsts" token="33554477" />
+      <entry java-name="androidx/lifecycle/ViewModelProvider$Factory" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/IFactoryInvoker" token="33554479" />
+      <entry java-name="androidx/lifecycle/viewmodel/CreationExtras$Key" managed-type-name="AndroidX.Lifecycle.ViewModels.CreationExtras/IKeyInvoker" token="33554485" />
+      <entry java-name="androidx/lifecycle/viewmodel/CreationExtras" managed-type-name="AndroidX.Lifecycle.ViewModels.CreationExtrasInvoker" token="33554458" />
+      <entry java-name="androidx/lifecycle/viewmodel/ViewModelFactoryDsl" managed-type-name="AndroidX.Lifecycle.ViewModels.IViewModelFactoryDslInvoker" token="33554463" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/lifecycle/AndroidViewModel" java-name="androidx/lifecycle/AndroidViewModel" managed-type-name="AndroidX.Lifecycle.AndroidViewModel" token="33554442" />
+      <entry key="androidx/lifecycle/AndroidViewModel_androidKt" java-name="androidx/lifecycle/AndroidViewModel_androidKt" managed-type-name="AndroidX.Lifecycle.AndroidViewModel_androidKt" token="33554443" />
+      <entry key="androidx/lifecycle/HasDefaultViewModelProviderFactory" java-name="androidx/lifecycle/HasDefaultViewModelProviderFactory" managed-type-name="AndroidX.Lifecycle.IHasDefaultViewModelProviderFactory" token="33554444" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/ViewModelStoreOwner" java-name="androidx/lifecycle/ViewModelStoreOwner" managed-type-name="AndroidX.Lifecycle.IViewModelStoreOwner" token="33554446" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/ViewModel" java-name="androidx/lifecycle/ViewModel" managed-type-name="AndroidX.Lifecycle.ViewModel" token="33554448" />
+      <entry key="androidx/lifecycle/ViewModelKt" java-name="androidx/lifecycle/ViewModelKt" managed-type-name="AndroidX.Lifecycle.ViewModelKt" token="33554450" />
+      <entry key="androidx/lifecycle/ViewModelLazy" java-name="androidx/lifecycle/ViewModelLazy" managed-type-name="AndroidX.Lifecycle.ViewModelLazy" token="33554451" />
+      <entry key="androidx/lifecycle/ViewModelProvider" java-name="androidx/lifecycle/ViewModelProvider" managed-type-name="AndroidX.Lifecycle.ViewModelProvider" token="33554452" />
+      <entry key="androidx/lifecycle/ViewModelProvider$AndroidViewModelFactory" java-name="androidx/lifecycle/ViewModelProvider$AndroidViewModelFactory" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/AndroidViewModelFactory" token="33554473" />
+      <entry key="androidx/lifecycle/ViewModelProvider$AndroidViewModelFactory$Companion" java-name="androidx/lifecycle/ViewModelProvider$AndroidViewModelFactory$Companion" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/AndroidViewModelFactory/Companion" token="33554486" />
+      <entry key="androidx/lifecycle/ViewModelProvider$Companion" java-name="androidx/lifecycle/ViewModelProvider$Companion" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/Companion" token="33554474" />
+      <entry key="androidx/lifecycle/ViewModelProvider$Factory$Companion" java-name="androidx/lifecycle/ViewModelProvider$Factory$Companion" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/FactoryCompanion" token="33554475" />
+      <entry key="mono/internal/androidx/lifecycle/ViewModelProvider$Factory" java-name="mono/internal/androidx/lifecycle/ViewModelProvider$Factory" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/Factory" token="33554476" />
+      <entry key="androidx/lifecycle/ViewModelProvider$Factory" java-name="androidx/lifecycle/ViewModelProvider$Factory" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/IFactory" token="33554478" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/ViewModelProvider$NewInstanceFactory" java-name="androidx/lifecycle/ViewModelProvider$NewInstanceFactory" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/NewInstanceFactory" token="33554480" />
+      <entry key="androidx/lifecycle/ViewModelProvider$NewInstanceFactory$Companion" java-name="androidx/lifecycle/ViewModelProvider$NewInstanceFactory$Companion" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/NewInstanceFactory/Companion" token="33554488" />
+      <entry key="androidx/lifecycle/ViewModelProvider$OnRequeryFactory" java-name="androidx/lifecycle/ViewModelProvider$OnRequeryFactory" managed-type-name="AndroidX.Lifecycle.ViewModelProvider/OnRequeryFactory" token="33554481" />
+      <entry key="androidx/lifecycle/ViewModelProviderGetKt" java-name="androidx/lifecycle/ViewModelProviderGetKt" managed-type-name="AndroidX.Lifecycle.ViewModelProviderGetKt" token="33554453" />
+      <entry key="androidx/lifecycle/ViewModelStore" java-name="androidx/lifecycle/ViewModelStore" managed-type-name="AndroidX.Lifecycle.ViewModelStore" token="33554454" />
+      <entry key="androidx/lifecycle/ViewTreeViewModelKt" java-name="androidx/lifecycle/ViewTreeViewModelKt" managed-type-name="AndroidX.Lifecycle.ViewTreeViewModelKt" token="33554455" />
+      <entry key="androidx/lifecycle/ViewTreeViewModelStoreOwner" java-name="androidx/lifecycle/ViewTreeViewModelStoreOwner" managed-type-name="AndroidX.Lifecycle.ViewTreeViewModelStoreOwner" token="33554456" />
+      <entry key="androidx/lifecycle/viewmodel/CreationExtras" java-name="androidx/lifecycle/viewmodel/CreationExtras" managed-type-name="AndroidX.Lifecycle.ViewModels.CreationExtras" token="33554457" />
+      <entry key="androidx/lifecycle/viewmodel/CreationExtras$Companion" java-name="androidx/lifecycle/viewmodel/CreationExtras$Companion" managed-type-name="AndroidX.Lifecycle.ViewModels.CreationExtras/Companion" token="33554482" />
+      <entry key="androidx/lifecycle/viewmodel/CreationExtras$Empty" java-name="androidx/lifecycle/viewmodel/CreationExtras$Empty" managed-type-name="AndroidX.Lifecycle.ViewModels.CreationExtras/Empty" token="33554483" />
+      <entry key="androidx/lifecycle/viewmodel/CreationExtras$Key" java-name="androidx/lifecycle/viewmodel/CreationExtras$Key" managed-type-name="AndroidX.Lifecycle.ViewModels.CreationExtras/IKey" token="33554484" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/viewmodel/CreationExtrasKt" java-name="androidx/lifecycle/viewmodel/CreationExtrasKt" managed-type-name="AndroidX.Lifecycle.ViewModels.CreationExtrasKt" token="33554459" />
+      <entry key="androidx/lifecycle/viewmodel/InitializerViewModelFactoryBuilder" java-name="androidx/lifecycle/viewmodel/InitializerViewModelFactoryBuilder" managed-type-name="AndroidX.Lifecycle.ViewModels.InitializerViewModelFactoryBuilder" token="33554460" />
+      <entry key="androidx/lifecycle/viewmodel/InitializerViewModelFactoryKt" java-name="androidx/lifecycle/viewmodel/InitializerViewModelFactoryKt" managed-type-name="AndroidX.Lifecycle.ViewModels.InitializerViewModelFactoryKt" token="33554461" />
+      <entry key="androidx/lifecycle/viewmodel/ViewModelFactoryDsl" java-name="androidx/lifecycle/viewmodel/ViewModelFactoryDsl" managed-type-name="AndroidX.Lifecycle.ViewModels.IViewModelFactoryDsl" token="33554462" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/viewmodel/MutableCreationExtras" java-name="androidx/lifecycle/viewmodel/MutableCreationExtras" managed-type-name="AndroidX.Lifecycle.ViewModels.MutableCreationExtras" token="33554464" />
+      <entry key="androidx/lifecycle/viewmodel/ViewModelInitializer" java-name="androidx/lifecycle/viewmodel/ViewModelInitializer" managed-type-name="AndroidX.Lifecycle.ViewModels.ViewModelInitializer" token="33554466" />
+      <entry key="androidx/lifecycle/viewmodel/ViewModelProviderImpl_androidKt" java-name="androidx/lifecycle/viewmodel/ViewModelProviderImpl_androidKt" managed-type-name="AndroidX.Lifecycle.ViewModels.ViewModelProviderImpl_androidKt" token="33554467" />
+      <entry key="androidx/lifecycle/viewmodel/internal/CanonicalName_jvmKt" java-name="androidx/lifecycle/viewmodel/internal/CanonicalName_jvmKt" managed-type-name="AndroidX.Lifecycle.ViewModels.Internal.CanonicalName_jvmKt" token="33554468" />
+      <entry key="androidx/lifecycle/viewmodel/internal/CloseableCoroutineScopeKt" java-name="androidx/lifecycle/viewmodel/internal/CloseableCoroutineScopeKt" managed-type-name="AndroidX.Lifecycle.ViewModels.Internal.CloseableCoroutineScopeKt" token="33554469" />
+      <entry key="androidx/lifecycle/viewmodel/internal/SynchronizedObjectKt" java-name="androidx/lifecycle/viewmodel/internal/SynchronizedObjectKt" managed-type-name="AndroidX.Lifecycle.ViewModels.Internal.SynchronizedObjectKt" token="33554470" />
+      <entry key="androidx/lifecycle/viewmodel/internal/SynchronizedObject_jvmKt" java-name="androidx/lifecycle/viewmodel/internal/SynchronizedObject_jvmKt" managed-type-name="AndroidX.Lifecycle.ViewModels.Internal.SynchronizedObject_jvmKt" token="33554471" />
+    </types-scratch>
+  </module>
+</api>

@@ -1,0 +1,105 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Malhar\\.nuget\\packages\\microsoft.aspnetcore.components.webview\\10.0.0\\staticwebassets\\blazor.modules.json",
+      "PackagePath": "staticwebassets\\_framework\\blazor.modules.json"
+    },
+    {
+      "Id": "C:\\Users\\Malhar\\.nuget\\packages\\microsoft.aspnetcore.components.webview\\10.0.0\\staticwebassets\\blazor.webview.js",
+      "PackagePath": "staticwebassets\\_framework\\blazor.webview.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\obj\\Debug\\net10.0-android\\scopedcss\\bundle\\LOCATION_TRACKING.styles.css",
+      "PackagePath": "staticwebassets\\LOCATION_TRACKING.styles.css"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\css\\dsr-premium.css",
+      "PackagePath": "staticwebassets\\css\\dsr-premium.css"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\css\\style.css",
+      "PackagePath": "staticwebassets\\css\\style.css"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\img\\skyway-logo.png",
+      "PackagePath": "staticwebassets\\img\\skyway-logo.png"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\admin.js",
+      "PackagePath": "staticwebassets\\js\\admin.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\api.js",
+      "PackagePath": "staticwebassets\\js\\api.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\app.js",
+      "PackagePath": "staticwebassets\\js\\app.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\auth.js",
+      "PackagePath": "staticwebassets\\js\\auth.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\client.js",
+      "PackagePath": "staticwebassets\\js\\client.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\dsrDb.js",
+      "PackagePath": "staticwebassets\\js\\dsrDb.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\leaveDb.js",
+      "PackagePath": "staticwebassets\\js\\leaveDb.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\reminderDb.js",
+      "PackagePath": "staticwebassets\\js\\reminderDb.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\storage.js",
+      "PackagePath": "staticwebassets\\js\\storage.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\time-guard.js",
+      "PackagePath": "staticwebassets\\js\\time-guard.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-android\\staticwebassets\\msbuild.LOCATION_TRACKING.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-android\\staticwebassets\\msbuild.LOCATION_TRACKING.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-android\\staticwebassets\\msbuild.build.LOCATION_TRACKING.props",
+      "PackagePath": "build\\LOCATION_TRACKING.props"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-android\\staticwebassets\\msbuild.buildMultiTargeting.LOCATION_TRACKING.props",
+      "PackagePath": "buildMultiTargeting\\LOCATION_TRACKING.props"
+    },
+    {
+      "Id": "obj\\Debug\\net10.0-android\\staticwebassets\\msbuild.buildTransitive.LOCATION_TRACKING.props",
+      "PackagePath": "buildTransitive\\LOCATION_TRACKING.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

@@ -1,0 +1,21 @@
+<api type="release" assembly-name="Xamarin.AndroidX.CoordinatorLayout" mvid="278d241de2cb4d6884bf501c96ba3951">
+  <module assembly-name="Xamarin.AndroidX.CoordinatorLayout" mvid="278d241de2cb4d6884bf501c96ba3951" mvid-bytes="HSSNJ8viaE2Ev1Aclro5UQ==">
+    <duplicates>
+      <entry java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$AttachedBehavior" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/IAttachedBehaviorInvoker" token="33554478" />
+      <entry java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$Behavior" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/BehaviorInvoker" token="33554480" />
+      <entry java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$DefaultBehavior" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/IDefaultBehaviorInvoker" token="33554482" />
+      <entry java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$DispatchChangeEvent" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/IDispatchChangeEventInvoker" token="33554484" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/coordinatorlayout/widget/CoordinatorLayout" java-name="androidx/coordinatorlayout/widget/CoordinatorLayout" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout" token="33554473" />
+      <entry key="androidx/coordinatorlayout/widget/CoordinatorLayout$AttachedBehavior" java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$AttachedBehavior" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/IAttachedBehavior" token="33554477" skip-in-java-to-managed="True" />
+      <entry key="androidx/coordinatorlayout/widget/CoordinatorLayout$Behavior" java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$Behavior" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/Behavior" token="33554479" />
+      <entry key="androidx/coordinatorlayout/widget/CoordinatorLayout$DefaultBehavior" java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$DefaultBehavior" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/IDefaultBehavior" token="33554481" skip-in-java-to-managed="True" />
+      <entry key="androidx/coordinatorlayout/widget/CoordinatorLayout$DispatchChangeEvent" java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$DispatchChangeEvent" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/IDispatchChangeEvent" token="33554483" skip-in-java-to-managed="True" />
+      <entry key="androidx/coordinatorlayout/widget/CoordinatorLayout$LayoutParams" java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$LayoutParams" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/LayoutParams" token="33554485" />
+      <entry key="androidx/coordinatorlayout/widget/CoordinatorLayout$SavedState" java-name="androidx/coordinatorlayout/widget/CoordinatorLayout$SavedState" managed-type-name="AndroidX.CoordinatorLayout.Widget.CoordinatorLayout/SavedState" token="33554486" />
+      <entry key="androidx/coordinatorlayout/widget/DirectedAcyclicGraph" java-name="androidx/coordinatorlayout/widget/DirectedAcyclicGraph" managed-type-name="AndroidX.CoordinatorLayout.Widget.DirectedAcyclicGraph" token="33554474" />
+      <entry key="androidx/coordinatorlayout/widget/ViewGroupUtils" java-name="androidx/coordinatorlayout/widget/ViewGroupUtils" managed-type-name="AndroidX.CoordinatorLayout.Widget.ViewGroupUtils" token="33554475" />
+    </types-scratch>
+  </module>
+</api>

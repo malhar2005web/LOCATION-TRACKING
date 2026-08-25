@@ -1,0 +1,26 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Navigation.Fragment" mvid="3c72a605208e46ce8a359af51890b770">
+  <module assembly-name="Xamarin.AndroidX.Navigation.Fragment" mvid="3c72a605208e46ce8a359af51890b770" mvid-bytes="BaZyPI4gzkaKNZr1GJC3cA==">
+    <duplicates>
+      <entry java-name="androidx/navigation/fragment/AbstractListDetailFragment" managed-type-name="AndroidX.Navigation.Fragment.AbstractListDetailFragmentInvoker" token="33554443" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/navigation/NavGraphViewModelLazyKt" java-name="androidx/navigation/NavGraphViewModelLazyKt" managed-type-name="AndroidX.Navigation.NavGraphViewModelLazyKt" token="33554441" />
+      <entry key="androidx/navigation/fragment/AbstractListDetailFragment" java-name="androidx/navigation/fragment/AbstractListDetailFragment" managed-type-name="AndroidX.Navigation.Fragment.AbstractListDetailFragment" token="33554442" />
+      <entry key="androidx/navigation/fragment/DialogFragmentNavigator" java-name="androidx/navigation/fragment/DialogFragmentNavigator" managed-type-name="AndroidX.Navigation.Fragment.DialogFragmentNavigator" token="33554444" />
+      <entry key="androidx/navigation/fragment/DialogFragmentNavigator$Destination" java-name="androidx/navigation/fragment/DialogFragmentNavigator$Destination" managed-type-name="AndroidX.Navigation.Fragment.DialogFragmentNavigator/Destination" token="33554455" />
+      <entry key="androidx/navigation/fragment/DialogFragmentNavigatorDestinationBuilder" java-name="androidx/navigation/fragment/DialogFragmentNavigatorDestinationBuilder" managed-type-name="AndroidX.Navigation.Fragment.DialogFragmentNavigatorDestinationBuilder" token="33554445" />
+      <entry key="androidx/navigation/fragment/DialogFragmentNavigatorDestinationBuilderKt" java-name="androidx/navigation/fragment/DialogFragmentNavigatorDestinationBuilderKt" managed-type-name="AndroidX.Navigation.Fragment.DialogFragmentNavigatorDestinationBuilderKt" token="33554446" />
+      <entry key="androidx/navigation/fragment/FragmentKt" java-name="androidx/navigation/fragment/FragmentKt" managed-type-name="AndroidX.Navigation.Fragment.FragmentKt" token="33554447" />
+      <entry key="androidx/navigation/fragment/FragmentNavArgsLazyKt" java-name="androidx/navigation/fragment/FragmentNavArgsLazyKt" managed-type-name="AndroidX.Navigation.Fragment.FragmentNavArgsLazyKt" token="33554448" />
+      <entry key="androidx/navigation/fragment/FragmentNavigator" java-name="androidx/navigation/fragment/FragmentNavigator" managed-type-name="AndroidX.Navigation.Fragment.FragmentNavigator" token="33554449" />
+      <entry key="androidx/navigation/fragment/FragmentNavigator$Destination" java-name="androidx/navigation/fragment/FragmentNavigator$Destination" managed-type-name="AndroidX.Navigation.Fragment.FragmentNavigator/Destination" token="33554456" />
+      <entry key="androidx/navigation/fragment/FragmentNavigator$Extras" java-name="androidx/navigation/fragment/FragmentNavigator$Extras" managed-type-name="AndroidX.Navigation.Fragment.FragmentNavigator/Extras" token="33554457" />
+      <entry key="androidx/navigation/fragment/FragmentNavigator$Extras$Builder" java-name="androidx/navigation/fragment/FragmentNavigator$Extras$Builder" managed-type-name="AndroidX.Navigation.Fragment.FragmentNavigator/Extras/Builder" token="33554459" />
+      <entry key="androidx/navigation/fragment/FragmentNavigatorDestinationBuilder" java-name="androidx/navigation/fragment/FragmentNavigatorDestinationBuilder" managed-type-name="AndroidX.Navigation.Fragment.FragmentNavigatorDestinationBuilder" token="33554450" />
+      <entry key="androidx/navigation/fragment/FragmentNavigatorDestinationBuilderKt" java-name="androidx/navigation/fragment/FragmentNavigatorDestinationBuilderKt" managed-type-name="AndroidX.Navigation.Fragment.FragmentNavigatorDestinationBuilderKt" token="33554451" />
+      <entry key="androidx/navigation/fragment/FragmentNavigatorExtrasKt" java-name="androidx/navigation/fragment/FragmentNavigatorExtrasKt" managed-type-name="AndroidX.Navigation.Fragment.FragmentNavigatorExtrasKt" token="33554452" />
+      <entry key="androidx/navigation/fragment/NavHostFragment" java-name="androidx/navigation/fragment/NavHostFragment" managed-type-name="AndroidX.Navigation.Fragment.NavHostFragment" token="33554453" />
+      <entry key="androidx/navigation/fragment/NavHostFragment$Companion" java-name="androidx/navigation/fragment/NavHostFragment$Companion" managed-type-name="AndroidX.Navigation.Fragment.NavHostFragment/Companion" token="33554458" />
+    </types-scratch>
+  </module>
+</api>

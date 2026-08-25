@@ -1,0 +1,11 @@
+<api type="release" assembly-name="Xamarin.AndroidX.VectorDrawable" mvid="8707a4905a4243faa05d4c44499c6492">
+  <module assembly-name="Xamarin.AndroidX.VectorDrawable" mvid="8707a4905a4243faa05d4c44499c6492" mvid-bytes="kKQHh0Ja+kOgXUxESZxkkg==">
+    <duplicates>
+      <entry java-name="androidx/vectordrawable/graphics/drawable/VectorDrawableCommon" managed-type-name="AndroidX.VectorDrawable.Graphics.Drawable.VectorDrawableCommonInvoker" token="33554446" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/vectordrawable/graphics/drawable/VectorDrawableCommon" java-name="androidx/vectordrawable/graphics/drawable/VectorDrawableCommon" managed-type-name="AndroidX.VectorDrawable.Graphics.Drawable.VectorDrawableCommon" token="33554445" />
+      <entry key="androidx/vectordrawable/graphics/drawable/VectorDrawableCompat" java-name="androidx/vectordrawable/graphics/drawable/VectorDrawableCompat" managed-type-name="AndroidX.VectorDrawable.Graphics.Drawable.VectorDrawableCompat" token="33554447" />
+    </types-scratch>
+  </module>
+</api>

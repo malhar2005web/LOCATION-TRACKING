@@ -1,0 +1,73 @@
+<api type="release" assembly-name="Jsr305Binding" mvid="01ef5c00be91440eb0167c700b4764a8">
+  <module assembly-name="Jsr305Binding" mvid="01ef5c00be91440eb0167c700b4764a8" mvid-bytes="AFzvAZG+DkSwFnxwC0dkqA==">
+    <duplicates>
+      <entry java-name="javax/annotation/CheckForNull" managed-type-name="Javax.Annotation.ICheckForNullInvoker" token="33554443" />
+      <entry java-name="javax/annotation/CheckForSigned" managed-type-name="Javax.Annotation.ICheckForSignedInvoker" token="33554445" />
+      <entry java-name="javax/annotation/CheckReturnValue" managed-type-name="Javax.Annotation.ICheckReturnValueInvoker" token="33554447" />
+      <entry java-name="javax/annotation/Detainted" managed-type-name="Javax.Annotation.IDetaintedInvoker" token="33554449" />
+      <entry java-name="javax/annotation/MatchesPattern" managed-type-name="Javax.Annotation.IMatchesPatternInvoker" token="33554452" />
+      <entry java-name="javax/annotation/Nonnegative" managed-type-name="Javax.Annotation.INonnegativeInvoker" token="33554455" />
+      <entry java-name="javax/annotation/Nonnull" managed-type-name="Javax.Annotation.INonnullInvoker" token="33554458" />
+      <entry java-name="javax/annotation/Nullable" managed-type-name="Javax.Annotation.INullableInvoker" token="33554460" />
+      <entry java-name="javax/annotation/OverridingMethodsMustInvokeSuper" managed-type-name="Javax.Annotation.IOverridingMethodsMustInvokeSuperInvoker" token="33554462" />
+      <entry java-name="javax/annotation/ParametersAreNonnullByDefault" managed-type-name="Javax.Annotation.IParametersAreNonnullByDefaultInvoker" token="33554464" />
+      <entry java-name="javax/annotation/ParametersAreNullableByDefault" managed-type-name="Javax.Annotation.IParametersAreNullableByDefaultInvoker" token="33554466" />
+      <entry java-name="javax/annotation/PropertyKey" managed-type-name="Javax.Annotation.IPropertyKeyInvoker" token="33554468" />
+      <entry java-name="javax/annotation/RegEx" managed-type-name="Javax.Annotation.IRegExInvoker" token="33554471" />
+      <entry java-name="javax/annotation/Signed" managed-type-name="Javax.Annotation.ISignedInvoker" token="33554473" />
+      <entry java-name="javax/annotation/Syntax" managed-type-name="Javax.Annotation.ISyntaxInvoker" token="33554475" />
+      <entry java-name="javax/annotation/Tainted" managed-type-name="Javax.Annotation.ITaintedInvoker" token="33554477" />
+      <entry java-name="javax/annotation/Untainted" managed-type-name="Javax.Annotation.IUntaintedInvoker" token="33554479" />
+      <entry java-name="javax/annotation/WillClose" managed-type-name="Javax.Annotation.IWillCloseInvoker" token="33554481" />
+      <entry java-name="javax/annotation/WillCloseWhenClosed" managed-type-name="Javax.Annotation.IWillCloseWhenClosedInvoker" token="33554483" />
+      <entry java-name="javax/annotation/WillNotClose" managed-type-name="Javax.Annotation.IWillNotCloseInvoker" token="33554485" />
+      <entry java-name="javax/annotation/meta/Exclusive" managed-type-name="Javax.Annotation.Meta.IExclusiveInvoker" token="33554505" />
+      <entry java-name="javax/annotation/meta/Exhaustive" managed-type-name="Javax.Annotation.Meta.IExhaustiveInvoker" token="33554507" />
+      <entry java-name="javax/annotation/meta/TypeQualifier" managed-type-name="Javax.Annotation.Meta.ITypeQualifierInvoker" token="33554509" />
+      <entry java-name="javax/annotation/meta/TypeQualifierDefault" managed-type-name="Javax.Annotation.Meta.ITypeQualifierDefaultInvoker" token="33554511" />
+      <entry java-name="javax/annotation/meta/TypeQualifierNickname" managed-type-name="Javax.Annotation.Meta.ITypeQualifierNicknameInvoker" token="33554513" />
+      <entry java-name="javax/annotation/meta/TypeQualifierValidator" managed-type-name="Javax.Annotation.Meta.ITypeQualifierValidatorInvoker" token="33554515" />
+      <entry java-name="javax/annotation/concurrent/GuardedBy" managed-type-name="Javax.Annotation.Concurrent.IGuardedByInvoker" token="33554522" />
+      <entry java-name="javax/annotation/concurrent/Immutable" managed-type-name="Javax.Annotation.Concurrent.IImmutableInvoker" token="33554524" />
+      <entry java-name="javax/annotation/concurrent/NotThreadSafe" managed-type-name="Javax.Annotation.Concurrent.INotThreadSafeInvoker" token="33554527" />
+      <entry java-name="javax/annotation/concurrent/ThreadSafe" managed-type-name="Javax.Annotation.Concurrent.IThreadSafeInvoker" token="33554529" />
+    </duplicates>
+    <types-scratch>
+      <entry key="javax/annotation/CheckForNull" java-name="javax/annotation/CheckForNull" managed-type-name="Javax.Annotation.ICheckForNull" token="33554442" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/CheckForSigned" java-name="javax/annotation/CheckForSigned" managed-type-name="Javax.Annotation.ICheckForSigned" token="33554444" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/CheckReturnValue" java-name="javax/annotation/CheckReturnValue" managed-type-name="Javax.Annotation.ICheckReturnValue" token="33554446" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/Detainted" java-name="javax/annotation/Detainted" managed-type-name="Javax.Annotation.IDetainted" token="33554448" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/MatchesPattern$Checker" java-name="javax/annotation/MatchesPattern$Checker" managed-type-name="Javax.Annotation.MatchesPatternChecker" token="33554450" />
+      <entry key="javax/annotation/MatchesPattern" java-name="javax/annotation/MatchesPattern" managed-type-name="Javax.Annotation.IMatchesPattern" token="33554451" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/Nonnegative$Checker" java-name="javax/annotation/Nonnegative$Checker" managed-type-name="Javax.Annotation.NonnegativeChecker" token="33554453" />
+      <entry key="javax/annotation/Nonnegative" java-name="javax/annotation/Nonnegative" managed-type-name="Javax.Annotation.INonnegative" token="33554454" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/Nonnull$Checker" java-name="javax/annotation/Nonnull$Checker" managed-type-name="Javax.Annotation.NonnullChecker" token="33554456" />
+      <entry key="javax/annotation/Nonnull" java-name="javax/annotation/Nonnull" managed-type-name="Javax.Annotation.INonnull" token="33554457" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/Nullable" java-name="javax/annotation/Nullable" managed-type-name="Javax.Annotation.INullable" token="33554459" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/OverridingMethodsMustInvokeSuper" java-name="javax/annotation/OverridingMethodsMustInvokeSuper" managed-type-name="Javax.Annotation.IOverridingMethodsMustInvokeSuper" token="33554461" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/ParametersAreNonnullByDefault" java-name="javax/annotation/ParametersAreNonnullByDefault" managed-type-name="Javax.Annotation.IParametersAreNonnullByDefault" token="33554463" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/ParametersAreNullableByDefault" java-name="javax/annotation/ParametersAreNullableByDefault" managed-type-name="Javax.Annotation.IParametersAreNullableByDefault" token="33554465" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/PropertyKey" java-name="javax/annotation/PropertyKey" managed-type-name="Javax.Annotation.IPropertyKey" token="33554467" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/RegEx$Checker" java-name="javax/annotation/RegEx$Checker" managed-type-name="Javax.Annotation.RegExChecker" token="33554469" />
+      <entry key="javax/annotation/RegEx" java-name="javax/annotation/RegEx" managed-type-name="Javax.Annotation.IRegEx" token="33554470" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/Signed" java-name="javax/annotation/Signed" managed-type-name="Javax.Annotation.ISigned" token="33554472" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/Syntax" java-name="javax/annotation/Syntax" managed-type-name="Javax.Annotation.ISyntax" token="33554474" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/Tainted" java-name="javax/annotation/Tainted" managed-type-name="Javax.Annotation.ITainted" token="33554476" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/Untainted" java-name="javax/annotation/Untainted" managed-type-name="Javax.Annotation.IUntainted" token="33554478" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/WillClose" java-name="javax/annotation/WillClose" managed-type-name="Javax.Annotation.IWillClose" token="33554480" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/WillCloseWhenClosed" java-name="javax/annotation/WillCloseWhenClosed" managed-type-name="Javax.Annotation.IWillCloseWhenClosed" token="33554482" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/WillNotClose" java-name="javax/annotation/WillNotClose" managed-type-name="Javax.Annotation.IWillNotClose" token="33554484" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/meta/Exclusive" java-name="javax/annotation/meta/Exclusive" managed-type-name="Javax.Annotation.Meta.IExclusive" token="33554504" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/meta/Exhaustive" java-name="javax/annotation/meta/Exhaustive" managed-type-name="Javax.Annotation.Meta.IExhaustive" token="33554506" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/meta/TypeQualifier" java-name="javax/annotation/meta/TypeQualifier" managed-type-name="Javax.Annotation.Meta.ITypeQualifier" token="33554508" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/meta/TypeQualifierDefault" java-name="javax/annotation/meta/TypeQualifierDefault" managed-type-name="Javax.Annotation.Meta.ITypeQualifierDefault" token="33554510" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/meta/TypeQualifierNickname" java-name="javax/annotation/meta/TypeQualifierNickname" managed-type-name="Javax.Annotation.Meta.ITypeQualifierNickname" token="33554512" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/meta/TypeQualifierValidator" java-name="javax/annotation/meta/TypeQualifierValidator" managed-type-name="Javax.Annotation.Meta.ITypeQualifierValidator" token="33554514" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/meta/When" java-name="javax/annotation/meta/When" managed-type-name="Javax.Annotation.Meta.When" token="33554519" />
+      <entry key="javax/annotation/concurrent/GuardedBy" java-name="javax/annotation/concurrent/GuardedBy" managed-type-name="Javax.Annotation.Concurrent.IGuardedBy" token="33554521" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/concurrent/Immutable" java-name="javax/annotation/concurrent/Immutable" managed-type-name="Javax.Annotation.Concurrent.IImmutable" token="33554523" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/concurrent/NotThreadSafe" java-name="javax/annotation/concurrent/NotThreadSafe" managed-type-name="Javax.Annotation.Concurrent.INotThreadSafe" token="33554526" skip-in-java-to-managed="True" />
+      <entry key="javax/annotation/concurrent/ThreadSafe" java-name="javax/annotation/concurrent/ThreadSafe" managed-type-name="Javax.Annotation.Concurrent.IThreadSafe" token="33554528" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>

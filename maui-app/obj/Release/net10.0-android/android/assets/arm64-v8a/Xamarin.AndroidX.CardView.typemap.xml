@@ -1,0 +1,8 @@
+<api type="release" assembly-name="Xamarin.AndroidX.CardView" mvid="84493a94871747d39167a248879bd433">
+  <module assembly-name="Xamarin.AndroidX.CardView" mvid="84493a94871747d39167a248879bd433" mvid-bytes="lDpJhBeH00eRZ6JIh5vUMw==">
+    <types-scratch>
+      <entry key="androidx/cardview/widget/CardView" java-name="androidx/cardview/widget/CardView" managed-type-name="AndroidX.CardView.Widget.CardView" token="33554444" />
+      <entry key="androidx/cardview/widget/RoundRectDrawableWithShadow" java-name="androidx/cardview/widget/RoundRectDrawableWithShadow" managed-type-name="AndroidX.CardView.Widget.RoundRectDrawableWithShadow" token="33554445" />
+    </types-scratch>
+  </module>
+</api>

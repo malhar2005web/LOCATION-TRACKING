@@ -1,0 +1,31 @@
+<api type="release" assembly-name="Xamarin.AndroidX.DynamicAnimation" mvid="f6423ce5f5dd4ae4993324ee2251fea5">
+  <module assembly-name="Xamarin.AndroidX.DynamicAnimation" mvid="f6423ce5f5dd4ae4993324ee2251fea5" mvid-bytes="5TxC9t315EqZMyTuIlH+pQ==">
+    <duplicates>
+      <entry java-name="androidx/dynamicanimation/animation/AnimationHandler$DurationScaleChangeListener" managed-type-name="AndroidX.DynamicAnimation.AnimationHandler/IDurationScaleChangeListenerInvoker" token="33554461" />
+      <entry java-name="androidx/dynamicanimation/animation/DynamicAnimation$OnAnimationEndListener" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation/IOnAnimationEndListenerInvoker" token="33554467" />
+      <entry java-name="androidx/dynamicanimation/animation/DynamicAnimation$OnAnimationUpdateListener" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation/IOnAnimationUpdateListenerInvoker" token="33554471" />
+      <entry java-name="androidx/dynamicanimation/animation/DynamicAnimation$ViewProperty" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation/ViewPropertyInvoker" token="33554475" />
+      <entry java-name="androidx/dynamicanimation/animation/DynamicAnimation" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimationInvoker" token="33554450" />
+      <entry java-name="androidx/dynamicanimation/animation/FloatPropertyCompat" managed-type-name="AndroidX.DynamicAnimation.FloatPropertyCompatInvoker" token="33554453" />
+      <entry java-name="androidx/dynamicanimation/animation/FrameCallbackScheduler" managed-type-name="AndroidX.DynamicAnimation.IFrameCallbackSchedulerInvoker" token="33554456" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/dynamicanimation/animation/AnimationHandler" java-name="androidx/dynamicanimation/animation/AnimationHandler" managed-type-name="AndroidX.DynamicAnimation.AnimationHandler" token="33554448" />
+      <entry key="androidx/dynamicanimation/animation/AnimationHandler$DurationScaleChangeListener" java-name="androidx/dynamicanimation/animation/AnimationHandler$DurationScaleChangeListener" managed-type-name="AndroidX.DynamicAnimation.AnimationHandler/IDurationScaleChangeListener" token="33554460" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/dynamicanimation/animation/AnimationHandler_DurationScaleChangeListenerImplementor" java-name="mono/androidx/dynamicanimation/animation/AnimationHandler_DurationScaleChangeListenerImplementor" managed-type-name="AndroidX.DynamicAnimation.AnimationHandler/IDurationScaleChangeListenerImplementor" token="33554464" />
+      <entry key="androidx/dynamicanimation/animation/AnimationHandler$DurationScaleChangeListener33" java-name="androidx/dynamicanimation/animation/AnimationHandler$DurationScaleChangeListener33" managed-type-name="AndroidX.DynamicAnimation.AnimationHandler/DurationScaleChangeListener33" token="33554465" />
+      <entry key="androidx/dynamicanimation/animation/DynamicAnimation" java-name="androidx/dynamicanimation/animation/DynamicAnimation" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation" token="33554449" />
+      <entry key="androidx/dynamicanimation/animation/DynamicAnimation$OnAnimationEndListener" java-name="androidx/dynamicanimation/animation/DynamicAnimation$OnAnimationEndListener" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation/IOnAnimationEndListener" token="33554466" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/dynamicanimation/animation/DynamicAnimation_OnAnimationEndListenerImplementor" java-name="mono/androidx/dynamicanimation/animation/DynamicAnimation_OnAnimationEndListenerImplementor" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation/IOnAnimationEndListenerImplementor" token="33554469" />
+      <entry key="androidx/dynamicanimation/animation/DynamicAnimation$OnAnimationUpdateListener" java-name="androidx/dynamicanimation/animation/DynamicAnimation$OnAnimationUpdateListener" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation/IOnAnimationUpdateListener" token="33554470" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/dynamicanimation/animation/DynamicAnimation_OnAnimationUpdateListenerImplementor" java-name="mono/androidx/dynamicanimation/animation/DynamicAnimation_OnAnimationUpdateListenerImplementor" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation/IOnAnimationUpdateListenerImplementor" token="33554473" />
+      <entry key="androidx/dynamicanimation/animation/DynamicAnimation$ViewProperty" java-name="androidx/dynamicanimation/animation/DynamicAnimation$ViewProperty" managed-type-name="AndroidX.DynamicAnimation.DynamicAnimation/ViewProperty" token="33554474" />
+      <entry key="androidx/dynamicanimation/animation/FlingAnimation" java-name="androidx/dynamicanimation/animation/FlingAnimation" managed-type-name="AndroidX.DynamicAnimation.FlingAnimation" token="33554451" />
+      <entry key="androidx/dynamicanimation/animation/FloatPropertyCompat" java-name="androidx/dynamicanimation/animation/FloatPropertyCompat" managed-type-name="AndroidX.DynamicAnimation.FloatPropertyCompat" token="33554452" />
+      <entry key="androidx/dynamicanimation/animation/FloatValueHolder" java-name="androidx/dynamicanimation/animation/FloatValueHolder" managed-type-name="AndroidX.DynamicAnimation.FloatValueHolder" token="33554454" />
+      <entry key="androidx/dynamicanimation/animation/FrameCallbackScheduler" java-name="androidx/dynamicanimation/animation/FrameCallbackScheduler" managed-type-name="AndroidX.DynamicAnimation.IFrameCallbackScheduler" token="33554455" skip-in-java-to-managed="True" />
+      <entry key="androidx/dynamicanimation/animation/SpringAnimation" java-name="androidx/dynamicanimation/animation/SpringAnimation" managed-type-name="AndroidX.DynamicAnimation.SpringAnimation" token="33554457" />
+      <entry key="androidx/dynamicanimation/animation/SpringForce" java-name="androidx/dynamicanimation/animation/SpringForce" managed-type-name="AndroidX.DynamicAnimation.SpringForce" token="33554458" />
+    </types-scratch>
+  </module>
+</api>

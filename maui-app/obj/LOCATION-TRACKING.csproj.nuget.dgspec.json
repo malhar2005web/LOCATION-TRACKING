@@ -1400,13 +1400,19 @@
         }
       },
       "runtimes": {
+        "android-arm": {
+          "#import": []
+        },
         "android-arm64": {
           "#import": []
         },
         "android-x64": {
           "#import": []
         },
-        "iossimulator-x64": {
+        "android-x86": {
+          "#import": []
+        },
+        "ios-arm64": {
           "#import": []
         },
         "maccatalyst-arm64": {

@@ -1,0 +1,3 @@
+D:\Desktop\New folder (100)\maui-app\bin\Release\net10.0-android\publish\com.locationtracker.app-Signed.apk
+D:\Desktop\New folder (100)\maui-app\bin\Release\net10.0-android\publish\com.locationtracker.app.apk
+D:\Desktop\New folder (100)\maui-app\bin\Release\net10.0-android\publish\_Microsoft.Android.Resource.Designer.dll

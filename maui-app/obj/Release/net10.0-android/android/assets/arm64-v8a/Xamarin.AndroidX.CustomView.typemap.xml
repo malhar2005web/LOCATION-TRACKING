@@ -1,0 +1,17 @@
+<api type="release" assembly-name="Xamarin.AndroidX.CustomView" mvid="0e2aacb48c81499ea5cc1c740229e365">
+  <module assembly-name="Xamarin.AndroidX.CustomView" mvid="0e2aacb48c81499ea5cc1c740229e365" mvid-bytes="tKwqDoGMnkmlzBx0AinjZQ==">
+    <duplicates>
+      <entry java-name="androidx/customview/widget/ExploreByTouchHelper" managed-type-name="AndroidX.CustomView.Widget.ExploreByTouchHelperInvoker" token="33554465" />
+      <entry java-name="androidx/customview/widget/Openable" managed-type-name="AndroidX.CustomView.Widget.IOpenableInvoker" token="33554467" />
+      <entry java-name="androidx/customview/widget/ViewDragHelper$Callback" managed-type-name="AndroidX.CustomView.Widget.ViewDragHelper/CallbackInvoker" token="33554473" />
+      <entry java-name="androidx/customview/view/AbsSavedState" managed-type-name="AndroidX.CustomView.View.AbsSavedStateInvoker" token="33554470" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/customview/widget/ExploreByTouchHelper" java-name="androidx/customview/widget/ExploreByTouchHelper" managed-type-name="AndroidX.CustomView.Widget.ExploreByTouchHelper" token="33554464" />
+      <entry key="androidx/customview/widget/Openable" java-name="androidx/customview/widget/Openable" managed-type-name="AndroidX.CustomView.Widget.IOpenable" token="33554466" skip-in-java-to-managed="True" />
+      <entry key="androidx/customview/widget/ViewDragHelper" java-name="androidx/customview/widget/ViewDragHelper" managed-type-name="AndroidX.CustomView.Widget.ViewDragHelper" token="33554468" />
+      <entry key="androidx/customview/widget/ViewDragHelper$Callback" java-name="androidx/customview/widget/ViewDragHelper$Callback" managed-type-name="AndroidX.CustomView.Widget.ViewDragHelper/Callback" token="33554472" />
+      <entry key="androidx/customview/view/AbsSavedState" java-name="androidx/customview/view/AbsSavedState" managed-type-name="AndroidX.CustomView.View.AbsSavedState" token="33554469" />
+    </types-scratch>
+  </module>
+</api>

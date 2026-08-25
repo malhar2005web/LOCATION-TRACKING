@@ -1,0 +1,80 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Emoji2" mvid="caf998617b4443ad9a75088898741188">
+  <module assembly-name="Xamarin.AndroidX.Emoji2" mvid="caf998617b4443ad9a75088898741188" mvid-bytes="YZj5ykR7rUOadQiImHQRiA==">
+    <duplicates>
+      <entry java-name="androidx/emoji2/text/EmojiCompat$CodepointSequenceMatchResult" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/ICodepointSequenceMatchResultInvoker" token="33554545" />
+      <entry java-name="androidx/emoji2/text/EmojiCompat$Config" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/ConfigInvoker" token="33554547" />
+      <entry java-name="androidx/emoji2/text/EmojiCompat$GlyphChecker" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/IGlyphCheckerInvoker" token="33554550" />
+      <entry java-name="androidx/emoji2/text/EmojiCompat$InitCallback" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/InitCallbackInvoker" token="33554552" />
+      <entry java-name="androidx/emoji2/text/EmojiCompat$LoadStrategy" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/ILoadStrategyInvoker" token="33554554" />
+      <entry java-name="androidx/emoji2/text/EmojiCompat$MetadataRepoLoader" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/IMetadataRepoLoaderInvoker" token="33554556" />
+      <entry java-name="androidx/emoji2/text/EmojiCompat$MetadataRepoLoaderCallback" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/MetadataRepoLoaderCallbackInvoker" token="33554558" />
+      <entry java-name="androidx/emoji2/text/EmojiCompat$ReplaceStrategy" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/IReplaceStrategyInvoker" token="33554560" />
+      <entry java-name="androidx/emoji2/text/EmojiCompat$SpanFactory" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/ISpanFactoryInvoker" token="33554562" />
+      <entry java-name="androidx/emoji2/text/EmojiSpan" managed-type-name="AndroidX.Emoji2.Text.EmojiSpanInvoker" token="33554509" />
+      <entry java-name="androidx/emoji2/text/FontRequestEmojiCompatConfig$RetryPolicy" managed-type-name="AndroidX.Emoji2.Text.FontRequestEmojiCompatConfig/RetryPolicyInvoker" token="33554566" />
+      <entry java-name="androidx/emoji2/text/TypefaceEmojiRasterizer$HasGlyph" managed-type-name="AndroidX.Emoji2.Text.TypefaceEmojiRasterizer/IHasGlyphInvoker" token="33554568" />
+      <entry java-name="androidx/emoji2/text/flatbuffer/FlatBufferBuilder$ByteBufferFactory" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlatBufferBuilder/ByteBufferFactoryInvoker" token="33554570" />
+      <entry java-name="androidx/emoji2/text/flatbuffer/Utf8" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.Utf8Invoker" token="33554537" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/emoji2/text/DefaultEmojiCompatConfig" java-name="androidx/emoji2/text/DefaultEmojiCompatConfig" managed-type-name="AndroidX.Emoji2.Text.DefaultEmojiCompatConfig" token="33554503" />
+      <entry key="androidx/emoji2/text/DefaultEmojiCompatConfig$DefaultEmojiCompatConfigFactory" java-name="androidx/emoji2/text/DefaultEmojiCompatConfig$DefaultEmojiCompatConfigFactory" managed-type-name="AndroidX.Emoji2.Text.DefaultEmojiCompatConfig/DefaultEmojiCompatConfigFactory" token="33554541" />
+      <entry key="androidx/emoji2/text/DefaultEmojiCompatConfig$DefaultEmojiCompatConfigHelper" java-name="androidx/emoji2/text/DefaultEmojiCompatConfig$DefaultEmojiCompatConfigHelper" managed-type-name="AndroidX.Emoji2.Text.DefaultEmojiCompatConfig/DefaultEmojiCompatConfigHelper" token="33554542" />
+      <entry key="androidx/emoji2/text/DefaultEmojiCompatConfig$DefaultEmojiCompatConfigHelper_API28" java-name="androidx/emoji2/text/DefaultEmojiCompatConfig$DefaultEmojiCompatConfigHelper_API28" managed-type-name="AndroidX.Emoji2.Text.DefaultEmojiCompatConfig/DefaultEmojiCompatConfigHelper_API28" token="33554543" />
+      <entry key="androidx/emoji2/text/EmojiCompat" java-name="androidx/emoji2/text/EmojiCompat" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat" token="33554504" />
+      <entry key="androidx/emoji2/text/EmojiCompat$CodepointSequenceMatchResult" java-name="androidx/emoji2/text/EmojiCompat$CodepointSequenceMatchResult" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/ICodepointSequenceMatchResult" token="33554544" skip-in-java-to-managed="True" />
+      <entry key="androidx/emoji2/text/EmojiCompat$Config" java-name="androidx/emoji2/text/EmojiCompat$Config" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/Config" token="33554546" />
+      <entry key="androidx/emoji2/text/EmojiCompat$DefaultSpanFactory" java-name="androidx/emoji2/text/EmojiCompat$DefaultSpanFactory" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/DefaultSpanFactory" token="33554548" />
+      <entry key="androidx/emoji2/text/EmojiCompat$GlyphChecker" java-name="androidx/emoji2/text/EmojiCompat$GlyphChecker" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/IGlyphChecker" token="33554549" skip-in-java-to-managed="True" />
+      <entry key="androidx/emoji2/text/EmojiCompat$InitCallback" java-name="androidx/emoji2/text/EmojiCompat$InitCallback" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/InitCallback" token="33554551" />
+      <entry key="androidx/emoji2/text/EmojiCompat$LoadStrategy" java-name="androidx/emoji2/text/EmojiCompat$LoadStrategy" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/ILoadStrategy" token="33554553" skip-in-java-to-managed="True" />
+      <entry key="androidx/emoji2/text/EmojiCompat$MetadataRepoLoader" java-name="androidx/emoji2/text/EmojiCompat$MetadataRepoLoader" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/IMetadataRepoLoader" token="33554555" skip-in-java-to-managed="True" />
+      <entry key="androidx/emoji2/text/EmojiCompat$MetadataRepoLoaderCallback" java-name="androidx/emoji2/text/EmojiCompat$MetadataRepoLoaderCallback" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/MetadataRepoLoaderCallback" token="33554557" />
+      <entry key="androidx/emoji2/text/EmojiCompat$ReplaceStrategy" java-name="androidx/emoji2/text/EmojiCompat$ReplaceStrategy" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/IReplaceStrategy" token="33554559" skip-in-java-to-managed="True" />
+      <entry key="androidx/emoji2/text/EmojiCompat$SpanFactory" java-name="androidx/emoji2/text/EmojiCompat$SpanFactory" managed-type-name="AndroidX.Emoji2.Text.EmojiCompat/ISpanFactory" token="33554561" skip-in-java-to-managed="True" />
+      <entry key="androidx/emoji2/text/EmojiCompatInitializer" java-name="androidx/emoji2/text/EmojiCompatInitializer" managed-type-name="AndroidX.Emoji2.Text.EmojiCompatInitializer" token="33554506" />
+      <entry key="androidx/emoji2/text/EmojiDefaults" java-name="androidx/emoji2/text/EmojiDefaults" managed-type-name="AndroidX.Emoji2.Text.EmojiDefaults" token="33554507" />
+      <entry key="androidx/emoji2/text/EmojiSpan" java-name="androidx/emoji2/text/EmojiSpan" managed-type-name="AndroidX.Emoji2.Text.EmojiSpan" token="33554508" />
+      <entry key="androidx/emoji2/text/FontRequestEmojiCompatConfig" java-name="androidx/emoji2/text/FontRequestEmojiCompatConfig" managed-type-name="AndroidX.Emoji2.Text.FontRequestEmojiCompatConfig" token="33554510" />
+      <entry key="androidx/emoji2/text/FontRequestEmojiCompatConfig$ExponentialBackoffRetryPolicy" java-name="androidx/emoji2/text/FontRequestEmojiCompatConfig$ExponentialBackoffRetryPolicy" managed-type-name="AndroidX.Emoji2.Text.FontRequestEmojiCompatConfig/ExponentialBackoffRetryPolicy" token="33554563" />
+      <entry key="androidx/emoji2/text/FontRequestEmojiCompatConfig$FontProviderHelper" java-name="androidx/emoji2/text/FontRequestEmojiCompatConfig$FontProviderHelper" managed-type-name="AndroidX.Emoji2.Text.FontRequestEmojiCompatConfig/FontProviderHelper" token="33554564" />
+      <entry key="androidx/emoji2/text/FontRequestEmojiCompatConfig$RetryPolicy" java-name="androidx/emoji2/text/FontRequestEmojiCompatConfig$RetryPolicy" managed-type-name="AndroidX.Emoji2.Text.FontRequestEmojiCompatConfig/RetryPolicy" token="33554565" />
+      <entry key="androidx/emoji2/text/MetadataRepo" java-name="androidx/emoji2/text/MetadataRepo" managed-type-name="AndroidX.Emoji2.Text.MetadataRepo" token="33554511" />
+      <entry key="androidx/emoji2/text/SpannableBuilder" java-name="androidx/emoji2/text/SpannableBuilder" managed-type-name="AndroidX.Emoji2.Text.SpannableBuilder" token="33554512" />
+      <entry key="androidx/emoji2/text/TypefaceEmojiRasterizer" java-name="androidx/emoji2/text/TypefaceEmojiRasterizer" managed-type-name="AndroidX.Emoji2.Text.TypefaceEmojiRasterizer" token="33554513" />
+      <entry key="androidx/emoji2/text/TypefaceEmojiRasterizer$HasGlyph" java-name="androidx/emoji2/text/TypefaceEmojiRasterizer$HasGlyph" managed-type-name="AndroidX.Emoji2.Text.TypefaceEmojiRasterizer/IHasGlyph" token="33554567" skip-in-java-to-managed="True" />
+      <entry key="androidx/emoji2/text/TypefaceEmojiSpan" java-name="androidx/emoji2/text/TypefaceEmojiSpan" managed-type-name="AndroidX.Emoji2.Text.TypefaceEmojiSpan" token="33554514" />
+      <entry key="androidx/emoji2/text/flatbuffer/ArrayReadWriteBuf" java-name="androidx/emoji2/text/flatbuffer/ArrayReadWriteBuf" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.ArrayReadWriteBuf" token="33554515" />
+      <entry key="androidx/emoji2/text/flatbuffer/BaseVector" java-name="androidx/emoji2/text/flatbuffer/BaseVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.BaseVector" token="33554516" />
+      <entry key="androidx/emoji2/text/flatbuffer/BooleanVector" java-name="androidx/emoji2/text/flatbuffer/BooleanVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.BooleanVector" token="33554517" />
+      <entry key="androidx/emoji2/text/flatbuffer/ByteBufferReadWriteBuf" java-name="androidx/emoji2/text/flatbuffer/ByteBufferReadWriteBuf" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.ByteBufferReadWriteBuf" token="33554518" />
+      <entry key="androidx/emoji2/text/flatbuffer/ByteBufferUtil" java-name="androidx/emoji2/text/flatbuffer/ByteBufferUtil" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.ByteBufferUtil" token="33554519" />
+      <entry key="androidx/emoji2/text/flatbuffer/ByteVector" java-name="androidx/emoji2/text/flatbuffer/ByteVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.ByteVector" token="33554520" />
+      <entry key="androidx/emoji2/text/flatbuffer/Constants" java-name="androidx/emoji2/text/flatbuffer/Constants" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.Constants" token="33554521" />
+      <entry key="androidx/emoji2/text/flatbuffer/DoubleVector" java-name="androidx/emoji2/text/flatbuffer/DoubleVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.DoubleVector" token="33554522" />
+      <entry key="androidx/emoji2/text/flatbuffer/FlatBufferBuilder" java-name="androidx/emoji2/text/flatbuffer/FlatBufferBuilder" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlatBufferBuilder" token="33554523" />
+      <entry key="androidx/emoji2/text/flatbuffer/FlatBufferBuilder$ByteBufferFactory" java-name="androidx/emoji2/text/flatbuffer/FlatBufferBuilder$ByteBufferFactory" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlatBufferBuilder/ByteBufferFactory" token="33554569" />
+      <entry key="androidx/emoji2/text/flatbuffer/FlatBufferBuilder$HeapByteBufferFactory" java-name="androidx/emoji2/text/flatbuffer/FlatBufferBuilder$HeapByteBufferFactory" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlatBufferBuilder/HeapByteBufferFactory" token="33554571" />
+      <entry key="androidx/emoji2/text/flatbuffer/FlexBuffers" java-name="androidx/emoji2/text/flatbuffer/FlexBuffers" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlexBuffers" token="33554524" />
+      <entry key="androidx/emoji2/text/flatbuffer/FlexBuffers$FlexBufferException" java-name="androidx/emoji2/text/flatbuffer/FlexBuffers$FlexBufferException" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlexBuffers/FlexBufferException" token="33554572" />
+      <entry key="androidx/emoji2/text/flatbuffer/FlexBuffers$KeyVector" java-name="androidx/emoji2/text/flatbuffer/FlexBuffers$KeyVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlexBuffers/KeyVector" token="33554573" />
+      <entry key="androidx/emoji2/text/flatbuffer/FlexBuffers$Reference" java-name="androidx/emoji2/text/flatbuffer/FlexBuffers$Reference" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlexBuffers/Reference" token="33554574" />
+      <entry key="androidx/emoji2/text/flatbuffer/FlexBuffersBuilder" java-name="androidx/emoji2/text/flatbuffer/FlexBuffersBuilder" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FlexBuffersBuilder" token="33554525" />
+      <entry key="androidx/emoji2/text/flatbuffer/FloatVector" java-name="androidx/emoji2/text/flatbuffer/FloatVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.FloatVector" token="33554526" />
+      <entry key="androidx/emoji2/text/flatbuffer/IntVector" java-name="androidx/emoji2/text/flatbuffer/IntVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.IntVector" token="33554527" />
+      <entry key="androidx/emoji2/text/flatbuffer/LongVector" java-name="androidx/emoji2/text/flatbuffer/LongVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.LongVector" token="33554528" />
+      <entry key="androidx/emoji2/text/flatbuffer/MetadataItem" java-name="androidx/emoji2/text/flatbuffer/MetadataItem" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.MetadataItem" token="33554529" />
+      <entry key="androidx/emoji2/text/flatbuffer/MetadataItem$Vector" java-name="androidx/emoji2/text/flatbuffer/MetadataItem$Vector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.MetadataItem/Vector" token="33554575" />
+      <entry key="androidx/emoji2/text/flatbuffer/MetadataList" java-name="androidx/emoji2/text/flatbuffer/MetadataList" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.MetadataList" token="33554530" />
+      <entry key="androidx/emoji2/text/flatbuffer/MetadataList$Vector" java-name="androidx/emoji2/text/flatbuffer/MetadataList$Vector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.MetadataList/Vector" token="33554576" />
+      <entry key="androidx/emoji2/text/flatbuffer/ShortVector" java-name="androidx/emoji2/text/flatbuffer/ShortVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.ShortVector" token="33554531" />
+      <entry key="androidx/emoji2/text/flatbuffer/StringVector" java-name="androidx/emoji2/text/flatbuffer/StringVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.StringVector" token="33554532" />
+      <entry key="androidx/emoji2/text/flatbuffer/Struct" java-name="androidx/emoji2/text/flatbuffer/Struct" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.Struct" token="33554533" />
+      <entry key="androidx/emoji2/text/flatbuffer/Table" java-name="androidx/emoji2/text/flatbuffer/Table" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.Table" token="33554534" />
+      <entry key="androidx/emoji2/text/flatbuffer/UnionVector" java-name="androidx/emoji2/text/flatbuffer/UnionVector" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.UnionVector" token="33554535" />
+      <entry key="androidx/emoji2/text/flatbuffer/Utf8" java-name="androidx/emoji2/text/flatbuffer/Utf8" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.Utf8" token="33554536" />
+      <entry key="androidx/emoji2/text/flatbuffer/Utf8Old" java-name="androidx/emoji2/text/flatbuffer/Utf8Old" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.Utf8Old" token="33554538" />
+      <entry key="androidx/emoji2/text/flatbuffer/Utf8Safe" java-name="androidx/emoji2/text/flatbuffer/Utf8Safe" managed-type-name="AndroidX.Emoji2.Text.FlatBuffer.Utf8Safe" token="33554539" />
+    </types-scratch>
+  </module>
+</api>

@@ -1,0 +1,8 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Tracing.Tracing.Android" mvid="b3a7a4709ca649df8da85b153b8f7896">
+  <module assembly-name="Xamarin.AndroidX.Tracing.Tracing.Android" mvid="b3a7a4709ca649df8da85b153b8f7896" mvid-bytes="cKSns6ac30mNqFsVO494lg==">
+    <types-scratch>
+      <entry key="androidx/tracing/Trace" java-name="androidx/tracing/Trace" managed-type-name="AndroidX.Tracing.Trace" token="33554435" />
+      <entry key="androidx/tracing/TraceKt" java-name="androidx/tracing/TraceKt" managed-type-name="AndroidX.Tracing.TraceKt" token="33554436" />
+    </types-scratch>
+  </module>
+</api>

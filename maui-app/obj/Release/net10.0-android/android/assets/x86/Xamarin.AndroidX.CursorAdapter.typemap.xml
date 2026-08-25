@@ -1,0 +1,18 @@
+<api type="release" assembly-name="Xamarin.AndroidX.CursorAdapter" mvid="5a9b341eb9974665a79f0e15afb4bace">
+  <module assembly-name="Xamarin.AndroidX.CursorAdapter" mvid="5a9b341eb9974665a79f0e15afb4bace" mvid-bytes="HjSbWpe5ZUannw4Vr7S6zg==">
+    <duplicates>
+      <entry java-name="androidx/cursoradapter/widget/CursorAdapter" managed-type-name="AndroidX.CursorAdapter.Widget.CursorAdapterInvoker" token="33554450" />
+      <entry java-name="androidx/cursoradapter/widget/ResourceCursorAdapter" managed-type-name="AndroidX.CursorAdapter.Widget.ResourceCursorAdapterInvoker" token="33554453" />
+      <entry java-name="androidx/cursoradapter/widget/SimpleCursorAdapter$CursorToStringConverter" managed-type-name="AndroidX.CursorAdapter.Widget.SimpleCursorAdapter/ICursorToStringConverterInvoker" token="33554458" />
+      <entry java-name="androidx/cursoradapter/widget/SimpleCursorAdapter$ViewBinder" managed-type-name="AndroidX.CursorAdapter.Widget.SimpleCursorAdapter/IViewBinderInvoker" token="33554460" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/cursoradapter/widget/CursorAdapter" java-name="androidx/cursoradapter/widget/CursorAdapter" managed-type-name="AndroidX.CursorAdapter.Widget.CursorAdapter" token="33554449" />
+      <entry key="androidx/cursoradapter/widget/CursorFilter" java-name="androidx/cursoradapter/widget/CursorFilter" managed-type-name="AndroidX.CursorAdapter.Widget.CursorFilter" token="33554451" />
+      <entry key="androidx/cursoradapter/widget/ResourceCursorAdapter" java-name="androidx/cursoradapter/widget/ResourceCursorAdapter" managed-type-name="AndroidX.CursorAdapter.Widget.ResourceCursorAdapter" token="33554452" />
+      <entry key="androidx/cursoradapter/widget/SimpleCursorAdapter" java-name="androidx/cursoradapter/widget/SimpleCursorAdapter" managed-type-name="AndroidX.CursorAdapter.Widget.SimpleCursorAdapter" token="33554454" />
+      <entry key="androidx/cursoradapter/widget/SimpleCursorAdapter$CursorToStringConverter" java-name="androidx/cursoradapter/widget/SimpleCursorAdapter$CursorToStringConverter" managed-type-name="AndroidX.CursorAdapter.Widget.SimpleCursorAdapter/ICursorToStringConverter" token="33554457" skip-in-java-to-managed="True" />
+      <entry key="androidx/cursoradapter/widget/SimpleCursorAdapter$ViewBinder" java-name="androidx/cursoradapter/widget/SimpleCursorAdapter$ViewBinder" managed-type-name="AndroidX.CursorAdapter.Widget.SimpleCursorAdapter/IViewBinder" token="33554459" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>

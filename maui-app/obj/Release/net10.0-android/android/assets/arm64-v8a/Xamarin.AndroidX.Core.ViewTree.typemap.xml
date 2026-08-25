@@ -1,0 +1,7 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Core.ViewTree" mvid="aa2f1fd43eee42cd9ef17d0db6fa93d0">
+  <module assembly-name="Xamarin.AndroidX.Core.ViewTree" mvid="aa2f1fd43eee42cd9ef17d0db6fa93d0" mvid-bytes="1B8vqu4+zUKe8X0NtvqT0A==">
+    <types-scratch>
+      <entry key="androidx/core/viewtree/ViewTree" java-name="androidx/core/viewtree/ViewTree" managed-type-name="AndroidX.Core.ViewTree.ViewTree" token="33554435" />
+    </types-scratch>
+  </module>
+</api>

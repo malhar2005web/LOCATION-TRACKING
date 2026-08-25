@@ -1,0 +1,24 @@
+<api type="release" assembly-name="Xamarin.AndroidX.ProfileInstaller.ProfileInstaller" mvid="d6241a147d6e47ad9b5c881655ac837f">
+  <module assembly-name="Xamarin.AndroidX.ProfileInstaller.ProfileInstaller" mvid="d6241a147d6e47ad9b5c881655ac837f" mvid-bytes="FBok1m59rUebXIgWVayDfw==">
+    <duplicates>
+      <entry java-name="androidx/profileinstaller/ProfileInstaller$DiagnosticCode" managed-type-name="AndroidX.ProfileInstallers.ProfileInstaller/IDiagnosticCodeInvoker" token="33554450" />
+      <entry java-name="androidx/profileinstaller/ProfileInstaller$DiagnosticsCallback" managed-type-name="AndroidX.ProfileInstallers.ProfileInstaller/IDiagnosticsCallbackInvoker" token="33554452" />
+      <entry java-name="androidx/profileinstaller/ProfileInstaller$ResultCode" managed-type-name="AndroidX.ProfileInstallers.ProfileInstaller/IResultCodeInvoker" token="33554454" />
+      <entry java-name="androidx/profileinstaller/ProfileVerifier$CompilationStatus$ResultCode" managed-type-name="AndroidX.ProfileInstallers.ProfileVerifier/CompilationStatus/IResultCodeInvoker" token="33554458" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/profileinstaller/DeviceProfileWriter" java-name="androidx/profileinstaller/DeviceProfileWriter" managed-type-name="AndroidX.ProfileInstallers.DeviceProfileWriter" token="33554442" />
+      <entry key="androidx/profileinstaller/ProfileInstaller" java-name="androidx/profileinstaller/ProfileInstaller" managed-type-name="AndroidX.ProfileInstallers.ProfileInstaller" token="33554443" />
+      <entry key="androidx/profileinstaller/ProfileInstaller$DiagnosticCode" java-name="androidx/profileinstaller/ProfileInstaller$DiagnosticCode" managed-type-name="AndroidX.ProfileInstallers.ProfileInstaller/IDiagnosticCode" token="33554449" skip-in-java-to-managed="True" />
+      <entry key="androidx/profileinstaller/ProfileInstaller$DiagnosticsCallback" java-name="androidx/profileinstaller/ProfileInstaller$DiagnosticsCallback" managed-type-name="AndroidX.ProfileInstallers.ProfileInstaller/IDiagnosticsCallback" token="33554451" skip-in-java-to-managed="True" />
+      <entry key="androidx/profileinstaller/ProfileInstaller$ResultCode" java-name="androidx/profileinstaller/ProfileInstaller$ResultCode" managed-type-name="AndroidX.ProfileInstallers.ProfileInstaller/IResultCode" token="33554453" skip-in-java-to-managed="True" />
+      <entry key="androidx/profileinstaller/ProfileInstallerInitializer" java-name="androidx/profileinstaller/ProfileInstallerInitializer" managed-type-name="AndroidX.ProfileInstallers.ProfileInstallerInitializer" token="33554444" />
+      <entry key="androidx/profileinstaller/ProfileInstallerInitializer$Result" java-name="androidx/profileinstaller/ProfileInstallerInitializer$Result" managed-type-name="AndroidX.ProfileInstallers.ProfileInstallerInitializer/Result" token="33554455" />
+      <entry key="androidx/profileinstaller/ProfileInstallReceiver" java-name="androidx/profileinstaller/ProfileInstallReceiver" managed-type-name="AndroidX.ProfileInstallers.ProfileInstallReceiver" token="33554445" />
+      <entry key="androidx/profileinstaller/ProfileVerifier" java-name="androidx/profileinstaller/ProfileVerifier" managed-type-name="AndroidX.ProfileInstallers.ProfileVerifier" token="33554446" />
+      <entry key="androidx/profileinstaller/ProfileVerifier$CompilationStatus" java-name="androidx/profileinstaller/ProfileVerifier$CompilationStatus" managed-type-name="AndroidX.ProfileInstallers.ProfileVerifier/CompilationStatus" token="33554456" />
+      <entry key="androidx/profileinstaller/ProfileVerifier$CompilationStatus$ResultCode" java-name="androidx/profileinstaller/ProfileVerifier$CompilationStatus$ResultCode" managed-type-name="AndroidX.ProfileInstallers.ProfileVerifier/CompilationStatus/IResultCode" token="33554457" skip-in-java-to-managed="True" />
+      <entry key="androidx/profileinstaller/ProfileVersion" java-name="androidx/profileinstaller/ProfileVersion" managed-type-name="AndroidX.ProfileInstallers.ProfileVersion" token="33554447" />
+    </types-scratch>
+  </module>
+</api>

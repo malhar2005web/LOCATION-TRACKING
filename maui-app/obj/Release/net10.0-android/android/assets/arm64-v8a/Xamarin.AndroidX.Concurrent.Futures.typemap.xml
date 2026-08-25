@@ -1,0 +1,16 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Concurrent.Futures" mvid="2b6757954d0d41a3a23f28be1836f4bd">
+  <module assembly-name="Xamarin.AndroidX.Concurrent.Futures" mvid="2b6757954d0d41a3a23f28be1836f4bd" mvid-bytes="lVdnKw1No0GiPyi+GDb0vQ==">
+    <duplicates>
+      <entry java-name="androidx/concurrent/futures/AbstractResolvableFuture" managed-type-name="AndroidX.Concurrent.Futures.AbstractResolvableFutureInvoker" token="33554440" />
+      <entry java-name="androidx/concurrent/futures/CallbackToFutureAdapter$Resolver" managed-type-name="AndroidX.Concurrent.Futures.CallbackToFutureAdapter/IResolverInvoker" token="33554447" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/concurrent/futures/AbstractResolvableFuture" java-name="androidx/concurrent/futures/AbstractResolvableFuture" managed-type-name="AndroidX.Concurrent.Futures.AbstractResolvableFuture" token="33554439" />
+      <entry key="androidx/concurrent/futures/CallbackToFutureAdapter" java-name="androidx/concurrent/futures/CallbackToFutureAdapter" managed-type-name="AndroidX.Concurrent.Futures.CallbackToFutureAdapter" token="33554441" />
+      <entry key="androidx/concurrent/futures/CallbackToFutureAdapter$Completer" java-name="androidx/concurrent/futures/CallbackToFutureAdapter$Completer" managed-type-name="AndroidX.Concurrent.Futures.CallbackToFutureAdapter/Completer" token="33554445" />
+      <entry key="androidx/concurrent/futures/CallbackToFutureAdapter$Resolver" java-name="androidx/concurrent/futures/CallbackToFutureAdapter$Resolver" managed-type-name="AndroidX.Concurrent.Futures.CallbackToFutureAdapter/IResolver" token="33554446" skip-in-java-to-managed="True" />
+      <entry key="androidx/concurrent/futures/DirectExecutor" java-name="androidx/concurrent/futures/DirectExecutor" managed-type-name="AndroidX.Concurrent.Futures.DirectExecutor" token="33554442" />
+      <entry key="androidx/concurrent/futures/ResolvableFuture" java-name="androidx/concurrent/futures/ResolvableFuture" managed-type-name="AndroidX.Concurrent.Futures.ResolvableFuture" token="33554443" />
+    </types-scratch>
+  </module>
+</api>

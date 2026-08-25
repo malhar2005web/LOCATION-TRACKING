@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "zNuQRgzU0No=",
+  "dgSpecHash": "rqD3R1n1a+U=",
   "success": true,
   "projectFilePath": "D:\\Desktop\\New folder (100)\\maui-app\\LOCATION-TRACKING.csproj",
   "expectedPackageFiles": [
@@ -178,16 +178,20 @@
       "libraryId": "SQLitePCLRaw.lib.e_sqlite3",
       "targetGraphs": [
         "net10.0-maccatalyst",
+        "net10.0-maccatalyst/android-arm",
         "net10.0-maccatalyst/android-arm64",
         "net10.0-maccatalyst/android-x64",
-        "net10.0-maccatalyst/iossimulator-x64",
+        "net10.0-maccatalyst/android-x86",
+        "net10.0-maccatalyst/ios-arm64",
         "net10.0-maccatalyst/maccatalyst-arm64",
         "net10.0-maccatalyst/maccatalyst-x64",
         "net10.0-maccatalyst/win-x64",
         "net10.0-windows10.0.19041.0",
+        "net10.0-windows10.0.19041.0/android-arm",
         "net10.0-windows10.0.19041.0/android-arm64",
         "net10.0-windows10.0.19041.0/android-x64",
-        "net10.0-windows10.0.19041.0/iossimulator-x64",
+        "net10.0-windows10.0.19041.0/android-x86",
+        "net10.0-windows10.0.19041.0/ios-arm64",
         "net10.0-windows10.0.19041.0/maccatalyst-arm64",
         "net10.0-windows10.0.19041.0/maccatalyst-x64",
         "net10.0-windows10.0.19041.0/win-x64"
@@ -203,9 +207,11 @@
       "libraryId": "SQLitePCLRaw.lib.e_sqlite3.android",
       "targetGraphs": [
         "net10.0-android",
+        "net10.0-android/android-arm",
         "net10.0-android/android-arm64",
         "net10.0-android/android-x64",
-        "net10.0-android/iossimulator-x64",
+        "net10.0-android/android-x86",
+        "net10.0-android/ios-arm64",
         "net10.0-android/maccatalyst-arm64",
         "net10.0-android/maccatalyst-x64",
         "net10.0-android/win-x64"
@@ -221,9 +227,11 @@
       "libraryId": "System.Drawing.Common",
       "targetGraphs": [
         "net10.0-windows10.0.19041.0",
+        "net10.0-windows10.0.19041.0/android-arm",
         "net10.0-windows10.0.19041.0/android-arm64",
         "net10.0-windows10.0.19041.0/android-x64",
-        "net10.0-windows10.0.19041.0/iossimulator-x64",
+        "net10.0-windows10.0.19041.0/android-x86",
+        "net10.0-windows10.0.19041.0/ios-arm64",
         "net10.0-windows10.0.19041.0/maccatalyst-arm64",
         "net10.0-windows10.0.19041.0/maccatalyst-x64",
         "net10.0-windows10.0.19041.0/win-x64"

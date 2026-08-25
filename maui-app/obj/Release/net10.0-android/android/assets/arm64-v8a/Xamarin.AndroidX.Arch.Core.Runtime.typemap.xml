@@ -1,0 +1,12 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Arch.Core.Runtime" mvid="d2039744b132480790d5991ee50adefc">
+  <module assembly-name="Xamarin.AndroidX.Arch.Core.Runtime" mvid="d2039744b132480790d5991ee50adefc" mvid-bytes="RJcD0jKxB0iQ1Zke5Qre/A==">
+    <duplicates>
+      <entry java-name="androidx/arch/core/executor/TaskExecutor" managed-type-name="AndroidX.Arch.Core.Executor.TaskExecutorInvoker" token="33554440" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/arch/core/executor/ArchTaskExecutor" java-name="androidx/arch/core/executor/ArchTaskExecutor" managed-type-name="AndroidX.Arch.Core.Executor.ArchTaskExecutor" token="33554437" />
+      <entry key="androidx/arch/core/executor/DefaultTaskExecutor" java-name="androidx/arch/core/executor/DefaultTaskExecutor" managed-type-name="AndroidX.Arch.Core.Executor.DefaultTaskExecutor" token="33554438" />
+      <entry key="androidx/arch/core/executor/TaskExecutor" java-name="androidx/arch/core/executor/TaskExecutor" managed-type-name="AndroidX.Arch.Core.Executor.TaskExecutor" token="33554439" />
+    </types-scratch>
+  </module>
+</api>

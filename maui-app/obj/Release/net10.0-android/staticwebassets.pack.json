@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\LOCATION_TRACKING.styles.css"
     },
     {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
       "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\css\\dsr-premium.css",
       "PackagePath": "staticwebassets\\css\\dsr-premium.css"
     },
@@ -21,8 +25,16 @@
       "PackagePath": "staticwebassets\\css\\style.css"
     },
     {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\img\\skyway-logo.png",
+      "PackagePath": "staticwebassets\\img\\skyway-logo.png"
+    },
+    {
       "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\admin.js",
+      "PackagePath": "staticwebassets\\js\\admin.js"
     },
     {
       "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\api.js",
@@ -41,12 +53,32 @@
       "PackagePath": "staticwebassets\\js\\client.js"
     },
     {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\dsrDb.js",
+      "PackagePath": "staticwebassets\\js\\dsrDb.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\leaveDb.js",
+      "PackagePath": "staticwebassets\\js\\leaveDb.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\reminderDb.js",
+      "PackagePath": "staticwebassets\\js\\reminderDb.js"
+    },
+    {
       "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\storage.js",
       "PackagePath": "staticwebassets\\js\\storage.js"
     },
     {
       "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\js\\time-guard.js",
       "PackagePath": "staticwebassets\\js\\time-guard.js"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\Desktop\\New folder (100)\\maui-app\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
     },
     {
       "Id": "obj\\Release\\net10.0-android\\staticwebassets\\msbuild.LOCATION_TRACKING.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",

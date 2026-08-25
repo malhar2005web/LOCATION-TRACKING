@@ -1,0 +1,216 @@
+<api type="release" assembly-name="Xamarin.KotlinX.Coroutines.Core.Jvm" mvid="4480664f8860454081125f14c864caff">
+  <module assembly-name="Xamarin.KotlinX.Coroutines.Core.Jvm" mvid="4480664f8860454081125f14c864caff" mvid-bytes="T2aARGCIQEWBEl8UyGTK/w==">
+    <duplicates>
+      <entry java-name="kotlinx/coroutines/CoroutineDispatcher" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineDispatcherInvoker" token="33554464" />
+      <entry java-name="kotlinx/coroutines/ExecutorCoroutineDispatcher" managed-type-name="Xamarin.KotlinX.Coroutines.ExecutorCoroutineDispatcherInvoker" token="33554481" />
+      <entry java-name="kotlinx/coroutines/CancellableContinuation" managed-type-name="Xamarin.KotlinX.Coroutines.ICancellableContinuationInvoker" token="33554490" />
+      <entry java-name="kotlinx/coroutines/ChildHandle" managed-type-name="Xamarin.KotlinX.Coroutines.IChildHandleInvoker" token="33554493" />
+      <entry java-name="kotlinx/coroutines/ChildJob" managed-type-name="Xamarin.KotlinX.Coroutines.IChildJobInvoker" token="33554496" />
+      <entry java-name="kotlinx/coroutines/CompletableDeferred" managed-type-name="Xamarin.KotlinX.Coroutines.ICompletableDeferredInvoker" token="33554499" />
+      <entry java-name="kotlinx/coroutines/CompletableJob" managed-type-name="Xamarin.KotlinX.Coroutines.ICompletableJobInvoker" token="33554502" />
+      <entry java-name="kotlinx/coroutines/CopyableThreadContextElement" managed-type-name="Xamarin.KotlinX.Coroutines.ICopyableThreadContextElementInvoker" token="33554505" />
+      <entry java-name="kotlinx/coroutines/CopyableThrowable" managed-type-name="Xamarin.KotlinX.Coroutines.ICopyableThrowableInvoker" token="33554507" />
+      <entry java-name="mono/internal/kotlinx/coroutines/CoroutineExceptionHandler" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineExceptionHandlerConsts" token="33554511" />
+      <entry java-name="kotlinx/coroutines/CoroutineExceptionHandler" managed-type-name="Xamarin.KotlinX.Coroutines.ICoroutineExceptionHandlerInvoker" token="33554513" />
+      <entry java-name="kotlinx/coroutines/CoroutineScope" managed-type-name="Xamarin.KotlinX.Coroutines.ICoroutineScopeInvoker" token="33554515" />
+      <entry java-name="kotlinx/coroutines/Deferred" managed-type-name="Xamarin.KotlinX.Coroutines.IDeferredInvoker" token="33554518" />
+      <entry java-name="kotlinx/coroutines/Delay" managed-type-name="Xamarin.KotlinX.Coroutines.IDelayInvoker" token="33554521" />
+      <entry java-name="kotlinx/coroutines/DelicateCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IDelicateCoroutinesApiInvoker" token="33554523" />
+      <entry java-name="kotlinx/coroutines/DisposableHandle" managed-type-name="Xamarin.KotlinX.Coroutines.IDisposableHandleInvoker" token="33554525" />
+      <entry java-name="kotlinx/coroutines/ExperimentalCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IExperimentalCoroutinesApiInvoker" token="33554527" />
+      <entry java-name="kotlinx/coroutines/ExperimentalForInheritanceCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IExperimentalForInheritanceCoroutinesApiInvoker" token="33554529" />
+      <entry java-name="kotlinx/coroutines/FlowPreview" managed-type-name="Xamarin.KotlinX.Coroutines.IFlowPreviewInvoker" token="33554531" />
+      <entry java-name="kotlinx/coroutines/InternalCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IInternalCoroutinesApiInvoker" token="33554533" />
+      <entry java-name="kotlinx/coroutines/InternalForInheritanceCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IInternalForInheritanceCoroutinesApiInvoker" token="33554535" />
+      <entry java-name="mono/internal/kotlinx/coroutines/Job" managed-type-name="Xamarin.KotlinX.Coroutines.JobConsts" token="33554539" />
+      <entry java-name="kotlinx/coroutines/Job" managed-type-name="Xamarin.KotlinX.Coroutines.IJobInvoker" token="33554541" />
+      <entry java-name="kotlinx/coroutines/ObsoleteCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IObsoleteCoroutinesApiInvoker" token="33554546" />
+      <entry java-name="kotlinx/coroutines/ParentJob" managed-type-name="Xamarin.KotlinX.Coroutines.IParentJobInvoker" token="33554549" />
+      <entry java-name="kotlinx/coroutines/ThreadContextElement" managed-type-name="Xamarin.KotlinX.Coroutines.IThreadContextElementInvoker" token="33554552" />
+      <entry java-name="kotlinx/coroutines/MainCoroutineDispatcher" managed-type-name="Xamarin.KotlinX.Coroutines.MainCoroutineDispatcherInvoker" token="33554557" />
+      <entry java-name="kotlinx/coroutines/sync/Mutex" managed-type-name="Xamarin.KotlinX.Coroutines.Sync.IMutexInvoker" token="33554572" />
+      <entry java-name="kotlinx/coroutines/sync/Semaphore" managed-type-name="Xamarin.KotlinX.Coroutines.Sync.ISemaphoreInvoker" token="33554574" />
+      <entry java-name="kotlinx/coroutines/selects/SelectBuilder" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectBuilderInvoker" token="33554580" />
+      <entry java-name="kotlinx/coroutines/selects/SelectClause" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectClauseInvoker" token="33554582" />
+      <entry java-name="kotlinx/coroutines/selects/SelectClause0" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectClause0Invoker" token="33554584" />
+      <entry java-name="kotlinx/coroutines/selects/SelectClause1" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectClause1Invoker" token="33554586" />
+      <entry java-name="kotlinx/coroutines/selects/SelectClause2" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectClause2Invoker" token="33554588" />
+      <entry java-name="kotlinx/coroutines/selects/SelectInstance" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectInstanceInvoker" token="33554590" />
+      <entry java-name="kotlinx/coroutines/flow/Flow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IFlowInvoker" token="33554604" />
+      <entry java-name="kotlinx/coroutines/flow/FlowCollector" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IFlowCollectorInvoker" token="33554606" />
+      <entry java-name="kotlinx/coroutines/flow/MutableSharedFlow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IMutableSharedFlowInvoker" token="33554608" />
+      <entry java-name="kotlinx/coroutines/flow/MutableStateFlow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IMutableStateFlowInvoker" token="33554610" />
+      <entry java-name="kotlinx/coroutines/flow/SharedFlow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.ISharedFlowInvoker" token="33554612" />
+      <entry java-name="mono/internal/kotlinx/coroutines/flow/SharingStarted" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.SharingStartedConsts" token="33554615" />
+      <entry java-name="kotlinx/coroutines/flow/SharingStarted" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.ISharingStartedInvoker" token="33554617" />
+      <entry java-name="kotlinx/coroutines/flow/StateFlow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IStateFlowInvoker" token="33554619" />
+      <entry java-name="kotlinx/coroutines/channels/ActorScope" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IActorScopeInvoker" token="33554638" />
+      <entry java-name="kotlinx/coroutines/channels/BroadcastChannel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IBroadcastChannelInvoker" token="33554641" />
+      <entry java-name="mono/internal/kotlinx/coroutines/channels/Channel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ChannelConsts" token="33554645" />
+      <entry java-name="kotlinx/coroutines/channels/Channel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IChannelInvoker" token="33554647" />
+      <entry java-name="kotlinx/coroutines/channels/ChannelIterator" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IChannelIteratorInvoker" token="33554650" />
+      <entry java-name="kotlinx/coroutines/channels/ProducerScope" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IProducerScopeInvoker" token="33554653" />
+      <entry java-name="kotlinx/coroutines/channels/ReceiveChannel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IReceiveChannelInvoker" token="33554656" />
+      <entry java-name="kotlinx/coroutines/channels/SendChannel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ISendChannelInvoker" token="33554659" />
+    </duplicates>
+    <types-scratch>
+      <entry key="_COROUTINE/ArtificialStackFrames" java-name="_COROUTINE/ArtificialStackFrames" managed-type-name="_COROUTINE.ArtificialStackFrames" token="33554451" />
+      <entry key="_COROUTINE/CoroutineDebuggingKt" java-name="_COROUTINE/CoroutineDebuggingKt" managed-type-name="_COROUTINE.CoroutineDebuggingKt" token="33554452" />
+      <entry key="kotlinx/coroutines/AbstractTimeSourceKt" java-name="kotlinx/coroutines/AbstractTimeSourceKt" managed-type-name="Xamarin.KotlinX.Coroutines.AbstractTimeSourceKt" token="33554453" />
+      <entry key="kotlinx/coroutines/AwaitKt" java-name="kotlinx/coroutines/AwaitKt" managed-type-name="Xamarin.KotlinX.Coroutines.AwaitKt" token="33554454" />
+      <entry key="kotlinx/coroutines/BuildersKt" java-name="kotlinx/coroutines/BuildersKt" managed-type-name="Xamarin.KotlinX.Coroutines.BuildersKt" token="33554455" />
+      <entry key="kotlinx/coroutines/CancellableContinuationImplKt" java-name="kotlinx/coroutines/CancellableContinuationImplKt" managed-type-name="Xamarin.KotlinX.Coroutines.CancellableContinuationImplKt" token="33554456" />
+      <entry key="kotlinx/coroutines/CancellableContinuationKt" java-name="kotlinx/coroutines/CancellableContinuationKt" managed-type-name="Xamarin.KotlinX.Coroutines.CancellableContinuationKt" token="33554457" />
+      <entry key="kotlinx/coroutines/CompletableDeferredKt" java-name="kotlinx/coroutines/CompletableDeferredKt" managed-type-name="Xamarin.KotlinX.Coroutines.CompletableDeferredKt" token="33554458" />
+      <entry key="kotlinx/coroutines/CompletionHandlerException" java-name="kotlinx/coroutines/CompletionHandlerException" managed-type-name="Xamarin.KotlinX.Coroutines.CompletionHandlerException" token="33554459" />
+      <entry key="kotlinx/coroutines/CompletionHandler_commonKt" java-name="kotlinx/coroutines/CompletionHandler_commonKt" managed-type-name="Xamarin.KotlinX.Coroutines.CompletionHandler_commonKt" token="33554460" />
+      <entry key="kotlinx/coroutines/CompletionStateKt" java-name="kotlinx/coroutines/CompletionStateKt" managed-type-name="Xamarin.KotlinX.Coroutines.CompletionStateKt" token="33554461" />
+      <entry key="kotlinx/coroutines/CoroutineContextKt" java-name="kotlinx/coroutines/CoroutineContextKt" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineContextKt" token="33554462" />
+      <entry key="kotlinx/coroutines/CoroutineDispatcher" java-name="kotlinx/coroutines/CoroutineDispatcher" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineDispatcher" token="33554463" />
+      <entry key="kotlinx/coroutines/CoroutineExceptionHandlerKt" java-name="kotlinx/coroutines/CoroutineExceptionHandlerKt" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineExceptionHandlerKt" token="33554465" />
+      <entry key="kotlinx/coroutines/CoroutineName" java-name="kotlinx/coroutines/CoroutineName" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineName" token="33554466" />
+      <entry key="kotlinx/coroutines/CoroutineName$Key" java-name="kotlinx/coroutines/CoroutineName$Key" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineName/Key" token="33554664" />
+      <entry key="kotlinx/coroutines/CoroutineScopeKt" java-name="kotlinx/coroutines/CoroutineScopeKt" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineScopeKt" token="33554467" />
+      <entry key="kotlinx/coroutines/CoroutineStart" java-name="kotlinx/coroutines/CoroutineStart" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineStart" token="33554468" />
+      <entry key="kotlinx/coroutines/CoroutineStart$WhenMappings" java-name="kotlinx/coroutines/CoroutineStart$WhenMappings" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineStart/WhenMappings" token="33554665" />
+      <entry key="kotlinx/coroutines/DebugKt" java-name="kotlinx/coroutines/DebugKt" managed-type-name="Xamarin.KotlinX.Coroutines.DebugKt" token="33554469" />
+      <entry key="kotlinx/coroutines/DebugStringsKt" java-name="kotlinx/coroutines/DebugStringsKt" managed-type-name="Xamarin.KotlinX.Coroutines.DebugStringsKt" token="33554470" />
+      <entry key="kotlinx/coroutines/DefaultExecutorKt" java-name="kotlinx/coroutines/DefaultExecutorKt" managed-type-name="Xamarin.KotlinX.Coroutines.DefaultExecutorKt" token="33554471" />
+      <entry key="kotlinx/coroutines/DelayKt" java-name="kotlinx/coroutines/DelayKt" managed-type-name="Xamarin.KotlinX.Coroutines.DelayKt" token="33554472" />
+      <entry key="kotlinx/coroutines/DispatchedTaskKt" java-name="kotlinx/coroutines/DispatchedTaskKt" managed-type-name="Xamarin.KotlinX.Coroutines.DispatchedTaskKt" token="33554474" />
+      <entry key="kotlinx/coroutines/Dispatchers" java-name="kotlinx/coroutines/Dispatchers" managed-type-name="Xamarin.KotlinX.Coroutines.Dispatchers" token="33554475" />
+      <entry key="kotlinx/coroutines/DispatchersKt" java-name="kotlinx/coroutines/DispatchersKt" managed-type-name="Xamarin.KotlinX.Coroutines.DispatchersKt" token="33554476" />
+      <entry key="kotlinx/coroutines/EventLoopKt" java-name="kotlinx/coroutines/EventLoopKt" managed-type-name="Xamarin.KotlinX.Coroutines.EventLoopKt" token="33554477" />
+      <entry key="kotlinx/coroutines/EventLoop_commonKt" java-name="kotlinx/coroutines/EventLoop_commonKt" managed-type-name="Xamarin.KotlinX.Coroutines.EventLoop_commonKt" token="33554478" />
+      <entry key="kotlinx/coroutines/ExceptionsKt" java-name="kotlinx/coroutines/ExceptionsKt" managed-type-name="Xamarin.KotlinX.Coroutines.ExceptionsKt" token="33554479" />
+      <entry key="kotlinx/coroutines/ExecutorCoroutineDispatcher" java-name="kotlinx/coroutines/ExecutorCoroutineDispatcher" managed-type-name="Xamarin.KotlinX.Coroutines.ExecutorCoroutineDispatcher" token="33554480" />
+      <entry key="kotlinx/coroutines/ExecutorsKt" java-name="kotlinx/coroutines/ExecutorsKt" managed-type-name="Xamarin.KotlinX.Coroutines.ExecutorsKt" token="33554482" />
+      <entry key="kotlinx/coroutines/GlobalScope" java-name="kotlinx/coroutines/GlobalScope" managed-type-name="Xamarin.KotlinX.Coroutines.GlobalScope" token="33554486" />
+      <entry key="kotlinx/coroutines/GuidanceKt" java-name="kotlinx/coroutines/GuidanceKt" managed-type-name="Xamarin.KotlinX.Coroutines.GuidanceKt" token="33554487" />
+      <entry key="kotlinx/coroutines/CancellableContinuation$DefaultImpls" java-name="kotlinx/coroutines/CancellableContinuation$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.CancellableContinuationDefaultImpls" token="33554488" />
+      <entry key="kotlinx/coroutines/CancellableContinuation" java-name="kotlinx/coroutines/CancellableContinuation" managed-type-name="Xamarin.KotlinX.Coroutines.ICancellableContinuation" token="33554489" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/ChildHandle$DefaultImpls" java-name="kotlinx/coroutines/ChildHandle$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.ChildHandleDefaultImpls" token="33554491" />
+      <entry key="kotlinx/coroutines/ChildHandle" java-name="kotlinx/coroutines/ChildHandle" managed-type-name="Xamarin.KotlinX.Coroutines.IChildHandle" token="33554492" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/ChildJob$DefaultImpls" java-name="kotlinx/coroutines/ChildJob$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.ChildJobDefaultImpls" token="33554494" />
+      <entry key="kotlinx/coroutines/ChildJob" java-name="kotlinx/coroutines/ChildJob" managed-type-name="Xamarin.KotlinX.Coroutines.IChildJob" token="33554495" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/CompletableDeferred$DefaultImpls" java-name="kotlinx/coroutines/CompletableDeferred$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.CompletableDeferredDefaultImpls" token="33554497" />
+      <entry key="kotlinx/coroutines/CompletableDeferred" java-name="kotlinx/coroutines/CompletableDeferred" managed-type-name="Xamarin.KotlinX.Coroutines.ICompletableDeferred" token="33554498" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/CompletableJob$DefaultImpls" java-name="kotlinx/coroutines/CompletableJob$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.CompletableJobDefaultImpls" token="33554500" />
+      <entry key="kotlinx/coroutines/CompletableJob" java-name="kotlinx/coroutines/CompletableJob" managed-type-name="Xamarin.KotlinX.Coroutines.ICompletableJob" token="33554501" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/CopyableThreadContextElement$DefaultImpls" java-name="kotlinx/coroutines/CopyableThreadContextElement$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.CopyableThreadContextElementDefaultImpls" token="33554503" />
+      <entry key="kotlinx/coroutines/CopyableThreadContextElement" java-name="kotlinx/coroutines/CopyableThreadContextElement" managed-type-name="Xamarin.KotlinX.Coroutines.ICopyableThreadContextElement" token="33554504" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/CopyableThrowable" java-name="kotlinx/coroutines/CopyableThrowable" managed-type-name="Xamarin.KotlinX.Coroutines.ICopyableThrowable" token="33554506" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/CoroutineExceptionHandler$DefaultImpls" java-name="kotlinx/coroutines/CoroutineExceptionHandler$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineExceptionHandlerDefaultImpls" token="33554508" />
+      <entry key="kotlinx/coroutines/CoroutineExceptionHandler$Key" java-name="kotlinx/coroutines/CoroutineExceptionHandler$Key" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineExceptionHandlerKey" token="33554509" />
+      <entry key="mono/internal/kotlinx/coroutines/CoroutineExceptionHandler" java-name="mono/internal/kotlinx/coroutines/CoroutineExceptionHandler" managed-type-name="Xamarin.KotlinX.Coroutines.CoroutineExceptionHandler" token="33554510" />
+      <entry key="kotlinx/coroutines/CoroutineExceptionHandler" java-name="kotlinx/coroutines/CoroutineExceptionHandler" managed-type-name="Xamarin.KotlinX.Coroutines.ICoroutineExceptionHandler" token="33554512" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/CoroutineScope" java-name="kotlinx/coroutines/CoroutineScope" managed-type-name="Xamarin.KotlinX.Coroutines.ICoroutineScope" token="33554514" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/Deferred$DefaultImpls" java-name="kotlinx/coroutines/Deferred$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.DeferredDefaultImpls" token="33554516" />
+      <entry key="kotlinx/coroutines/Deferred" java-name="kotlinx/coroutines/Deferred" managed-type-name="Xamarin.KotlinX.Coroutines.IDeferred" token="33554517" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/Delay$DefaultImpls" java-name="kotlinx/coroutines/Delay$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.DelayDefaultImpls" token="33554519" />
+      <entry key="kotlinx/coroutines/Delay" java-name="kotlinx/coroutines/Delay" managed-type-name="Xamarin.KotlinX.Coroutines.IDelay" token="33554520" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/DelicateCoroutinesApi" java-name="kotlinx/coroutines/DelicateCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IDelicateCoroutinesApi" token="33554522" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/DisposableHandle" java-name="kotlinx/coroutines/DisposableHandle" managed-type-name="Xamarin.KotlinX.Coroutines.IDisposableHandle" token="33554524" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/ExperimentalCoroutinesApi" java-name="kotlinx/coroutines/ExperimentalCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IExperimentalCoroutinesApi" token="33554526" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/ExperimentalForInheritanceCoroutinesApi" java-name="kotlinx/coroutines/ExperimentalForInheritanceCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IExperimentalForInheritanceCoroutinesApi" token="33554528" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/FlowPreview" java-name="kotlinx/coroutines/FlowPreview" managed-type-name="Xamarin.KotlinX.Coroutines.IFlowPreview" token="33554530" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/InternalCoroutinesApi" java-name="kotlinx/coroutines/InternalCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IInternalCoroutinesApi" token="33554532" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/InternalForInheritanceCoroutinesApi" java-name="kotlinx/coroutines/InternalForInheritanceCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IInternalForInheritanceCoroutinesApi" token="33554534" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/Job$DefaultImpls" java-name="kotlinx/coroutines/Job$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.JobDefaultImpls" token="33554536" />
+      <entry key="kotlinx/coroutines/Job$Key" java-name="kotlinx/coroutines/Job$Key" managed-type-name="Xamarin.KotlinX.Coroutines.JobKey" token="33554537" />
+      <entry key="mono/internal/kotlinx/coroutines/Job" java-name="mono/internal/kotlinx/coroutines/Job" managed-type-name="Xamarin.KotlinX.Coroutines.Job" token="33554538" />
+      <entry key="kotlinx/coroutines/Job" java-name="kotlinx/coroutines/Job" managed-type-name="Xamarin.KotlinX.Coroutines.IJob" token="33554540" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/InterruptibleKt" java-name="kotlinx/coroutines/InterruptibleKt" managed-type-name="Xamarin.KotlinX.Coroutines.InterruptibleKt" token="33554544" />
+      <entry key="kotlinx/coroutines/ObsoleteCoroutinesApi" java-name="kotlinx/coroutines/ObsoleteCoroutinesApi" managed-type-name="Xamarin.KotlinX.Coroutines.IObsoleteCoroutinesApi" token="33554545" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/ParentJob$DefaultImpls" java-name="kotlinx/coroutines/ParentJob$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.ParentJobDefaultImpls" token="33554547" />
+      <entry key="kotlinx/coroutines/ParentJob" java-name="kotlinx/coroutines/ParentJob" managed-type-name="Xamarin.KotlinX.Coroutines.IParentJob" token="33554548" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/ThreadContextElement$DefaultImpls" java-name="kotlinx/coroutines/ThreadContextElement$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.ThreadContextElementDefaultImpls" token="33554550" />
+      <entry key="kotlinx/coroutines/ThreadContextElement" java-name="kotlinx/coroutines/ThreadContextElement" managed-type-name="Xamarin.KotlinX.Coroutines.IThreadContextElement" token="33554551" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/JobKt" java-name="kotlinx/coroutines/JobKt" managed-type-name="Xamarin.KotlinX.Coroutines.JobKt" token="33554553" />
+      <entry key="kotlinx/coroutines/JobSupport" java-name="kotlinx/coroutines/JobSupport" managed-type-name="Xamarin.KotlinX.Coroutines.JobSupport" token="33554554" />
+      <entry key="kotlinx/coroutines/JobSupportKt" java-name="kotlinx/coroutines/JobSupportKt" managed-type-name="Xamarin.KotlinX.Coroutines.JobSupportKt" token="33554555" />
+      <entry key="kotlinx/coroutines/MainCoroutineDispatcher" java-name="kotlinx/coroutines/MainCoroutineDispatcher" managed-type-name="Xamarin.KotlinX.Coroutines.MainCoroutineDispatcher" token="33554556" />
+      <entry key="kotlinx/coroutines/NonCancellable" java-name="kotlinx/coroutines/NonCancellable" managed-type-name="Xamarin.KotlinX.Coroutines.NonCancellable" token="33554558" />
+      <entry key="kotlinx/coroutines/NonDisposableHandle" java-name="kotlinx/coroutines/NonDisposableHandle" managed-type-name="Xamarin.KotlinX.Coroutines.NonDisposableHandle" token="33554559" />
+      <entry key="kotlinx/coroutines/RunnableKt" java-name="kotlinx/coroutines/RunnableKt" managed-type-name="Xamarin.KotlinX.Coroutines.RunnableKt" token="33554561" />
+      <entry key="kotlinx/coroutines/SchedulerTaskKt" java-name="kotlinx/coroutines/SchedulerTaskKt" managed-type-name="Xamarin.KotlinX.Coroutines.SchedulerTaskKt" token="33554562" />
+      <entry key="kotlinx/coroutines/SupervisorKt" java-name="kotlinx/coroutines/SupervisorKt" managed-type-name="Xamarin.KotlinX.Coroutines.SupervisorKt" token="33554563" />
+      <entry key="kotlinx/coroutines/ThreadContextElementKt" java-name="kotlinx/coroutines/ThreadContextElementKt" managed-type-name="Xamarin.KotlinX.Coroutines.ThreadContextElementKt" token="33554564" />
+      <entry key="kotlinx/coroutines/ThreadPoolDispatcherKt" java-name="kotlinx/coroutines/ThreadPoolDispatcherKt" managed-type-name="Xamarin.KotlinX.Coroutines.ThreadPoolDispatcherKt" token="33554565" />
+      <entry key="kotlinx/coroutines/TimeoutCancellationException" java-name="kotlinx/coroutines/TimeoutCancellationException" managed-type-name="Xamarin.KotlinX.Coroutines.TimeoutCancellationException" token="33554566" />
+      <entry key="kotlinx/coroutines/TimeoutKt" java-name="kotlinx/coroutines/TimeoutKt" managed-type-name="Xamarin.KotlinX.Coroutines.TimeoutKt" token="33554567" />
+      <entry key="kotlinx/coroutines/YieldKt" java-name="kotlinx/coroutines/YieldKt" managed-type-name="Xamarin.KotlinX.Coroutines.YieldKt" token="33554568" />
+      <entry key="kotlinx/coroutines/time/TimeKt" java-name="kotlinx/coroutines/time/TimeKt" managed-type-name="Xamarin.KotlinX.Coroutines.Time.TimeKt" token="33554569" />
+      <entry key="kotlinx/coroutines/sync/Mutex$DefaultImpls" java-name="kotlinx/coroutines/sync/Mutex$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Sync.MutexDefaultImpls" token="33554570" />
+      <entry key="kotlinx/coroutines/sync/Mutex" java-name="kotlinx/coroutines/sync/Mutex" managed-type-name="Xamarin.KotlinX.Coroutines.Sync.IMutex" token="33554571" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/sync/Semaphore" java-name="kotlinx/coroutines/sync/Semaphore" managed-type-name="Xamarin.KotlinX.Coroutines.Sync.ISemaphore" token="33554573" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/sync/MutexKt" java-name="kotlinx/coroutines/sync/MutexKt" managed-type-name="Xamarin.KotlinX.Coroutines.Sync.MutexKt" token="33554575" />
+      <entry key="kotlinx/coroutines/sync/SemaphoreKt" java-name="kotlinx/coroutines/sync/SemaphoreKt" managed-type-name="Xamarin.KotlinX.Coroutines.Sync.SemaphoreKt" token="33554576" />
+      <entry key="kotlinx/coroutines/stream/StreamKt" java-name="kotlinx/coroutines/stream/StreamKt" managed-type-name="Xamarin.KotlinX.Coroutines.Stream.StreamKt" token="33554577" />
+      <entry key="kotlinx/coroutines/selects/SelectBuilder$DefaultImpls" java-name="kotlinx/coroutines/selects/SelectBuilder$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.SelectBuilderDefaultImpls" token="33554578" />
+      <entry key="kotlinx/coroutines/selects/SelectBuilder" java-name="kotlinx/coroutines/selects/SelectBuilder" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectBuilder" token="33554579" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/selects/SelectClause" java-name="kotlinx/coroutines/selects/SelectClause" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectClause" token="33554581" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/selects/SelectClause0" java-name="kotlinx/coroutines/selects/SelectClause0" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectClause0" token="33554583" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/selects/SelectClause1" java-name="kotlinx/coroutines/selects/SelectClause1" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectClause1" token="33554585" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/selects/SelectClause2" java-name="kotlinx/coroutines/selects/SelectClause2" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectClause2" token="33554587" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/selects/SelectInstance" java-name="kotlinx/coroutines/selects/SelectInstance" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.ISelectInstance" token="33554589" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/selects/OnTimeoutKt" java-name="kotlinx/coroutines/selects/OnTimeoutKt" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.OnTimeoutKt" token="33554591" />
+      <entry key="kotlinx/coroutines/selects/SelectKt" java-name="kotlinx/coroutines/selects/SelectKt" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.SelectKt" token="33554592" />
+      <entry key="kotlinx/coroutines/selects/SelectOldKt" java-name="kotlinx/coroutines/selects/SelectOldKt" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.SelectOldKt" token="33554593" />
+      <entry key="kotlinx/coroutines/selects/SelectUnbiasedKt" java-name="kotlinx/coroutines/selects/SelectUnbiasedKt" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.SelectUnbiasedKt" token="33554594" />
+      <entry key="kotlinx/coroutines/selects/WhileSelectKt" java-name="kotlinx/coroutines/selects/WhileSelectKt" managed-type-name="Xamarin.KotlinX.Coroutines.Selects.WhileSelectKt" token="33554595" />
+      <entry key="kotlinx/coroutines/scheduling/CoroutineSchedulerKt" java-name="kotlinx/coroutines/scheduling/CoroutineSchedulerKt" managed-type-name="Xamarin.KotlinX.Coroutines.Scheduling.CoroutineSchedulerKt" token="33554596" />
+      <entry key="kotlinx/coroutines/scheduling/TasksKt" java-name="kotlinx/coroutines/scheduling/TasksKt" managed-type-name="Xamarin.KotlinX.Coroutines.Scheduling.TasksKt" token="33554597" />
+      <entry key="kotlinx/coroutines/scheduling/WorkQueueKt" java-name="kotlinx/coroutines/scheduling/WorkQueueKt" managed-type-name="Xamarin.KotlinX.Coroutines.Scheduling.WorkQueueKt" token="33554598" />
+      <entry key="kotlinx/coroutines/intrinsics/CancellableKt" java-name="kotlinx/coroutines/intrinsics/CancellableKt" managed-type-name="Xamarin.KotlinX.Coroutines.Intrinsics.CancellableKt" token="33554599" />
+      <entry key="kotlinx/coroutines/intrinsics/UndispatchedKt" java-name="kotlinx/coroutines/intrinsics/UndispatchedKt" managed-type-name="Xamarin.KotlinX.Coroutines.Intrinsics.UndispatchedKt" token="33554600" />
+      <entry key="kotlinx/coroutines/future/FutureKt" java-name="kotlinx/coroutines/future/FutureKt" managed-type-name="Xamarin.KotlinX.Coroutines.Future.FutureKt" token="33554601" />
+      <entry key="kotlinx/coroutines/flow/FlowKt" java-name="kotlinx/coroutines/flow/FlowKt" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.FlowKt" token="33554602" />
+      <entry key="kotlinx/coroutines/flow/Flow" java-name="kotlinx/coroutines/flow/Flow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IFlow" token="33554603" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/flow/FlowCollector" java-name="kotlinx/coroutines/flow/FlowCollector" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IFlowCollector" token="33554605" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/flow/MutableSharedFlow" java-name="kotlinx/coroutines/flow/MutableSharedFlow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IMutableSharedFlow" token="33554607" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/flow/MutableStateFlow" java-name="kotlinx/coroutines/flow/MutableStateFlow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IMutableStateFlow" token="33554609" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/flow/SharedFlow" java-name="kotlinx/coroutines/flow/SharedFlow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.ISharedFlow" token="33554611" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/flow/SharingStarted$Companion" java-name="kotlinx/coroutines/flow/SharingStarted$Companion" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.SharingStartedCompanion" token="33554613" />
+      <entry key="mono/internal/kotlinx/coroutines/flow/SharingStarted" java-name="mono/internal/kotlinx/coroutines/flow/SharingStarted" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.SharingStarted" token="33554614" />
+      <entry key="kotlinx/coroutines/flow/SharingStarted" java-name="kotlinx/coroutines/flow/SharingStarted" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.ISharingStarted" token="33554616" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/flow/StateFlow" java-name="kotlinx/coroutines/flow/StateFlow" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.IStateFlow" token="33554618" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/flow/LintKt" java-name="kotlinx/coroutines/flow/LintKt" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.LintKt" token="33554620" />
+      <entry key="kotlinx/coroutines/flow/SharedFlowKt" java-name="kotlinx/coroutines/flow/SharedFlowKt" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.SharedFlowKt" token="33554621" />
+      <entry key="kotlinx/coroutines/flow/SharingCommand" java-name="kotlinx/coroutines/flow/SharingCommand" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.SharingCommand" token="33554622" />
+      <entry key="kotlinx/coroutines/flow/SharingStartedKt" java-name="kotlinx/coroutines/flow/SharingStartedKt" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.SharingStartedKt" token="33554623" />
+      <entry key="kotlinx/coroutines/flow/StateFlowKt" java-name="kotlinx/coroutines/flow/StateFlowKt" managed-type-name="Xamarin.KotlinX.Coroutines.Flow.StateFlowKt" token="33554624" />
+      <entry key="kotlinx/coroutines/channels/ActorKt" java-name="kotlinx/coroutines/channels/ActorKt" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ActorKt" token="33554625" />
+      <entry key="kotlinx/coroutines/channels/BroadcastChannelKt" java-name="kotlinx/coroutines/channels/BroadcastChannelKt" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.BroadcastChannelKt" token="33554626" />
+      <entry key="kotlinx/coroutines/channels/BroadcastKt" java-name="kotlinx/coroutines/channels/BroadcastKt" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.BroadcastKt" token="33554627" />
+      <entry key="kotlinx/coroutines/channels/BufferedChannelKt" java-name="kotlinx/coroutines/channels/BufferedChannelKt" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.BufferedChannelKt" token="33554628" />
+      <entry key="kotlinx/coroutines/channels/BufferOverflow" java-name="kotlinx/coroutines/channels/BufferOverflow" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.BufferOverflow" token="33554629" />
+      <entry key="kotlinx/coroutines/channels/ChannelKt" java-name="kotlinx/coroutines/channels/ChannelKt" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ChannelKt" token="33554630" />
+      <entry key="kotlinx/coroutines/channels/ChannelResult" java-name="kotlinx/coroutines/channels/ChannelResult" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ChannelResult" token="33554631" />
+      <entry key="kotlinx/coroutines/channels/ChannelResult$Companion" java-name="kotlinx/coroutines/channels/ChannelResult$Companion" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ChannelResult/Companion" token="33554666" />
+      <entry key="kotlinx/coroutines/channels/ChannelsKt" java-name="kotlinx/coroutines/channels/ChannelsKt" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ChannelsKt" token="33554632" />
+      <entry key="kotlinx/coroutines/channels/ClosedReceiveChannelException" java-name="kotlinx/coroutines/channels/ClosedReceiveChannelException" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ClosedReceiveChannelException" token="33554633" />
+      <entry key="kotlinx/coroutines/channels/ClosedSendChannelException" java-name="kotlinx/coroutines/channels/ClosedSendChannelException" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ClosedSendChannelException" token="33554634" />
+      <entry key="kotlinx/coroutines/channels/ConflatedBroadcastChannel" java-name="kotlinx/coroutines/channels/ConflatedBroadcastChannel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ConflatedBroadcastChannel" token="33554635" />
+      <entry key="kotlinx/coroutines/channels/ActorScope$DefaultImpls" java-name="kotlinx/coroutines/channels/ActorScope$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ActorScopeDefaultImpls" token="33554636" />
+      <entry key="kotlinx/coroutines/channels/ActorScope" java-name="kotlinx/coroutines/channels/ActorScope" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IActorScope" token="33554637" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/channels/BroadcastChannel$DefaultImpls" java-name="kotlinx/coroutines/channels/BroadcastChannel$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.BroadcastChannelDefaultImpls" token="33554639" />
+      <entry key="kotlinx/coroutines/channels/BroadcastChannel" java-name="kotlinx/coroutines/channels/BroadcastChannel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IBroadcastChannel" token="33554640" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/channels/Channel$DefaultImpls" java-name="kotlinx/coroutines/channels/Channel$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ChannelDefaultImpls" token="33554642" />
+      <entry key="kotlinx/coroutines/channels/Channel$Factory" java-name="kotlinx/coroutines/channels/Channel$Factory" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ChannelFactory" token="33554643" />
+      <entry key="mono/internal/kotlinx/coroutines/channels/Channel" java-name="mono/internal/kotlinx/coroutines/channels/Channel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.Channel" token="33554644" />
+      <entry key="kotlinx/coroutines/channels/Channel" java-name="kotlinx/coroutines/channels/Channel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IChannel" token="33554646" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/channels/ChannelIterator$DefaultImpls" java-name="kotlinx/coroutines/channels/ChannelIterator$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ChannelIteratorDefaultImpls" token="33554648" />
+      <entry key="kotlinx/coroutines/channels/ChannelIterator" java-name="kotlinx/coroutines/channels/ChannelIterator" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IChannelIterator" token="33554649" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/channels/ProducerScope$DefaultImpls" java-name="kotlinx/coroutines/channels/ProducerScope$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ProducerScopeDefaultImpls" token="33554651" />
+      <entry key="kotlinx/coroutines/channels/ProducerScope" java-name="kotlinx/coroutines/channels/ProducerScope" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IProducerScope" token="33554652" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/channels/ReceiveChannel$DefaultImpls" java-name="kotlinx/coroutines/channels/ReceiveChannel$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ReceiveChannelDefaultImpls" token="33554654" />
+      <entry key="kotlinx/coroutines/channels/ReceiveChannel" java-name="kotlinx/coroutines/channels/ReceiveChannel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.IReceiveChannel" token="33554655" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/channels/SendChannel$DefaultImpls" java-name="kotlinx/coroutines/channels/SendChannel$DefaultImpls" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.SendChannelDefaultImpls" token="33554657" />
+      <entry key="kotlinx/coroutines/channels/SendChannel" java-name="kotlinx/coroutines/channels/SendChannel" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ISendChannel" token="33554658" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/coroutines/channels/ProduceKt" java-name="kotlinx/coroutines/channels/ProduceKt" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.ProduceKt" token="33554660" />
+      <entry key="kotlinx/coroutines/channels/TickerChannelsKt" java-name="kotlinx/coroutines/channels/TickerChannelsKt" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.TickerChannelsKt" token="33554661" />
+      <entry key="kotlinx/coroutines/channels/TickerMode" java-name="kotlinx/coroutines/channels/TickerMode" managed-type-name="Xamarin.KotlinX.Coroutines.Channels.TickerMode" token="33554662" />
+    </types-scratch>
+  </module>
+</api>

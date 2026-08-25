@@ -1,0 +1,24 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Navigation.UI" mvid="ddbcd8542d3c4609a42d211d0f804e9f">
+  <module assembly-name="Xamarin.AndroidX.Navigation.UI" mvid="ddbcd8542d3c4609a42d211d0f804e9f" mvid-bytes="VNi83TwtCUakLSEdD4BOnw==">
+    <duplicates>
+      <entry java-name="androidx/navigation/ui/AppBarConfiguration$OnNavigateUpListener" managed-type-name="AndroidX.Navigation.UI.AppBarConfiguration/IOnNavigateUpListenerInvoker" token="33554455" />
+      <entry java-name="androidx/navigation/ui/NavigationUiSaveStateControl" managed-type-name="AndroidX.Navigation.UI.INavigationUiSaveStateControlInvoker" token="33554445" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/navigation/ui/ActivityKt" java-name="androidx/navigation/ui/ActivityKt" managed-type-name="AndroidX.Navigation.UI.ActivityKt" token="33554439" />
+      <entry key="androidx/navigation/ui/AppBarConfiguration" java-name="androidx/navigation/ui/AppBarConfiguration" managed-type-name="AndroidX.Navigation.UI.AppBarConfiguration" token="33554440" />
+      <entry key="androidx/navigation/ui/AppBarConfiguration$Builder" java-name="androidx/navigation/ui/AppBarConfiguration$Builder" managed-type-name="AndroidX.Navigation.UI.AppBarConfiguration/Builder" token="33554453" />
+      <entry key="androidx/navigation/ui/AppBarConfiguration$OnNavigateUpListener" java-name="androidx/navigation/ui/AppBarConfiguration$OnNavigateUpListener" managed-type-name="AndroidX.Navigation.UI.AppBarConfiguration/IOnNavigateUpListener" token="33554454" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/navigation/ui/AppBarConfiguration_OnNavigateUpListenerImplementor" java-name="mono/androidx/navigation/ui/AppBarConfiguration_OnNavigateUpListenerImplementor" managed-type-name="AndroidX.Navigation.UI.AppBarConfiguration/IOnNavigateUpListenerImplementor" token="33554457" />
+      <entry key="androidx/navigation/ui/AppBarConfigurationKt" java-name="androidx/navigation/ui/AppBarConfigurationKt" managed-type-name="AndroidX.Navigation.UI.AppBarConfigurationKt" token="33554441" />
+      <entry key="androidx/navigation/ui/BottomNavigationViewKt" java-name="androidx/navigation/ui/BottomNavigationViewKt" managed-type-name="AndroidX.Navigation.UI.BottomNavigationViewKt" token="33554442" />
+      <entry key="androidx/navigation/ui/CollapsingToolbarLayoutKt" java-name="androidx/navigation/ui/CollapsingToolbarLayoutKt" managed-type-name="AndroidX.Navigation.UI.CollapsingToolbarLayoutKt" token="33554443" />
+      <entry key="androidx/navigation/ui/NavigationUiSaveStateControl" java-name="androidx/navigation/ui/NavigationUiSaveStateControl" managed-type-name="AndroidX.Navigation.UI.INavigationUiSaveStateControl" token="33554444" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/ui/MenuItemKt" java-name="androidx/navigation/ui/MenuItemKt" managed-type-name="AndroidX.Navigation.UI.MenuItemKt" token="33554446" />
+      <entry key="androidx/navigation/ui/NavControllerKt" java-name="androidx/navigation/ui/NavControllerKt" managed-type-name="AndroidX.Navigation.UI.NavControllerKt" token="33554447" />
+      <entry key="androidx/navigation/ui/NavigationUI" java-name="androidx/navigation/ui/NavigationUI" managed-type-name="AndroidX.Navigation.UI.NavigationUI" token="33554448" />
+      <entry key="androidx/navigation/ui/NavigationViewKt" java-name="androidx/navigation/ui/NavigationViewKt" managed-type-name="AndroidX.Navigation.UI.NavigationViewKt" token="33554450" />
+      <entry key="androidx/navigation/ui/ToolbarKt" java-name="androidx/navigation/ui/ToolbarKt" managed-type-name="AndroidX.Navigation.UI.ToolbarKt" token="33554451" />
+    </types-scratch>
+  </module>
+</api>

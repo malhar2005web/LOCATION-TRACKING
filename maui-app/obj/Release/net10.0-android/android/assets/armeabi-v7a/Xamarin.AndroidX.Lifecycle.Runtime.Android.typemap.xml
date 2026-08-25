@@ -1,0 +1,25 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Lifecycle.Runtime.Android" mvid="e59e13eae8a54a26bee6f124a3791987">
+  <module assembly-name="Xamarin.AndroidX.Lifecycle.Runtime.Android" mvid="e59e13eae8a54a26bee6f124a3791987" mvid-bytes="6hOe5aXoJkq+5vEko3kZhw==">
+    <duplicates>
+      <entry java-name="androidx/lifecycle/LifecycleRegistryOwner" managed-type-name="AndroidX.Lifecycle.ILifecycleRegistryOwnerInvoker" token="33554441" />
+      <entry java-name="androidx/lifecycle/ReportFragment$ActivityInitializationListener" managed-type-name="AndroidX.Lifecycle.ReportFragment/IActivityInitializationListenerInvoker" token="33554454" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/lifecycle/FlowExtKt" java-name="androidx/lifecycle/FlowExtKt" managed-type-name="AndroidX.Lifecycle.FlowExtKt" token="33554439" />
+      <entry key="androidx/lifecycle/LifecycleRegistryOwner" java-name="androidx/lifecycle/LifecycleRegistryOwner" managed-type-name="AndroidX.Lifecycle.ILifecycleRegistryOwner" token="33554440" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/LifecycleDestroyedException" java-name="androidx/lifecycle/LifecycleDestroyedException" managed-type-name="AndroidX.Lifecycle.LifecycleDestroyedException" token="33554442" />
+      <entry key="androidx/lifecycle/LifecycleRegistry" java-name="androidx/lifecycle/LifecycleRegistry" managed-type-name="AndroidX.Lifecycle.LifecycleRegistry" token="33554443" />
+      <entry key="androidx/lifecycle/LifecycleRegistry$Companion" java-name="androidx/lifecycle/LifecycleRegistry$Companion" managed-type-name="AndroidX.Lifecycle.LifecycleRegistry/Companion" token="33554452" />
+      <entry key="androidx/lifecycle/LifecycleRegistryKt" java-name="androidx/lifecycle/LifecycleRegistryKt" managed-type-name="AndroidX.Lifecycle.LifecycleRegistryKt" token="33554444" />
+      <entry key="androidx/lifecycle/LifecycleRegistry_androidKt" java-name="androidx/lifecycle/LifecycleRegistry_androidKt" managed-type-name="AndroidX.Lifecycle.LifecycleRegistry_androidKt" token="33554445" />
+      <entry key="androidx/lifecycle/RepeatOnLifecycleKt" java-name="androidx/lifecycle/RepeatOnLifecycleKt" managed-type-name="AndroidX.Lifecycle.RepeatOnLifecycleKt" token="33554446" />
+      <entry key="androidx/lifecycle/ReportFragment" java-name="androidx/lifecycle/ReportFragment" managed-type-name="AndroidX.Lifecycle.ReportFragment" token="33554447" />
+      <entry key="androidx/lifecycle/ReportFragment$ActivityInitializationListener" java-name="androidx/lifecycle/ReportFragment$ActivityInitializationListener" managed-type-name="AndroidX.Lifecycle.ReportFragment/IActivityInitializationListener" token="33554453" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/lifecycle/ReportFragment_ActivityInitializationListenerImplementor" java-name="mono/androidx/lifecycle/ReportFragment_ActivityInitializationListenerImplementor" managed-type-name="AndroidX.Lifecycle.ReportFragment/IActivityInitializationListenerImplementor" token="33554455" />
+      <entry key="androidx/lifecycle/ReportFragment$Companion" java-name="androidx/lifecycle/ReportFragment$Companion" managed-type-name="AndroidX.Lifecycle.ReportFragment/Companion" token="33554456" />
+      <entry key="androidx/lifecycle/ViewKt" java-name="androidx/lifecycle/ViewKt" managed-type-name="AndroidX.Lifecycle.ViewKt" token="33554448" />
+      <entry key="androidx/lifecycle/ViewTreeLifecycleOwner" java-name="androidx/lifecycle/ViewTreeLifecycleOwner" managed-type-name="AndroidX.Lifecycle.ViewTreeLifecycleOwner" token="33554449" />
+      <entry key="androidx/lifecycle/WithLifecycleStateKt" java-name="androidx/lifecycle/WithLifecycleStateKt" managed-type-name="AndroidX.Lifecycle.WithLifecycleStateKt" token="33554450" />
+    </types-scratch>
+  </module>
+</api>

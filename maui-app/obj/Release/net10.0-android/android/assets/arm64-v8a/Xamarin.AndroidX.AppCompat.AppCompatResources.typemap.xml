@@ -1,0 +1,24 @@
+<api type="release" assembly-name="Xamarin.AndroidX.AppCompat.AppCompatResources" mvid="aaebdb570d9141528693049d533a60bc">
+  <module assembly-name="Xamarin.AndroidX.AppCompat.AppCompatResources" mvid="aaebdb570d9141528693049d533a60bc" mvid-bytes="V9vrqpENUkGGkwSdUzpgvA==">
+    <duplicates>
+      <entry java-name="androidx/appcompat/widget/ResourceManagerInternal$ResourceManagerHooks" managed-type-name="AndroidX.AppCompat.Widget.ResourceManagerInternal/IResourceManagerHooksInvoker" token="33554477" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/appcompat/widget/DrawableUtils" java-name="androidx/appcompat/widget/DrawableUtils" managed-type-name="AndroidX.AppCompat.Widget.DrawableUtils" token="33554461" />
+      <entry key="androidx/appcompat/widget/ResourceManagerInternal" java-name="androidx/appcompat/widget/ResourceManagerInternal" managed-type-name="AndroidX.AppCompat.Widget.ResourceManagerInternal" token="33554462" />
+      <entry key="androidx/appcompat/widget/ResourceManagerInternal$AsldcInflateDelegate" java-name="androidx/appcompat/widget/ResourceManagerInternal$AsldcInflateDelegate" managed-type-name="AndroidX.AppCompat.Widget.ResourceManagerInternal/AsldcInflateDelegate" token="33554475" />
+      <entry key="androidx/appcompat/widget/ResourceManagerInternal$ResourceManagerHooks" java-name="androidx/appcompat/widget/ResourceManagerInternal$ResourceManagerHooks" managed-type-name="AndroidX.AppCompat.Widget.ResourceManagerInternal/IResourceManagerHooks" token="33554476" skip-in-java-to-managed="True" />
+      <entry key="androidx/appcompat/widget/TintContextWrapper" java-name="androidx/appcompat/widget/TintContextWrapper" managed-type-name="AndroidX.AppCompat.Widget.TintContextWrapper" token="33554463" />
+      <entry key="androidx/appcompat/widget/TintInfo" java-name="androidx/appcompat/widget/TintInfo" managed-type-name="AndroidX.AppCompat.Widget.TintInfo" token="33554464" />
+      <entry key="androidx/appcompat/widget/VectorEnabledTintResources" java-name="androidx/appcompat/widget/VectorEnabledTintResources" managed-type-name="AndroidX.AppCompat.Widget.VectorEnabledTintResources" token="33554465" />
+      <entry key="androidx/appcompat/resources/Compatibility" java-name="androidx/appcompat/resources/Compatibility" managed-type-name="AndroidX.AppCompat.Resources.Compatibility" token="33554466" />
+      <entry key="androidx/appcompat/content/res/AppCompatResources" java-name="androidx/appcompat/content/res/AppCompatResources" managed-type-name="AndroidX.AppCompat.Content.Res.AppCompatResources" token="33554467" />
+      <entry key="crc6439358991bbf5dbbd/DrawableContainer" java-name="crc6439358991bbf5dbbd/DrawableContainer" managed-type-name="AndroidX.AppCompat.Graphics.Drawable.DrawableContainer" token="33554468" />
+      <entry key="crc6439358991bbf5dbbd/DrawableWrapper" java-name="crc6439358991bbf5dbbd/DrawableWrapper" managed-type-name="AndroidX.AppCompat.Graphics.Drawable.DrawableWrapper" token="33554469" />
+      <entry key="androidx/appcompat/graphics/drawable/AnimatedStateListDrawableCompat" java-name="androidx/appcompat/graphics/drawable/AnimatedStateListDrawableCompat" managed-type-name="AndroidX.AppCompat.Graphics.Drawable.AnimatedStateListDrawableCompat" token="33554470" />
+      <entry key="androidx/appcompat/graphics/drawable/DrawableContainerCompat" java-name="androidx/appcompat/graphics/drawable/DrawableContainerCompat" managed-type-name="AndroidX.AppCompat.Graphics.Drawable.DrawableContainerCompat" token="33554471" />
+      <entry key="androidx/appcompat/graphics/drawable/DrawableWrapperCompat" java-name="androidx/appcompat/graphics/drawable/DrawableWrapperCompat" managed-type-name="AndroidX.AppCompat.Graphics.Drawable.DrawableWrapperCompat" token="33554472" />
+      <entry key="androidx/appcompat/graphics/drawable/StateListDrawableCompat" java-name="androidx/appcompat/graphics/drawable/StateListDrawableCompat" managed-type-name="AndroidX.AppCompat.Graphics.Drawable.StateListDrawableCompat" token="33554473" />
+    </types-scratch>
+  </module>
+</api>

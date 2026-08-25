@@ -1,0 +1,11 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Fragment.Ktx" mvid="feaab69a6d604bd4bd7d2a94728fe6ce">
+  <module assembly-name="Xamarin.AndroidX.Fragment.Ktx" mvid="feaab69a6d604bd4bd7d2a94728fe6ce" mvid-bytes="mraq/mBt1Eu9fSqUco/mzg==">
+    <types-scratch>
+      <entry key="androidx/fragment/app/FragmentKt" java-name="androidx/fragment/app/FragmentKt" managed-type-name="AndroidX.Fragment.App.FragmentKt" token="33554435" />
+      <entry key="androidx/fragment/app/FragmentManagerKt" java-name="androidx/fragment/app/FragmentManagerKt" managed-type-name="AndroidX.Fragment.App.FragmentManagerKt" token="33554436" />
+      <entry key="androidx/fragment/app/FragmentTransactionKt" java-name="androidx/fragment/app/FragmentTransactionKt" managed-type-name="AndroidX.Fragment.App.FragmentTransactionKt" token="33554437" />
+      <entry key="androidx/fragment/app/FragmentViewModelLazyKt" java-name="androidx/fragment/app/FragmentViewModelLazyKt" managed-type-name="AndroidX.Fragment.App.FragmentViewModelLazyKt" token="33554438" />
+      <entry key="androidx/fragment/app/ViewKt" java-name="androidx/fragment/app/ViewKt" managed-type-name="AndroidX.Fragment.App.ViewKt" token="33554439" />
+    </types-scratch>
+  </module>
+</api>

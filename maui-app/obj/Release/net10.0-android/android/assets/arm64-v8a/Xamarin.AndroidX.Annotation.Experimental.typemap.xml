@@ -1,0 +1,18 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Annotation.Experimental" mvid="7c6de80283144c59a734d0c7aba36d65">
+  <module assembly-name="Xamarin.AndroidX.Annotation.Experimental" mvid="7c6de80283144c59a734d0c7aba36d65" mvid-bytes="AuhtfBSDWUynNNDHq6NtZQ==">
+    <duplicates>
+      <entry java-name="androidx/annotation/OptIn" managed-type-name="AndroidX.Annotations.IOptInInvoker" token="33554439" />
+      <entry java-name="androidx/annotation/RequiresOptIn" managed-type-name="AndroidX.Annotations.IRequiresOptInInvoker" token="33554442" />
+      <entry java-name="androidx/annotation/experimental/Experimental" managed-type-name="AndroidX.Annotations.Experimental.IExperimentalInvoker" token="33554448" />
+      <entry java-name="androidx/annotation/experimental/UseExperimental" managed-type-name="AndroidX.Annotations.Experimental.IUseExperimentalInvoker" token="33554450" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/annotation/OptIn" java-name="androidx/annotation/OptIn" managed-type-name="AndroidX.Annotations.IOptIn" token="33554438" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RequiresOptIn$Level" java-name="androidx/annotation/RequiresOptIn$Level" managed-type-name="AndroidX.Annotations.RequiresOptInLevel" token="33554440" />
+      <entry key="androidx/annotation/RequiresOptIn" java-name="androidx/annotation/RequiresOptIn" managed-type-name="AndroidX.Annotations.IRequiresOptIn" token="33554441" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/experimental/Experimental$Level" java-name="androidx/annotation/experimental/Experimental$Level" managed-type-name="AndroidX.Annotations.Experimental.ExperimentalLevel" token="33554446" />
+      <entry key="androidx/annotation/experimental/Experimental" java-name="androidx/annotation/experimental/Experimental" managed-type-name="AndroidX.Annotations.Experimental.IExperimental" token="33554447" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/experimental/UseExperimental" java-name="androidx/annotation/experimental/UseExperimental" managed-type-name="AndroidX.Annotations.Experimental.IUseExperimental" token="33554449" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>

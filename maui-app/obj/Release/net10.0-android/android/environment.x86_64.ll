@@ -112,14 +112,14 @@ target triple = "x86_64-unknown-linux-android21"
 	i32 3, ; uint32_t package_naming_policy
 	i32 4, ; uint32_t environment_variable_count
 	i32 0, ; uint32_t system_property_count
-	i32 146, ; uint32_t number_of_assemblies_in_apk
+	i32 351, ; uint32_t number_of_assemblies_in_apk
 	i32 0, ; uint32_t bundled_assembly_name_width
 	i32 32, ; uint32_t number_of_dso_cache_entries
 	i32 0, ; uint32_t number_of_aot_cache_entries
 	i32 8, ; uint32_t number_of_shared_libraries
-	i32 u0x020002fc, ; uint32_t android_runtime_jnienv_class_token
-	i32 u0x06001e2b, ; uint32_t jnienv_initialize_method_token
-	i32 u0x06001e2a, ; uint32_t jnienv_registerjninatives_method_token
+	i32 u0x02001416, ; uint32_t android_runtime_jnienv_class_token
+	i32 u0x06014f5e, ; uint32_t jnienv_initialize_method_token
+	i32 u0x06014f5a, ; uint32_t jnienv_registerjninatives_method_token
 	i32 0, ; uint32_t jni_remapping_replacement_type_count
 	i32 0, ; uint32_t jni_remapping_replacement_method_index_entry_count
 	i32 u0x00000000, ; uint32_t mono_components_mask
@@ -407,7 +407,7 @@ target triple = "x86_64-unknown-linux-android21"
 ; Bundled assembly name buffers, all empty (unused when assembly stores are enabled)
 @bundled_assemblies = dso_local local_unnamed_addr global [0 x %struct.XamarinAndroidBundledAssembly] zeroinitializer, align 8
 
-@assembly_store_bundled_assemblies = dso_local local_unnamed_addr global [146 x %struct.AssemblyStoreSingleAssemblyRuntimeData] zeroinitializer, align 8
+@assembly_store_bundled_assemblies = dso_local local_unnamed_addr global [351 x %struct.AssemblyStoreSingleAssemblyRuntimeData] zeroinitializer, align 8
 
 @assembly_store = dso_local local_unnamed_addr global %struct.AssemblyStoreRuntimeData {
 	ptr null, ; uint8_t* data_start

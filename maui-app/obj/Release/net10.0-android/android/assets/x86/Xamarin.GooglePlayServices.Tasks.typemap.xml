@@ -1,0 +1,39 @@
+<api type="release" assembly-name="Xamarin.GooglePlayServices.Tasks" mvid="52f906747cf9476c9f4f1a74fd398c68">
+  <module assembly-name="Xamarin.GooglePlayServices.Tasks" mvid="52f906747cf9476c9f4f1a74fd398c68" mvid-bytes="dAb5Uvl8bEefTxp0/TmMaA==">
+    <duplicates>
+      <entry java-name="com/google/android/gms/tasks/CancellationToken" managed-type-name="Android.Gms.Tasks.CancellationTokenInvoker" token="33554446" />
+      <entry java-name="com/google/android/gms/tasks/Continuation" managed-type-name="Android.Gms.Tasks.IContinuationInvoker" token="33554450" />
+      <entry java-name="com/google/android/gms/tasks/OnCanceledListener" managed-type-name="Android.Gms.Tasks.IOnCanceledListenerInvoker" token="33554452" />
+      <entry java-name="com/google/android/gms/tasks/OnCompleteListener" managed-type-name="Android.Gms.Tasks.IOnCompleteListenerInvoker" token="33554455" />
+      <entry java-name="com/google/android/gms/tasks/OnFailureListener" managed-type-name="Android.Gms.Tasks.IOnFailureListenerInvoker" token="33554459" />
+      <entry java-name="com/google/android/gms/tasks/OnSuccessListener" managed-type-name="Android.Gms.Tasks.IOnSuccessListenerInvoker" token="33554463" />
+      <entry java-name="com/google/android/gms/tasks/OnTokenCanceledListener" managed-type-name="Android.Gms.Tasks.IOnTokenCanceledListenerInvoker" token="33554467" />
+      <entry java-name="com/google/android/gms/tasks/SuccessContinuation" managed-type-name="Android.Gms.Tasks.ISuccessContinuationInvoker" token="33554470" />
+      <entry java-name="com/google/android/gms/tasks/Task" managed-type-name="Android.Gms.Tasks.TaskInvoker" token="33554473" />
+    </duplicates>
+    <types-scratch>
+      <entry key="com/google/android/gms/tasks/Task" java-name="com/google/android/gms/tasks/Task" managed-type-name="Android.Gms.Tasks.Task" token="33554443" />
+      <entry key="com/google/android/gms/tasks/TaskCompletionSource" java-name="com/google/android/gms/tasks/TaskCompletionSource" managed-type-name="Android.Gms.Tasks.TaskCompletionSource" token="33554444" />
+      <entry key="com/google/android/gms/tasks/CancellationToken" java-name="com/google/android/gms/tasks/CancellationToken" managed-type-name="Android.Gms.Tasks.CancellationToken" token="33554445" />
+      <entry key="com/google/android/gms/tasks/CancellationTokenSource" java-name="com/google/android/gms/tasks/CancellationTokenSource" managed-type-name="Android.Gms.Tasks.CancellationTokenSource" token="33554447" />
+      <entry key="com/google/android/gms/tasks/DuplicateTaskCompletionException" java-name="com/google/android/gms/tasks/DuplicateTaskCompletionException" managed-type-name="Android.Gms.Tasks.DuplicateTaskCompletionException" token="33554448" />
+      <entry key="com/google/android/gms/tasks/Continuation" java-name="com/google/android/gms/tasks/Continuation" managed-type-name="Android.Gms.Tasks.IContinuation" token="33554449" skip-in-java-to-managed="True" />
+      <entry key="com/google/android/gms/tasks/OnCanceledListener" java-name="com/google/android/gms/tasks/OnCanceledListener" managed-type-name="Android.Gms.Tasks.IOnCanceledListener" token="33554451" skip-in-java-to-managed="True" />
+      <entry key="mono/com/google/android/gms/tasks/OnCanceledListenerImplementor" java-name="mono/com/google/android/gms/tasks/OnCanceledListenerImplementor" managed-type-name="Android.Gms.Tasks.IOnCanceledListenerImplementor" token="33554453" />
+      <entry key="com/google/android/gms/tasks/OnCompleteListener" java-name="com/google/android/gms/tasks/OnCompleteListener" managed-type-name="Android.Gms.Tasks.IOnCompleteListener" token="33554454" skip-in-java-to-managed="True" />
+      <entry key="mono/com/google/android/gms/tasks/OnCompleteListenerImplementor" java-name="mono/com/google/android/gms/tasks/OnCompleteListenerImplementor" managed-type-name="Android.Gms.Tasks.IOnCompleteListenerImplementor" token="33554457" />
+      <entry key="com/google/android/gms/tasks/OnFailureListener" java-name="com/google/android/gms/tasks/OnFailureListener" managed-type-name="Android.Gms.Tasks.IOnFailureListener" token="33554458" skip-in-java-to-managed="True" />
+      <entry key="mono/com/google/android/gms/tasks/OnFailureListenerImplementor" java-name="mono/com/google/android/gms/tasks/OnFailureListenerImplementor" managed-type-name="Android.Gms.Tasks.IOnFailureListenerImplementor" token="33554461" />
+      <entry key="com/google/android/gms/tasks/OnSuccessListener" java-name="com/google/android/gms/tasks/OnSuccessListener" managed-type-name="Android.Gms.Tasks.IOnSuccessListener" token="33554462" skip-in-java-to-managed="True" />
+      <entry key="mono/com/google/android/gms/tasks/OnSuccessListenerImplementor" java-name="mono/com/google/android/gms/tasks/OnSuccessListenerImplementor" managed-type-name="Android.Gms.Tasks.IOnSuccessListenerImplementor" token="33554465" />
+      <entry key="com/google/android/gms/tasks/OnTokenCanceledListener" java-name="com/google/android/gms/tasks/OnTokenCanceledListener" managed-type-name="Android.Gms.Tasks.IOnTokenCanceledListener" token="33554466" skip-in-java-to-managed="True" />
+      <entry key="mono/com/google/android/gms/tasks/OnTokenCanceledListenerImplementor" java-name="mono/com/google/android/gms/tasks/OnTokenCanceledListenerImplementor" managed-type-name="Android.Gms.Tasks.IOnTokenCanceledListenerImplementor" token="33554468" />
+      <entry key="com/google/android/gms/tasks/SuccessContinuation" java-name="com/google/android/gms/tasks/SuccessContinuation" managed-type-name="Android.Gms.Tasks.ISuccessContinuation" token="33554469" skip-in-java-to-managed="True" />
+      <entry key="com/google/android/gms/tasks/NativeOnCompleteListener" java-name="com/google/android/gms/tasks/NativeOnCompleteListener" managed-type-name="Android.Gms.Tasks.NativeOnCompleteListener" token="33554471" />
+      <entry key="com/google/android/gms/tasks/RuntimeExecutionException" java-name="com/google/android/gms/tasks/RuntimeExecutionException" managed-type-name="Android.Gms.Tasks.RuntimeExecutionException" token="33554472" />
+      <entry key="com/google/android/gms/tasks/TaskExecutors" java-name="com/google/android/gms/tasks/TaskExecutors" managed-type-name="Android.Gms.Tasks.TaskExecutors" token="33554474" />
+      <entry key="com/google/android/gms/tasks/Tasks" java-name="com/google/android/gms/tasks/Tasks" managed-type-name="Android.Gms.Tasks.TasksClass" token="33554475" />
+      <entry key="crc6495d4f5d63cc5c882/AwaitableTaskCompleteListener_1" java-name="crc6495d4f5d63cc5c882/AwaitableTaskCompleteListener_1" managed-type-name="Android.Gms.Extensions.AwaitableTaskCompleteListener`1" token="33554477" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>

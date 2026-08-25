@@ -1,0 +1,70 @@
+<api type="release" assembly-name="GoogleGson" mvid="a8db86591cc94394b62b24f3bb67cba0">
+  <module assembly-name="GoogleGson" mvid="a8db86591cc94394b62b24f3bb67cba0" mvid-bytes="WYbbqMkclEO2KyTzu2fLoA==">
+    <duplicates>
+      <entry java-name="com/google/gson/FieldNamingPolicy" managed-type-name="GoogleGson.FieldNamingPolicyInvoker" token="33554454" />
+      <entry java-name="com/google/gson/ExclusionStrategy" managed-type-name="GoogleGson.IExclusionStrategyInvoker" token="33554459" />
+      <entry java-name="com/google/gson/FieldNamingStrategy" managed-type-name="GoogleGson.IFieldNamingStrategyInvoker" token="33554461" />
+      <entry java-name="com/google/gson/InstanceCreator" managed-type-name="GoogleGson.IInstanceCreatorInvoker" token="33554463" />
+      <entry java-name="com/google/gson/JsonDeserializationContext" managed-type-name="GoogleGson.IJsonDeserializationContextInvoker" token="33554465" />
+      <entry java-name="com/google/gson/JsonDeserializer" managed-type-name="GoogleGson.IJsonDeserializerInvoker" token="33554467" />
+      <entry java-name="com/google/gson/JsonSerializationContext" managed-type-name="GoogleGson.IJsonSerializationContextInvoker" token="33554469" />
+      <entry java-name="com/google/gson/JsonSerializer" managed-type-name="GoogleGson.IJsonSerializerInvoker" token="33554471" />
+      <entry java-name="mono/internal/com/google/gson/ReflectionAccessFilter" managed-type-name="GoogleGson.ReflectionAccessFilterConsts" token="33554474" />
+      <entry java-name="com/google/gson/ReflectionAccessFilter" managed-type-name="GoogleGson.IReflectionAccessFilterInvoker" token="33554476" />
+      <entry java-name="com/google/gson/ToNumberStrategy" managed-type-name="GoogleGson.IToNumberStrategyInvoker" token="33554478" />
+      <entry java-name="com/google/gson/TypeAdapterFactory" managed-type-name="GoogleGson.ITypeAdapterFactoryInvoker" token="33554480" />
+      <entry java-name="com/google/gson/JsonElement" managed-type-name="GoogleGson.JsonElementInvoker" token="33554483" />
+      <entry java-name="com/google/gson/LongSerializationPolicy" managed-type-name="GoogleGson.LongSerializationPolicyInvoker" token="33554493" />
+      <entry java-name="com/google/gson/ToNumberPolicy" managed-type-name="GoogleGson.ToNumberPolicyInvoker" token="33554496" />
+      <entry java-name="com/google/gson/TypeAdapter" managed-type-name="GoogleGson.TypeAdapterInvoker" token="33554498" />
+      <entry java-name="com/google/gson/annotations/Expose" managed-type-name="GoogleGson.Annotations.IExposeInvoker" token="33554506" />
+      <entry java-name="com/google/gson/annotations/JsonAdapter" managed-type-name="GoogleGson.Annotations.IJsonAdapterInvoker" token="33554508" />
+      <entry java-name="com/google/gson/annotations/SerializedName" managed-type-name="GoogleGson.Annotations.ISerializedNameInvoker" token="33554510" />
+      <entry java-name="com/google/gson/annotations/Since" managed-type-name="GoogleGson.Annotations.ISinceInvoker" token="33554512" />
+      <entry java-name="com/google/gson/annotations/Until" managed-type-name="GoogleGson.Annotations.IUntilInvoker" token="33554514" />
+    </duplicates>
+    <types-scratch>
+      <entry key="com/google/gson/FieldAttributes" java-name="com/google/gson/FieldAttributes" managed-type-name="GoogleGson.FieldAttributes" token="33554452" />
+      <entry key="com/google/gson/FieldNamingPolicy" java-name="com/google/gson/FieldNamingPolicy" managed-type-name="GoogleGson.FieldNamingPolicy" token="33554453" />
+      <entry key="com/google/gson/FormattingStyle" java-name="com/google/gson/FormattingStyle" managed-type-name="GoogleGson.FormattingStyle" token="33554455" />
+      <entry key="com/google/gson/Gson" java-name="com/google/gson/Gson" managed-type-name="GoogleGson.Gson" token="33554456" />
+      <entry key="com/google/gson/GsonBuilder" java-name="com/google/gson/GsonBuilder" managed-type-name="GoogleGson.GsonBuilder" token="33554457" />
+      <entry key="com/google/gson/ExclusionStrategy" java-name="com/google/gson/ExclusionStrategy" managed-type-name="GoogleGson.IExclusionStrategy" token="33554458" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/FieldNamingStrategy" java-name="com/google/gson/FieldNamingStrategy" managed-type-name="GoogleGson.IFieldNamingStrategy" token="33554460" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/InstanceCreator" java-name="com/google/gson/InstanceCreator" managed-type-name="GoogleGson.IInstanceCreator" token="33554462" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/JsonDeserializationContext" java-name="com/google/gson/JsonDeserializationContext" managed-type-name="GoogleGson.IJsonDeserializationContext" token="33554464" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/JsonDeserializer" java-name="com/google/gson/JsonDeserializer" managed-type-name="GoogleGson.IJsonDeserializer" token="33554466" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/JsonSerializationContext" java-name="com/google/gson/JsonSerializationContext" managed-type-name="GoogleGson.IJsonSerializationContext" token="33554468" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/JsonSerializer" java-name="com/google/gson/JsonSerializer" managed-type-name="GoogleGson.IJsonSerializer" token="33554470" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/ReflectionAccessFilter$FilterResult" java-name="com/google/gson/ReflectionAccessFilter$FilterResult" managed-type-name="GoogleGson.ReflectionAccessFilterFilterResult" token="33554472" />
+      <entry key="mono/internal/com/google/gson/ReflectionAccessFilter" java-name="mono/internal/com/google/gson/ReflectionAccessFilter" managed-type-name="GoogleGson.ReflectionAccessFilter" token="33554473" />
+      <entry key="com/google/gson/ReflectionAccessFilter" java-name="com/google/gson/ReflectionAccessFilter" managed-type-name="GoogleGson.IReflectionAccessFilter" token="33554475" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/ToNumberStrategy" java-name="com/google/gson/ToNumberStrategy" managed-type-name="GoogleGson.IToNumberStrategy" token="33554477" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/TypeAdapterFactory" java-name="com/google/gson/TypeAdapterFactory" managed-type-name="GoogleGson.ITypeAdapterFactory" token="33554479" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/JsonArray" java-name="com/google/gson/JsonArray" managed-type-name="GoogleGson.JsonArray" token="33554481" />
+      <entry key="com/google/gson/JsonElement" java-name="com/google/gson/JsonElement" managed-type-name="GoogleGson.JsonElement" token="33554482" />
+      <entry key="com/google/gson/JsonIOException" java-name="com/google/gson/JsonIOException" managed-type-name="GoogleGson.JsonIOException" token="33554484" />
+      <entry key="com/google/gson/JsonNull" java-name="com/google/gson/JsonNull" managed-type-name="GoogleGson.JsonNull" token="33554485" />
+      <entry key="com/google/gson/JsonObject" java-name="com/google/gson/JsonObject" managed-type-name="GoogleGson.JsonObject" token="33554486" />
+      <entry key="com/google/gson/JsonParseException" java-name="com/google/gson/JsonParseException" managed-type-name="GoogleGson.JsonParseException" token="33554487" />
+      <entry key="com/google/gson/JsonParser" java-name="com/google/gson/JsonParser" managed-type-name="GoogleGson.JsonParser" token="33554488" />
+      <entry key="com/google/gson/JsonPrimitive" java-name="com/google/gson/JsonPrimitive" managed-type-name="GoogleGson.JsonPrimitive" token="33554489" />
+      <entry key="com/google/gson/JsonStreamParser" java-name="com/google/gson/JsonStreamParser" managed-type-name="GoogleGson.JsonStreamParser" token="33554490" />
+      <entry key="com/google/gson/JsonSyntaxException" java-name="com/google/gson/JsonSyntaxException" managed-type-name="GoogleGson.JsonSyntaxException" token="33554491" />
+      <entry key="com/google/gson/LongSerializationPolicy" java-name="com/google/gson/LongSerializationPolicy" managed-type-name="GoogleGson.LongSerializationPolicy" token="33554492" />
+      <entry key="com/google/gson/Strictness" java-name="com/google/gson/Strictness" managed-type-name="GoogleGson.Strictness" token="33554494" />
+      <entry key="com/google/gson/ToNumberPolicy" java-name="com/google/gson/ToNumberPolicy" managed-type-name="GoogleGson.ToNumberPolicy" token="33554495" />
+      <entry key="com/google/gson/TypeAdapter" java-name="com/google/gson/TypeAdapter" managed-type-name="GoogleGson.TypeAdapter" token="33554497" />
+      <entry key="com/google/gson/stream/JsonReader" java-name="com/google/gson/stream/JsonReader" managed-type-name="GoogleGson.Stream.JsonReader" token="33554499" />
+      <entry key="com/google/gson/stream/JsonToken" java-name="com/google/gson/stream/JsonToken" managed-type-name="GoogleGson.Stream.JsonToken" token="33554500" />
+      <entry key="com/google/gson/stream/JsonWriter" java-name="com/google/gson/stream/JsonWriter" managed-type-name="GoogleGson.Stream.JsonWriter" token="33554501" />
+      <entry key="com/google/gson/stream/MalformedJsonException" java-name="com/google/gson/stream/MalformedJsonException" managed-type-name="GoogleGson.Stream.MalformedJsonException" token="33554502" />
+      <entry key="com/google/gson/reflect/TypeToken" java-name="com/google/gson/reflect/TypeToken" managed-type-name="GoogleGson.Reflect.TypeToken" token="33554503" />
+      <entry key="com/google/gson/annotations/Expose" java-name="com/google/gson/annotations/Expose" managed-type-name="GoogleGson.Annotations.IExpose" token="33554505" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/annotations/JsonAdapter" java-name="com/google/gson/annotations/JsonAdapter" managed-type-name="GoogleGson.Annotations.IJsonAdapter" token="33554507" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/annotations/SerializedName" java-name="com/google/gson/annotations/SerializedName" managed-type-name="GoogleGson.Annotations.ISerializedName" token="33554509" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/annotations/Since" java-name="com/google/gson/annotations/Since" managed-type-name="GoogleGson.Annotations.ISince" token="33554511" skip-in-java-to-managed="True" />
+      <entry key="com/google/gson/annotations/Until" java-name="com/google/gson/annotations/Until" managed-type-name="GoogleGson.Annotations.IUntil" token="33554513" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>

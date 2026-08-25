@@ -1,0 +1,9 @@
+<api type="release" assembly-name="Xamarin.Android.Glide.DiskLruCache" mvid="1967e16701de49388b711436e0e787f6">
+  <module assembly-name="Xamarin.Android.Glide.DiskLruCache" mvid="1967e16701de49388b711436e0e787f6" mvid-bytes="Z+FnGd4BOEmLcRQ24OeH9g==">
+    <types-scratch>
+      <entry key="com/bumptech/glide/disklrucache/DiskLruCache" java-name="com/bumptech/glide/disklrucache/DiskLruCache" managed-type-name="Bumptech.Glide.DiskLruCache.DiskLruCache" token="33554435" />
+      <entry key="com/bumptech/glide/disklrucache/DiskLruCache$Editor" java-name="com/bumptech/glide/disklrucache/DiskLruCache$Editor" managed-type-name="Bumptech.Glide.DiskLruCache.DiskLruCache/Editor" token="33554437" />
+      <entry key="com/bumptech/glide/disklrucache/DiskLruCache$Value" java-name="com/bumptech/glide/disklrucache/DiskLruCache$Value" managed-type-name="Bumptech.Glide.DiskLruCache.DiskLruCache/Value" token="33554438" />
+    </types-scratch>
+  </module>
+</api>

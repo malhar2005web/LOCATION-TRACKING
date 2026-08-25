@@ -1,0 +1,11 @@
+<api type="release" assembly-name="LOCATION_TRACKING" mvid="22ed3eb84cd54a43b9e0e32d8cf9b8e6">
+  <module assembly-name="LOCATION_TRACKING" mvid="22ed3eb84cd54a43b9e0e32d8cf9b8e6" mvid-bytes="uD7tItVMQ0q54OMtjPm45g==">
+    <types-scratch>
+      <entry key="com/locationtracker/app/AndroidBackgroundService" java-name="com/locationtracker/app/AndroidBackgroundService" managed-type-name="LocationTracker.Platforms.Android.AndroidBackgroundService" token="33554450" />
+      <entry key="com/locationtracker/app/AndroidBackgroundService_ActiveLocationListener" java-name="com/locationtracker/app/AndroidBackgroundService_ActiveLocationListener" managed-type-name="LocationTracker.Platforms.Android.AndroidBackgroundService/ActiveLocationListener" token="33554485" />
+      <entry key="com/locationtracker/app/BootReceiver" java-name="com/locationtracker/app/BootReceiver" managed-type-name="LocationTracker.Platforms.Android.BootReceiver" token="33554451" />
+      <entry key="crc64f3443bf5f88e657c/MyWebChromeClient" java-name="crc64f3443bf5f88e657c/MyWebChromeClient" managed-type-name="LOCATION_TRACKING.MyWebChromeClient" token="33554462" />
+      <entry key="crc64f3443bf5f88e657c/MainActivity" java-name="crc64f3443bf5f88e657c/MainActivity" managed-type-name="LOCATION_TRACKING.MainActivity" token="33554463" />
+    </types-scratch>
+  </module>
+</api>

@@ -1,0 +1,13 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Interpolator" mvid="f905d111db7e4cc3b5640af2298866d2">
+  <module assembly-name="Xamarin.AndroidX.Interpolator" mvid="f905d111db7e4cc3b5640af2298866d2" mvid-bytes="EdEF+X7bw0y1ZAryKYhm0g==">
+    <duplicates>
+      <entry java-name="androidx/interpolator/view/animation/LookupTableInterpolator" managed-type-name="AndroidX.Interpolator.View.Animation.LookupTableInterpolatorInvoker" token="33554440" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/interpolator/view/animation/FastOutLinearInInterpolator" java-name="androidx/interpolator/view/animation/FastOutLinearInInterpolator" managed-type-name="AndroidX.Interpolator.View.Animation.FastOutLinearInInterpolator" token="33554436" />
+      <entry key="androidx/interpolator/view/animation/FastOutSlowInInterpolator" java-name="androidx/interpolator/view/animation/FastOutSlowInInterpolator" managed-type-name="AndroidX.Interpolator.View.Animation.FastOutSlowInInterpolator" token="33554437" />
+      <entry key="androidx/interpolator/view/animation/LinearOutSlowInInterpolator" java-name="androidx/interpolator/view/animation/LinearOutSlowInInterpolator" managed-type-name="AndroidX.Interpolator.View.Animation.LinearOutSlowInInterpolator" token="33554438" />
+      <entry key="androidx/interpolator/view/animation/LookupTableInterpolator" java-name="androidx/interpolator/view/animation/LookupTableInterpolator" managed-type-name="AndroidX.Interpolator.View.Animation.LookupTableInterpolator" token="33554439" />
+    </types-scratch>
+  </module>
+</api>

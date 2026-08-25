@@ -1,0 +1,158 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Annotation.Jvm" mvid="b36c4701cfaf4e34817242b64c5b37c1">
+  <module assembly-name="Xamarin.AndroidX.Annotation.Jvm" mvid="b36c4701cfaf4e34817242b64c5b37c1" mvid-bytes="AUdss6/PNE6BckK2TFs3wQ==">
+    <duplicates>
+      <entry java-name="androidx/annotation/AnimatorRes" managed-type-name="AndroidX.Annotations.IAnimatorResInvoker" token="33554471" />
+      <entry java-name="androidx/annotation/AnimRes" managed-type-name="AndroidX.Annotations.IAnimResInvoker" token="33554473" />
+      <entry java-name="androidx/annotation/AnyRes" managed-type-name="AndroidX.Annotations.IAnyResInvoker" token="33554475" />
+      <entry java-name="androidx/annotation/AnyThread" managed-type-name="AndroidX.Annotations.IAnyThreadInvoker" token="33554477" />
+      <entry java-name="androidx/annotation/ArrayRes" managed-type-name="AndroidX.Annotations.IArrayResInvoker" token="33554479" />
+      <entry java-name="androidx/annotation/AttrRes" managed-type-name="AndroidX.Annotations.IAttrResInvoker" token="33554481" />
+      <entry java-name="androidx/annotation/BinderThread" managed-type-name="AndroidX.Annotations.IBinderThreadInvoker" token="33554483" />
+      <entry java-name="androidx/annotation/BoolRes" managed-type-name="AndroidX.Annotations.IBoolResInvoker" token="33554485" />
+      <entry java-name="androidx/annotation/CallSuper" managed-type-name="AndroidX.Annotations.ICallSuperInvoker" token="33554487" />
+      <entry java-name="androidx/annotation/CheckResult" managed-type-name="AndroidX.Annotations.ICheckResultInvoker" token="33554489" />
+      <entry java-name="androidx/annotation/ChecksSdkIntAtLeast" managed-type-name="AndroidX.Annotations.IChecksSdkIntAtLeastInvoker" token="33554491" />
+      <entry java-name="androidx/annotation/ColorInt" managed-type-name="AndroidX.Annotations.IColorIntInvoker" token="33554493" />
+      <entry java-name="androidx/annotation/ColorLong" managed-type-name="AndroidX.Annotations.IColorLongInvoker" token="33554495" />
+      <entry java-name="androidx/annotation/ColorRes" managed-type-name="AndroidX.Annotations.IColorResInvoker" token="33554497" />
+      <entry java-name="androidx/annotation/ContentView" managed-type-name="AndroidX.Annotations.IContentViewInvoker" token="33554499" />
+      <entry java-name="androidx/annotation/DeprecatedSinceApi" managed-type-name="AndroidX.Annotations.IDeprecatedSinceApiInvoker" token="33554501" />
+      <entry java-name="androidx/annotation/DimenRes" managed-type-name="AndroidX.Annotations.IDimenResInvoker" token="33554503" />
+      <entry java-name="mono/internal/androidx/annotation/Dimension" managed-type-name="AndroidX.Annotations.DimensionConsts" token="33554506" />
+      <entry java-name="androidx/annotation/Dimension" managed-type-name="AndroidX.Annotations.IDimensionInvoker" token="33554508" />
+      <entry java-name="androidx/annotation/Discouraged" managed-type-name="AndroidX.Annotations.IDiscouragedInvoker" token="33554510" />
+      <entry java-name="androidx/annotation/DisplayContext" managed-type-name="AndroidX.Annotations.IDisplayContextInvoker" token="33554512" />
+      <entry java-name="androidx/annotation/DoNotInline" managed-type-name="AndroidX.Annotations.IDoNotInlineInvoker" token="33554514" />
+      <entry java-name="androidx/annotation/DrawableRes" managed-type-name="AndroidX.Annotations.IDrawableResInvoker" token="33554516" />
+      <entry java-name="androidx/annotation/EmptySuper" managed-type-name="AndroidX.Annotations.IEmptySuperInvoker" token="33554519" />
+      <entry java-name="androidx/annotation/FloatRange" managed-type-name="AndroidX.Annotations.IFloatRangeInvoker" token="33554521" />
+      <entry java-name="androidx/annotation/FontRes" managed-type-name="AndroidX.Annotations.IFontResInvoker" token="33554523" />
+      <entry java-name="androidx/annotation/FractionRes" managed-type-name="AndroidX.Annotations.IFractionResInvoker" token="33554525" />
+      <entry java-name="androidx/annotation/GravityInt" managed-type-name="AndroidX.Annotations.IGravityIntInvoker" token="33554527" />
+      <entry java-name="androidx/annotation/GuardedBy" managed-type-name="AndroidX.Annotations.IGuardedByInvoker" token="33554529" />
+      <entry java-name="androidx/annotation/HalfFloat" managed-type-name="AndroidX.Annotations.IHalfFloatInvoker" token="33554531" />
+      <entry java-name="androidx/annotation/IdRes" managed-type-name="AndroidX.Annotations.IIdResInvoker" token="33554533" />
+      <entry java-name="androidx/annotation/InspectableProperty$EnumEntry" managed-type-name="AndroidX.Annotations.IInspectablePropertyEnumEntryInvoker" token="33554535" />
+      <entry java-name="androidx/annotation/InspectableProperty$FlagEntry" managed-type-name="AndroidX.Annotations.IInspectablePropertyFlagEntryInvoker" token="33554537" />
+      <entry java-name="androidx/annotation/InspectableProperty" managed-type-name="AndroidX.Annotations.IInspectablePropertyInvoker" token="33554540" />
+      <entry java-name="androidx/annotation/IntDef" managed-type-name="AndroidX.Annotations.IIntDefInvoker" token="33554542" />
+      <entry java-name="androidx/annotation/IntegerRes" managed-type-name="AndroidX.Annotations.IIntegerResInvoker" token="33554544" />
+      <entry java-name="androidx/annotation/InterpolatorRes" managed-type-name="AndroidX.Annotations.IInterpolatorResInvoker" token="33554546" />
+      <entry java-name="androidx/annotation/IntRange" managed-type-name="AndroidX.Annotations.IIntRangeInvoker" token="33554548" />
+      <entry java-name="androidx/annotation/Keep" managed-type-name="AndroidX.Annotations.IKeepInvoker" token="33554550" />
+      <entry java-name="androidx/annotation/LayoutRes" managed-type-name="AndroidX.Annotations.ILayoutResInvoker" token="33554552" />
+      <entry java-name="androidx/annotation/LongDef" managed-type-name="AndroidX.Annotations.ILongDefInvoker" token="33554554" />
+      <entry java-name="androidx/annotation/MainThread" managed-type-name="AndroidX.Annotations.IMainThreadInvoker" token="33554556" />
+      <entry java-name="androidx/annotation/MenuRes" managed-type-name="AndroidX.Annotations.IMenuResInvoker" token="33554558" />
+      <entry java-name="androidx/annotation/NavigationRes" managed-type-name="AndroidX.Annotations.INavigationResInvoker" token="33554560" />
+      <entry java-name="androidx/annotation/NonNull" managed-type-name="AndroidX.Annotations.INonNullInvoker" token="33554562" />
+      <entry java-name="androidx/annotation/NonUiContext" managed-type-name="AndroidX.Annotations.INonUiContextInvoker" token="33554564" />
+      <entry java-name="androidx/annotation/Nullable" managed-type-name="AndroidX.Annotations.INullableInvoker" token="33554571" />
+      <entry java-name="androidx/annotation/OpenForTesting" managed-type-name="AndroidX.Annotations.IOpenForTestingInvoker" token="33554573" />
+      <entry java-name="androidx/annotation/PluralsRes" managed-type-name="AndroidX.Annotations.IPluralsResInvoker" token="33554575" />
+      <entry java-name="androidx/annotation/Px" managed-type-name="AndroidX.Annotations.IPxInvoker" token="33554577" />
+      <entry java-name="androidx/annotation/RawRes" managed-type-name="AndroidX.Annotations.IRawResInvoker" token="33554579" />
+      <entry java-name="androidx/annotation/ReplaceWith" managed-type-name="AndroidX.Annotations.IReplaceWithInvoker" token="33554581" />
+      <entry java-name="androidx/annotation/RequiresApi" managed-type-name="AndroidX.Annotations.IRequiresApiInvoker" token="33554583" />
+      <entry java-name="androidx/annotation/RequiresExtension$Container" managed-type-name="AndroidX.Annotations.IRequiresExtensionContainerInvoker" token="33554585" />
+      <entry java-name="androidx/annotation/RequiresExtension" managed-type-name="AndroidX.Annotations.IRequiresExtensionInvoker" token="33554587" />
+      <entry java-name="androidx/annotation/RequiresFeature" managed-type-name="AndroidX.Annotations.IRequiresFeatureInvoker" token="33554589" />
+      <entry java-name="androidx/annotation/RequiresPermission$Read" managed-type-name="AndroidX.Annotations.IRequiresPermissionReadInvoker" token="33554591" />
+      <entry java-name="androidx/annotation/RequiresPermission$Write" managed-type-name="AndroidX.Annotations.IRequiresPermissionWriteInvoker" token="33554593" />
+      <entry java-name="androidx/annotation/RequiresPermission" managed-type-name="AndroidX.Annotations.IRequiresPermissionInvoker" token="33554595" />
+      <entry java-name="androidx/annotation/RestrictTo" managed-type-name="AndroidX.Annotations.IRestrictToInvoker" token="33554598" />
+      <entry java-name="androidx/annotation/ReturnThis" managed-type-name="AndroidX.Annotations.IReturnThisInvoker" token="33554600" />
+      <entry java-name="androidx/annotation/Size" managed-type-name="AndroidX.Annotations.ISizeInvoker" token="33554602" />
+      <entry java-name="androidx/annotation/StringDef" managed-type-name="AndroidX.Annotations.IStringDefInvoker" token="33554604" />
+      <entry java-name="androidx/annotation/StringRes" managed-type-name="AndroidX.Annotations.IStringResInvoker" token="33554606" />
+      <entry java-name="androidx/annotation/StyleableRes" managed-type-name="AndroidX.Annotations.IStyleableResInvoker" token="33554608" />
+      <entry java-name="androidx/annotation/StyleRes" managed-type-name="AndroidX.Annotations.IStyleResInvoker" token="33554610" />
+      <entry java-name="androidx/annotation/TransitionRes" managed-type-name="AndroidX.Annotations.ITransitionResInvoker" token="33554612" />
+      <entry java-name="androidx/annotation/UiContext" managed-type-name="AndroidX.Annotations.IUiContextInvoker" token="33554614" />
+      <entry java-name="androidx/annotation/UiThread" managed-type-name="AndroidX.Annotations.IUiThreadInvoker" token="33554616" />
+      <entry java-name="mono/internal/androidx/annotation/VisibleForTesting" managed-type-name="AndroidX.Annotations.VisibleForTestingConsts" token="33554619" />
+      <entry java-name="androidx/annotation/VisibleForTesting" managed-type-name="AndroidX.Annotations.IVisibleForTestingInvoker" token="33554621" />
+      <entry java-name="androidx/annotation/WorkerThread" managed-type-name="AndroidX.Annotations.IWorkerThreadInvoker" token="33554623" />
+      <entry java-name="androidx/annotation/XmlRes" managed-type-name="AndroidX.Annotations.IXmlResInvoker" token="33554625" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/annotation/AnimatorRes" java-name="androidx/annotation/AnimatorRes" managed-type-name="AndroidX.Annotations.IAnimatorRes" token="33554470" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/AnimRes" java-name="androidx/annotation/AnimRes" managed-type-name="AndroidX.Annotations.IAnimRes" token="33554472" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/AnyRes" java-name="androidx/annotation/AnyRes" managed-type-name="AndroidX.Annotations.IAnyRes" token="33554474" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/AnyThread" java-name="androidx/annotation/AnyThread" managed-type-name="AndroidX.Annotations.IAnyThread" token="33554476" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/ArrayRes" java-name="androidx/annotation/ArrayRes" managed-type-name="AndroidX.Annotations.IArrayRes" token="33554478" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/AttrRes" java-name="androidx/annotation/AttrRes" managed-type-name="AndroidX.Annotations.IAttrRes" token="33554480" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/BinderThread" java-name="androidx/annotation/BinderThread" managed-type-name="AndroidX.Annotations.IBinderThread" token="33554482" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/BoolRes" java-name="androidx/annotation/BoolRes" managed-type-name="AndroidX.Annotations.IBoolRes" token="33554484" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/CallSuper" java-name="androidx/annotation/CallSuper" managed-type-name="AndroidX.Annotations.ICallSuper" token="33554486" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/CheckResult" java-name="androidx/annotation/CheckResult" managed-type-name="AndroidX.Annotations.ICheckResult" token="33554488" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/ChecksSdkIntAtLeast" java-name="androidx/annotation/ChecksSdkIntAtLeast" managed-type-name="AndroidX.Annotations.IChecksSdkIntAtLeast" token="33554490" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/ColorInt" java-name="androidx/annotation/ColorInt" managed-type-name="AndroidX.Annotations.IColorInt" token="33554492" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/ColorLong" java-name="androidx/annotation/ColorLong" managed-type-name="AndroidX.Annotations.IColorLong" token="33554494" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/ColorRes" java-name="androidx/annotation/ColorRes" managed-type-name="AndroidX.Annotations.IColorRes" token="33554496" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/ContentView" java-name="androidx/annotation/ContentView" managed-type-name="AndroidX.Annotations.IContentView" token="33554498" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/DeprecatedSinceApi" java-name="androidx/annotation/DeprecatedSinceApi" managed-type-name="AndroidX.Annotations.IDeprecatedSinceApi" token="33554500" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/DimenRes" java-name="androidx/annotation/DimenRes" managed-type-name="AndroidX.Annotations.IDimenRes" token="33554502" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/Dimension$Companion" java-name="androidx/annotation/Dimension$Companion" managed-type-name="AndroidX.Annotations.DimensionCompanion" token="33554504" />
+      <entry key="mono/internal/androidx/annotation/Dimension" java-name="mono/internal/androidx/annotation/Dimension" managed-type-name="AndroidX.Annotations.Dimension" token="33554505" />
+      <entry key="androidx/annotation/Dimension" java-name="androidx/annotation/Dimension" managed-type-name="AndroidX.Annotations.IDimension" token="33554507" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/Discouraged" java-name="androidx/annotation/Discouraged" managed-type-name="AndroidX.Annotations.IDiscouraged" token="33554509" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/DisplayContext" java-name="androidx/annotation/DisplayContext" managed-type-name="AndroidX.Annotations.IDisplayContext" token="33554511" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/DoNotInline" java-name="androidx/annotation/DoNotInline" managed-type-name="AndroidX.Annotations.IDoNotInline" token="33554513" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/DrawableRes" java-name="androidx/annotation/DrawableRes" managed-type-name="AndroidX.Annotations.IDrawableRes" token="33554515" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/EmptySuper" java-name="androidx/annotation/EmptySuper" managed-type-name="AndroidX.Annotations.IEmptySuper" token="33554518" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/FloatRange" java-name="androidx/annotation/FloatRange" managed-type-name="AndroidX.Annotations.IFloatRange" token="33554520" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/FontRes" java-name="androidx/annotation/FontRes" managed-type-name="AndroidX.Annotations.IFontRes" token="33554522" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/FractionRes" java-name="androidx/annotation/FractionRes" managed-type-name="AndroidX.Annotations.IFractionRes" token="33554524" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/GravityInt" java-name="androidx/annotation/GravityInt" managed-type-name="AndroidX.Annotations.IGravityInt" token="33554526" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/GuardedBy" java-name="androidx/annotation/GuardedBy" managed-type-name="AndroidX.Annotations.IGuardedBy" token="33554528" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/HalfFloat" java-name="androidx/annotation/HalfFloat" managed-type-name="AndroidX.Annotations.IHalfFloat" token="33554530" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/IdRes" java-name="androidx/annotation/IdRes" managed-type-name="AndroidX.Annotations.IIdRes" token="33554532" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/InspectableProperty$EnumEntry" java-name="androidx/annotation/InspectableProperty$EnumEntry" managed-type-name="AndroidX.Annotations.IInspectablePropertyEnumEntry" token="33554534" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/InspectableProperty$FlagEntry" java-name="androidx/annotation/InspectableProperty$FlagEntry" managed-type-name="AndroidX.Annotations.IInspectablePropertyFlagEntry" token="33554536" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/InspectableProperty$ValueType" java-name="androidx/annotation/InspectableProperty$ValueType" managed-type-name="AndroidX.Annotations.InspectablePropertyValueType" token="33554538" />
+      <entry key="androidx/annotation/InspectableProperty" java-name="androidx/annotation/InspectableProperty" managed-type-name="AndroidX.Annotations.IInspectableProperty" token="33554539" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/IntDef" java-name="androidx/annotation/IntDef" managed-type-name="AndroidX.Annotations.IIntDef" token="33554541" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/IntegerRes" java-name="androidx/annotation/IntegerRes" managed-type-name="AndroidX.Annotations.IIntegerRes" token="33554543" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/InterpolatorRes" java-name="androidx/annotation/InterpolatorRes" managed-type-name="AndroidX.Annotations.IInterpolatorRes" token="33554545" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/IntRange" java-name="androidx/annotation/IntRange" managed-type-name="AndroidX.Annotations.IIntRange" token="33554547" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/Keep" java-name="androidx/annotation/Keep" managed-type-name="AndroidX.Annotations.IKeep" token="33554549" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/LayoutRes" java-name="androidx/annotation/LayoutRes" managed-type-name="AndroidX.Annotations.ILayoutRes" token="33554551" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/LongDef" java-name="androidx/annotation/LongDef" managed-type-name="AndroidX.Annotations.ILongDef" token="33554553" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/MainThread" java-name="androidx/annotation/MainThread" managed-type-name="AndroidX.Annotations.IMainThread" token="33554555" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/MenuRes" java-name="androidx/annotation/MenuRes" managed-type-name="AndroidX.Annotations.IMenuRes" token="33554557" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/NavigationRes" java-name="androidx/annotation/NavigationRes" managed-type-name="AndroidX.Annotations.INavigationRes" token="33554559" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/NonNull" java-name="androidx/annotation/NonNull" managed-type-name="AndroidX.Annotations.INonNull" token="33554561" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/NonUiContext" java-name="androidx/annotation/NonUiContext" managed-type-name="AndroidX.Annotations.INonUiContext" token="33554563" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/Nullable" java-name="androidx/annotation/Nullable" managed-type-name="AndroidX.Annotations.INullable" token="33554570" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/OpenForTesting" java-name="androidx/annotation/OpenForTesting" managed-type-name="AndroidX.Annotations.IOpenForTesting" token="33554572" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/PluralsRes" java-name="androidx/annotation/PluralsRes" managed-type-name="AndroidX.Annotations.IPluralsRes" token="33554574" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/Px" java-name="androidx/annotation/Px" managed-type-name="AndroidX.Annotations.IPx" token="33554576" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RawRes" java-name="androidx/annotation/RawRes" managed-type-name="AndroidX.Annotations.IRawRes" token="33554578" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/ReplaceWith" java-name="androidx/annotation/ReplaceWith" managed-type-name="AndroidX.Annotations.IReplaceWith" token="33554580" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RequiresApi" java-name="androidx/annotation/RequiresApi" managed-type-name="AndroidX.Annotations.IRequiresApi" token="33554582" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RequiresExtension$Container" java-name="androidx/annotation/RequiresExtension$Container" managed-type-name="AndroidX.Annotations.IRequiresExtensionContainer" token="33554584" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RequiresExtension" java-name="androidx/annotation/RequiresExtension" managed-type-name="AndroidX.Annotations.IRequiresExtension" token="33554586" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RequiresFeature" java-name="androidx/annotation/RequiresFeature" managed-type-name="AndroidX.Annotations.IRequiresFeature" token="33554588" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RequiresPermission$Read" java-name="androidx/annotation/RequiresPermission$Read" managed-type-name="AndroidX.Annotations.IRequiresPermissionRead" token="33554590" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RequiresPermission$Write" java-name="androidx/annotation/RequiresPermission$Write" managed-type-name="AndroidX.Annotations.IRequiresPermissionWrite" token="33554592" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RequiresPermission" java-name="androidx/annotation/RequiresPermission" managed-type-name="AndroidX.Annotations.IRequiresPermission" token="33554594" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/RestrictTo$Scope" java-name="androidx/annotation/RestrictTo$Scope" managed-type-name="AndroidX.Annotations.RestrictToScope" token="33554596" />
+      <entry key="androidx/annotation/RestrictTo" java-name="androidx/annotation/RestrictTo" managed-type-name="AndroidX.Annotations.IRestrictTo" token="33554597" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/ReturnThis" java-name="androidx/annotation/ReturnThis" managed-type-name="AndroidX.Annotations.IReturnThis" token="33554599" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/Size" java-name="androidx/annotation/Size" managed-type-name="AndroidX.Annotations.ISize" token="33554601" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/StringDef" java-name="androidx/annotation/StringDef" managed-type-name="AndroidX.Annotations.IStringDef" token="33554603" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/StringRes" java-name="androidx/annotation/StringRes" managed-type-name="AndroidX.Annotations.IStringRes" token="33554605" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/StyleableRes" java-name="androidx/annotation/StyleableRes" managed-type-name="AndroidX.Annotations.IStyleableRes" token="33554607" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/StyleRes" java-name="androidx/annotation/StyleRes" managed-type-name="AndroidX.Annotations.IStyleRes" token="33554609" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/TransitionRes" java-name="androidx/annotation/TransitionRes" managed-type-name="AndroidX.Annotations.ITransitionRes" token="33554611" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/UiContext" java-name="androidx/annotation/UiContext" managed-type-name="AndroidX.Annotations.IUiContext" token="33554613" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/UiThread" java-name="androidx/annotation/UiThread" managed-type-name="AndroidX.Annotations.IUiThread" token="33554615" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/VisibleForTesting$Companion" java-name="androidx/annotation/VisibleForTesting$Companion" managed-type-name="AndroidX.Annotations.VisibleForTestingCompanion" token="33554617" />
+      <entry key="mono/internal/androidx/annotation/VisibleForTesting" java-name="mono/internal/androidx/annotation/VisibleForTesting" managed-type-name="AndroidX.Annotations.VisibleForTesting" token="33554618" />
+      <entry key="androidx/annotation/VisibleForTesting" java-name="androidx/annotation/VisibleForTesting" managed-type-name="AndroidX.Annotations.IVisibleForTesting" token="33554620" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/WorkerThread" java-name="androidx/annotation/WorkerThread" managed-type-name="AndroidX.Annotations.IWorkerThread" token="33554622" skip-in-java-to-managed="True" />
+      <entry key="androidx/annotation/XmlRes" java-name="androidx/annotation/XmlRes" managed-type-name="AndroidX.Annotations.IXmlRes" token="33554624" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>

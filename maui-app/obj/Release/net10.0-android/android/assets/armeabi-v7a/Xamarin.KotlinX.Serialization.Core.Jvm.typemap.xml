@@ -1,0 +1,130 @@
+<api type="release" assembly-name="Xamarin.KotlinX.Serialization.Core.Jvm" mvid="7d37d63ebb504630a84cc7a18e49a05c">
+  <module assembly-name="Xamarin.KotlinX.Serialization.Core.Jvm" mvid="7d37d63ebb504630a84cc7a18e49a05c" mvid-bytes="PtY3fVC7MEaoTMehjkmgXA==">
+    <duplicates>
+      <entry java-name="kotlinx/serialization/BinaryFormat" managed-type-name="KotlinX.Serialization.IBinaryFormatInvoker" token="33554484" />
+      <entry java-name="kotlinx/serialization/Contextual" managed-type-name="KotlinX.Serialization.IContextualInvoker" token="33554486" />
+      <entry java-name="kotlinx/serialization/DeserializationStrategy" managed-type-name="KotlinX.Serialization.IDeserializationStrategyInvoker" token="33554488" />
+      <entry java-name="kotlinx/serialization/EncodeDefault" managed-type-name="KotlinX.Serialization.IEncodeDefaultInvoker" token="33554491" />
+      <entry java-name="kotlinx/serialization/ExperimentalSerializationApi" managed-type-name="KotlinX.Serialization.IExperimentalSerializationApiInvoker" token="33554493" />
+      <entry java-name="kotlinx/serialization/InheritableSerialInfo" managed-type-name="KotlinX.Serialization.IInheritableSerialInfoInvoker" token="33554495" />
+      <entry java-name="kotlinx/serialization/InternalSerializationApi" managed-type-name="KotlinX.Serialization.IInternalSerializationApiInvoker" token="33554497" />
+      <entry java-name="kotlinx/serialization/KeepGeneratedSerializer" managed-type-name="KotlinX.Serialization.IKeepGeneratedSerializerInvoker" token="33554499" />
+      <entry java-name="kotlinx/serialization/KSerializer" managed-type-name="KotlinX.Serialization.IKSerializerInvoker" token="33554501" />
+      <entry java-name="kotlinx/serialization/MetaSerializable" managed-type-name="KotlinX.Serialization.IMetaSerializableInvoker" token="33554503" />
+      <entry java-name="kotlinx/serialization/Polymorphic" managed-type-name="KotlinX.Serialization.IPolymorphicInvoker" token="33554507" />
+      <entry java-name="kotlinx/serialization/Required" managed-type-name="KotlinX.Serialization.IRequiredInvoker" token="33554509" />
+      <entry java-name="kotlinx/serialization/SealedSerializationApi" managed-type-name="KotlinX.Serialization.ISealedSerializationApiInvoker" token="33554511" />
+      <entry java-name="kotlinx/serialization/SerialFormat" managed-type-name="KotlinX.Serialization.ISerialFormatInvoker" token="33554513" />
+      <entry java-name="kotlinx/serialization/SerialInfo" managed-type-name="KotlinX.Serialization.ISerialInfoInvoker" token="33554515" />
+      <entry java-name="kotlinx/serialization/Serializable" managed-type-name="KotlinX.Serialization.ISerializableInvoker" token="33554517" />
+      <entry java-name="kotlinx/serialization/SerializationStrategy" managed-type-name="KotlinX.Serialization.ISerializationStrategyInvoker" token="33554519" />
+      <entry java-name="kotlinx/serialization/Serializer" managed-type-name="KotlinX.Serialization.ISerializerInvoker" token="33554521" />
+      <entry java-name="kotlinx/serialization/SerialName" managed-type-name="KotlinX.Serialization.ISerialNameInvoker" token="33554523" />
+      <entry java-name="kotlinx/serialization/StringFormat" managed-type-name="KotlinX.Serialization.IStringFormatInvoker" token="33554525" />
+      <entry java-name="kotlinx/serialization/Transient" managed-type-name="KotlinX.Serialization.ITransientInvoker" token="33554527" />
+      <entry java-name="kotlinx/serialization/UseContextualSerialization" managed-type-name="KotlinX.Serialization.IUseContextualSerializationInvoker" token="33554529" />
+      <entry java-name="kotlinx/serialization/UseSerializers" managed-type-name="KotlinX.Serialization.IUseSerializersInvoker" token="33554531" />
+      <entry java-name="kotlinx/serialization/modules/SerializersModuleCollector" managed-type-name="KotlinX.Serialization.Modules.ISerializersModuleCollectorInvoker" token="33554552" />
+      <entry java-name="kotlinx/serialization/modules/SerializersModule" managed-type-name="KotlinX.Serialization.Modules.SerializersModuleInvoker" token="33554556" />
+      <entry java-name="kotlinx/serialization/encoding/AbstractDecoder" managed-type-name="KotlinX.Serialization.Encoding.AbstractDecoderInvoker" token="33554561" />
+      <entry java-name="kotlinx/serialization/encoding/AbstractEncoder" managed-type-name="KotlinX.Serialization.Encoding.AbstractEncoderInvoker" token="33554563" />
+      <entry java-name="kotlinx/serialization/encoding/ChunkedDecoder" managed-type-name="KotlinX.Serialization.Encoding.IChunkedDecoderInvoker" token="33554567" />
+      <entry java-name="mono/internal/kotlinx/serialization/encoding/CompositeDecoder" managed-type-name="KotlinX.Serialization.Encoding.CompositeDecoderConsts" token="33554571" />
+      <entry java-name="kotlinx/serialization/encoding/CompositeDecoder" managed-type-name="KotlinX.Serialization.Encoding.ICompositeDecoderInvoker" token="33554573" />
+      <entry java-name="kotlinx/serialization/encoding/CompositeEncoder" managed-type-name="KotlinX.Serialization.Encoding.ICompositeEncoderInvoker" token="33554576" />
+      <entry java-name="kotlinx/serialization/encoding/Decoder" managed-type-name="KotlinX.Serialization.Encoding.IDecoderInvoker" token="33554579" />
+      <entry java-name="kotlinx/serialization/encoding/Encoder" managed-type-name="KotlinX.Serialization.Encoding.IEncoderInvoker" token="33554582" />
+      <entry java-name="kotlinx/serialization/descriptors/SerialDescriptor" managed-type-name="KotlinX.Serialization.Descriptors.ISerialDescriptorInvoker" token="33554587" />
+      <entry java-name="kotlinx/serialization/descriptors/PolymorphicKind" managed-type-name="KotlinX.Serialization.Descriptors.PolymorphicKindInvoker" token="33554589" />
+      <entry java-name="kotlinx/serialization/descriptors/PrimitiveKind" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKindInvoker" token="33554591" />
+      <entry java-name="kotlinx/serialization/descriptors/SerialKind" managed-type-name="KotlinX.Serialization.Descriptors.SerialKindInvoker" token="33554595" />
+      <entry java-name="kotlinx/serialization/descriptors/StructureKind" managed-type-name="KotlinX.Serialization.Descriptors.StructureKindInvoker" token="33554597" />
+    </duplicates>
+    <types-scratch>
+      <entry key="kotlinx/serialization/ContextualSerializer" java-name="kotlinx/serialization/ContextualSerializer" managed-type-name="KotlinX.Serialization.ContextualSerializer" token="33554480" />
+      <entry key="kotlinx/serialization/BinaryFormat" java-name="kotlinx/serialization/BinaryFormat" managed-type-name="KotlinX.Serialization.IBinaryFormat" token="33554483" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/Contextual" java-name="kotlinx/serialization/Contextual" managed-type-name="KotlinX.Serialization.IContextual" token="33554485" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/DeserializationStrategy" java-name="kotlinx/serialization/DeserializationStrategy" managed-type-name="KotlinX.Serialization.IDeserializationStrategy" token="33554487" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/EncodeDefault$Mode" java-name="kotlinx/serialization/EncodeDefault$Mode" managed-type-name="KotlinX.Serialization.EncodeDefaultMode" token="33554489" />
+      <entry key="kotlinx/serialization/EncodeDefault" java-name="kotlinx/serialization/EncodeDefault" managed-type-name="KotlinX.Serialization.IEncodeDefault" token="33554490" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/ExperimentalSerializationApi" java-name="kotlinx/serialization/ExperimentalSerializationApi" managed-type-name="KotlinX.Serialization.IExperimentalSerializationApi" token="33554492" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/InheritableSerialInfo" java-name="kotlinx/serialization/InheritableSerialInfo" managed-type-name="KotlinX.Serialization.IInheritableSerialInfo" token="33554494" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/InternalSerializationApi" java-name="kotlinx/serialization/InternalSerializationApi" managed-type-name="KotlinX.Serialization.IInternalSerializationApi" token="33554496" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/KeepGeneratedSerializer" java-name="kotlinx/serialization/KeepGeneratedSerializer" managed-type-name="KotlinX.Serialization.IKeepGeneratedSerializer" token="33554498" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/KSerializer" java-name="kotlinx/serialization/KSerializer" managed-type-name="KotlinX.Serialization.IKSerializer" token="33554500" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/MetaSerializable" java-name="kotlinx/serialization/MetaSerializable" managed-type-name="KotlinX.Serialization.IMetaSerializable" token="33554502" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/Polymorphic" java-name="kotlinx/serialization/Polymorphic" managed-type-name="KotlinX.Serialization.IPolymorphic" token="33554506" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/Required" java-name="kotlinx/serialization/Required" managed-type-name="KotlinX.Serialization.IRequired" token="33554508" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/SealedSerializationApi" java-name="kotlinx/serialization/SealedSerializationApi" managed-type-name="KotlinX.Serialization.ISealedSerializationApi" token="33554510" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/SerialFormat" java-name="kotlinx/serialization/SerialFormat" managed-type-name="KotlinX.Serialization.ISerialFormat" token="33554512" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/SerialInfo" java-name="kotlinx/serialization/SerialInfo" managed-type-name="KotlinX.Serialization.ISerialInfo" token="33554514" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/Serializable" java-name="kotlinx/serialization/Serializable" managed-type-name="KotlinX.Serialization.ISerializable" token="33554516" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/SerializationStrategy" java-name="kotlinx/serialization/SerializationStrategy" managed-type-name="KotlinX.Serialization.ISerializationStrategy" token="33554518" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/Serializer" java-name="kotlinx/serialization/Serializer" managed-type-name="KotlinX.Serialization.ISerializer" token="33554520" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/SerialName" java-name="kotlinx/serialization/SerialName" managed-type-name="KotlinX.Serialization.ISerialName" token="33554522" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/StringFormat" java-name="kotlinx/serialization/StringFormat" managed-type-name="KotlinX.Serialization.IStringFormat" token="33554524" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/Transient" java-name="kotlinx/serialization/Transient" managed-type-name="KotlinX.Serialization.ITransient" token="33554526" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/UseContextualSerialization" java-name="kotlinx/serialization/UseContextualSerialization" managed-type-name="KotlinX.Serialization.IUseContextualSerialization" token="33554528" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/UseSerializers" java-name="kotlinx/serialization/UseSerializers" managed-type-name="KotlinX.Serialization.IUseSerializers" token="33554530" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/MissingFieldException" java-name="kotlinx/serialization/MissingFieldException" managed-type-name="KotlinX.Serialization.MissingFieldException" token="33554534" />
+      <entry key="kotlinx/serialization/PolymorphicSerializerKt" java-name="kotlinx/serialization/PolymorphicSerializerKt" managed-type-name="KotlinX.Serialization.PolymorphicSerializerKt" token="33554536" />
+      <entry key="kotlinx/serialization/SerialFormatKt" java-name="kotlinx/serialization/SerialFormatKt" managed-type-name="KotlinX.Serialization.SerialFormatKt" token="33554539" />
+      <entry key="kotlinx/serialization/SerializationException" java-name="kotlinx/serialization/SerializationException" managed-type-name="KotlinX.Serialization.SerializationException" token="33554542" />
+      <entry key="kotlinx/serialization/SerializersCacheKt" java-name="kotlinx/serialization/SerializersCacheKt" managed-type-name="KotlinX.Serialization.SerializersCacheKt" token="33554544" />
+      <entry key="kotlinx/serialization/SerializersKt" java-name="kotlinx/serialization/SerializersKt" managed-type-name="KotlinX.Serialization.SerializersKt" token="33554545" />
+      <entry key="kotlinx/serialization/modules/SerializersModuleCollector$DefaultImpls" java-name="kotlinx/serialization/modules/SerializersModuleCollector$DefaultImpls" managed-type-name="KotlinX.Serialization.Modules.SerializersModuleCollectorDefaultImpls" token="33554550" />
+      <entry key="kotlinx/serialization/modules/SerializersModuleCollector" java-name="kotlinx/serialization/modules/SerializersModuleCollector" managed-type-name="KotlinX.Serialization.Modules.ISerializersModuleCollector" token="33554551" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/modules/PolymorphicModuleBuilder" java-name="kotlinx/serialization/modules/PolymorphicModuleBuilder" managed-type-name="KotlinX.Serialization.Modules.PolymorphicModuleBuilder" token="33554553" />
+      <entry key="kotlinx/serialization/modules/PolymorphicModuleBuilderKt" java-name="kotlinx/serialization/modules/PolymorphicModuleBuilderKt" managed-type-name="KotlinX.Serialization.Modules.PolymorphicModuleBuilderKt" token="33554554" />
+      <entry key="kotlinx/serialization/modules/SerializersModule" java-name="kotlinx/serialization/modules/SerializersModule" managed-type-name="KotlinX.Serialization.Modules.SerializersModule" token="33554555" />
+      <entry key="kotlinx/serialization/modules/SerializersModuleBuilder" java-name="kotlinx/serialization/modules/SerializersModuleBuilder" managed-type-name="KotlinX.Serialization.Modules.SerializersModuleBuilder" token="33554557" />
+      <entry key="kotlinx/serialization/modules/SerializersModuleBuildersKt" java-name="kotlinx/serialization/modules/SerializersModuleBuildersKt" managed-type-name="KotlinX.Serialization.Modules.SerializersModuleBuildersKt" token="33554558" />
+      <entry key="kotlinx/serialization/modules/SerializersModuleKt" java-name="kotlinx/serialization/modules/SerializersModuleKt" managed-type-name="KotlinX.Serialization.Modules.SerializersModuleKt" token="33554559" />
+      <entry key="kotlinx/serialization/encoding/AbstractDecoder" java-name="kotlinx/serialization/encoding/AbstractDecoder" managed-type-name="KotlinX.Serialization.Encoding.AbstractDecoder" token="33554560" />
+      <entry key="kotlinx/serialization/encoding/AbstractEncoder" java-name="kotlinx/serialization/encoding/AbstractEncoder" managed-type-name="KotlinX.Serialization.Encoding.AbstractEncoder" token="33554562" />
+      <entry key="kotlinx/serialization/encoding/DecodingKt" java-name="kotlinx/serialization/encoding/DecodingKt" managed-type-name="KotlinX.Serialization.Encoding.DecodingKt" token="33554564" />
+      <entry key="kotlinx/serialization/encoding/EncodingKt" java-name="kotlinx/serialization/encoding/EncodingKt" managed-type-name="KotlinX.Serialization.Encoding.EncodingKt" token="33554565" />
+      <entry key="kotlinx/serialization/encoding/ChunkedDecoder" java-name="kotlinx/serialization/encoding/ChunkedDecoder" managed-type-name="KotlinX.Serialization.Encoding.IChunkedDecoder" token="33554566" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/encoding/CompositeDecoder$Companion" java-name="kotlinx/serialization/encoding/CompositeDecoder$Companion" managed-type-name="KotlinX.Serialization.Encoding.CompositeDecoderCompanion" token="33554568" />
+      <entry key="kotlinx/serialization/encoding/CompositeDecoder$DefaultImpls" java-name="kotlinx/serialization/encoding/CompositeDecoder$DefaultImpls" managed-type-name="KotlinX.Serialization.Encoding.CompositeDecoderDefaultImpls" token="33554569" />
+      <entry key="mono/internal/kotlinx/serialization/encoding/CompositeDecoder" java-name="mono/internal/kotlinx/serialization/encoding/CompositeDecoder" managed-type-name="KotlinX.Serialization.Encoding.CompositeDecoder" token="33554570" />
+      <entry key="kotlinx/serialization/encoding/CompositeDecoder" java-name="kotlinx/serialization/encoding/CompositeDecoder" managed-type-name="KotlinX.Serialization.Encoding.ICompositeDecoder" token="33554572" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/encoding/CompositeEncoder$DefaultImpls" java-name="kotlinx/serialization/encoding/CompositeEncoder$DefaultImpls" managed-type-name="KotlinX.Serialization.Encoding.CompositeEncoderDefaultImpls" token="33554574" />
+      <entry key="kotlinx/serialization/encoding/CompositeEncoder" java-name="kotlinx/serialization/encoding/CompositeEncoder" managed-type-name="KotlinX.Serialization.Encoding.ICompositeEncoder" token="33554575" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/encoding/Decoder$DefaultImpls" java-name="kotlinx/serialization/encoding/Decoder$DefaultImpls" managed-type-name="KotlinX.Serialization.Encoding.DecoderDefaultImpls" token="33554577" />
+      <entry key="kotlinx/serialization/encoding/Decoder" java-name="kotlinx/serialization/encoding/Decoder" managed-type-name="KotlinX.Serialization.Encoding.IDecoder" token="33554578" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/encoding/Encoder$DefaultImpls" java-name="kotlinx/serialization/encoding/Encoder$DefaultImpls" managed-type-name="KotlinX.Serialization.Encoding.EncoderDefaultImpls" token="33554580" />
+      <entry key="kotlinx/serialization/encoding/Encoder" java-name="kotlinx/serialization/encoding/Encoder" managed-type-name="KotlinX.Serialization.Encoding.IEncoder" token="33554581" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/descriptors/ClassSerialDescriptorBuilder" java-name="kotlinx/serialization/descriptors/ClassSerialDescriptorBuilder" managed-type-name="KotlinX.Serialization.Descriptors.ClassSerialDescriptorBuilder" token="33554583" />
+      <entry key="kotlinx/serialization/descriptors/ContextAwareKt" java-name="kotlinx/serialization/descriptors/ContextAwareKt" managed-type-name="KotlinX.Serialization.Descriptors.ContextAwareKt" token="33554584" />
+      <entry key="kotlinx/serialization/descriptors/SerialDescriptor$DefaultImpls" java-name="kotlinx/serialization/descriptors/SerialDescriptor$DefaultImpls" managed-type-name="KotlinX.Serialization.Descriptors.SerialDescriptorDefaultImpls" token="33554585" />
+      <entry key="kotlinx/serialization/descriptors/SerialDescriptor" java-name="kotlinx/serialization/descriptors/SerialDescriptor" managed-type-name="KotlinX.Serialization.Descriptors.ISerialDescriptor" token="33554586" skip-in-java-to-managed="True" />
+      <entry key="kotlinx/serialization/descriptors/PolymorphicKind" java-name="kotlinx/serialization/descriptors/PolymorphicKind" managed-type-name="KotlinX.Serialization.Descriptors.PolymorphicKind" token="33554588" />
+      <entry key="kotlinx/serialization/descriptors/PolymorphicKind$OPEN" java-name="kotlinx/serialization/descriptors/PolymorphicKind$OPEN" managed-type-name="KotlinX.Serialization.Descriptors.PolymorphicKind/OPEN" token="33554603" />
+      <entry key="kotlinx/serialization/descriptors/PolymorphicKind$SEALED" java-name="kotlinx/serialization/descriptors/PolymorphicKind$SEALED" managed-type-name="KotlinX.Serialization.Descriptors.PolymorphicKind/SEALED" token="33554604" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind" java-name="kotlinx/serialization/descriptors/PrimitiveKind" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind" token="33554590" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$BOOLEAN" java-name="kotlinx/serialization/descriptors/PrimitiveKind$BOOLEAN" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/BOOLEAN" token="33554605" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$BYTE" java-name="kotlinx/serialization/descriptors/PrimitiveKind$BYTE" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/BYTE" token="33554606" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$CHAR" java-name="kotlinx/serialization/descriptors/PrimitiveKind$CHAR" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/CHAR" token="33554607" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$DOUBLE" java-name="kotlinx/serialization/descriptors/PrimitiveKind$DOUBLE" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/DOUBLE" token="33554608" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$FLOAT" java-name="kotlinx/serialization/descriptors/PrimitiveKind$FLOAT" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/FLOAT" token="33554609" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$INT" java-name="kotlinx/serialization/descriptors/PrimitiveKind$INT" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/INT" token="33554610" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$LONG" java-name="kotlinx/serialization/descriptors/PrimitiveKind$LONG" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/LONG" token="33554611" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$SHORT" java-name="kotlinx/serialization/descriptors/PrimitiveKind$SHORT" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/SHORT" token="33554612" />
+      <entry key="kotlinx/serialization/descriptors/PrimitiveKind$STRING" java-name="kotlinx/serialization/descriptors/PrimitiveKind$STRING" managed-type-name="KotlinX.Serialization.Descriptors.PrimitiveKind/STRING" token="33554613" />
+      <entry key="kotlinx/serialization/descriptors/SerialDescriptorKt" java-name="kotlinx/serialization/descriptors/SerialDescriptorKt" managed-type-name="KotlinX.Serialization.Descriptors.SerialDescriptorKt" token="33554592" />
+      <entry key="kotlinx/serialization/descriptors/SerialDescriptorsKt" java-name="kotlinx/serialization/descriptors/SerialDescriptorsKt" managed-type-name="KotlinX.Serialization.Descriptors.SerialDescriptorsKt" token="33554593" />
+      <entry key="kotlinx/serialization/descriptors/SerialKind" java-name="kotlinx/serialization/descriptors/SerialKind" managed-type-name="KotlinX.Serialization.Descriptors.SerialKind" token="33554594" />
+      <entry key="kotlinx/serialization/descriptors/SerialKind$CONTEXTUAL" java-name="kotlinx/serialization/descriptors/SerialKind$CONTEXTUAL" managed-type-name="KotlinX.Serialization.Descriptors.SerialKind/CONTEXTUAL" token="33554614" />
+      <entry key="kotlinx/serialization/descriptors/SerialKind$ENUM" java-name="kotlinx/serialization/descriptors/SerialKind$ENUM" managed-type-name="KotlinX.Serialization.Descriptors.SerialKind/ENUM" token="33554615" />
+      <entry key="kotlinx/serialization/descriptors/StructureKind" java-name="kotlinx/serialization/descriptors/StructureKind" managed-type-name="KotlinX.Serialization.Descriptors.StructureKind" token="33554596" />
+      <entry key="kotlinx/serialization/descriptors/StructureKind$CLASS" java-name="kotlinx/serialization/descriptors/StructureKind$CLASS" managed-type-name="KotlinX.Serialization.Descriptors.StructureKind/CLASS" token="33554616" />
+      <entry key="kotlinx/serialization/descriptors/StructureKind$LIST" java-name="kotlinx/serialization/descriptors/StructureKind$LIST" managed-type-name="KotlinX.Serialization.Descriptors.StructureKind/LIST" token="33554617" />
+      <entry key="kotlinx/serialization/descriptors/StructureKind$MAP" java-name="kotlinx/serialization/descriptors/StructureKind$MAP" managed-type-name="KotlinX.Serialization.Descriptors.StructureKind/MAP" token="33554618" />
+      <entry key="kotlinx/serialization/descriptors/StructureKind$OBJECT" java-name="kotlinx/serialization/descriptors/StructureKind$OBJECT" managed-type-name="KotlinX.Serialization.Descriptors.StructureKind/OBJECT" token="33554619" />
+      <entry key="kotlinx/serialization/builtins/InstantComponentSerializer" java-name="kotlinx/serialization/builtins/InstantComponentSerializer" managed-type-name="KotlinX.Serialization.Builtins.InstantComponentSerializer" token="33554598" />
+      <entry key="kotlinx/serialization/builtins/BuiltinSerializersKt" java-name="kotlinx/serialization/builtins/BuiltinSerializersKt" managed-type-name="KotlinX.Serialization.Builtins.BuiltinSerializersKt" token="33554599" />
+      <entry key="kotlinx/serialization/builtins/LongAsStringSerializer" java-name="kotlinx/serialization/builtins/LongAsStringSerializer" managed-type-name="KotlinX.Serialization.Builtins.LongAsStringSerializer" token="33554600" />
+    </types-scratch>
+  </module>
+</api>

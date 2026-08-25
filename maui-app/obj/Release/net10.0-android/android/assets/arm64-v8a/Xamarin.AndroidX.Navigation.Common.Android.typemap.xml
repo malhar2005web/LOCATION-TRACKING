@@ -1,0 +1,97 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Navigation.Common.Android" mvid="408e8f8918bc40198901eade3a930c1c">
+  <module assembly-name="Xamarin.AndroidX.Navigation.Common.Android" mvid="408e8f8918bc40198901eade3a930c1c" mvid-bytes="iY+OQLwYGUCJAereOpMMHA==">
+    <duplicates>
+      <entry java-name="androidx/navigation/CollectionNavType" managed-type-name="AndroidX.Navigation.CollectionNavTypeInvoker" token="33554450" />
+      <entry java-name="androidx/navigation/FloatingWindow" managed-type-name="AndroidX.Navigation.IFloatingWindowInvoker" token="33554452" />
+      <entry java-name="androidx/navigation/NavArgs" managed-type-name="AndroidX.Navigation.INavArgsInvoker" token="33554454" />
+      <entry java-name="androidx/navigation/NavDeepLinkDsl" managed-type-name="AndroidX.Navigation.INavDeepLinkDslInvoker" token="33554456" />
+      <entry java-name="androidx/navigation/NavDestinationDsl" managed-type-name="AndroidX.Navigation.INavDestinationDslInvoker" token="33554458" />
+      <entry java-name="androidx/navigation/NavDirections" managed-type-name="AndroidX.Navigation.INavDirectionsInvoker" token="33554460" />
+      <entry java-name="androidx/navigation/NavOptionsDsl" managed-type-name="AndroidX.Navigation.INavOptionsDslInvoker" token="33554462" />
+      <entry java-name="androidx/navigation/NavViewModelStoreProvider" managed-type-name="AndroidX.Navigation.INavViewModelStoreProviderInvoker" token="33554464" />
+      <entry java-name="androidx/navigation/SupportingPane" managed-type-name="AndroidX.Navigation.ISupportingPaneInvoker" token="33554466" />
+      <entry java-name="androidx/navigation/NavDestination$ClassType" managed-type-name="AndroidX.Navigation.NavDestination/IClassTypeInvoker" token="33554523" />
+      <entry java-name="androidx/navigation/Navigator$Extras" managed-type-name="AndroidX.Navigation.Navigator/IExtrasInvoker" token="33554528" />
+      <entry java-name="androidx/navigation/Navigator$Name" managed-type-name="AndroidX.Navigation.Navigator/INameInvoker" token="33554530" />
+      <entry java-name="androidx/navigation/Navigator" managed-type-name="AndroidX.Navigation.NavigatorInvoker" token="33554492" />
+      <entry java-name="androidx/navigation/NavigatorState" managed-type-name="AndroidX.Navigation.NavigatorStateInvoker" token="33554496" />
+      <entry java-name="androidx/navigation/NavType" managed-type-name="AndroidX.Navigation.NavTypeInvoker" token="33554502" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/navigation/ActionOnlyNavDirections" java-name="androidx/navigation/ActionOnlyNavDirections" managed-type-name="AndroidX.Navigation.ActionOnlyNavDirections" token="33554447" />
+      <entry key="androidx/navigation/AnimBuilder" java-name="androidx/navigation/AnimBuilder" managed-type-name="AndroidX.Navigation.AnimBuilder" token="33554448" />
+      <entry key="androidx/navigation/CollectionNavType" java-name="androidx/navigation/CollectionNavType" managed-type-name="AndroidX.Navigation.CollectionNavType" token="33554449" />
+      <entry key="androidx/navigation/FloatingWindow" java-name="androidx/navigation/FloatingWindow" managed-type-name="AndroidX.Navigation.IFloatingWindow" token="33554451" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavArgs" java-name="androidx/navigation/NavArgs" managed-type-name="AndroidX.Navigation.INavArgs" token="33554453" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavDeepLinkDsl" java-name="androidx/navigation/NavDeepLinkDsl" managed-type-name="AndroidX.Navigation.INavDeepLinkDsl" token="33554455" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavDestinationDsl" java-name="androidx/navigation/NavDestinationDsl" managed-type-name="AndroidX.Navigation.INavDestinationDsl" token="33554457" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavDirections" java-name="androidx/navigation/NavDirections" managed-type-name="AndroidX.Navigation.INavDirections" token="33554459" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavOptionsDsl" java-name="androidx/navigation/NavOptionsDsl" managed-type-name="AndroidX.Navigation.INavOptionsDsl" token="33554461" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavViewModelStoreProvider" java-name="androidx/navigation/NavViewModelStoreProvider" managed-type-name="AndroidX.Navigation.INavViewModelStoreProvider" token="33554463" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/SupportingPane" java-name="androidx/navigation/SupportingPane" managed-type-name="AndroidX.Navigation.ISupportingPane" token="33554465" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NamedNavArgument" java-name="androidx/navigation/NamedNavArgument" managed-type-name="AndroidX.Navigation.NamedNavArgument" token="33554467" />
+      <entry key="androidx/navigation/NamedNavArgumentKt" java-name="androidx/navigation/NamedNavArgumentKt" managed-type-name="AndroidX.Navigation.NamedNavArgumentKt" token="33554468" />
+      <entry key="androidx/navigation/NavAction" java-name="androidx/navigation/NavAction" managed-type-name="AndroidX.Navigation.NavAction" token="33554469" />
+      <entry key="androidx/navigation/NavActionBuilder" java-name="androidx/navigation/NavActionBuilder" managed-type-name="AndroidX.Navigation.NavActionBuilder" token="33554470" />
+      <entry key="androidx/navigation/NavArgsLazy" java-name="androidx/navigation/NavArgsLazy" managed-type-name="AndroidX.Navigation.NavArgsLazy" token="33554471" />
+      <entry key="androidx/navigation/NavArgsLazy_androidKt" java-name="androidx/navigation/NavArgsLazy_androidKt" managed-type-name="AndroidX.Navigation.NavArgsLazy_androidKt" token="33554472" />
+      <entry key="androidx/navigation/NavArgument" java-name="androidx/navigation/NavArgument" managed-type-name="AndroidX.Navigation.NavArgument" token="33554473" />
+      <entry key="androidx/navigation/NavArgument$Builder" java-name="androidx/navigation/NavArgument$Builder" managed-type-name="AndroidX.Navigation.NavArgument/Builder" token="33554518" />
+      <entry key="androidx/navigation/NavArgumentBuilder" java-name="androidx/navigation/NavArgumentBuilder" managed-type-name="AndroidX.Navigation.NavArgumentBuilder" token="33554474" />
+      <entry key="androidx/navigation/NavArgumentKt" java-name="androidx/navigation/NavArgumentKt" managed-type-name="AndroidX.Navigation.NavArgumentKt" token="33554475" />
+      <entry key="androidx/navigation/NavBackStackEntry" java-name="androidx/navigation/NavBackStackEntry" managed-type-name="AndroidX.Navigation.NavBackStackEntry" token="33554476" />
+      <entry key="androidx/navigation/NavBackStackEntry$Companion" java-name="androidx/navigation/NavBackStackEntry$Companion" managed-type-name="AndroidX.Navigation.NavBackStackEntry/Companion" token="33554519" />
+      <entry key="androidx/navigation/NavBackStackEntryKt" java-name="androidx/navigation/NavBackStackEntryKt" managed-type-name="AndroidX.Navigation.NavBackStackEntryKt" token="33554477" />
+      <entry key="androidx/navigation/NavDeepLink" java-name="androidx/navigation/NavDeepLink" managed-type-name="AndroidX.Navigation.NavDeepLink" token="33554478" />
+      <entry key="androidx/navigation/NavDeepLink$Builder" java-name="androidx/navigation/NavDeepLink$Builder" managed-type-name="AndroidX.Navigation.NavDeepLink/Builder" token="33554520" />
+      <entry key="androidx/navigation/NavDeepLinkDslBuilder" java-name="androidx/navigation/NavDeepLinkDslBuilder" managed-type-name="AndroidX.Navigation.NavDeepLinkDslBuilder" token="33554480" />
+      <entry key="androidx/navigation/NavDeepLinkDslBuilderKt" java-name="androidx/navigation/NavDeepLinkDslBuilderKt" managed-type-name="AndroidX.Navigation.NavDeepLinkDslBuilderKt" token="33554481" />
+      <entry key="androidx/navigation/NavDeepLinkRequest" java-name="androidx/navigation/NavDeepLinkRequest" managed-type-name="AndroidX.Navigation.NavDeepLinkRequest" token="33554482" />
+      <entry key="androidx/navigation/NavDeepLinkRequest$Builder" java-name="androidx/navigation/NavDeepLinkRequest$Builder" managed-type-name="AndroidX.Navigation.NavDeepLinkRequest/Builder" token="33554521" />
+      <entry key="androidx/navigation/NavDeepLinkRequest$Builder$Companion" java-name="androidx/navigation/NavDeepLinkRequest$Builder$Companion" managed-type-name="AndroidX.Navigation.NavDeepLinkRequest/Builder/Companion" token="33554539" />
+      <entry key="androidx/navigation/NavDestination" java-name="androidx/navigation/NavDestination" managed-type-name="AndroidX.Navigation.NavDestination" token="33554483" />
+      <entry key="androidx/navigation/NavDestination$ClassType" java-name="androidx/navigation/NavDestination$ClassType" managed-type-name="AndroidX.Navigation.NavDestination/IClassType" token="33554522" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavDestination$Companion" java-name="androidx/navigation/NavDestination$Companion" managed-type-name="AndroidX.Navigation.NavDestination/Companion" token="33554524" />
+      <entry key="androidx/navigation/NavDestination$DeepLinkMatch" java-name="androidx/navigation/NavDestination$DeepLinkMatch" managed-type-name="AndroidX.Navigation.NavDestination/DeepLinkMatch" token="33554525" />
+      <entry key="androidx/navigation/NavDestinationBuilder" java-name="androidx/navigation/NavDestinationBuilder" managed-type-name="AndroidX.Navigation.NavDestinationBuilder" token="33554484" />
+      <entry key="androidx/navigation/NavGraph" java-name="androidx/navigation/NavGraph" managed-type-name="AndroidX.Navigation.NavGraph" token="33554486" />
+      <entry key="androidx/navigation/NavGraph$Companion" java-name="androidx/navigation/NavGraph$Companion" managed-type-name="AndroidX.Navigation.NavGraph/Companion" token="33554526" />
+      <entry key="androidx/navigation/NavGraphBuilder" java-name="androidx/navigation/NavGraphBuilder" managed-type-name="AndroidX.Navigation.NavGraphBuilder" token="33554487" />
+      <entry key="androidx/navigation/NavGraphBuilderKt" java-name="androidx/navigation/NavGraphBuilderKt" managed-type-name="AndroidX.Navigation.NavGraphBuilderKt" token="33554488" />
+      <entry key="androidx/navigation/NavGraphKt" java-name="androidx/navigation/NavGraphKt" managed-type-name="AndroidX.Navigation.NavGraphKt" token="33554489" />
+      <entry key="androidx/navigation/NavGraphNavigator" java-name="androidx/navigation/NavGraphNavigator" managed-type-name="AndroidX.Navigation.NavGraphNavigator" token="33554490" />
+      <entry key="androidx/navigation/Navigator" java-name="androidx/navigation/Navigator" managed-type-name="AndroidX.Navigation.Navigator" token="33554491" />
+      <entry key="androidx/navigation/Navigator$Extras" java-name="androidx/navigation/Navigator$Extras" managed-type-name="AndroidX.Navigation.Navigator/IExtras" token="33554527" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/Navigator$Name" java-name="androidx/navigation/Navigator$Name" managed-type-name="AndroidX.Navigation.Navigator/IName" token="33554529" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavigatorProvider" java-name="androidx/navigation/NavigatorProvider" managed-type-name="AndroidX.Navigation.NavigatorProvider" token="33554493" />
+      <entry key="androidx/navigation/NavigatorProviderKt" java-name="androidx/navigation/NavigatorProviderKt" managed-type-name="AndroidX.Navigation.NavigatorProviderKt" token="33554494" />
+      <entry key="androidx/navigation/NavigatorState" java-name="androidx/navigation/NavigatorState" managed-type-name="AndroidX.Navigation.NavigatorState" token="33554495" />
+      <entry key="androidx/navigation/NavOptions" java-name="androidx/navigation/NavOptions" managed-type-name="AndroidX.Navigation.NavOptions" token="33554497" />
+      <entry key="androidx/navigation/NavOptions$Builder" java-name="androidx/navigation/NavOptions$Builder" managed-type-name="AndroidX.Navigation.NavOptions/Builder" token="33554531" />
+      <entry key="androidx/navigation/NavOptionsBuilder" java-name="androidx/navigation/NavOptionsBuilder" managed-type-name="AndroidX.Navigation.NavOptionsBuilder" token="33554498" />
+      <entry key="androidx/navigation/NavOptionsBuilderKt" java-name="androidx/navigation/NavOptionsBuilderKt" managed-type-name="AndroidX.Navigation.NavOptionsBuilderKt" token="33554499" />
+      <entry key="androidx/navigation/NavType" java-name="androidx/navigation/NavType" managed-type-name="AndroidX.Navigation.NavType" token="33554501" />
+      <entry key="androidx/navigation/NavType$Companion" java-name="androidx/navigation/NavType$Companion" managed-type-name="AndroidX.Navigation.NavType/Companion" token="33554532" />
+      <entry key="androidx/navigation/NavType$EnumType" java-name="androidx/navigation/NavType$EnumType" managed-type-name="AndroidX.Navigation.NavType/EnumType" token="33554533" />
+      <entry key="androidx/navigation/NavType$ParcelableArrayType" java-name="androidx/navigation/NavType$ParcelableArrayType" managed-type-name="AndroidX.Navigation.NavType/ParcelableArrayType" token="33554534" />
+      <entry key="androidx/navigation/NavType$ParcelableType" java-name="androidx/navigation/NavType$ParcelableType" managed-type-name="AndroidX.Navigation.NavType/ParcelableType" token="33554535" />
+      <entry key="androidx/navigation/NavType$SerializableArrayType" java-name="androidx/navigation/NavType$SerializableArrayType" managed-type-name="AndroidX.Navigation.NavType/SerializableArrayType" token="33554536" />
+      <entry key="androidx/navigation/NavType$SerializableType" java-name="androidx/navigation/NavType$SerializableType" managed-type-name="AndroidX.Navigation.NavType/SerializableType" token="33554537" />
+      <entry key="androidx/navigation/NavTypeKt" java-name="androidx/navigation/NavTypeKt" managed-type-name="AndroidX.Navigation.NavTypeKt" token="33554503" />
+      <entry key="androidx/navigation/NavUriKt" java-name="androidx/navigation/NavUriKt" managed-type-name="AndroidX.Navigation.NavUriKt" token="33554504" />
+      <entry key="androidx/navigation/NavUri_androidKt" java-name="androidx/navigation/NavUri_androidKt" managed-type-name="AndroidX.Navigation.NavUri_androidKt" token="33554505" />
+      <entry key="androidx/navigation/NoOpNavigator" java-name="androidx/navigation/NoOpNavigator" managed-type-name="AndroidX.Navigation.NoOpNavigator" token="33554506" />
+      <entry key="androidx/navigation/PopUpToBuilder" java-name="androidx/navigation/PopUpToBuilder" managed-type-name="AndroidX.Navigation.PopUpToBuilder" token="33554507" />
+      <entry key="androidx/navigation/SavedStateHandleKt" java-name="androidx/navigation/SavedStateHandleKt" managed-type-name="AndroidX.Navigation.SavedStateHandleKt" token="33554508" />
+      <entry key="androidx/navigation/serialization/NavTypeConverterKt" java-name="androidx/navigation/serialization/NavTypeConverterKt" managed-type-name="AndroidX.Navigation.Serialization.NavTypeConverterKt" token="33554509" />
+      <entry key="androidx/navigation/serialization/NavTypeConverterKt$WhenMappings" java-name="androidx/navigation/serialization/NavTypeConverterKt$WhenMappings" managed-type-name="AndroidX.Navigation.Serialization.NavTypeConverterKt/WhenMappings" token="33554538" />
+      <entry key="androidx/navigation/serialization/NavTypeConverter_androidKt" java-name="androidx/navigation/serialization/NavTypeConverter_androidKt" managed-type-name="AndroidX.Navigation.Serialization.NavTypeConverter_androidKt" token="33554510" />
+      <entry key="androidx/navigation/serialization/RouteDeserializerKt" java-name="androidx/navigation/serialization/RouteDeserializerKt" managed-type-name="AndroidX.Navigation.Serialization.RouteDeserializerKt" token="33554511" />
+      <entry key="androidx/navigation/serialization/RouteEncoder" java-name="androidx/navigation/serialization/RouteEncoder" managed-type-name="AndroidX.Navigation.Serialization.RouteEncoder" token="33554512" />
+      <entry key="androidx/navigation/serialization/RouteSerializerKt" java-name="androidx/navigation/serialization/RouteSerializerKt" managed-type-name="AndroidX.Navigation.Serialization.RouteSerializerKt" token="33554513" />
+      <entry key="androidx/navigation/internal/NavContext" java-name="androidx/navigation/internal/NavContext" managed-type-name="AndroidX.Navigation.Internal.NavContext" token="33554514" />
+      <entry key="androidx/navigation/internal/SynchronizedObjectKt" java-name="androidx/navigation/internal/SynchronizedObjectKt" managed-type-name="AndroidX.Navigation.Internal.SynchronizedObjectKt" token="33554515" />
+      <entry key="androidx/navigation/internal/SynchronizedObject_jvmCommonKt" java-name="androidx/navigation/internal/SynchronizedObject_jvmCommonKt" managed-type-name="AndroidX.Navigation.Internal.SynchronizedObject_jvmCommonKt" token="33554516" />
+    </types-scratch>
+  </module>
+</api>

@@ -1,0 +1,37 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Lifecycle.Common.Jvm" mvid="08487c7fd57f440b8e859f96df604077">
+  <module assembly-name="Xamarin.AndroidX.Lifecycle.Common.Jvm" mvid="08487c7fd57f440b8e859f96df604077" mvid-bytes="f3xICH/VC0SOhZ+W32BAdw==">
+    <duplicates>
+      <entry java-name="androidx/lifecycle/DefaultLifecycleObserver" managed-type-name="AndroidX.Lifecycle.IDefaultLifecycleObserverInvoker" token="33554444" />
+      <entry java-name="androidx/lifecycle/GeneratedAdapter" managed-type-name="AndroidX.Lifecycle.IGeneratedAdapterInvoker" token="33554446" />
+      <entry java-name="androidx/lifecycle/GenericLifecycleObserver" managed-type-name="AndroidX.Lifecycle.IGenericLifecycleObserverInvoker" token="33554448" />
+      <entry java-name="androidx/lifecycle/LifecycleEventObserver" managed-type-name="AndroidX.Lifecycle.ILifecycleEventObserverInvoker" token="33554450" />
+      <entry java-name="androidx/lifecycle/LifecycleObserver" managed-type-name="AndroidX.Lifecycle.ILifecycleObserverInvoker" token="33554452" />
+      <entry java-name="androidx/lifecycle/LifecycleOwner" managed-type-name="AndroidX.Lifecycle.ILifecycleOwnerInvoker" token="33554454" />
+      <entry java-name="androidx/lifecycle/Lifecycle" managed-type-name="AndroidX.Lifecycle.LifecycleInvoker" token="33554455" />
+      <entry java-name="androidx/lifecycle/LifecycleCoroutineScope" managed-type-name="AndroidX.Lifecycle.LifecycleCoroutineScopeInvoker" token="33554457" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/lifecycle/Lifecycle" java-name="androidx/lifecycle/Lifecycle" managed-type-name="AndroidX.Lifecycle.Lifecycle" token="33554440" />
+      <entry key="androidx/lifecycle/Lifecycle$Event" java-name="androidx/lifecycle/Lifecycle$Event" managed-type-name="AndroidX.Lifecycle.Lifecycle/Event" token="33554465" />
+      <entry key="androidx/lifecycle/Lifecycle$Event$Companion" java-name="androidx/lifecycle/Lifecycle$Event$Companion" managed-type-name="AndroidX.Lifecycle.Lifecycle/Event/Companion" token="33554474" />
+      <entry key="androidx/lifecycle/Lifecycle$Event$Companion$WhenMappings" java-name="androidx/lifecycle/Lifecycle$Event$Companion$WhenMappings" managed-type-name="AndroidX.Lifecycle.Lifecycle/Event/Companion/WhenMappings" token="33554476" />
+      <entry key="androidx/lifecycle/Lifecycle$Event$WhenMappings" java-name="androidx/lifecycle/Lifecycle$Event$WhenMappings" managed-type-name="AndroidX.Lifecycle.Lifecycle/Event/WhenMappings" token="33554475" />
+      <entry key="androidx/lifecycle/Lifecycle$State" java-name="androidx/lifecycle/Lifecycle$State" managed-type-name="AndroidX.Lifecycle.Lifecycle/State" token="33554466" />
+      <entry key="androidx/lifecycle/AtomicReference" java-name="androidx/lifecycle/AtomicReference" managed-type-name="AndroidX.Lifecycle.AtomicReference" token="33554441" />
+      <entry key="androidx/lifecycle/CompositeGeneratedAdaptersObserver" java-name="androidx/lifecycle/CompositeGeneratedAdaptersObserver" managed-type-name="AndroidX.Lifecycle.CompositeGeneratedAdaptersObserver" token="33554442" />
+      <entry key="androidx/lifecycle/DefaultLifecycleObserver" java-name="androidx/lifecycle/DefaultLifecycleObserver" managed-type-name="AndroidX.Lifecycle.IDefaultLifecycleObserver" token="33554443" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/GeneratedAdapter" java-name="androidx/lifecycle/GeneratedAdapter" managed-type-name="AndroidX.Lifecycle.IGeneratedAdapter" token="33554445" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/GenericLifecycleObserver" java-name="androidx/lifecycle/GenericLifecycleObserver" managed-type-name="AndroidX.Lifecycle.IGenericLifecycleObserver" token="33554447" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/LifecycleEventObserver" java-name="androidx/lifecycle/LifecycleEventObserver" managed-type-name="AndroidX.Lifecycle.ILifecycleEventObserver" token="33554449" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/LifecycleObserver" java-name="androidx/lifecycle/LifecycleObserver" managed-type-name="AndroidX.Lifecycle.ILifecycleObserver" token="33554451" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/LifecycleOwner" java-name="androidx/lifecycle/LifecycleOwner" managed-type-name="AndroidX.Lifecycle.ILifecycleOwner" token="33554453" skip-in-java-to-managed="True" />
+      <entry key="androidx/lifecycle/LifecycleCoroutineScope" java-name="androidx/lifecycle/LifecycleCoroutineScope" managed-type-name="AndroidX.Lifecycle.LifecycleCoroutineScope" token="33554456" />
+      <entry key="androidx/lifecycle/LifecycleKt" java-name="androidx/lifecycle/LifecycleKt" managed-type-name="AndroidX.Lifecycle.LifecycleKt" token="33554458" />
+      <entry key="androidx/lifecycle/LifecycleOwnerKt" java-name="androidx/lifecycle/LifecycleOwnerKt" managed-type-name="AndroidX.Lifecycle.LifecycleOwnerKt" token="33554459" />
+      <entry key="androidx/lifecycle/Lifecycling" java-name="androidx/lifecycle/Lifecycling" managed-type-name="AndroidX.Lifecycle.Lifecycling" token="33554460" />
+      <entry key="androidx/lifecycle/MethodCallsLogger" java-name="androidx/lifecycle/MethodCallsLogger" managed-type-name="AndroidX.Lifecycle.MethodCallsLogger" token="33554461" />
+      <entry key="androidx/lifecycle/PausingDispatcherKt" java-name="androidx/lifecycle/PausingDispatcherKt" managed-type-name="AndroidX.Lifecycle.PausingDispatcherKt" token="33554462" />
+      <entry key="androidx/lifecycle/SingleGeneratedAdapterObserver" java-name="androidx/lifecycle/SingleGeneratedAdapterObserver" managed-type-name="AndroidX.Lifecycle.SingleGeneratedAdapterObserver" token="33554463" />
+    </types-scratch>
+  </module>
+</api>

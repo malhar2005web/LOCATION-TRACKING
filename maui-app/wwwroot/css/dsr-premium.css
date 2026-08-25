@@ -1830,7 +1830,6 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 #leave-application-view > .page-container > .page-content,
 #leave-status-view > .page-container > .page-content,
 #checkin-view > .page-container > .page-content,
-#new-client-view > .page-container > .page-content,
 #others-view > .page-container > .page-content,
 #reports-view > .page-container > .page-content,
 #start-end-day-report-view > .page-container > .page-content,
@@ -1840,6 +1839,11 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
 #booking-view > .page-container > .page-content,
 #reminders-view > .page-container > .page-content {
   padding: 8px 16px 30px !important;
+}
+
+/* new-client-view: edge-to-edge (no left/right padding) */
+#new-client-view > .page-container > .page-content {
+  padding: 8px 0px 30px !important;
 }
 
 /* Glass Form Card Containers */
@@ -2104,4 +2108,21 @@ textarea.notes::placeholder{ color:#B9BFC9; font-weight:500; }
   border-radius: 16px !important;
   backdrop-filter: blur(15px) !important;
   box-shadow: 0 8px 20px rgba(30,36,48,0.06) !important;
+}
+
+/* ── New Client Form: Edge-to-Edge Card ── */
+#new-client-view .glass-form-card {
+  border-radius: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 20px 18px !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+#new-client-view .page-container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+#new-client-view .glass-shell {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }

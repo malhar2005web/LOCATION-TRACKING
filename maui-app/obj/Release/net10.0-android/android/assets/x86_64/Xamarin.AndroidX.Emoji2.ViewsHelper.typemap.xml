@@ -1,0 +1,8 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Emoji2.ViewsHelper" mvid="eab28de890204cf4a4c555a06af7e9e5">
+  <module assembly-name="Xamarin.AndroidX.Emoji2.ViewsHelper" mvid="eab28de890204cf4a4c555a06af7e9e5" mvid-bytes="6I2y6iCQ9EykxVWgavfp5Q==">
+    <types-scratch>
+      <entry key="androidx/emoji2/viewsintegration/EmojiEditTextHelper" java-name="androidx/emoji2/viewsintegration/EmojiEditTextHelper" managed-type-name="AndroidX.Emoji2.ViewsIntegration.EmojiEditTextHelper" token="33554435" />
+      <entry key="androidx/emoji2/viewsintegration/EmojiTextViewHelper" java-name="androidx/emoji2/viewsintegration/EmojiTextViewHelper" managed-type-name="AndroidX.Emoji2.ViewsIntegration.EmojiTextViewHelper" token="33554436" />
+    </types-scratch>
+  </module>
+</api>

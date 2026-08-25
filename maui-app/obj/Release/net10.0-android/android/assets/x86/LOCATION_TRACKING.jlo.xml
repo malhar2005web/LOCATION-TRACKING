@@ -1,0 +1,61 @@
+<api>
+  <jcw-types>
+    <type name="AndroidBackgroundService" package="com.locationtracker.app" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="android.app.Service" partial_assembly_qualified_name="LocationTracker.Platforms.Android.AndroidBackgroundService, LOCATION_TRACKING">
+      <constructors>
+        <constructor name="AndroidBackgroundService" method="n_.ctor:()V:" jni_signature="()V" managed_parameters="" retval="void" is_dynamically_registered="True" />
+      </constructors>
+      <methods>
+        <method name="onBind" method="n_onBind:(Landroid/content/Intent;)Landroid/os/IBinder;:GetOnBind_Landroid_content_Intent_Handler" jni_signature="(Landroid/content/Intent;)Landroid/os/IBinder;" params="android.content.Intent p0" retval="android.os.IBinder" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+        <method name="onStartCommand" method="n_onStartCommand:(Landroid/content/Intent;II)I:GetOnStartCommand_Landroid_content_Intent_IIHandler" jni_signature="(Landroid/content/Intent;II)I" params="android.content.Intent p0, int p1, int p2" retval="int" is_dynamically_registered="True" super_call="p0, p1, p2" activate_call="p0, p1, p2" />
+        <method name="onDestroy" method="n_onDestroy:()V:GetOnDestroyHandler" jni_signature="()V" retval="void" is_dynamically_registered="True" />
+      </methods>
+    </type>
+    <type name="AndroidBackgroundService_ActiveLocationListener" package="com.locationtracker.app" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="java.lang.Object" partial_assembly_qualified_name="LocationTracker.Platforms.Android.AndroidBackgroundService+ActiveLocationListener, LOCATION_TRACKING">
+      <implemented_interfaces>
+        <interface name="android.location.LocationListener" />
+      </implemented_interfaces>
+      <constructors>
+        <constructor name="AndroidBackgroundService_ActiveLocationListener" method="n_.ctor:()V:" jni_signature="()V" managed_parameters="" retval="void" is_dynamically_registered="True" />
+      </constructors>
+      <methods>
+        <method name="onLocationChanged" method="n_onLocationChanged:(Landroid/location/Location;)V:GetOnLocationChanged_Landroid_location_Location_Handler:Android.Locations.ILocationListenerInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" jni_signature="(Landroid/location/Location;)V" params="android.location.Location p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+        <method name="onProviderDisabled" method="n_onProviderDisabled:(Ljava/lang/String;)V:GetOnProviderDisabled_Ljava_lang_String_Handler:Android.Locations.ILocationListenerInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" jni_signature="(Ljava/lang/String;)V" params="java.lang.String p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+        <method name="onProviderEnabled" method="n_onProviderEnabled:(Ljava/lang/String;)V:GetOnProviderEnabled_Ljava_lang_String_Handler:Android.Locations.ILocationListenerInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" jni_signature="(Ljava/lang/String;)V" params="java.lang.String p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+        <method name="onStatusChanged" method="n_onStatusChanged:(Ljava/lang/String;ILandroid/os/Bundle;)V:GetOnStatusChanged_Ljava_lang_String_ILandroid_os_Bundle_Handler:Android.Locations.ILocationListenerInvoker, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" jni_signature="(Ljava/lang/String;ILandroid/os/Bundle;)V" params="java.lang.String p0, int p1, android.os.Bundle p2" retval="void" is_dynamically_registered="True" super_call="p0, p1, p2" activate_call="p0, p1, p2" />
+        <method name="onFlushComplete" method="n_onFlushComplete:(I)V:GetOnFlushComplete_IHandler:Android.Locations.ILocationListener, Mono.Android, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" jni_signature="(I)V" params="int p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+      </methods>
+    </type>
+    <type name="BootReceiver" package="com.locationtracker.app" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="android.content.BroadcastReceiver" partial_assembly_qualified_name="LocationTracker.Platforms.Android.BootReceiver, LOCATION_TRACKING">
+      <constructors>
+        <constructor name="BootReceiver" method="n_.ctor:()V:" jni_signature="()V" managed_parameters="" retval="void" is_dynamically_registered="True" />
+      </constructors>
+      <methods>
+        <method name="onReceive" method="n_onReceive:(Landroid/content/Context;Landroid/content/Intent;)V:GetOnReceive_Landroid_content_Context_Landroid_content_Intent_Handler" jni_signature="(Landroid/content/Context;Landroid/content/Intent;)V" params="android.content.Context p0, android.content.Intent p1" retval="void" is_dynamically_registered="True" super_call="p0, p1" activate_call="p0, p1" />
+      </methods>
+    </type>
+    <type name="MyWebChromeClient" package="crc64f3443bf5f88e657c" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="android.webkit.WebChromeClient" partial_assembly_qualified_name="LOCATION_TRACKING.MyWebChromeClient, LOCATION_TRACKING">
+      <constructors>
+        <constructor name="MyWebChromeClient" method="n_.ctor:()V:" jni_signature="()V" managed_parameters="" retval="void" is_dynamically_registered="True" />
+      </constructors>
+      <methods>
+        <method name="onGeolocationPermissionsShowPrompt" method="n_onGeolocationPermissionsShowPrompt:(Ljava/lang/String;Landroid/webkit/GeolocationPermissions$Callback;)V:GetOnGeolocationPermissionsShowPrompt_Ljava_lang_String_Landroid_webkit_GeolocationPermissions_Callback_Handler" jni_signature="(Ljava/lang/String;Landroid/webkit/GeolocationPermissions$Callback;)V" params="java.lang.String p0, android.webkit.GeolocationPermissions.Callback p1" retval="void" is_dynamically_registered="True" super_call="p0, p1" activate_call="p0, p1" />
+      </methods>
+    </type>
+    <type name="MainActivity" package="crc64f3443bf5f88e657c" application_java_class="android.app.Application" mono_runtime_initialization="mono.MonoPackageManager.LoadApplication (context);" extends_type="crc6488302ad6e9e4df1a.MauiAppCompatActivity" partial_assembly_qualified_name="LOCATION_TRACKING.MainActivity, LOCATION_TRACKING">
+      <constructors>
+        <constructor name="MainActivity" method="n_.ctor:()V:" jni_signature="()V" managed_parameters="" retval="void" is_dynamically_registered="True" />
+        <constructor name="MainActivity" method="n_.ctor:(I)V:" jni_signature="(I)V" managed_parameters="System.Int32, System.Private.CoreLib" params="int p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+      </constructors>
+      <methods>
+        <method name="onCreate" method="n_onCreate:(Landroid/os/Bundle;)V:GetOnCreate_Landroid_os_Bundle_Handler" jni_signature="(Landroid/os/Bundle;)V" params="android.os.Bundle p0" retval="void" is_dynamically_registered="True" super_call="p0" activate_call="p0" />
+      </methods>
+    </type>
+  </jcw-types>
+  <acw-types partial-assembly-name="LOCATION_TRACKING" module-name="LOCATION_TRACKING.dll">
+    <type assembly-qualified-name="LocationTracker.Platforms.Android.AndroidBackgroundService, LOCATION_TRACKING, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="com.locationtracker.app.AndroidBackgroundService" java-key="com.locationtracker.app.AndroidBackgroundService" managed-key="LocationTracker.Platforms.Android.AndroidBackgroundService" partial-assembly-qualified-name="LocationTracker.Platforms.Android.AndroidBackgroundService, LOCATION_TRACKING" />
+    <type assembly-qualified-name="LocationTracker.Platforms.Android.AndroidBackgroundService+ActiveLocationListener, LOCATION_TRACKING, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="com.locationtracker.app.AndroidBackgroundService_ActiveLocationListener" java-key="com.locationtracker.app.AndroidBackgroundService_ActiveLocationListener" managed-key="LocationTracker.Platforms.Android.AndroidBackgroundService.ActiveLocationListener" partial-assembly-qualified-name="LocationTracker.Platforms.Android.AndroidBackgroundService+ActiveLocationListener, LOCATION_TRACKING" />
+    <type assembly-qualified-name="LocationTracker.Platforms.Android.BootReceiver, LOCATION_TRACKING, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="com.locationtracker.app.BootReceiver" java-key="com.locationtracker.app.BootReceiver" managed-key="LocationTracker.Platforms.Android.BootReceiver" partial-assembly-qualified-name="LocationTracker.Platforms.Android.BootReceiver, LOCATION_TRACKING" />
+    <type assembly-qualified-name="LOCATION_TRACKING.MyWebChromeClient, LOCATION_TRACKING, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="location_tracking.MyWebChromeClient" java-key="crc64f3443bf5f88e657c.MyWebChromeClient" managed-key="LOCATION_TRACKING.MyWebChromeClient" partial-assembly-qualified-name="LOCATION_TRACKING.MyWebChromeClient, LOCATION_TRACKING" />
+    <type assembly-qualified-name="LOCATION_TRACKING.MainActivity, LOCATION_TRACKING, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" compat-jni-name="location_tracking.MainActivity" java-key="crc64f3443bf5f88e657c.MainActivity" managed-key="LOCATION_TRACKING.MainActivity" partial-assembly-qualified-name="LOCATION_TRACKING.MainActivity, LOCATION_TRACKING" />
+  </acw-types>
+</api>

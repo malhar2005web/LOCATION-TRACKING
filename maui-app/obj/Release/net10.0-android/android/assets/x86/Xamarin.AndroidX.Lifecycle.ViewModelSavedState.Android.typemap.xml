@@ -1,0 +1,19 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android" mvid="88aa4bcbb2e84e87b81e5afd83e9d0c9">
+  <module assembly-name="Xamarin.AndroidX.Lifecycle.ViewModelSavedState.Android" mvid="88aa4bcbb2e84e87b81e5afd83e9d0c9" mvid-bytes="y0uqiOiyh064Hlr9g+nQyQ==">
+    <duplicates>
+      <entry java-name="androidx/lifecycle/AbstractSavedStateViewModelFactory" managed-type-name="AndroidX.Lifecycle.AbstractSavedStateViewModelFactoryInvoker" token="33554439" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/lifecycle/AbstractSavedStateViewModelFactory" java-name="androidx/lifecycle/AbstractSavedStateViewModelFactory" managed-type-name="AndroidX.Lifecycle.AbstractSavedStateViewModelFactory" token="33554438" />
+      <entry key="androidx/lifecycle/SavedStateHandle" java-name="androidx/lifecycle/SavedStateHandle" managed-type-name="AndroidX.Lifecycle.SavedStateHandle" token="33554440" />
+      <entry key="androidx/lifecycle/SavedStateHandle$Companion" java-name="androidx/lifecycle/SavedStateHandle$Companion" managed-type-name="AndroidX.Lifecycle.SavedStateHandle/Companion" token="33554449" />
+      <entry key="androidx/lifecycle/SavedStateHandleSupport" java-name="androidx/lifecycle/SavedStateHandleSupport" managed-type-name="AndroidX.Lifecycle.SavedStateHandleSupport" token="33554441" />
+      <entry key="androidx/lifecycle/SavedStateHandle_androidKt" java-name="androidx/lifecycle/SavedStateHandle_androidKt" managed-type-name="AndroidX.Lifecycle.SavedStateHandle_androidKt" token="33554442" />
+      <entry key="androidx/lifecycle/SavedStateViewModelFactory" java-name="androidx/lifecycle/SavedStateViewModelFactory" managed-type-name="AndroidX.Lifecycle.SavedStateViewModelFactory" token="33554443" />
+      <entry key="androidx/lifecycle/SavedStateViewModelFactory_androidKt" java-name="androidx/lifecycle/SavedStateViewModelFactory_androidKt" managed-type-name="AndroidX.Lifecycle.SavedStateViewModelFactory_androidKt" token="33554444" />
+      <entry key="androidx/lifecycle/serialization/SavedStateHandleDelegateKt" java-name="androidx/lifecycle/serialization/SavedStateHandleDelegateKt" managed-type-name="AndroidX.Lifecycle.Serialization.SavedStateHandleDelegateKt" token="33554445" />
+      <entry key="androidx/lifecycle/internal/CanonicalName_jvmKt" java-name="androidx/lifecycle/internal/CanonicalName_jvmKt" managed-type-name="AndroidX.Lifecycle.Internal.CanonicalName_jvmKt" token="33554446" />
+      <entry key="androidx/lifecycle/internal/SavedStateHandleImpl_androidKt" java-name="androidx/lifecycle/internal/SavedStateHandleImpl_androidKt" managed-type-name="AndroidX.Lifecycle.Internal.SavedStateHandleImpl_androidKt" token="33554447" />
+    </types-scratch>
+  </module>
+</api>

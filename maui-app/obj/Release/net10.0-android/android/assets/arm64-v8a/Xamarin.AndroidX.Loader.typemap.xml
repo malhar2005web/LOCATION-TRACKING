@@ -1,0 +1,23 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Loader" mvid="aa65e9ef641d4dfdb53fa11053b659dd">
+  <module assembly-name="Xamarin.AndroidX.Loader" mvid="aa65e9ef641d4dfdb53fa11053b659dd" mvid-bytes="7+llqh1k/U21P6EQU7ZZ3Q==">
+    <duplicates>
+      <entry java-name="androidx/loader/content/AsyncTaskLoader" managed-type-name="AndroidX.Loader.Content.AsyncTaskLoaderInvoker" token="33554450" />
+      <entry java-name="androidx/loader/content/Loader$OnLoadCanceledListener" managed-type-name="AndroidX.Loader.Content.Loader/IOnLoadCanceledListenerInvoker" token="33554458" />
+      <entry java-name="androidx/loader/content/Loader$OnLoadCompleteListener" managed-type-name="AndroidX.Loader.Content.Loader/IOnLoadCompleteListenerInvoker" token="33554462" />
+      <entry java-name="androidx/loader/app/LoaderManager$LoaderCallbacks" managed-type-name="AndroidX.Loader.App.LoaderManager/ILoaderCallbacksInvoker" token="33554466" />
+      <entry java-name="androidx/loader/app/LoaderManager" managed-type-name="AndroidX.Loader.App.LoaderManagerInvoker" token="33554454" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/loader/content/AsyncTaskLoader" java-name="androidx/loader/content/AsyncTaskLoader" managed-type-name="AndroidX.Loader.Content.AsyncTaskLoader" token="33554449" />
+      <entry key="androidx/loader/content/CursorLoader" java-name="androidx/loader/content/CursorLoader" managed-type-name="AndroidX.Loader.Content.CursorLoader" token="33554451" />
+      <entry key="androidx/loader/content/Loader" java-name="androidx/loader/content/Loader" managed-type-name="AndroidX.Loader.Content.Loader" token="33554452" />
+      <entry key="androidx/loader/content/Loader$ForceLoadContentObserver" java-name="androidx/loader/content/Loader$ForceLoadContentObserver" managed-type-name="AndroidX.Loader.Content.Loader/ForceLoadContentObserver" token="33554456" />
+      <entry key="androidx/loader/content/Loader$OnLoadCanceledListener" java-name="androidx/loader/content/Loader$OnLoadCanceledListener" managed-type-name="AndroidX.Loader.Content.Loader/IOnLoadCanceledListener" token="33554457" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/loader/content/Loader_OnLoadCanceledListenerImplementor" java-name="mono/androidx/loader/content/Loader_OnLoadCanceledListenerImplementor" managed-type-name="AndroidX.Loader.Content.Loader/IOnLoadCanceledListenerImplementor" token="33554460" />
+      <entry key="androidx/loader/content/Loader$OnLoadCompleteListener" java-name="androidx/loader/content/Loader$OnLoadCompleteListener" managed-type-name="AndroidX.Loader.Content.Loader/IOnLoadCompleteListener" token="33554461" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/loader/content/Loader_OnLoadCompleteListenerImplementor" java-name="mono/androidx/loader/content/Loader_OnLoadCompleteListenerImplementor" managed-type-name="AndroidX.Loader.Content.Loader/IOnLoadCompleteListenerImplementor" token="33554464" />
+      <entry key="androidx/loader/app/LoaderManager" java-name="androidx/loader/app/LoaderManager" managed-type-name="AndroidX.Loader.App.LoaderManager" token="33554453" />
+      <entry key="androidx/loader/app/LoaderManager$LoaderCallbacks" java-name="androidx/loader/app/LoaderManager$LoaderCallbacks" managed-type-name="AndroidX.Loader.App.LoaderManager/ILoaderCallbacks" token="33554465" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>

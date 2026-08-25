@@ -1,0 +1,37 @@
+<api type="release" assembly-name="Xamarin.AndroidX.Navigation.Runtime.Android" mvid="19da9f974c2c400d8ca6bb85c32a7132">
+  <module assembly-name="Xamarin.AndroidX.Navigation.Runtime.Android" mvid="19da9f974c2c400d8ca6bb85c32a7132" mvid-bytes="l5/aGSxMDUCMpruFwypxMg==">
+    <duplicates>
+      <entry java-name="androidx/navigation/NavDeepLinkSaveStateControl" managed-type-name="AndroidX.Navigation.INavDeepLinkSaveStateControlInvoker" token="33554458" />
+      <entry java-name="androidx/navigation/NavHost" managed-type-name="AndroidX.Navigation.INavHostInvoker" token="33554460" />
+      <entry java-name="androidx/navigation/NavController$OnDestinationChangedListener" managed-type-name="AndroidX.Navigation.NavController/IOnDestinationChangedListenerInvoker" token="33554478" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/navigation/ActivityKt" java-name="androidx/navigation/ActivityKt" managed-type-name="AndroidX.Navigation.ActivityKt" token="33554451" />
+      <entry key="androidx/navigation/ActivityNavArgsLazyKt" java-name="androidx/navigation/ActivityNavArgsLazyKt" managed-type-name="AndroidX.Navigation.ActivityNavArgsLazyKt" token="33554452" />
+      <entry key="androidx/navigation/ActivityNavigator" java-name="androidx/navigation/ActivityNavigator" managed-type-name="AndroidX.Navigation.ActivityNavigator" token="33554453" />
+      <entry key="androidx/navigation/ActivityNavigator$Companion" java-name="androidx/navigation/ActivityNavigator$Companion" managed-type-name="AndroidX.Navigation.ActivityNavigator/Companion" token="33554473" />
+      <entry key="androidx/navigation/ActivityNavigator$Destination" java-name="androidx/navigation/ActivityNavigator$Destination" managed-type-name="AndroidX.Navigation.ActivityNavigator/Destination" token="33554474" />
+      <entry key="androidx/navigation/ActivityNavigator$Extras" java-name="androidx/navigation/ActivityNavigator$Extras" managed-type-name="AndroidX.Navigation.ActivityNavigator/Extras" token="33554475" />
+      <entry key="androidx/navigation/ActivityNavigator$Extras$Builder" java-name="androidx/navigation/ActivityNavigator$Extras$Builder" managed-type-name="AndroidX.Navigation.ActivityNavigator/Extras/Builder" token="33554485" />
+      <entry key="androidx/navigation/ActivityNavigatorDestinationBuilder" java-name="androidx/navigation/ActivityNavigatorDestinationBuilder" managed-type-name="AndroidX.Navigation.ActivityNavigatorDestinationBuilder" token="33554454" />
+      <entry key="androidx/navigation/ActivityNavigatorDestinationBuilderKt" java-name="androidx/navigation/ActivityNavigatorDestinationBuilderKt" managed-type-name="AndroidX.Navigation.ActivityNavigatorDestinationBuilderKt" token="33554455" />
+      <entry key="androidx/navigation/ActivityNavigatorExtrasKt" java-name="androidx/navigation/ActivityNavigatorExtrasKt" managed-type-name="AndroidX.Navigation.ActivityNavigatorExtrasKt" token="33554456" />
+      <entry key="androidx/navigation/NavDeepLinkSaveStateControl" java-name="androidx/navigation/NavDeepLinkSaveStateControl" managed-type-name="AndroidX.Navigation.INavDeepLinkSaveStateControl" token="33554457" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavHost" java-name="androidx/navigation/NavHost" managed-type-name="AndroidX.Navigation.INavHost" token="33554459" skip-in-java-to-managed="True" />
+      <entry key="androidx/navigation/NavController" java-name="androidx/navigation/NavController" managed-type-name="AndroidX.Navigation.NavController" token="33554461" />
+      <entry key="androidx/navigation/NavController$Companion" java-name="androidx/navigation/NavController$Companion" managed-type-name="AndroidX.Navigation.NavController/Companion" token="33554476" />
+      <entry key="androidx/navigation/NavController$OnDestinationChangedListener" java-name="androidx/navigation/NavController$OnDestinationChangedListener" managed-type-name="AndroidX.Navigation.NavController/IOnDestinationChangedListener" token="33554477" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/navigation/NavController_OnDestinationChangedListenerImplementor" java-name="mono/androidx/navigation/NavController_OnDestinationChangedListenerImplementor" managed-type-name="AndroidX.Navigation.NavController/IOnDestinationChangedListenerImplementor" token="33554480" />
+      <entry key="androidx/navigation/NavControllerKt" java-name="androidx/navigation/NavControllerKt" managed-type-name="AndroidX.Navigation.NavControllerKt" token="33554462" />
+      <entry key="androidx/navigation/NavControllerViewModelKt" java-name="androidx/navigation/NavControllerViewModelKt" managed-type-name="AndroidX.Navigation.NavControllerViewModelKt" token="33554463" />
+      <entry key="androidx/navigation/NavDeepLinkBuilder" java-name="androidx/navigation/NavDeepLinkBuilder" managed-type-name="AndroidX.Navigation.NavDeepLinkBuilder" token="33554464" />
+      <entry key="androidx/navigation/NavHostController" java-name="androidx/navigation/NavHostController" managed-type-name="AndroidX.Navigation.NavHostController" token="33554466" />
+      <entry key="androidx/navigation/NavHostKt" java-name="androidx/navigation/NavHostKt" managed-type-name="AndroidX.Navigation.NavHostKt" token="33554467" />
+      <entry key="androidx/navigation/Navigation" java-name="androidx/navigation/Navigation" managed-type-name="AndroidX.Navigation.Navigation" token="33554468" />
+      <entry key="androidx/navigation/NavInflater" java-name="androidx/navigation/NavInflater" managed-type-name="AndroidX.Navigation.NavInflater" token="33554469" />
+      <entry key="androidx/navigation/NavInflater$Companion" java-name="androidx/navigation/NavInflater$Companion" managed-type-name="AndroidX.Navigation.NavInflater/Companion" token="33554484" />
+      <entry key="androidx/navigation/ViewKt" java-name="androidx/navigation/ViewKt" managed-type-name="AndroidX.Navigation.ViewKt" token="33554470" />
+      <entry key="androidx/navigation/internal/Utils_jvmCommonKt" java-name="androidx/navigation/internal/Utils_jvmCommonKt" managed-type-name="AndroidX.Navigation.Internal.Utils_jvmCommonKt" token="33554471" />
+    </types-scratch>
+  </module>
+</api>

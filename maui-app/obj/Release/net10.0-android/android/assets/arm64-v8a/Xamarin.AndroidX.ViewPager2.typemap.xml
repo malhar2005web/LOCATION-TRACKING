@@ -1,0 +1,34 @@
+<api type="release" assembly-name="Xamarin.AndroidX.ViewPager2" mvid="ab964067aa4f413585f4dcc99a87ab6e">
+  <module assembly-name="Xamarin.AndroidX.ViewPager2" mvid="ab964067aa4f413585f4dcc99a87ab6e" mvid-bytes="Z0CWq0+qNUGF9NzJmoerbg==">
+    <duplicates>
+      <entry java-name="androidx/viewpager2/widget/ViewPager2$OffscreenPageLimit" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/IOffscreenPageLimitInvoker" token="33554459" />
+      <entry java-name="androidx/viewpager2/widget/ViewPager2$OnPageChangeCallback" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/OnPageChangeCallbackInvoker" token="33554461" />
+      <entry java-name="androidx/viewpager2/widget/ViewPager2$Orientation" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/IOrientationInvoker" token="33554463" />
+      <entry java-name="androidx/viewpager2/widget/ViewPager2$PageTransformer" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/IPageTransformerInvoker" token="33554465" />
+      <entry java-name="androidx/viewpager2/widget/ViewPager2$ScrollState" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/IScrollStateInvoker" token="33554467" />
+      <entry java-name="androidx/viewpager2/adapter/FragmentStateAdapter$ExperimentalFragmentStateAdapterApi" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapter/IExperimentalFragmentStateAdapterApiInvoker" token="33554469" />
+      <entry java-name="androidx/viewpager2/adapter/FragmentStateAdapter$FragmentTransactionCallback$OnPostEventListener" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapter/FragmentTransactionCallback/IOnPostEventListenerInvoker" token="33554473" />
+      <entry java-name="androidx/viewpager2/adapter/FragmentStateAdapter$FragmentTransactionCallback" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapter/FragmentTransactionCallbackInvoker" token="33554471" />
+      <entry java-name="androidx/viewpager2/adapter/FragmentStateAdapter" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapterInvoker" token="33554453" />
+      <entry java-name="androidx/viewpager2/adapter/StatefulAdapter" managed-type-name="AndroidX.ViewPager2.Adapter.IStatefulAdapterInvoker" token="33554456" />
+    </duplicates>
+    <types-scratch>
+      <entry key="androidx/viewpager2/widget/CompositePageTransformer" java-name="androidx/viewpager2/widget/CompositePageTransformer" managed-type-name="AndroidX.ViewPager2.Widget.CompositePageTransformer" token="33554448" />
+      <entry key="androidx/viewpager2/widget/MarginPageTransformer" java-name="androidx/viewpager2/widget/MarginPageTransformer" managed-type-name="AndroidX.ViewPager2.Widget.MarginPageTransformer" token="33554449" />
+      <entry key="androidx/viewpager2/widget/ViewPager2" java-name="androidx/viewpager2/widget/ViewPager2" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2" token="33554450" />
+      <entry key="androidx/viewpager2/widget/ViewPager2$OffscreenPageLimit" java-name="androidx/viewpager2/widget/ViewPager2$OffscreenPageLimit" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/IOffscreenPageLimit" token="33554458" skip-in-java-to-managed="True" />
+      <entry key="androidx/viewpager2/widget/ViewPager2$OnPageChangeCallback" java-name="androidx/viewpager2/widget/ViewPager2$OnPageChangeCallback" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/OnPageChangeCallback" token="33554460" />
+      <entry key="androidx/viewpager2/widget/ViewPager2$Orientation" java-name="androidx/viewpager2/widget/ViewPager2$Orientation" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/IOrientation" token="33554462" skip-in-java-to-managed="True" />
+      <entry key="androidx/viewpager2/widget/ViewPager2$PageTransformer" java-name="androidx/viewpager2/widget/ViewPager2$PageTransformer" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/IPageTransformer" token="33554464" skip-in-java-to-managed="True" />
+      <entry key="androidx/viewpager2/widget/ViewPager2$ScrollState" java-name="androidx/viewpager2/widget/ViewPager2$ScrollState" managed-type-name="AndroidX.ViewPager2.Widget.ViewPager2/IScrollState" token="33554466" skip-in-java-to-managed="True" />
+      <entry key="androidx/viewpager2/widget/WindowInsetsApplier" java-name="androidx/viewpager2/widget/WindowInsetsApplier" managed-type-name="AndroidX.ViewPager2.Widget.WindowInsetsApplier" token="33554451" />
+      <entry key="androidx/viewpager2/adapter/FragmentStateAdapter" java-name="androidx/viewpager2/adapter/FragmentStateAdapter" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapter" token="33554452" />
+      <entry key="androidx/viewpager2/adapter/FragmentStateAdapter$ExperimentalFragmentStateAdapterApi" java-name="androidx/viewpager2/adapter/FragmentStateAdapter$ExperimentalFragmentStateAdapterApi" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapter/IExperimentalFragmentStateAdapterApi" token="33554468" skip-in-java-to-managed="True" />
+      <entry key="androidx/viewpager2/adapter/FragmentStateAdapter$FragmentTransactionCallback" java-name="androidx/viewpager2/adapter/FragmentStateAdapter$FragmentTransactionCallback" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapter/FragmentTransactionCallback" token="33554470" />
+      <entry key="androidx/viewpager2/adapter/FragmentStateAdapter$FragmentTransactionCallback$OnPostEventListener" java-name="androidx/viewpager2/adapter/FragmentStateAdapter$FragmentTransactionCallback$OnPostEventListener" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapter/FragmentTransactionCallback/IOnPostEventListener" token="33554472" skip-in-java-to-managed="True" />
+      <entry key="mono/androidx/viewpager2/adapter/FragmentStateAdapter_FragmentTransactionCallback_OnPostEventListenerImplementor" java-name="mono/androidx/viewpager2/adapter/FragmentStateAdapter_FragmentTransactionCallback_OnPostEventListenerImplementor" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentStateAdapter/FragmentTransactionCallback/IOnPostEventListenerImplementor" token="33554474" />
+      <entry key="androidx/viewpager2/adapter/FragmentViewHolder" java-name="androidx/viewpager2/adapter/FragmentViewHolder" managed-type-name="AndroidX.ViewPager2.Adapter.FragmentViewHolder" token="33554454" />
+      <entry key="androidx/viewpager2/adapter/StatefulAdapter" java-name="androidx/viewpager2/adapter/StatefulAdapter" managed-type-name="AndroidX.ViewPager2.Adapter.IStatefulAdapter" token="33554455" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>

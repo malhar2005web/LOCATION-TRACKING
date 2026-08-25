@@ -1,0 +1,16 @@
+<api type="debug" assembly-name="LOCATION_TRACKING" mvid="682527ffd65c4a5e96663f27962477ba">
+  <java-to-managed>
+    <entry java-name="com/locationtracker/app/AndroidBackgroundService" managed-name="LocationTracker.Platforms.Android.AndroidBackgroundService, LOCATION_TRACKING" managed-type-token-id="33554450" />
+    <entry java-name="com/locationtracker/app/AndroidBackgroundService_ActiveLocationListener" managed-name="LocationTracker.Platforms.Android.AndroidBackgroundService+ActiveLocationListener, LOCATION_TRACKING" managed-type-token-id="33554485" />
+    <entry java-name="com/locationtracker/app/BootReceiver" managed-name="LocationTracker.Platforms.Android.BootReceiver, LOCATION_TRACKING" managed-type-token-id="33554451" />
+    <entry java-name="crc64f3443bf5f88e657c/MyWebChromeClient" managed-name="LOCATION_TRACKING.MyWebChromeClient, LOCATION_TRACKING" managed-type-token-id="33554462" />
+    <entry java-name="crc64f3443bf5f88e657c/MainActivity" managed-name="LOCATION_TRACKING.MainActivity, LOCATION_TRACKING" managed-type-token-id="33554463" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="com/locationtracker/app/AndroidBackgroundService" managed-name="LocationTracker.Platforms.Android.AndroidBackgroundService, LOCATION_TRACKING" managed-type-token-id="33554450" />
+    <entry java-name="com/locationtracker/app/AndroidBackgroundService_ActiveLocationListener" managed-name="LocationTracker.Platforms.Android.AndroidBackgroundService+ActiveLocationListener, LOCATION_TRACKING" managed-type-token-id="33554485" />
+    <entry java-name="com/locationtracker/app/BootReceiver" managed-name="LocationTracker.Platforms.Android.BootReceiver, LOCATION_TRACKING" managed-type-token-id="33554451" />
+    <entry java-name="crc64f3443bf5f88e657c/MyWebChromeClient" managed-name="LOCATION_TRACKING.MyWebChromeClient, LOCATION_TRACKING" managed-type-token-id="33554462" />
+    <entry java-name="crc64f3443bf5f88e657c/MainActivity" managed-name="LOCATION_TRACKING.MainActivity, LOCATION_TRACKING" managed-type-token-id="33554463" />
+  </managed-to-java>
+</api>

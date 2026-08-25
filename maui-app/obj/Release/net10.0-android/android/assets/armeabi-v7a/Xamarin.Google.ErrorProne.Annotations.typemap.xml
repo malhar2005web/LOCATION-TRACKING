@@ -1,0 +1,65 @@
+<api type="release" assembly-name="Xamarin.Google.ErrorProne.Annotations" mvid="8e284a6f282848e4a1ff4868a17a0dd8">
+  <module assembly-name="Xamarin.Google.ErrorProne.Annotations" mvid="8e284a6f282848e4a1ff4868a17a0dd8" mvid-bytes="b0oojigo5Eih/0hooXoN2A==">
+    <duplicates>
+      <entry java-name="com/google/errorprone/annotations/CanIgnoreReturnValue" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ICanIgnoreReturnValueInvoker" token="33554447" />
+      <entry java-name="com/google/errorprone/annotations/CheckReturnValue" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ICheckReturnValueInvoker" token="33554449" />
+      <entry java-name="com/google/errorprone/annotations/CompatibleWith" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ICompatibleWithInvoker" token="33554451" />
+      <entry java-name="com/google/errorprone/annotations/CompileTimeConstant" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ICompileTimeConstantInvoker" token="33554453" />
+      <entry java-name="com/google/errorprone/annotations/DoNotCall" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IDoNotCallInvoker" token="33554455" />
+      <entry java-name="com/google/errorprone/annotations/DoNotMock" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IDoNotMockInvoker" token="33554457" />
+      <entry java-name="com/google/errorprone/annotations/FormatMethod" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IFormatMethodInvoker" token="33554459" />
+      <entry java-name="com/google/errorprone/annotations/FormatString" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IFormatStringInvoker" token="33554461" />
+      <entry java-name="com/google/errorprone/annotations/ForOverride" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IForOverrideInvoker" token="33554463" />
+      <entry java-name="com/google/errorprone/annotations/Immutable" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IImmutableInvoker" token="33554465" />
+      <entry java-name="com/google/errorprone/annotations/ImmutableTypeParameter" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IImmutableTypeParameterInvoker" token="33554467" />
+      <entry java-name="com/google/errorprone/annotations/IncompatibleModifiers" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IIncompatibleModifiersInvoker" token="33554469" />
+      <entry java-name="com/google/errorprone/annotations/InlineMe" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IInlineMeInvoker" token="33554471" />
+      <entry java-name="com/google/errorprone/annotations/InlineMeValidationDisabled" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IInlineMeValidationDisabledInvoker" token="33554473" />
+      <entry java-name="com/google/errorprone/annotations/Keep" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IKeepInvoker" token="33554475" />
+      <entry java-name="com/google/errorprone/annotations/MustBeClosed" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IMustBeClosedInvoker" token="33554479" />
+      <entry java-name="com/google/errorprone/annotations/NoAllocation" managed-type-name="Xamarin.Google.ErrorProne.Annotations.INoAllocationInvoker" token="33554484" />
+      <entry java-name="com/google/errorprone/annotations/OverridingMethodsMustInvokeSuper" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IOverridingMethodsMustInvokeSuperInvoker" token="33554486" />
+      <entry java-name="com/google/errorprone/annotations/RequiredModifiers" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IRequiredModifiersInvoker" token="33554488" />
+      <entry java-name="com/google/errorprone/annotations/RestrictedApi" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IRestrictedApiInvoker" token="33554490" />
+      <entry java-name="com/google/errorprone/annotations/SuppressPackageLocation" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ISuppressPackageLocationInvoker" token="33554492" />
+      <entry java-name="com/google/errorprone/annotations/ThreadSafe" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IThreadSafeInvoker" token="33554494" />
+      <entry java-name="com/google/errorprone/annotations/ThreadSafeTypeParameter" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IThreadSafeTypeParameterInvoker" token="33554496" />
+      <entry java-name="com/google/errorprone/annotations/Var" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IVarInvoker" token="33554498" />
+      <entry java-name="com/google/errorprone/annotations/concurrent/GuardedBy" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Concurrent.IGuardedByInvoker" token="33554512" />
+      <entry java-name="com/google/errorprone/annotations/concurrent/LazyInit" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Concurrent.ILazyInitInvoker" token="33554514" />
+      <entry java-name="com/google/errorprone/annotations/concurrent/LockMethod" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Concurrent.ILockMethodInvoker" token="33554516" />
+      <entry java-name="com/google/errorprone/annotations/concurrent/UnlockMethod" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Concurrent.IUnlockMethodInvoker" token="33554518" />
+    </duplicates>
+    <types-scratch>
+      <entry key="com/google/errorprone/annotations/CanIgnoreReturnValue" java-name="com/google/errorprone/annotations/CanIgnoreReturnValue" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ICanIgnoreReturnValue" token="33554446" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/CheckReturnValue" java-name="com/google/errorprone/annotations/CheckReturnValue" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ICheckReturnValue" token="33554448" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/CompatibleWith" java-name="com/google/errorprone/annotations/CompatibleWith" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ICompatibleWith" token="33554450" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/CompileTimeConstant" java-name="com/google/errorprone/annotations/CompileTimeConstant" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ICompileTimeConstant" token="33554452" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/DoNotCall" java-name="com/google/errorprone/annotations/DoNotCall" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IDoNotCall" token="33554454" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/DoNotMock" java-name="com/google/errorprone/annotations/DoNotMock" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IDoNotMock" token="33554456" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/FormatMethod" java-name="com/google/errorprone/annotations/FormatMethod" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IFormatMethod" token="33554458" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/FormatString" java-name="com/google/errorprone/annotations/FormatString" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IFormatString" token="33554460" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/ForOverride" java-name="com/google/errorprone/annotations/ForOverride" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IForOverride" token="33554462" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/Immutable" java-name="com/google/errorprone/annotations/Immutable" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IImmutable" token="33554464" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/ImmutableTypeParameter" java-name="com/google/errorprone/annotations/ImmutableTypeParameter" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IImmutableTypeParameter" token="33554466" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/IncompatibleModifiers" java-name="com/google/errorprone/annotations/IncompatibleModifiers" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IIncompatibleModifiers" token="33554468" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/InlineMe" java-name="com/google/errorprone/annotations/InlineMe" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IInlineMe" token="33554470" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/InlineMeValidationDisabled" java-name="com/google/errorprone/annotations/InlineMeValidationDisabled" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IInlineMeValidationDisabled" token="33554472" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/Keep" java-name="com/google/errorprone/annotations/Keep" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IKeep" token="33554474" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/MustBeClosed" java-name="com/google/errorprone/annotations/MustBeClosed" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IMustBeClosed" token="33554478" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/NoAllocation" java-name="com/google/errorprone/annotations/NoAllocation" managed-type-name="Xamarin.Google.ErrorProne.Annotations.INoAllocation" token="33554483" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/OverridingMethodsMustInvokeSuper" java-name="com/google/errorprone/annotations/OverridingMethodsMustInvokeSuper" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IOverridingMethodsMustInvokeSuper" token="33554485" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/RequiredModifiers" java-name="com/google/errorprone/annotations/RequiredModifiers" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IRequiredModifiers" token="33554487" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/RestrictedApi" java-name="com/google/errorprone/annotations/RestrictedApi" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IRestrictedApi" token="33554489" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/SuppressPackageLocation" java-name="com/google/errorprone/annotations/SuppressPackageLocation" managed-type-name="Xamarin.Google.ErrorProne.Annotations.ISuppressPackageLocation" token="33554491" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/ThreadSafe" java-name="com/google/errorprone/annotations/ThreadSafe" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IThreadSafe" token="33554493" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/ThreadSafeTypeParameter" java-name="com/google/errorprone/annotations/ThreadSafeTypeParameter" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IThreadSafeTypeParameter" token="33554495" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/Var" java-name="com/google/errorprone/annotations/Var" managed-type-name="Xamarin.Google.ErrorProne.Annotations.IVar" token="33554497" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/Modifier" java-name="com/google/errorprone/annotations/Modifier" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Modifier" token="33554500" />
+      <entry key="com/google/errorprone/annotations/concurrent/GuardedBy" java-name="com/google/errorprone/annotations/concurrent/GuardedBy" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Concurrent.IGuardedBy" token="33554511" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/concurrent/LazyInit" java-name="com/google/errorprone/annotations/concurrent/LazyInit" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Concurrent.ILazyInit" token="33554513" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/concurrent/LockMethod" java-name="com/google/errorprone/annotations/concurrent/LockMethod" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Concurrent.ILockMethod" token="33554515" skip-in-java-to-managed="True" />
+      <entry key="com/google/errorprone/annotations/concurrent/UnlockMethod" java-name="com/google/errorprone/annotations/concurrent/UnlockMethod" managed-type-name="Xamarin.Google.ErrorProne.Annotations.Concurrent.IUnlockMethod" token="33554517" skip-in-java-to-managed="True" />
+    </types-scratch>
+  </module>
+</api>
