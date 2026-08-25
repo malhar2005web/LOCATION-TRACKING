@@ -134,16 +134,13 @@ function onDeviceReady(source) {
 
     setTimeout(() => {
         try {
-            if (session && session.token) {
-                console.log('[App] Resuming session:', session.role);
-                
-                if (session.role === 'client' && session.userData) {
-                    enterClientSession(session.userData);
-                } else if (session.role === 'admin' && session.userData) {
+            if (session && session.token && session.userData) {
+                console.log('[App] Resuming session for role:', session.role);
+                if (session.role === 'admin') {
                     initAdminDashboard(session.userData);
                     showView('admin-view');
                 } else {
-                    showView('login-view');
+                    enterClientSession(session.userData);
                 }
             } else {
                 showView('login-view');
