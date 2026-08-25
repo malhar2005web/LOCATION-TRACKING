@@ -38,7 +38,10 @@
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <ApplicationVersion>1</ApplicationVersion>
-        <RunAOTCompilation>true</RunAOTCompilation>
+        <RunAOTCompilation>false</RunAOTCompilation>
+        <PublishTrimmed>false</PublishTrimmed>
+        <AndroidLinkMode>None</AndroidLinkMode>
+        <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
         <RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
 
