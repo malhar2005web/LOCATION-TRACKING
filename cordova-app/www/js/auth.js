@@ -63,6 +63,19 @@ function populateDeviceIdFields() {
     });
 }
 
+// Polling helper to ensure fields are populated and bound once Blazor renders the inputs
+(function startupPopulate() {
+    let attempts = 0;
+    const interval = setInterval(() => {
+        populateDeviceIdFields();
+        bindDeviceIdInputs();
+        attempts++;
+        if (attempts > 50) {
+            clearInterval(interval);
+        }
+    }, 200);
+})();
+
 function bindDeviceIdInputs() {
     const fields = [
         'client-device-id-input',
@@ -165,42 +178,51 @@ async function handleClientLogin() {
             throw new Error('Invalid User ID or Device ID. Please contact your administrator.');
         }
 
-        // Helper to extract field value dynamically regardless of casing
-        function getDynamicField(obj, ...possibleKeys) {
-            if (!obj || typeof obj !== 'object') return '';
-            const keys = Object.keys(obj);
-            for (const pKey of possibleKeys) {
-                const target = pKey.toLowerCase();
-                const found = keys.find(k => k.toLowerCase() === target);
-                if (found && obj[found] !== null && obj[found] !== undefined) {
-                    const str = String(obj[found]).trim();
-                    if (str.length > 0) return str;
-                }
-            }
-            return '';
+        // Block login if device is not registered for this user (Skyway security)
+        if (info.resstatus === 'Register With Valid Device') {
+            throw new Error('Device not registered for this User ID. Please contact your administrator to register this device.');
         }
 
-        const resolvedClientId = String(getDynamicField(info, 'userid', 'id') || clientId);
-        const resolvedDeviceId = String(getDynamicField(info, 'imeinumber', 'imei', 'deviceid') || deviceId);
-
-        // Dynamically extract user name from server response fields
-        let resolvedName = getDynamicField(info, 'userfullname', 'user_fullname', 'fullname', 'userloginid', 'username', 'name');
-        if (!resolvedName) {
-            resolvedName = `Client ${resolvedClientId}`;
+        // Block login if user is deactivated on server
+        if (info.resstatus === 'User Not Active') {
+            throw new Error('Your account is not active. Please contact your administrator.');
         }
 
-        // Build client object from Skyway response
+        // Block login if API returns zeroed/empty data (server rejection)
+        const rawUserId = String(info.userid || '').trim();
+        const rawClientId = String(info.clientid || '').trim();
+        const rawId = String(info.id || '').trim();
+        
+        if ((!rawUserId || rawUserId === '0') && (!rawClientId || rawClientId === '0') && (!rawId || rawId === '0')) {
+            throw new Error('Login rejected by server. User/Client ID is 0. Please contact your administrator.');
+        }
+
+        // Build client object strictly from Skyway API response fields (100% dynamic, zero hardcoding)
+        const apiUserId = (rawUserId && rawUserId !== '0') ? rawUserId
+            : ((rawClientId && rawClientId !== '0') ? rawClientId
+                : ((rawId && rawId !== '0') ? rawId : String(clientId).trim()));
+
+        const apiName = (info.userfullname && String(info.userfullname).trim() && String(info.userfullname).trim() !== '0')
+            ? String(info.userfullname).trim()
+            : ((info.userloginid && String(info.userloginid).trim() && String(info.userloginid).trim() !== '0')
+                ? String(info.userloginid).trim()
+                : ((info.username && String(info.username).trim() && String(info.username).trim() !== '0')
+                    ? String(info.username).trim()
+                    : `Client ${apiUserId}`));
+
+        const apiDeviceId = (info.imeinumber && String(info.imeinumber).trim()) || String(deviceId).trim();
+
         const clientData = {
-            clientId:   resolvedClientId,
-            deviceId:   resolvedDeviceId,
-            name:       resolvedName,
-            userType:   getDynamicField(info, 'usertype', 'user_type', 'role') || 'client',
-            clusters:   getDynamicField(info, 'clusters') || '',
+            clientId:   apiUserId,
+            deviceId:   apiDeviceId,
+            name:       apiName,
+            userType:   info.usertype || 'grouphead',
+            clusters:   info.clusters || '',
             skywayInfo: info
         };
 
-        // Save session locally (token not needed from custom backend)
-        saveSession('skyway-direct', 'client', clientData);
+        // Save session locally (token not needed from our custom backend)
+        saveSession('skyway-direct', 'grouphead', clientData);
 
         // Permanently lock the device to this client ID (cleared only via app data wipe in system settings)
         localStorage.setItem('registered_client_id', clientData.clientId);

@@ -163,6 +163,13 @@ function initClientDashboard(clientData) {
     ReminderDb.init(() => {
         refreshRemindersCount();
         syncReminders();
+        if (typeof fetchTodayFollowupAlerts === 'function') {
+            fetchTodayFollowupAlerts().then(() => {
+                refreshRemindersCount();
+            }).catch(() => {
+                refreshRemindersCount();
+            });
+        }
     });
     LeaveDb.init(() => {
         syncLeaves();
@@ -2375,9 +2382,16 @@ async function fetchReportData(reportType) {
     const tbody = document.querySelector(`#${config.tableId} tbody`);
     if (!tbody) return;
 
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    const firstDayStr = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+
     const selectedUserId = userEl && userEl.value ? userEl.value : 'All';
-    const selectedFromDate = fromEl ? fromEl.value : '';
-    const selectedTillDate = tillEl ? tillEl.value : '';
+    const selectedFromDate = (fromEl && fromEl.value) ? fromEl.value : firstDayStr;
+    const selectedTillDate = (tillEl && tillEl.value) ? tillEl.value : todayStr;
+
+    if (fromEl && !fromEl.value) fromEl.value = selectedFromDate;
+    if (tillEl && !tillEl.value) tillEl.value = selectedTillDate;
 
     if (reportType === 'dsr-client') {
         tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR client report data...</td></tr>`;
@@ -2417,7 +2431,6 @@ async function fetchReportData(reportType) {
                 return;
             } catch (err) {
                 console.error('[Reports] Failed to fetch getdsrleadreport_v1:', err);
-                showToast(`Failed to fetch DSR Client Report: ${err.message}`, 'error');
             }
         }
 
@@ -2438,7 +2451,7 @@ async function fetchReportData(reportType) {
                 config.render(tbody, mappedLocal);
             });
         } else {
-            tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Offline: Local data unavailable.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">No records found.</td></tr>`;
         }
         return;
     }
@@ -2448,7 +2461,7 @@ async function fetchReportData(reportType) {
         tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR Summary Report...</td></tr>`;
         const session = getSession();
         const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-        const gemptype = (session && session.role) || 'grouphead';
+        const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
 
         const payload16 = {
             gemptype: gemptype,
@@ -2470,12 +2483,12 @@ async function fetchReportData(reportType) {
                 console.log('[Reports API 16] dailyreportformatsummary_v3 response:', data);
 
                 let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-                if (records.length > 0) {
-                    config.render(tbody, records, data);
-                    return;
-                }
+                config.render(tbody, records, data);
+                return;
             } catch (err) {
                 console.error('[Reports API 16] Error fetching dailyreportformatsummary_v3:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch summary report.</td></tr>`;
+                return;
             }
         }
     }
@@ -2485,7 +2498,7 @@ async function fetchReportData(reportType) {
         tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR Updated List...</td></tr>`;
         const session = getSession();
         const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-        const gemptype = (session && session.role) || 'grouphead';
+        const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
 
         const payload17 = {
             aim: 'aim',
@@ -2506,12 +2519,12 @@ async function fetchReportData(reportType) {
                 console.log('[Reports API 17] getdsrleadreport_vo1 response:', data);
 
                 let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-                if (records.length > 0) {
-                    config.render(tbody, records, data);
-                    return;
-                }
+                config.render(tbody, records, data);
+                return;
             } catch (err) {
                 console.error('[Reports API 17] Error fetching getdsrleadreport_vo1:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch DSR list.</td></tr>`;
+                return;
             }
         }
     }
@@ -2541,12 +2554,12 @@ async function fetchReportData(reportType) {
                 console.log('[Reports API 18] getcheckinoutrtp response:', data);
 
                 let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-                if (records.length > 0) {
-                    config.render(tbody, records, data);
-                    return;
-                }
+                config.render(tbody, records, data);
+                return;
             } catch (err) {
                 console.error('[Reports API 18] Error fetching getcheckinoutrtp:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch attendance report.</td></tr>`;
+                return;
             }
         }
     }
@@ -2942,11 +2955,11 @@ function reportEscape(value) {
 async function fetchTodayFollowupAlerts() {
     const session = getSession();
     const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-    const gemptype = (session && session.role) || 'grouphead';
+    const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
 
     if (navigator.onLine) {
         try {
-            console.log('[Reminders API 19] Fetching getfollowupalert for:', empName);
+            console.log('[Reminders API 19] Fetching getfollowupalert for:', empName, 'Role:', gemptype);
             const res = await fetch(`${API_BASE_URL}/getfollowupalert`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2961,13 +2974,14 @@ async function fetchTodayFollowupAlerts() {
             const serverAlerts = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
             if (serverAlerts.length > 0 && typeof ReminderDb !== 'undefined') {
                 for (const alert of serverAlerts) {
-                    const alertDate = alert.nextfollowup || alert.followup || new Date().toISOString().split('T')[0];
+                    let rawDate = alert.nextfollowup || alert.followup || new Date().toISOString().split('T')[0];
+                    let alertDate = rawDate.includes('T') ? rawDate.split('T')[0] : (rawDate.includes('/') ? rawDate.split(' ')[0].replace(/\//g, '-') : rawDate.slice(0, 10));
                     const alertTime = alert.nfollowuptime || alert.followuptime || '11:00';
                     const newRem = {
                         id: `REM-SRV-${alert.leadno || alert.id || Date.now()}`,
                         client_name: alert.leadname || alert.client || alert.outletname || 'Client',
                         reminder_type: alert.visited_for || alert.leadstatus || 'Follow Up',
-                        reminder_date: alertDate.includes('T') ? alertDate.split('T')[0] : alertDate.slice(0, 10),
+                        reminder_date: alertDate,
                         reminder_time: alertTime,
                         notes: alert.remark || alert.nremark || 'Follow up meeting scheduled',
                         status: 'Pending',
@@ -2977,8 +2991,18 @@ async function fetchTodayFollowupAlerts() {
                     ReminderDb.saveReminder(newRem, () => {});
                 }
             }
+            if (typeof refreshRemindersCount === 'function') {
+                refreshRemindersCount();
+            }
         } catch (err) {
             console.error('[Reminders API 19] Error fetching getfollowupalert:', err);
+            if (typeof refreshRemindersCount === 'function') {
+                refreshRemindersCount();
+            }
+        }
+    } else {
+        if (typeof refreshRemindersCount === 'function') {
+            refreshRemindersCount();
         }
     }
 }

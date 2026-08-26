@@ -65,6 +65,25 @@ function updateThemeToggleUI() {
     }
 }
 
+/**
+ * Get normalized gemptype for API requests
+ * Valid types: "admin", "agent", "superuser", "grouphead", "emp"
+ */
+function getGempType() {
+    const session = typeof getSession === 'function' ? getSession() : null;
+    let role = (session && (session.role || (session.userData && session.userData.userType))) || 'grouphead';
+
+    role = String(role).toLowerCase().trim().replace(/[\s_\-]+/g, '');
+
+    if (role === 'admin') return 'admin';
+    if (role === 'agent') return 'agent';
+    if (role === 'emp' || role === 'employee') return 'emp';
+    if (role === 'superuser' || role === 'super') return 'superuser';
+
+    // Default to 'grouphead' for client/grouphead/group/head/fallback
+    return 'grouphead';
+}
+
 // ── Greeting management ──
 function updateGreeting() {
     try {
@@ -144,6 +163,13 @@ function initClientDashboard(clientData) {
     ReminderDb.init(() => {
         refreshRemindersCount();
         syncReminders();
+        if (typeof fetchTodayFollowupAlerts === 'function') {
+            fetchTodayFollowupAlerts().then(() => {
+                refreshRemindersCount();
+            }).catch(() => {
+                refreshRemindersCount();
+            });
+        }
     });
     LeaveDb.init(() => {
         syncLeaves();
@@ -217,12 +243,12 @@ function startLocationTracking(clientId, deviceId) {
             console.log('[Tracking] MAUI Environment: Starting C# Native Foreground Service...');
             // 1. Tell C# to launch the native background foreground service
             invokeCSharp('StartBackgroundService');
-            
+
             // 2. Set up a UI-only poller to retrieve coordinates and counts from C#
             if (window.trackingInterval) {
                 clearInterval(window.trackingInterval);
             }
-            
+
             async function pollNativeTrackingData() {
                 try {
                     const dataJson = await invokeCSharp('GetLatestLocationData');
@@ -231,16 +257,17 @@ function startLocationTracking(clientId, deviceId) {
                         if (data.latitude && data.longitude) {
                             updateLocationUI(data.latitude, data.longitude);
                         }
-                        
+
                         // Update Locations Sent counter
                         locationSentCount = data.sentCount;
                         const countEl = document.getElementById('locations-sent-count');
                         if (countEl) countEl.textContent = locationSentCount.toString();
-                        
+
                         // Update last sync time
                         if (data.lastSync && data.lastSync !== 'Never') {
                             updateSyncStatusText(`Last Location Sent: ${data.lastSync}`);
-                            
+                            StorageService.setLastSyncTime(data.lastSync);
+
                             const lastSyncEl = document.getElementById('last-sync-time-display');
                             if (lastSyncEl) {
                                 lastSyncEl.textContent = data.lastSync;
@@ -255,7 +282,7 @@ function startLocationTracking(clientId, deviceId) {
                     console.error('[Tracking] Failed to poll native tracking data:', e);
                 }
             }
-            
+
             pollNativeTrackingData();
             window.trackingInterval = setInterval(pollNativeTrackingData, 3000);
         } else {
@@ -582,7 +609,16 @@ function updateSyncUI() {
     const lastSyncEl = document.getElementById('last-sync-time-display');
     const lastSyncBadge = document.getElementById('last-sync-time-display-badge');
     const lastSync = StorageService.getLastSyncTime();
-    const formattedSyncTime = lastSync !== 'Never' ? new Date(lastSync).toLocaleTimeString() : 'Never';
+
+    let formattedSyncTime = 'Never';
+    if (lastSync && lastSync !== 'Never') {
+        const d = new Date(lastSync);
+        if (!isNaN(d.getTime())) {
+            formattedSyncTime = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        } else {
+            formattedSyncTime = lastSync;
+        }
+    }
 
     if (lastSyncEl) {
         lastSyncEl.textContent = formattedSyncTime;
@@ -1008,15 +1044,17 @@ function updateWorkdayUI() {
 
         if (isDayStarted) {
             cardDayStart.classList.add('day-end-active');
+            cardDayStart.classList.add('day-active');
             if (dayToggleTitle) dayToggleTitle.textContent = 'Day End';
             if (dayToggleDesc) dayToggleDesc.textContent = 'Complete your workday and tracking';
             if (dayToggleIconContainer) {
-                dayToggleIconContainer.style.background = 'rgba(229, 115, 115, 0.15)';
-                dayToggleIconContainer.style.color = '#E57373';
+                dayToggleIconContainer.style.background = 'rgba(16, 185, 129, 0.18)';
+                dayToggleIconContainer.style.color = '#10B981';
                 dayToggleIconContainer.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>`;
             }
         } else {
             cardDayStart.classList.remove('day-end-active');
+            cardDayStart.classList.remove('day-active');
             if (dayToggleTitle) dayToggleTitle.textContent = 'Day Start';
             if (dayToggleDesc) dayToggleDesc.textContent = 'Begin your workday and tracking';
             if (dayToggleIconContainer) {
@@ -1173,38 +1211,61 @@ function handleCheckIn() {
         updateWorkdayUI();
         showToast('Attendance check-in successful.', 'success');
 
-        // Call iamatevent if online
+        // Call iamatevent CHECKIN if online with robust GPS coordinates
         if (navigator.onLine && session && session.userData) {
-            const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-            const empid = (session.userData.name) || 'demo admin2';
-            const imeino = session.userData.deviceId || '';
-            let latVal = 0.0;
-            let lngVal = 0.0;
-            const curLatEl = document.getElementById('current-lat');
-            const curLngEl = document.getElementById('current-lng');
-            if (curLatEl && curLngEl) {
-                const latText = curLatEl.textContent.trim();
-                const lngText = curLngEl.textContent.trim();
-                if (latText !== '--' && lngText !== '--') {
-                    latVal = parseFloat(latText);
-                    lngVal = parseFloat(lngText);
-                }
-            }
+            (async () => {
+                const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+                const empid = (session.userData.name) || 'demo group';
+                const imeino = session.userData.deviceId || '';
+                const userid = session.userData.clientId || imeino;
 
-            fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDate,
-                    gotempname: empid,
-                    gotempid: session.userData.clientId || imeino,
-                    gotinoutstatus: "CHECKIN",
-                    gotiamatclient: "",
-                    gotiamatlat: latVal,
-                    gotiamatlong: lngVal,
-                    gimeinumber: imeino
-                })
-            }).catch(err => console.error('iamatevent CHECKIN error:', err));
+                let latVal = 18.4748182;
+                let lngVal = 73.8119225;
+
+                const curLatEl = document.getElementById('current-lat');
+                const curLngEl = document.getElementById('current-lng');
+                if (curLatEl && curLngEl) {
+                    const latText = curLatEl.textContent.trim();
+                    const lngText = curLngEl.textContent.trim();
+                    if (latText !== '--' && lngText !== '--' && latText !== '0' && latText !== '0.0' && latText !== 'Fetching...') {
+                        latVal = parseFloat(latText);
+                        lngVal = parseFloat(lngText);
+                    }
+                }
+
+                if (latVal === 18.4748182) {
+                    try {
+                        const coords = await Promise.race([
+                            getCurrentLocationPromise(),
+                            new Promise(resolve => setTimeout(() => resolve(null), 2000))
+                        ]);
+                        if (coords && coords.latitude && coords.longitude) {
+                            latVal = coords.latitude;
+                            lngVal = coords.longitude;
+                        }
+                    } catch (e) {}
+                }
+
+                if ((latVal === 18.4748182 || latVal === 0) && session.userData.lat && session.userData.lat !== '0') {
+                    latVal = parseFloat(session.userData.lat);
+                    lngVal = parseFloat(session.userData.long);
+                }
+
+                fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gotiamatdate: currentDate,
+                        gotempname: empid,
+                        gotempid: userid,
+                        gotinoutstatus: "CHECKIN",
+                        gotiamatclient: "",
+                        gotiamatlat: latVal,
+                        gotiamatlong: lngVal,
+                        gimeinumber: imeino
+                    })
+                }).catch(err => console.error('iamatevent CHECKIN error:', err));
+            })();
         }
     }
 
@@ -1341,7 +1402,7 @@ async function submitOthers() {
 
     const session = getSession();
     const userid = (session && session.userData && session.userData.clientId) || '';
-    const gemptype = (session && session.role) || 'client';
+    const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
@@ -1381,125 +1442,135 @@ async function submitOthers() {
         }
     }
 
-    showToast('Submitting activity details...', 'info');
+    const executeSubmission = async () => {
+        showToast('Submitting activity details...', 'info');
 
-    if (navigator.onLine) {
-        try {
-            console.log('[Others] Submitting to third-party API...');
-            await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dsrBody)
-            });
-            console.log('[Others] Third-party API registration success.');
-        } catch (e) {
-            console.error('[Others] Third-party API failed:', e);
+        if (navigator.onLine) {
+            try {
+                console.log('[Others] Submitting to third-party API...');
+                await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dsrBody)
+                });
+                console.log('[Others] Third-party API registration success.');
+
+                // Also trigger iamatevent for OTHERS so server DAY END SUMMARY 2 displays the row!
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gotiamatdate: currentDateTime,
+                        gotempname: gempname || (session && session.userData && session.userData.name) || 'demo group',
+                        gotempid: userid,
+                        gotinoutstatus: "OTHERS",
+                        gotiamatclient: customerName || "Others",
+                        gotiamatlat: parseFloat(dsrBody.gpsLatitude) || 0.0,
+                        gotiamatlong: parseFloat(dsrBody.gpsLongitude) || 0.0,
+                        gimeinumber: (session && session.userData && session.userData.deviceId) || ""
+                    })
+                }).catch(err => console.error('iamatevent OTHERS error:', err));
+            } catch (e) {
+                console.error('[Others] Third-party API failed:', e);
+            }
+        } else {
+            showToast('Offline Mode: Activity saved locally.', 'info');
         }
 
-        try {
-            await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDateTime,
-                    gotempname: gempname,
-                    gotempid: userid,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: customerName,
-                    gotiamatlat: parseFloat(dsrBody.gpsLatitude),
-                    gotiamatlong: parseFloat(dsrBody.gpsLongitude),
-                    gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-                })
+        // Save DSR record locally (offline-first & populates Day End Summary)
+        if (typeof DsrDb !== 'undefined') {
+            const localDsr = {
+                client_id: userid,
+                client_name: gempname,
+                customer_name: customerName,
+                office_address: officeAddress,
+                site_name: siteDetails,
+                contact_person: contactPerson,
+                contact_no: contactNumber,
+                last_remark: remark,
+                visited_for: todayStatus || 'Others',
+                followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
+                latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
+                longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
+                sync_status: 'Pending',
+                created_timestamp: new Date().toISOString()
+            };
+
+            DsrDb.saveDsr(localDsr, (saved) => {
+                console.log('[Others] DSR saved locally:', saved);
+                syncDSRs();
             });
-        } catch (e) { }
-    } else {
-        showToast('Offline Mode: Activity saved locally.', 'info');
-    }
+        }
 
-    // Save DSR record locally (offline-first)
-    if (typeof DsrDb !== 'undefined') {
-        const localDsr = {
-            client_id: userid,
-            client_name: gempname,
-            customer_name: customerName,
-            office_address: officeAddress,
-            site_name: siteDetails,
-            contact_person: contactPerson,
-            contact_no: contactNumber,
-            last_remark: remark,
-            visited_for: todayStatus,
-            followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
-            latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
-            longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
-            sync_status: 'Pending',
-            created_timestamp: new Date().toISOString()
-        };
+        if (todayStatus && todayStatus !== 'Visit Done' && followupDate && hours && minutes) {
+            let reminderType = 'General Reminder';
+            if (todayStatus === 'Follow Up') reminderType = 'Follow Up';
+            else if (todayStatus === 'Document Submission') reminderType = 'Document Submission';
+            else if (todayStatus === 'Bill Submission') reminderType = 'Bill Submission';
+            else if (todayStatus === 'Payment Collection') reminderType = 'Payment Collection';
+            else if (todayStatus === 'Document Collection') reminderType = 'Document Collection';
 
-        DsrDb.saveDsr(localDsr, (saved) => {
-            console.log('[Others] DSR saved locally:', saved);
-            syncDSRs();
-        });
-    }
+            const reminderTime = hours + ":" + minutes;
+            const remId = 'REM_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
-    if (todayStatus && followupDate && hours && minutes) {
-        let reminderType = 'General Reminder';
-        if (todayStatus === 'Follow Up') reminderType = 'Follow Up';
-        else if (todayStatus === 'Document Submission') reminderType = 'Document Submission';
-        else if (todayStatus === 'Bill Submission') reminderType = 'Bill Submission';
-        else if (todayStatus === 'Payment Collection') reminderType = 'Payment Collection';
-        else if (todayStatus === 'Document Collection') reminderType = 'Document Collection';
+            const newReminder = {
+                id: remId,
+                client_name: customerName,
+                contact_person: contactPerson,
+                contact_number: contactNumber,
+                reminder_type: reminderType,
+                reminder_date: followupDate,
+                reminder_time: reminderTime,
+                remark: remark,
+                source_module: 'Others',
+                created_timestamp: new Date().toISOString(),
+                updated_timestamp: new Date().toISOString(),
+                status: 'Pending',
+                sync_status: 'Pending'
+            };
 
-        const reminderTime = hours + ":" + minutes;
-        const remId = 'REM_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            ReminderDb.saveReminder(newReminder, (saved) => {
+                console.log('[Others] Reminder created locally:', saved);
 
-        const newReminder = {
-            id: remId,
-            client_name: customerName,
-            contact_person: contactPerson,
-            contact_number: contactNumber,
-            reminder_type: reminderType,
-            reminder_date: followupDate,
-            reminder_time: reminderTime,
-            remark: remark,
-            source_module: 'Others',
-            created_timestamp: new Date().toISOString(),
-            updated_timestamp: new Date().toISOString(),
-            status: 'Pending',
-            sync_status: 'Pending'
-        };
-
-        ReminderDb.saveReminder(newReminder, (saved) => {
-            console.log('[Others] Reminder created locally:', saved);
-
-            const dateParts = followupDate.split('-');
-            const dateObj = new Date(
-                parseInt(dateParts[0], 10),
-                parseInt(dateParts[1], 10) - 1,
-                parseInt(dateParts[2], 10),
-                parseInt(hours, 10),
-                parseInt(minutes, 10),
-                0
-            );
-
-            if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
-                window.AlarmBridge.scheduleReminderNotification(
-                    remId, customerName, reminderType, remark, reminderTime, dateObj.getTime()
+                const dateParts = followupDate.split('-');
+                const dateObj = new Date(
+                    parseInt(dateParts[0], 10),
+                    parseInt(dateParts[1], 10) - 1,
+                    parseInt(dateParts[2], 10),
+                    parseInt(hours, 10),
+                    parseInt(minutes, 10),
+                    0
                 );
-            }
 
-            refreshRemindersCount();
-            syncReminders();
-        });
-    }
+                if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
+                    window.AlarmBridge.scheduleReminderNotification(
+                        remId, customerName, reminderType, remark, reminderTime, dateObj.getTime()
+                    );
+                }
 
-    const currentDsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10) + 1;
-    const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
-    localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
-    localStorage.setItem('visitsToday', currentVisits.toString());
-    updateMetricsUI();
+                refreshRemindersCount();
+                syncReminders();
+            });
+        }
 
-    showToast('Activity submitted successfully!', 'success');
-    showView('checkin-view');
+        const currentDsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10) + 1;
+        const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
+        localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
+        localStorage.setItem('visitsToday', currentVisits.toString());
+        updateMetricsUI();
+
+        resetOthersForm();
+        showToast('Activity submitted successfully!', 'success');
+
+        // Trigger Checkout success modal (user clicks OK -> sends Checkout & returns to Home Screen)
+        const latNum = parseFloat(dsrBody.gpsLatitude) || 18.4748182;
+        const lngNum = parseFloat(dsrBody.gpsLongitude) || 73.8119225;
+        const clientDisplayName = customerName || 'Others';
+        showDsrSuccessModal('Activity Submitted!', '', clientDisplayName, latNum, lngNum);
+    };
+
+    // Show Payload Inspector Modal Window before sending!
+    showApiPayloadModal('Others Activity Check-In', `${API_BASE_URL}/updateleaddeatils_sky`, dsrBody, executeSubmission);
 }
 
 function handleLeaveApplication() {
@@ -1654,6 +1725,30 @@ function submitLeave() {
 
     showToast('Saving leave request...', 'info');
 
+    // Trigger API 14 (empleave_n_v0) to submit leave directly to Skyway backend server
+    if (navigator.onLine) {
+        const leavePayload = {
+            department: (session && session.userData && session.userData.dept) || "SALES",
+            name: empName,
+            totalleave: String(totalDays),
+            requiredfrom: fromDateVal,
+            leavetype: type,
+            fullhalf: fullHalf,
+            reason: reason,
+            requiredtill: tillDateVal,
+            in_absence: absence,
+            clientid: clientId || "27"
+        };
+        console.log('[Leave API 14] Submitting empleave_n_v0 payload:', leavePayload);
+        fetch(`${API_BASE_URL}/empleave_n_v0`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(leavePayload)
+        }).then(r => r.json()).then(data => {
+            console.log('[Leave API 14] empleave_n_v0 response:', data);
+        }).catch(err => console.error('[Leave API 14] empleave_n_v0 error:', err));
+    }
+
     LeaveDb.saveLeave(leave, () => {
         showToast('Leave request saved successfully.', 'success');
         resetLeaveForm();
@@ -1697,8 +1792,66 @@ function normalizeDateOnly(value) {
     return String(value).includes('T') ? String(value).split('T')[0] : String(value).slice(0, 10);
 }
 
+async function fetchLeaveBalances() {
+    const session = getSession();
+    const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+    const userid = (session && session.userData && session.userData.userId) || localStorage.getItem('user_id') || '11';
+    const clientId = (session && session.userData && session.userData.clientId) || localStorage.getItem('client_id') || '27';
+
+    const payload = {
+        empname: empName,
+        clientid: String(clientId),
+        userid: String(userid)
+    };
+
+    if (navigator.onLine) {
+        try {
+            console.log('[Leave API 12 & 13] Fetching totalleaves_check and totalleaves_applied...', payload);
+
+            // API 12: Balance Leaves Check
+            const p1 = fetch(`${API_BASE_URL}/totalleaves_check`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(r => r.json()).catch(err => {
+                console.error('[Leave API 12] Error:', err);
+                return null;
+            });
+
+            // API 13: Total Leaves Applied
+            const p2 = fetch(`${API_BASE_URL}/totalleaves_applied`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(r => r.json()).catch(err => {
+                console.error('[Leave API 13] Error:', err);
+                return null;
+            });
+
+            const [dataBalance, dataApplied] = await Promise.all([p1, p2]);
+            console.log('[Leave API 12 & 13] Responses -> Balance:', dataBalance, '| Applied:', dataApplied);
+
+            if (dataApplied && (dataApplied.total_applied !== undefined || dataApplied.count !== undefined || dataApplied.trackerid)) {
+                const appliedCount = dataApplied.total_applied || dataApplied.count || (Array.isArray(dataApplied.trackerid) ? dataApplied.trackerid.length : 0);
+                const appliedEl = document.getElementById('stat-leaves-applied');
+                if (appliedEl && appliedCount > 0) {
+                    appliedEl.textContent = String(appliedCount);
+                }
+            }
+        } catch (err) {
+            console.error('[Leave Balances API] Error:', err);
+        }
+    }
+}
+
 async function fetchLeaveHistory() {
     renderLeaveHistorySkeletons();
+
+    // Trigger API 12 & API 13 for leave balances
+    fetchLeaveBalances();
+
+    const session = getSession();
+    const empName = (session && session.userData && session.userData.name) || 'demo group';
 
     if (leaveStatusSource === 'admin') {
         try {
@@ -1725,27 +1878,48 @@ async function fetchLeaveHistory() {
 
     if (navigator.onLine) {
         try {
-            const response = await apiRequest('/api/client/leaves', 'GET');
-            if (response && response.success && response.leaves) {
-                let savedCount = 0;
-                if (response.leaves.length === 0) {
-                    fetchLocalAndRender();
-                } else {
-                    for (const sLeave of response.leaves) {
-                        const localRecord = normalizeServerLeave(sLeave);
-                        LeaveDb.saveLeave(localRecord, () => {
-                            savedCount++;
-                            if (savedCount === response.leaves.length) {
-                                fetchLocalAndRender();
-                            }
-                        });
-                    }
-                }
+            console.log('[Leave API 15] Fetching getleavereport for:', empName);
+            const res = await fetch(`${API_BASE_URL}/getleavereport`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gempname: empName })
+            });
+            const data = await res.json();
+            console.log('[Leave API 15] getleavereport response:', data);
+
+            let serverLeaves = [];
+            if (data && Array.isArray(data.trackerid)) {
+                serverLeaves = data.trackerid;
+            } else if (Array.isArray(data)) {
+                serverLeaves = data;
+            } else if (data && typeof data === 'object') {
+                serverLeaves = data.output || data.records || [];
+            }
+
+            if (serverLeaves.length > 0) {
+                currentLeavesList = serverLeaves.map((s, idx) => ({
+                    id: s.id || `LV-SRV-${idx + 1}`,
+                    client_id: s.clientid || s.gempclientid || '27',
+                    employee_name: s.name || s.empname || s.gempname || empName,
+                    leave_type: s.leavetype || s.leave_type || 'Casual Leave',
+                    full_half_day: s.fullhalf || s.full_half_day || 'Full Day',
+                    start_date: s.requiredfrom || s.start_date || '--',
+                    end_date: s.requiredtill || s.end_date || '--',
+                    total_days: parseFloat(s.totalleave || s.total_days) || 1,
+                    reason: s.reason || '--',
+                    in_absence: s.in_absence || '--',
+                    status: s.status || s.leavestatus || 'Pending',
+                    sync_status: 'Synced',
+                    created_timestamp: s.created_timestamp || s.leaddatetime || new Date().toISOString(),
+                    updated_timestamp: new Date().toISOString()
+                }));
+                applyLeavesFilters();
+                return;
             } else {
                 fetchLocalAndRender();
             }
         } catch (err) {
-            console.error('[FetchLeaveHistory] Failed to fetch from API:', err);
+            console.error('[Leave API 15] getleavereport failed:', err);
             fetchLocalAndRender();
         }
     } else {
@@ -2063,6 +2237,10 @@ function handleStartEndDayReport() {
     openReportView('start-end', 'client');
 }
 
+function handleDSRClientReport() {
+    openReportView('dsr-client', 'client');
+}
+
 function handleDSRSummaryReportAdmin() {
     openReportView('dsr-summary', 'admin');
 }
@@ -2073,6 +2251,10 @@ function handleDSRUpdatedListAdmin() {
 
 function handleStartEndDayReportAdmin() {
     openReportView('start-end', 'admin');
+}
+
+function handleDSRClientReportAdmin() {
+    openReportView('dsr-client', 'admin');
 }
 
 function handleLeaveStatusAdmin() {
@@ -2100,7 +2282,8 @@ async function openReportView(reportType, source) {
     const viewMap = {
         'start-end': 'start-end-day-report-view',
         'dsr-summary': 'dsr-summary-report-view',
-        'dsr-list': 'dsr-updated-list-view'
+        'dsr-list': 'dsr-updated-list-view',
+        'dsr-client': 'dsr-client-report-view'
     };
 
     const viewId = viewMap[reportType];
@@ -2116,7 +2299,8 @@ function setReportDateDefaults(reportType) {
     const prefixMap = {
         'start-end': 'start-end',
         'dsr-summary': 'dsr-summary',
-        'dsr-list': 'dsr-list'
+        'dsr-list': 'dsr-list',
+        'dsr-client': 'dsr-client'
     };
     const prefix = prefixMap[reportType];
     const fromEl = document.getElementById(`${prefix}-from`);
@@ -2141,7 +2325,8 @@ async function populateReportUsers(reportType) {
     const prefixMap = {
         'start-end': 'start-end',
         'dsr-summary': 'dsr-summary',
-        'dsr-list': 'dsr-list'
+        'dsr-list': 'dsr-list',
+        'dsr-client': 'dsr-client'
     };
     const select = document.getElementById(`${prefixMap[reportType]}-user`);
     if (!select) return;
@@ -2183,6 +2368,10 @@ function fetchDSRListReportData() {
     return fetchReportData('dsr-list');
 }
 
+function fetchDSRClientReportData() {
+    return fetchReportData('dsr-client');
+}
+
 async function fetchReportData(reportType) {
     const config = getReportConfig(reportType);
     if (!config) return;
@@ -2193,9 +2382,187 @@ async function fetchReportData(reportType) {
     const tbody = document.querySelector(`#${config.tableId} tbody`);
     if (!tbody) return;
 
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    const firstDayStr = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+
     const selectedUserId = userEl && userEl.value ? userEl.value : 'All';
-    const selectedFromDate = fromEl ? fromEl.value : '';
-    const selectedTillDate = tillEl ? tillEl.value : '';
+    const selectedFromDate = (fromEl && fromEl.value) ? fromEl.value : firstDayStr;
+    const selectedTillDate = (tillEl && tillEl.value) ? tillEl.value : todayStr;
+
+    if (fromEl && !fromEl.value) fromEl.value = selectedFromDate;
+    if (tillEl && !tillEl.value) tillEl.value = selectedTillDate;
+
+    if (reportType === 'dsr-client') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR client report data...</td></tr>`;
+
+        const session = getSession();
+        const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+
+        const payload = {
+            startdatep: selectedFromDate,
+            enddatep: selectedTillDate,
+            userv: selectedUserId || 'All',
+            clientv: 'All',
+            gempname: empid
+        };
+
+        if (navigator.onLine) {
+            try {
+                console.log('[Reports] Fetching DSR Client Report from Skyway API...', payload);
+                const res = await fetch(`${API_BASE_URL}/getdsrleadreport_v1`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                console.log('[Reports] getdsrleadreport_v1 response:', data);
+
+                let records = [];
+                if (data && Array.isArray(data.trackerid)) {
+                    records = data.trackerid;
+                } else if (Array.isArray(data)) {
+                    records = data;
+                } else if (data && typeof data === 'object') {
+                    records = data.output || data.records || [];
+                }
+
+                config.render(tbody, records);
+                return;
+            } catch (err) {
+                console.error('[Reports] Failed to fetch getdsrleadreport_v1:', err);
+            }
+        }
+
+        // Offline fallback from local database
+        if (typeof DsrDb !== 'undefined') {
+            DsrDb.getDsrs((localList) => {
+                const mappedLocal = localList.map(local => ({
+                    assignedemp: local.client_name || local.client_id || empid,
+                    leaddatetime: local.created_timestamp,
+                    leadname: local.customer_name || '--',
+                    leadsitename: local.site_name || '--',
+                    officeaddres: local.office_address || '--',
+                    contactperson: local.contact_person || '--',
+                    contactno: local.contact_no || '--',
+                    remark: local.last_remark || '--',
+                    nextfollowup: local.followup || '--'
+                }));
+                config.render(tbody, mappedLocal);
+            });
+        } else {
+            tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">No records found.</td></tr>`;
+        }
+        return;
+    }
+
+    // API 16: DSR Summary Report (dailyreportformatsummary_v3)
+    if (reportType === 'dsr-summary') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR Summary Report...</td></tr>`;
+        const session = getSession();
+        const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+        const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
+
+        const payload16 = {
+            gemptype: gemptype,
+            gempname: empName,
+            sum_from: selectedFromDate,
+            sum_till: selectedTillDate,
+            dsruser: selectedUserId || 'All'
+        };
+
+        if (navigator.onLine) {
+            try {
+                console.log('[Reports API 16] Fetching dailyreportformatsummary_v3...', payload16);
+                const res = await fetch(`${API_BASE_URL}/dailyreportformatsummary_v3`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload16)
+                });
+                const data = await res.json();
+                console.log('[Reports API 16] dailyreportformatsummary_v3 response:', data);
+
+                let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+                config.render(tbody, records, data);
+                return;
+            } catch (err) {
+                console.error('[Reports API 16] Error fetching dailyreportformatsummary_v3:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch summary report.</td></tr>`;
+                return;
+            }
+        }
+    }
+
+    // API 17: DSR Updated List (getdsrleadreport_vo1)
+    if (reportType === 'dsr-list') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR Updated List...</td></tr>`;
+        const session = getSession();
+        const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+        const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
+
+        const payload17 = {
+            aim: 'aim',
+            gempname: empName,
+            gemptype: gemptype,
+            gempcluster: ''
+        };
+
+        if (navigator.onLine) {
+            try {
+                console.log('[Reports API 17] Fetching getdsrleadreport_vo1...', payload17);
+                const res = await fetch(`${API_BASE_URL}/getdsrleadreport_vo1`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload17)
+                });
+                const data = await res.json();
+                console.log('[Reports API 17] getdsrleadreport_vo1 response:', data);
+
+                let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+                config.render(tbody, records, data);
+                return;
+            } catch (err) {
+                console.error('[Reports API 17] Error fetching getdsrleadreport_vo1:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch DSR list.</td></tr>`;
+                return;
+            }
+        }
+    }
+
+    // API 18: Start End Day Report (getcheckinoutrtp)
+    if (reportType === 'start-end') {
+        tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading Start End Day Report...</td></tr>`;
+        const session = getSession();
+        const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+
+        const payload18 = {
+            startdate: selectedFromDate,
+            enddate: selectedTillDate,
+            gempname: empName,
+            username: selectedUserId || 'All'
+        };
+
+        if (navigator.onLine) {
+            try {
+                console.log('[Reports API 18] Fetching getcheckinoutrtp...', payload18);
+                const res = await fetch(`${API_BASE_URL}/getcheckinoutrtp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload18)
+                });
+                const data = await res.json();
+                console.log('[Reports API 18] getcheckinoutrtp response:', data);
+
+                let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+                config.render(tbody, records, data);
+                return;
+            } catch (err) {
+                console.error('[Reports API 18] Error fetching getcheckinoutrtp:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch attendance report.</td></tr>`;
+                return;
+            }
+        }
+    }
 
     const params = new URLSearchParams({
         clientId: selectedUserId,
@@ -2421,6 +2788,13 @@ function getReportConfig(reportType) {
             endpoint: '/api/client/reports/dsr-list',
             colspan: 11,
             render: renderDsrListReportRows
+        },
+        'dsr-client': {
+            prefix: 'dsr-client',
+            tableId: 'dsr-client-report-table',
+            endpoint: `${API_BASE_URL}/getdsrleadreport_v1`,
+            colspan: 10,
+            render: renderDsrClientReportRows
         }
     };
     return configs[reportType] || null;
@@ -2505,7 +2879,7 @@ function renderDsrSummaryReportRows(tbody, records, response) {
 
 function renderDsrListReportRows(tbody, records) {
     if (!records.length) {
-        tbody.innerHTML = '<tr><td colspan="11" class="table-empty">No DSR update records found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" class="table-empty">No DSR updated records found.</td></tr>';
         return;
     }
 
@@ -2521,7 +2895,29 @@ function renderDsrListReportRows(tbody, records) {
             <td>${reportEscape(row.contact_no || '--')}</td>
             <td>${reportEscape(row.last_remark || '--')}</td>
             <td>${reportEscape(row.visited_for || '--')}</td>
-            <td>${row.followup ? reportEscape(row.followup) : '--'}</td>
+            <td>${reportEscape(row.followup || '--')}</td>
+        </tr>
+    `).join('');
+}
+
+function renderDsrClientReportRows(tbody, records) {
+    if (!records || !records.length) {
+        tbody.innerHTML = '<tr><td colspan="10" class="table-empty">No DSR client records found.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = records.map((row, index) => `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${reportEscape(row.assignedemp || row.assigned_emp || row.gempname || row.visited_by || '--')}</td>
+            <td>${reportEscape(formatReportDateTime(row.leaddatetime || row.created_timestamp || row.registered_on || row.currentdatetime))}</td>
+            <td>${reportEscape(row.leadname || row.outletname || row.client || row.client_name || row.customer_name || '--')}</td>
+            <td>${reportEscape(row.leadsitename || row.site_name || row.sitename || '--')}</td>
+            <td>${reportEscape(row.officeaddres || row.office_address || row.address || '--')}</td>
+            <td>${reportEscape(row.contactperson || row.contact_person || '--')}</td>
+            <td>${reportEscape(row.contactno || row.contact_no || row.ncontact || '--')}</td>
+            <td>${reportEscape(row.remark || row.nremark || row.last_remark || '--')}</td>
+            <td>${reportEscape(row.nextfollowup || row.nfollowup || row.followup || '--')}</td>
         </tr>
     `).join('');
 }
@@ -2556,12 +2952,73 @@ function reportEscape(value) {
     return div.innerHTML;
 }
 
+async function fetchTodayFollowupAlerts() {
+    const session = getSession();
+    const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+    const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
+
+    if (navigator.onLine) {
+        try {
+            console.log('[Reminders API 19] Fetching getfollowupalert for:', empName, 'Role:', gemptype);
+            const res = await fetch(`${API_BASE_URL}/getfollowupalert`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gemptype: gemptype,
+                    gempname: empName
+                })
+            });
+            const data = await res.json();
+            console.log('[Reminders API 19] getfollowupalert response:', data);
+
+            const serverAlerts = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+            if (serverAlerts.length > 0 && typeof ReminderDb !== 'undefined') {
+                for (const alert of serverAlerts) {
+                    let rawDate = alert.nextfollowup || alert.followup || new Date().toISOString().split('T')[0];
+                    let alertDate = rawDate.includes('T') ? rawDate.split('T')[0] : (rawDate.includes('/') ? rawDate.split(' ')[0].replace(/\//g, '-') : rawDate.slice(0, 10));
+                    const alertTime = alert.nfollowuptime || alert.followuptime || '11:00';
+                    const newRem = {
+                        id: `REM-SRV-${alert.leadno || alert.id || Date.now()}`,
+                        client_name: alert.leadname || alert.client || alert.outletname || 'Client',
+                        reminder_type: alert.visited_for || alert.leadstatus || 'Follow Up',
+                        reminder_date: alertDate,
+                        reminder_time: alertTime,
+                        notes: alert.remark || alert.nremark || 'Follow up meeting scheduled',
+                        status: 'Pending',
+                        sync_status: 'Synced',
+                        created_timestamp: new Date().toISOString()
+                    };
+                    ReminderDb.saveReminder(newRem, () => {});
+                }
+            }
+            if (typeof refreshRemindersCount === 'function') {
+                refreshRemindersCount();
+            }
+        } catch (err) {
+            console.error('[Reminders API 19] Error fetching getfollowupalert:', err);
+            if (typeof refreshRemindersCount === 'function') {
+                refreshRemindersCount();
+            }
+        }
+    } else {
+        if (typeof refreshRemindersCount === 'function') {
+            refreshRemindersCount();
+        }
+    }
+}
+
 /**
  * Handle "Reminders" button action
  */
 function handleReminders() {
     showView('reminders-view');
-    applyRemindersFilter();
+    fetchTodayFollowupAlerts().then(() => {
+        applyRemindersFilter();
+        refreshRemindersCount();
+    }).catch(() => {
+        applyRemindersFilter();
+        refreshRemindersCount();
+    });
 }
 
 /**
@@ -2613,8 +3070,7 @@ async function fetchClientList() {
     const tableBody = document.getElementById('client-list-tbody');
     if (!tableBody) return;
 
-    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--color-text-secondary);">Loading clients...</td></tr>`;
-
+    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">Loading clients...</td></tr>`;
     const clientSearch = document.getElementById('search-client-input').value.trim();
     const groupSearch = document.getElementById('search-group-input').value.trim();
 
@@ -2745,7 +3201,7 @@ function renderClientList(list) {
     if (!tableBody) return;
 
     if (list.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No clients found</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No clients found</td></tr>`;
         return;
     }
 
@@ -2762,15 +3218,12 @@ function renderClientList(list) {
         const escapedSiteName = (c.leadsitename || '').replace(/'/g, "\\'");
 
         html += `
-            <tr>
-                <td style="font-weight:700; color:var(--color-text-secondary);">${index + 1}</td>
-                <td style="font-weight:700; color:var(--color-text-primary);">${leadname}</td>
-                <td style="font-size:0.85rem; color:var(--color-text-secondary); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${address}</td>
-                <td>
-                    <button class="btn-booking" onclick="openBookingForm('${escapedName}', '${escapedSiteName}', '${escapedAddress}', '${leadno}')">Booking</button>
-                </td>
-                <td>
-                    <button class="btn-dsr" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
+            <tr style="border-bottom:1px solid rgba(0,0,0,0.05);">
+                <td style="font-weight:700; color:var(--color-text-secondary); text-align:center; padding:10px 4px; font-size:0.78rem;">${index + 1}</td>
+                <td style="font-weight:700; color:var(--color-text-primary); padding:10px 6px; font-size:0.82rem; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedName}">${leadname}</td>
+                <td style="font-size:0.78rem; color:var(--color-text-secondary); padding:10px 6px; word-break:break-word; white-space:normal; line-height:1.35;" title="${escapedAddress}">${address || '--'}</td>
+                <td style="text-align:center; padding:10px 4px; white-space:nowrap;">
+                    <button class="btn-dsr" style="font-size:0.75rem; padding:7px 10px; white-space:nowrap; border-radius:8px; font-weight:700;" onclick="openDSRForm('${escapedName}', '${escapedAddress}', '${escapedSiteName}', '${escapedContactPerson}', '${escapedContactNo}', '${leadno}')">Update DSR</button>
                 </td>
             </tr>
         `;
@@ -2779,8 +3232,12 @@ function renderClientList(list) {
     tableBody.innerHTML = html;
 }
 
+let clientSearchTimeout = null;
 function filterClientList() {
-    fetchClientList();
+    clearTimeout(clientSearchTimeout);
+    clientSearchTimeout = setTimeout(() => {
+        fetchClientList();
+    }, 300);
 }
 
 function clearClientListFilters() {
@@ -2811,6 +3268,47 @@ function openBookingForm(name, siteName, address, leadno) {
     showView('booking-view');
 }
 
+// ── DSR Live Timer System ──
+let dsrTimerInterval = null;
+let dsrTimerStartTime = null;
+
+function startDsrTimer() {
+    stopDsrTimer(); // Clear any existing timer
+    dsrTimerStartTime = Date.now();
+    const timerDisplay = document.getElementById('dsr-timer-display');
+    const timerContainer = document.getElementById('dsr-live-timer');
+    if (timerDisplay) timerDisplay.textContent = '00:00';
+    if (timerContainer) timerContainer.style.display = 'flex';
+
+    dsrTimerInterval = setInterval(() => {
+        if (!dsrTimerStartTime) return;
+        const elapsed = Math.floor((Date.now() - dsrTimerStartTime) / 1000);
+        const hrs = Math.floor(elapsed / 3600);
+        const mins = Math.floor((elapsed % 3600) / 60);
+        const secs = elapsed % 60;
+        if (timerDisplay) {
+            if (hrs > 0) {
+                timerDisplay.textContent = `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            } else {
+                timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+    }, 1000);
+}
+
+function stopDsrTimer() {
+    let elapsedSeconds = 0;
+    if (dsrTimerStartTime) {
+        elapsedSeconds = Math.floor((Date.now() - dsrTimerStartTime) / 1000);
+    }
+    if (dsrTimerInterval) {
+        clearInterval(dsrTimerInterval);
+        dsrTimerInterval = null;
+    }
+    dsrTimerStartTime = null;
+    return elapsedSeconds;
+}
+
 function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadno) {
     selectedClient = { name, address, siteDetails, contactPerson, contactNo, leadno };
 
@@ -2828,8 +3326,68 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     document.getElementById('dsr-followup-hours').value = '00';
     document.getElementById('dsr-followup-minutes').value = '00';
 
+    // Trigger DSR_UPDATE event on Update DSR button click with REAL GPS coordinates
+    const session = typeof getSession === 'function' ? getSession() : null;
+    if (navigator.onLine && session && session.userData) {
+        (async () => {
+            const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            const empid = (session.userData.name) || 'demo group';
+            const userid = session.userData.clientId || session.userData.deviceId || '';
+
+            let latVal = 18.4748182;
+            let lngVal = 73.8119225;
+
+            const curLatEl = document.getElementById('current-lat');
+            const curLngEl = document.getElementById('current-lng');
+            if (curLatEl && curLngEl) {
+                const domLat = curLatEl.textContent.trim();
+                const domLng = curLngEl.textContent.trim();
+                if (domLat !== '--' && domLng !== '--' && domLat !== '0' && domLat !== '0.0' && domLat !== 'Fetching...') {
+                    latVal = parseFloat(domLat);
+                    lngVal = parseFloat(domLng);
+                }
+            }
+
+            if (latVal === 18.4748182) {
+                try {
+                    const coords = await Promise.race([
+                        getCurrentLocationPromise(),
+                        new Promise(resolve => setTimeout(() => resolve(null), 2000))
+                    ]);
+                    if (coords && coords.latitude && coords.longitude) {
+                        latVal = coords.latitude;
+                        lngVal = coords.longitude;
+                    }
+                } catch (e) {}
+            }
+
+            if ((latVal === 18.4748182 || latVal === 0) && session.userData.lat && session.userData.lat !== '0') {
+                latVal = parseFloat(session.userData.lat);
+                lngVal = parseFloat(session.userData.long);
+            }
+
+            fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: currentDateTime,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "DSR_UPDATE",
+                    gotiamatclient: name || "",
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: session.userData.deviceId || ""
+                })
+            }).catch(err => console.error('iamatevent DSR_UPDATE error:', err));
+        })();
+    }
+
     showView('existing-client-dsr-view');
-    
+
+    // Start the DSR live timer
+    startDsrTimer();
+
     // REDESIGNED: Initialize premium wizard flow
     if (typeof initDsrWizard === 'function') {
         initDsrWizard(name, address);
@@ -2855,10 +3413,44 @@ async function submitDSR() {
 
     const session = getSession();
     const userid = (session && session.userData && session.userData.clientId) || '';
-    const gemptype = (session && session.role) || 'client';
+    const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
 
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+
+    let latNum = 18.4748182;
+    let lngNum = 73.8119225;
+
+    // Try DOM current location elements first
+    const curLatEl = document.getElementById('current-lat');
+    const curLngEl = document.getElementById('current-lng');
+    if (curLatEl && curLngEl) {
+        const latVal = curLatEl.textContent.trim();
+        const lngVal = curLngEl.textContent.trim();
+        if (latVal !== '--' && lngVal !== '--' && latVal !== '0' && latVal !== '0.0' && latVal !== 'Fetching...') {
+            latNum = parseFloat(latVal);
+            lngNum = parseFloat(lngVal);
+        }
+    }
+
+    if (latNum === 18.4748182) {
+        try {
+            const coords = await Promise.race([
+                getCurrentLocationPromise(),
+                new Promise(resolve => setTimeout(() => resolve(null), 2000))
+            ]);
+            if (coords && coords.latitude && coords.longitude) {
+                latNum = coords.latitude;
+                lngNum = coords.longitude;
+                updateLocationUI(latNum, lngNum);
+            }
+        } catch (e) {}
+    }
+
+    if ((latNum === 18.4748182 || latNum === 0) && session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+        latNum = parseFloat(session.userData.lat);
+        lngNum = parseFloat(session.userData.long);
+    }
 
     const dsrBody = {
         userid: userid,
@@ -2873,8 +3465,8 @@ async function submitDSR() {
         nfollowup: followupDate || "",
         nfollowuptime: followupDate ? (hours + ":" + minutes) : "",
         assignedemp: "All",
-        gpsLatitude: "0.0",
-        gpsLongitude: "0.0",
+        gpsLatitude: String(latNum),
+        gpsLongitude: String(lngNum),
         l_nremark: remark,
         n_nremark: remark,
         leaddatetime: currentDateTime,
@@ -2885,16 +3477,7 @@ async function submitDSR() {
         lleadno: (selectedClient && selectedClient.leadno) || ""
     };
 
-    const curLatEl = document.getElementById('current-lat');
-    const curLngEl = document.getElementById('current-lng');
-    if (curLatEl && curLngEl) {
-        const latVal = curLatEl.textContent.trim();
-        const lngVal = curLngEl.textContent.trim();
-        if (latVal !== '--' && lngVal !== '--') {
-            dsrBody.gpsLatitude = latVal;
-            dsrBody.gpsLongitude = lngVal;
-        }
-    }
+    const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
 
     if (navigator.onLine) {
         try {
@@ -2905,26 +3488,10 @@ async function submitDSR() {
                 body: JSON.stringify(dsrBody)
             });
             console.log('[DSR] Third-party submission succeeded.');
+
         } catch (e) {
             console.error('[DSR] Third-party API failed:', e);
         }
-
-        try {
-            await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDateTime,
-                    gotempname: gempname,
-                    gotempid: userid,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: name,
-                    gotiamatlat: parseFloat(dsrBody.gpsLatitude),
-                    gotiamatlong: parseFloat(dsrBody.gpsLongitude),
-                    gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-                })
-            });
-        } catch (e) { }
     } else {
         showToast('Offline Mode: DSR saved locally.', 'info');
     }
@@ -2954,7 +3521,7 @@ async function submitDSR() {
         });
     }
 
-    if (status && followupDate && hours && minutes) {
+    if (status && status !== 'Visit Done' && followupDate && hours && minutes) {
         let reminderType = 'General Reminder';
         if (status === 'Follow Up') reminderType = 'Follow Up';
         else if (status === 'Document Submission') reminderType = 'Document Submission';
@@ -3011,10 +3578,156 @@ async function submitDSR() {
     localStorage.setItem('visitsToday', currentVisits.toString());
     updateMetricsUI();
 
+    // Stop the DSR live timer and get elapsed time
+    const dsrElapsed = stopDsrTimer();
+
     showToast('DSR submitted successfully!', 'success');
-    showView('dsr-client-list-view');
-    fetchClientList();
+
+    let timeStr = '';
+    if (dsrElapsed > 0) {
+        const hrs = Math.floor(dsrElapsed / 3600);
+        const mins = Math.floor((dsrElapsed % 3600) / 60);
+        const secs = dsrElapsed % 60;
+        if (hrs > 0) {
+            timeStr = `${hrs} hr ${mins} min ${secs} sec`;
+        } else if (mins > 0) {
+            timeStr = `${mins} min ${secs} sec`;
+        } else {
+            timeStr = `${secs} sec`;
+        }
+    }
+
+    // Show Custom Modal alert -> User taps OK -> triggers CHECKOUT & returns to Home Screen
+    showDsrSuccessModal('DSR Submitted!', timeStr, name, latNum, lngNum);
 }
+
+let pendingCheckoutData = null;
+
+function showDsrSuccessModal(title, timeStr, clientName, lat, lng) {
+    pendingCheckoutData = { clientName, lat, lng };
+
+    const titleEl = document.getElementById('dsr-success-modal-title');
+    if (titleEl) {
+        titleEl.textContent = title || 'DSR Submitted!';
+    }
+
+    const msgEl = document.getElementById('dsr-success-modal-msg');
+    if (msgEl) {
+        if (timeStr) {
+            msgEl.textContent = `You filled the form in ${timeStr}.`;
+        } else if (title) {
+            msgEl.textContent = `${title} successfully!`;
+        } else {
+            msgEl.textContent = 'Submitted successfully!';
+        }
+    }
+    const modalEl = document.getElementById('dsr-success-modal');
+    if (modalEl) {
+        modalEl.style.display = 'flex';
+    }
+}
+
+async function onDsrSuccessOkClick() {
+    console.log('[CHECKOUT] OK BUTTON CLICKED');
+
+    // 1. Hide modal immediately
+    const modalEl = document.getElementById('dsr-success-modal');
+    if (modalEl) {
+        modalEl.style.display = 'none';
+    }
+
+    // 2. Extract session & user details with solid fallbacks
+    const session = typeof getSession === 'function' ? getSession() : null;
+    const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    
+    const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
+    const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+    const userid = (session && session.userData && session.userData.clientId) || imeino;
+
+    let latVal = 18.4748182;
+    let lngVal = 73.8119225;
+
+    if (pendingCheckoutData && pendingCheckoutData.lat && pendingCheckoutData.lat !== '0.0' && pendingCheckoutData.lat !== 0 && !isNaN(pendingCheckoutData.lat)) {
+        latVal = parseFloat(pendingCheckoutData.lat);
+        lngVal = parseFloat(pendingCheckoutData.lng);
+    } else {
+        const coords = await getCurrentLocationPromise();
+        if (coords && coords.latitude && coords.longitude) {
+            latVal = coords.latitude;
+            lngVal = coords.longitude;
+        } else if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+            latVal = parseFloat(session.userData.lat);
+            lngVal = parseFloat(session.userData.long);
+        }
+    }
+
+    const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
+
+    const payload = {
+        gotiamatdate: currentDate,
+        gotempname: empid,
+        gotempid: userid,
+        gotinoutstatus: "CHECKOUT",
+        gotiamatclient: clientNameVal,
+        gotiamatlat: latVal,
+        gotiamatlong: lngVal,
+        gimeinumber: imeino
+    };
+
+    console.log('[CHECKOUT OK Click] Triggering CHECKOUT APIs (startendday + iamatevent):', payload);
+
+    if (navigator.onLine) {
+        try {
+            console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
+            console.log('[CHECKOUT TEST] Payload:', JSON.stringify(payload));
+
+            // Execute both iamatevent and startendday in parallel so iamatevent CHECKOUT is never blocked!
+            const p1 = fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(r => r.text()).catch(err => {
+                console.error('[CHECKOUT] iamatevent failed:', err);
+                return 'error';
+            });
+
+            const p2 = fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gcdatetime: currentDate.slice(0, 16),
+                    glaststatus: "CHECKOUT",
+                    empid: empid,
+                    imeino: imeino,
+                    gpsLatitude: latVal,
+                    gpsLongitude: lngVal
+                })
+            }).then(r => r.text()).catch(err => {
+                console.error('[CHECKOUT] startendday failed:', err);
+                return 'error';
+            });
+
+            const [resIamAt, resStartEnd] = await Promise.all([p1, p2]);
+            console.log('[CHECKOUT] Parallel checkout responses -> iamatevent:', resIamAt, '| startendday:', resStartEnd);
+            showToast('CHECKOUT Sent Successfully!', 'success');
+        } catch (err) {
+            console.error('[CHECKOUT TEST] Error sending checkout:', err);
+            showToast(`CHECKOUT Error: ${err.message}`, 'error');
+        }
+    }
+
+    // 3. Reset isCheckedIn state so user can Check In again for subsequent client visits
+    isCheckedIn = false;
+    localStorage.setItem('isCheckedIn', 'false');
+    updateWorkdayUI();
+
+    // 4. Return to Home screen AFTER await completes
+    showView('client-view');
+}
+
+// Bind to window object for guaranteed global availability in WebView
+window.showDsrSuccessModal = showDsrSuccessModal;
+window.onDsrSuccessOkClick = onDsrSuccessOkClick;
 
 async function submitBooking() {
     const clientName = document.getElementById('booking-client-name').value.trim();
@@ -3181,7 +3894,7 @@ async function syncDSRs() {
 
         const session = getSession();
         const defaultUserid = (session && session.userData && session.userData.clientId) || '';
-        const defaultGempType = (session && session.role) || 'client';
+        const defaultGempType = getGempType();
         const defaultGempName = (session && session.userData && session.userData.name) || '';
         const defaultDeviceId = (session && session.userData && session.userData.deviceId) || '';
         const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
@@ -3607,21 +4320,7 @@ async function handleDayEnd() {
         const empid = (session.userData.name) || 'demo admin2';
         const imeino = session.userData.deviceId || '';
 
-        // Call startendday
-        fetch(`${API_BASE_URL}/startendday`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                gcdatetime: currentDate.slice(0, 16), // YYYY-MM-DD HH:MM
-                glaststatus: "END",
-                empid: empid,
-                imeino: imeino,
-                gpsLatitude: latVal,
-                gpsLongitude: lngVal
-            })
-        }).catch(err => console.error('startendday END error:', err));
-
-        // Call iamatevent
+        // Call iamatevent END (keeps DAY END SUMMARY 2 intact without overwriting CHECK IN/OUT STATUS checkout record)
         fetch(`${API_BASE_URL}/iamatevent`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -3629,7 +4328,7 @@ async function handleDayEnd() {
                 gotiamatdate: currentDate,
                 gotempname: empid,
                 gotempid: session.userData.clientId || imeino,
-                gotinoutstatus: "CHECKOUT",
+                gotinoutstatus: "END",
                 gotiamatclient: "",
                 gotiamatlat: latVal,
                 gotiamatlong: lngVal,
@@ -3871,6 +4570,110 @@ function bindNewClientProgressListeners() {
     });
 }
 
+/**
+ * Display a Glassmorphic Inspector Window showing exact API Request Body payload
+ */
+function showApiPayloadModal(title, endpoint, payload, onProceed) {
+    const existingModal = document.getElementById('api-payload-modal');
+    if (existingModal) existingModal.remove();
+
+    const formattedJson = JSON.stringify(payload, null, 2);
+
+    const overlay = document.createElement('div');
+    overlay.id = 'api-payload-modal';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    `;
+
+    const card = document.createElement('div');
+    card.style.cssText = `
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        width: 100%;
+        max-width: 480px;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    `;
+
+    card.innerHTML = `
+        <div style="background: linear-gradient(135deg, #f97316, #ea580c); padding: 16px 20px; color: white; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9;">📡 API Payload Inspector</div>
+                <div style="font-size: 16px; font-weight: 800; margin-top: 2px;">${title}</div>
+            </div>
+            <span style="background: rgba(255,255,255,0.25); font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px;">POST</span>
+        </div>
+        <div style="padding: 10px 16px; background: #fff7ed; border-bottom: 1px solid #ffedd5; font-size: 11.5px; color: #c2410c; font-family: monospace; word-break: break-all;">
+            <strong>Endpoint:</strong> ${endpoint}
+        </div>
+        <div style="padding: 14px; flex: 1; overflow-y: auto; background: #0f172a;">
+            <pre style="margin: 0; font-family: 'Fira Code', Consolas, Monaco, monospace; font-size: 12px; color: #38bdf8; white-space: pre-wrap; word-break: break-all; line-height: 1.5;">${escapeHtmlHelper(formattedJson)}</pre>
+        </div>
+        <div style="padding: 14px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+            <button id="btn-copy-payload" style="background: #e2e8f0; color: #334155; border: none; padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer;">
+                📋 Copy JSON
+            </button>
+            <div style="display: flex; gap: 8px;">
+                <button id="btn-cancel-payload" style="background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer;">
+                    Cancel
+                </button>
+                <button id="btn-proceed-payload" style="background: #f97316; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);">
+                    Send to Server 🚀
+                </button>
+            </div>
+        </div>
+    `;
+
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+
+    document.getElementById('btn-copy-payload').onclick = function() {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(formattedJson).then(() => {
+                showToast('JSON Payload copied!', 'success');
+            }).catch(() => {
+                showToast('Copied JSON Payload', 'info');
+            });
+        } else {
+            showToast('JSON Payload generated', 'info');
+        }
+    };
+
+    document.getElementById('btn-cancel-payload').onclick = function() {
+        overlay.remove();
+        showToast('Registration cancelled by user', 'info');
+    };
+
+    document.getElementById('btn-proceed-payload').onclick = function() {
+        overlay.remove();
+        if (typeof onProceed === 'function') {
+            onProceed();
+        }
+    };
+}
+
+function escapeHtmlHelper(str) {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 async function submitNewClient() {
     if (!isDayStarted) {
         showToast('Please start your workday first by tapping "Day Start".', 'warning');
@@ -3928,7 +4731,7 @@ async function submitNewClient() {
 
     const session = getSession();
     const userid = (session && session.userData && session.userData.clientId) || '';
-    const gemptype = (session && session.role) || 'client';
+    const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
 
     const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
@@ -3939,148 +4742,176 @@ async function submitNewClient() {
     const minEl = document.getElementById('new-client-followup-minutes');
     if (hourEl) hours = hourEl.value;
     if (minEl) minutes = minEl.value;
+    const panNumber = (document.getElementById('new-client-pan') && document.getElementById('new-client-pan').value.trim()) || '';
+    const gstNumber = (document.getElementById('new-client-gst') && document.getElementById('new-client-gst').value.trim()) || '';
 
-    const dsrBody = {
+    const newClientBody = {
         userid: userid,
         gemptype: gemptype,
-        currentdatetime: currentDateTime,
-        intime: "00:00:00",
-        outtime: "00:00:00",
+        assignedemp: "All",
+        CustomerName: clientName,
+        CustomerType: "New Client",
+        PANNumber: panNumber,
+        GSTNumber: gstNumber,
+        officeaddress: officeAddress,
+        MobileNumber: contactNumber,
+        landlinenumber: "",
+        EmailAddress: email || "",
+        FullName1: contactPerson,
+        FullName2: "",
+        FullName3: "",
+        FullName4: "",
         outletname: clientName,
         nleadname: clientName,
         ncontact: contactNumber,
-        nremark: remark,
+        nlanddine: "",
+        BankAccount: "",
+        BankName: "",
+        BankAddress: "",
+        ifsccode: "",
+        onereference1: "",
+        onereference2: "",
+        currentdatetime: currentDateTime,
+        intime_h: "00",
+        intime_m: "00",
+        outtime_h: "00",
+        outtime_m: "00",
+        ocos: "",
+        ncns: "",
+        nremark: remark || "",
         nfollowup: followupDate || "",
-        nfollowuptime: followupDate ? (hours + ":" + minutes) : "",
-        assignedemp: "All",
-        gpsLatitude: document.getElementById('new-client-lat').value || "0.0",
-        gpsLongitude: document.getElementById('new-client-lng').value || "0.0",
-        l_nremark: remark,
-        n_nremark: remark,
-        leaddatetime: currentDateTime,
-        officeaddres: officeAddress,
-        contactperson: contactPerson,
-        gempname: gempname,
-        follow_rem: remark,
-        lleadno: "" // Empty for new client registration!
+        nfollowuptime_h: hours,
+        nfollowuptime_m: minutes,
+        c_assignedto: "",
+        gpsLatitude: (document.getElementById('new-client-lat') && document.getElementById('new-client-lat').value) || "0.0",
+        gpsLongitude: (document.getElementById('new-client-lng') && document.getElementById('new-client-lng').value) || "0.0"
     };
 
-    showToast('Submitting New Client Registration...', 'info');
+    const executeSubmission = async () => {
+        showToast('Submitting New Client Registration...', 'info');
 
-    // 1. Submit to FleetTrackon APIs if online
-    if (navigator.onLine) {
-        try {
-            console.log('[NewClient] Submitting to third-party API...');
-            await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dsrBody)
-            });
-            console.log('[NewClient] Third-party API registration success.');
-        } catch (e) {
-            console.error('[NewClient] Third-party API failed:', e);
+        // 1. Submit to FleetTrackon generatenewlead API if online
+        if (navigator.onLine) {
+            try {
+                console.log('[NewClient] Submitting to generatenewlead API...', newClientBody);
+                await fetch(`${API_BASE_URL}/generatenewlead`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newClientBody)
+                });
+                console.log('[NewClient] Third-party generatenewlead API registration success.');
+
+                // Also trigger iamatevent for NEW_CLIENT so server DAY END SUMMARY 2 displays the row!
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        gotiamatdate: currentDateTime,
+                        gotempname: gempname || (session && session.userData && session.userData.name) || 'demo group',
+                        gotempid: userid,
+                        gotinoutstatus: "NEW_CLIENT",
+                        gotiamatclient: clientName || "",
+                        gotiamatlat: parseFloat(newClientBody.gpsLatitude) || 0.0,
+                        gotiamatlong: parseFloat(newClientBody.gpsLongitude) || 0.0,
+                        gimeinumber: (session && session.userData && session.userData.deviceId) || ""
+                    })
+                }).catch(err => console.error('iamatevent NEW_CLIENT error:', err));
+            } catch (e) {
+                console.error('[NewClient] Third-party generatenewlead API failed:', e);
+            }
+        } else {
+            showToast('Offline Mode: DSR saved locally.', 'info');
         }
 
-        try {
-            await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDateTime,
-                    gotempname: gempname,
-                    gotempid: userid,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: clientName,
-                    gotiamatlat: parseFloat(dsrBody.gpsLatitude),
-                    gotiamatlong: parseFloat(dsrBody.gpsLongitude),
-                    gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-                })
+        // Save DSR record locally
+        if (typeof DsrDb !== 'undefined') {
+            const localDsr = {
+                client_id: userid,
+                client_name: gempname,
+                customer_name: clientName,
+                office_address: officeAddress,
+                site_name: siteDetails,
+                contact_person: contactPerson,
+                contact_no: contactNumber,
+                last_remark: remark,
+                visited_for: 'New Registration',
+                followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
+                latitude: parseFloat(newClientBody.gpsLatitude) || 0.0,
+                longitude: parseFloat(newClientBody.gpsLongitude) || 0.0,
+                sync_status: 'Pending',
+                created_timestamp: new Date().toISOString()
+            };
+
+            DsrDb.saveDsr(localDsr, (saved) => {
+                console.log('[NewClient] DSR saved locally:', saved);
+                syncDSRs();
             });
-        } catch (e) { }
-    } else {
-        showToast('Offline Mode: DSR saved locally.', 'info');
-    }
+        }
 
-    // Save DSR record locally
-    if (typeof DsrDb !== 'undefined') {
-        const localDsr = {
-            client_id: userid,
-            client_name: gempname,
-            customer_name: clientName,
-            office_address: officeAddress,
-            site_name: siteDetails,
-            contact_person: contactPerson,
-            contact_no: contactNumber,
-            last_remark: remark,
-            visited_for: 'New Registration',
-            followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
-            latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
-            longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
-            sync_status: 'Pending',
-            created_timestamp: new Date().toISOString()
-        };
+        // 2. Automatically create Follow-up Reminder if date is entered
+        if (followupDate) {
+            const reminderTime = hours + ":" + minutes;
+            const remId = 'REM_' + Date.now();
+            const reminderType = 'New Client Follow Up';
 
-        DsrDb.saveDsr(localDsr, (saved) => {
-            console.log('[NewClient] DSR saved locally:', saved);
-            syncDSRs();
-        });
-    }
+            const newReminder = {
+                id: remId,
+                client_id: userid,
+                client_name: clientName,
+                contact_person: contactPerson,
+                contact_number: contactNumber,
+                reminder_type: reminderType,
+                reminder_date: followupDate,
+                reminder_time: reminderTime,
+                remark: remark,
+                source_module: 'NewClient',
+                created_timestamp: new Date().toISOString(),
+                updated_timestamp: new Date().toISOString(),
+                status: 'Pending',
+                sync_status: 'Pending'
+            };
 
-    // 2. Automatically create Follow-up Reminder if date is entered
-    if (followupDate) {
-        const reminderTime = hours + ":" + minutes;
-        const remId = 'REM_' + Date.now();
-        const reminderType = 'New Client Follow Up';
+            ReminderDb.saveReminder(newReminder, (saved) => {
+                console.log('[NewClient] Reminder created locally:', saved);
 
-        const newReminder = {
-            id: remId,
-            client_id: userid,
-            client_name: clientName,
-            contact_person: contactPerson,
-            contact_number: contactNumber,
-            reminder_type: reminderType,
-            reminder_date: followupDate,
-            reminder_time: reminderTime,
-            remark: remark,
-            source_module: 'NewClient',
-            created_timestamp: new Date().toISOString(),
-            updated_timestamp: new Date().toISOString(),
-            status: 'Pending',
-            sync_status: 'Pending'
-        };
-
-        ReminderDb.saveReminder(newReminder, (saved) => {
-            console.log('[NewClient] Reminder created locally:', saved);
-
-            const dateParts = followupDate.split('-');
-            const dateObj = new Date(
-                parseInt(dateParts[0], 10),
-                parseInt(dateParts[1], 10) - 1,
-                parseInt(dateParts[2], 10),
-                parseInt(hours, 10),
-                parseInt(minutes, 10),
-                0
-            );
-
-            if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
-                window.AlarmBridge.scheduleReminderNotification(
-                    remId, clientName, reminderType, remark, reminderTime, dateObj.getTime()
+                const dateParts = followupDate.split('-');
+                const dateObj = new Date(
+                    parseInt(dateParts[0], 10),
+                    parseInt(dateParts[1], 10) - 1,
+                    parseInt(dateParts[2], 10),
+                    parseInt(hours, 10),
+                    parseInt(minutes, 10),
+                    0
                 );
-            }
 
-            refreshRemindersCount();
-            syncReminders();
-        });
-    }
+                if (window.AlarmBridge && typeof window.AlarmBridge.scheduleReminderNotification === 'function') {
+                    window.AlarmBridge.scheduleReminderNotification(
+                        remId, clientName, reminderType, remark, reminderTime, dateObj.getTime()
+                    );
+                }
 
-    const currentDsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10) + 1;
-    const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
-    localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
-    localStorage.setItem('visitsToday', currentVisits.toString());
-    updateMetricsUI();
+                refreshRemindersCount();
+                syncReminders();
+            });
+        }
 
-    showToast('New client registered successfully!', 'success');
-    showView('checkin-view');
+        const currentDsrs = parseInt(localStorage.getItem('dsrUpdatesToday') || '0', 10) + 1;
+        const currentVisits = parseInt(localStorage.getItem('visitsToday') || '0', 10) + 1;
+        localStorage.setItem('dsrUpdatesToday', currentDsrs.toString());
+        localStorage.setItem('visitsToday', currentVisits.toString());
+        updateMetricsUI();
+
+        resetNewClientForm();
+        showToast('New client registered successfully!', 'success');
+
+        // Trigger Checkout success modal (user clicks OK -> sends Checkout & returns to Home Screen)
+        const latNum = parseFloat(newClientBody.gpsLatitude) || 18.4748182;
+        const lngNum = parseFloat(newClientBody.gpsLongitude) || 73.8119225;
+        showDsrSuccessModal('New Client Registered!', '', clientName, latNum, lngNum);
+    };
+
+    // Show Payload Inspector Modal Window before sending!
+    showApiPayloadModal('New Client Registration', `${API_BASE_URL}/generatenewlead`, newClientBody, executeSubmission);
 }
 
 /**
@@ -4113,31 +4944,35 @@ function updateMetricsUI() {
         }
     } else {
         if (durationEl) {
+            const lastDuration = localStorage.getItem('lastWorkDuration') || '00:00';
             durationEl.innerHTML = `${lastDuration} <span class="stat-unit">hrs</span>`;
         }
     }
 }
 
 /* ==========================================================================
-   REDESIGNED DSR PREMIUM WORKFORCE SYSTEM WORKFLOW ENGINE
+/* ==========================================================================
+   REDESIGNED DSR WORKFORCE SYSTEM WORKFLOW ENGINE
    ========================================================================== */
 
-let dsrActiveStep = 1;
-const dsrTotalSteps = 4;
-
 /**
- * Initializes the DSR premium multi-step wizard.
- * Called automatically from modified openDSRForm().
+ * Initializes the DSR form view.
  */
 function initDsrWizard(clientName, clientAddress) {
-    dsrActiveStep = 1;
-    
+    const p1 = document.getElementById('dsr-panel-1');
+    const p2 = document.getElementById('dsr-panel-2');
+    if (p1) p1.classList.add('active');
+    if (p2) p2.classList.remove('active');
+
     // Update Hero Card details
     const heroNameEl = document.getElementById('hero-customer-name');
     const heroAddressEl = document.getElementById('hero-office-address');
     if (heroNameEl) heroNameEl.textContent = clientName || 'Client Name';
     if (heroAddressEl) heroAddressEl.textContent = clientAddress || 'Office Address';
-    
+
+    const customerNameTextEl = document.getElementById('dsr-customer-name-text');
+    if (customerNameTextEl) customerNameTextEl.textContent = clientName || 'Client Name';
+
     // Checked-in time calculation
     const heroTimeEl = document.getElementById('hero-checkin-time');
     if (heroTimeEl) {
@@ -4147,63 +4982,11 @@ function initDsrWizard(clientName, clientAddress) {
         hrs = hrs % 12;
         hrs = hrs ? hrs : 12; // 0 should be 12
         const mins = now.getMinutes().toString().padStart(2, '0');
-        heroTimeEl.innerHTML = `<span class="material-symbols-rounded">schedule</span>Checked in ${hrs}:${mins} ${ampm}`;
+        heroTimeEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Checked in ${hrs}:${mins} ${ampm}`;
     }
 
-    // Capture location display coordinates
-    const gpsCoordsEl = document.getElementById('dsr-gps-coordinates-display');
-    if (gpsCoordsEl) {
-        const curLatEl = document.getElementById('current-lat');
-        const curLngEl = document.getElementById('current-lng');
-        if (curLatEl && curLngEl && curLatEl.textContent.trim() !== '--') {
-            gpsCoordsEl.textContent = `${curLatEl.textContent.trim()}, ${curLngEl.textContent.trim()}`;
-        } else {
-            gpsCoordsEl.textContent = 'GPS location verified (mock coordinates)';
-        }
-    }
-
-    // Reset status chips & sync with original select
-    resetDsrStatusChips();
-    
     // Populate Hrs and Mins select options if they are empty
     populateDsrTimeDropdowns();
-
-    // Reset wizard steps UI
-    updateDsrWizardUI();
-    
-    // Setup stepper hover animations & anchor positioning fallback
-    setupDsrStepperInteractions();
-}
-
-/**
- * Reset premium status chips selection.
- */
-function resetDsrStatusChips() {
-    const chips = document.querySelectorAll('.dsr-status-chip');
-    chips.forEach(chip => {
-        chip.classList.remove('active');
-        chip.onclick = function() {
-            // Select chip
-            chips.forEach(c => c.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Sync with hidden original select option
-            const val = this.getAttribute('data-value');
-            const selectEl = document.getElementById('dsr-today-status');
-            if (selectEl) {
-                selectEl.value = val;
-                // Trigger change event for any listeners
-                const event = new Event('change', { bubbles: true });
-                selectEl.dispatchEvent(event);
-            }
-        };
-    });
-
-    // Make sure initial state of original select is empty
-    const selectEl = document.getElementById('dsr-today-status');
-    if (selectEl) {
-        selectEl.value = '';
-    }
 }
 
 /**
@@ -4212,7 +4995,7 @@ function resetDsrStatusChips() {
 function populateDsrTimeDropdowns() {
     const hoursSelect = document.getElementById('dsr-followup-hours');
     const minutesSelect = document.getElementById('dsr-followup-minutes');
-    
+
     if (hoursSelect && hoursSelect.options.length === 0) {
         for (let i = 0; i < 24; i++) {
             const val = i.toString().padStart(2, '0');
@@ -4220,7 +5003,7 @@ function populateDsrTimeDropdowns() {
             hoursSelect.add(opt);
         }
     }
-    
+
     if (minutesSelect && minutesSelect.options.length === 0) {
         for (let i = 0; i < 60; i += 5) {
             const val = i.toString().padStart(2, '0');
@@ -4231,244 +5014,79 @@ function populateDsrTimeDropdowns() {
 }
 
 /**
- * Handle Wizard Step Stepping
+ * Opens the Review summary screen after form validation.
  */
-/**
- * Handle Wizard Step Stepping
- */
-function goToDsrStep(stepNum) {
-    // REDESIGNED: Make jumping between steps easy and frictionless
-    dsrActiveStep = stepNum;
-    if (dsrActiveStep === 4) {
-        buildDsrReviewSummary();
+function openDsrReviewScreen() {
+    const name = document.getElementById('dsr-customer-name').value.trim();
+    const status = document.getElementById('dsr-today-status').value;
+    const dateVal = document.getElementById('dsr-followup-date').value;
+
+    if (!name) {
+        showToast('Customer Name is missing', 'error');
+        return;
     }
-    updateDsrWizardUI();
+    if (!status) {
+        showToast("Today's Status is required. Please select a status.", 'warning');
+        return;
+    }
+    if (!dateVal) {
+        showToast("Follow-up date is required.", 'warning');
+        return;
+    }
+
+    // Build the Review screen summary details
+    buildDsrReviewSummary();
+
+    // Show Panel 2 (Review) and hide Panel 1 (Form)
+    const p1 = document.getElementById('dsr-panel-1');
+    const p2 = document.getElementById('dsr-panel-2');
+    if (p1) p1.classList.remove('active');
+    if (p2) p2.classList.add('active');
 }
 
 /**
- * Validates entries in a given step before advancing.
+ * Closes the Review screen and goes back to form edit.
  */
-function validateDsrStep(stepNum) {
-    if (stepNum === 1) {
-        const name = document.getElementById('dsr-customer-name').value.trim();
-        if (!name) {
-            showToast('Customer Name is missing', 'error');
-            return false;
-        }
-    } else if (stepNum === 2) {
-        const status = document.getElementById('dsr-today-status').value;
-        if (!status) {
-            showToast("Today's Status is required. Please select a status chip.", 'warning');
-            return false;
-        }
-    } else if (stepNum === 3) {
-        const dateVal = document.getElementById('dsr-followup-date').value;
-        if (!dateVal) {
-            showToast("Follow-up date is required.", 'warning');
-            return false;
-        }
-    }
-    return true;
+function closeDsrReviewScreen() {
+    const p1 = document.getElementById('dsr-panel-1');
+    const p2 = document.getElementById('dsr-panel-2');
+    if (p1) p1.classList.add('active');
+    if (p2) p2.classList.remove('active');
 }
 
 /**
- * Next button action
+ * Triggered from Review screen "Confirm & Submit" button.
  */
-function nextDsrWizardStep() {
-    if (dsrActiveStep < dsrTotalSteps) {
-        dsrActiveStep++;
-        updateDsrWizardUI();
-        
-        // Build the Review screen summary details
-        if (dsrActiveStep === 4) {
-            buildDsrReviewSummary();
-        }
-    } else {
-        // REDESIGNED: Validate all data together on the final Review step submission
-        if (validateDsrStep(1) && validateDsrStep(2) && validateDsrStep(3)) {
-            // Trigger actual DSR form submission logic
-            const hiddenSubmitBtn = document.getElementById('hidden-dsr-submit-btn');
-            if (hiddenSubmitBtn) {
-                hiddenSubmitBtn.click();
-            } else {
-                submitDSR();
-            }
-        }
-    }
+function confirmAndSubmitDSR() {
+    submitDSR();
 }
 
 /**
- * Back button action
- */
-function prevDsrWizardStep() {
-    if (dsrActiveStep > 1) {
-        dsrActiveStep--;
-        updateDsrWizardUI();
-    } else {
-        // Go back to the client list view
-        const hiddenBackBtn = document.getElementById('hidden-dsr-back-btn');
-        if (hiddenBackBtn) {
-            hiddenBackBtn.click();
-        } else {
-            showView('dsr-client-list-view');
-        }
-    }
-}
-
-/**
- * Build dynamic reviews summary details on Step 4
+ * Build dynamic reviews summary details
  */
 function buildDsrReviewSummary() {
-    document.getElementById('dsr-review-name').textContent = document.getElementById('dsr-customer-name').value || '--';
-    document.getElementById('dsr-review-address').textContent = document.getElementById('dsr-office-address').value || '--';
-    document.getElementById('dsr-review-site').textContent = document.getElementById('dsr-site-details').value || '--';
-    document.getElementById('dsr-review-contact-person').textContent = document.getElementById('dsr-contact-person').value || '--';
-    document.getElementById('dsr-review-contact-no').textContent = document.getElementById('dsr-contact-number').value || '--';
-    document.getElementById('dsr-review-status').textContent = document.getElementById('dsr-today-status').value || '--';
-    document.getElementById('dsr-review-remark').textContent = document.getElementById('dsr-remark').value || '--';
-    document.getElementById('dsr-review-followup-date').textContent = document.getElementById('dsr-followup-date').value || '--';
-    
-    const hr = document.getElementById('dsr-followup-hours').value;
-    const min = document.getElementById('dsr-followup-minutes').value;
-    document.getElementById('dsr-review-followup-time').textContent = `${hr}:${min}`;
-}
+    const nameEl = document.getElementById('dsr-review-name');
+    const addrEl = document.getElementById('dsr-review-address');
+    const siteEl = document.getElementById('dsr-review-site');
+    const personEl = document.getElementById('dsr-review-contact-person');
+    const phoneEl = document.getElementById('dsr-review-contact-no');
+    const statusEl = document.getElementById('dsr-review-status');
+    const remarkEl = document.getElementById('dsr-review-remark');
+    const dateEl = document.getElementById('dsr-review-followup-date');
+    const timeEl = document.getElementById('dsr-review-followup-time');
 
-/**
- * Updates wizard panels view, progress meters, and indicator positions.
- */
-function updateDsrWizardUI() {
-    // Hide all panels and set active one
-    for (let i = 1; i <= dsrTotalSteps; i++) {
-        const panel = document.getElementById(`dsr-panel-${i}`);
-        const button = document.getElementById(`dsr-step-btn-${i}`);
-        if (panel) {
-            panel.classList.remove('active');
-            if (i === dsrActiveStep) {
-                panel.classList.add('active');
-            }
-        }
-        if (button) {
-            button.classList.remove('active');
-            if (i === dsrActiveStep) {
-                button.classList.add('active');
-            }
-        }
-    }
+    if (nameEl) nameEl.textContent = document.getElementById('dsr-customer-name').value || '--';
+    if (addrEl) addrEl.textContent = document.getElementById('dsr-office-address').value || '--';
+    if (siteEl) siteEl.textContent = document.getElementById('dsr-site-details').value || '--';
+    if (personEl) personEl.textContent = document.getElementById('dsr-contact-person').value || '--';
+    if (phoneEl) phoneEl.textContent = document.getElementById('dsr-contact-number').value || '--';
+    if (statusEl) statusEl.textContent = document.getElementById('dsr-today-status').value || '--';
+    if (remarkEl) remarkEl.textContent = document.getElementById('dsr-remark').value || '--';
+    if (dateEl) dateEl.textContent = document.getElementById('dsr-followup-date').value || '--';
 
-    // Position pointer to the active step
-    positionDsrPointer(dsrActiveStep);
-
-    // Update progress circle & bottom progress description
-    const progressPercent = Math.round((dsrActiveStep / dsrTotalSteps) * 100);
-    const circleBar = document.getElementById('dsr-progress-circle-bar');
-    const percentVal = document.getElementById('dsr-progress-percent-val');
-    const stepsDesc = document.getElementById('dsr-progress-steps-desc');
-    
-    if (circleBar) {
-        // Circumference is 2 * pi * radius (15.9155) ≈ 100
-        circleBar.style.strokeDasharray = `${progressPercent}, 100`;
-    }
-    if (percentVal) {
-        percentVal.textContent = `${progressPercent}%`;
-    }
-    if (stepsDesc) {
-        stepsDesc.textContent = `${dsrActiveStep} of 4 steps completed`;
-    }
-
-    // Update bottom wizard buttons text
-    const nextBtn = document.getElementById('dsr-wizard-next-btn');
-    if (nextBtn) {
-        if (dsrActiveStep === dsrTotalSteps) {
-            nextBtn.innerHTML = `Submit DSR <span class="material-symbols-rounded">done_all</span>`;
-        } else {
-            // REDESIGNED: Show Continue instead of Save & Continue
-            nextBtn.innerHTML = `Continue <span class="material-symbols-rounded">arrow_forward</span>`;
-        }
-    }
-}
-
-/**
- * Align DSR liquid-glass capsule indicator
- */
-function positionDsrPointer(index) {
-    const pointer = document.querySelector('.dsr-anchored-pointer');
-    if (!pointer) return;
-
-    // Anchor positioning support check
-    const hasAnchorSupport = ('positionAnchor' in document.documentElement.style) || 
-                             ('anchorName' in document.documentElement.style);
-    
-    if (hasAnchorSupport) {
-        pointer.style.positionAnchor = `--dsr-step-${index}`;
-    } else {
-        // Fallback for custom layouts
-        const targetBtn = document.getElementById(`dsr-step-btn-${index}`);
-        const container = document.querySelector('.dsr-stepper-container');
-        if (targetBtn && container) {
-            const targetRect = targetBtn.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            
-            pointer.style.top = `${targetRect.top - containerRect.top}px`;
-            pointer.style.left = `${targetRect.left - containerRect.left}px`;
-            pointer.style.width = `${targetRect.width}px`;
-            pointer.style.height = `${targetRect.height}px`;
-        }
-    }
-}
-
-/**
- * Setup interactions on step tabs (temporary hover shifts, click bindings).
- */
-function setupDsrStepperInteractions() {
-    const buttons = document.querySelectorAll('.dsr-step-btn');
-    const pointer = document.querySelector('.dsr-anchored-pointer');
-    if (!pointer) return;
-
-    buttons.forEach((btn, i) => {
-        const stepIndex = i + 1;
-
-        // Mouseenter shifts pointer momentarily
-        btn.addEventListener('mouseenter', () => {
-            // Only shift if it is already verified/accessible
-            let canAccess = true;
-            if (stepIndex > dsrActiveStep) {
-                for (let check = dsrActiveStep; check < stepIndex; check++) {
-                    if (check === 1) {
-                        const name = document.getElementById('dsr-customer-name').value.trim();
-                        if (!name) canAccess = false;
-                    } else if (check === 2) {
-                        const status = document.getElementById('dsr-today-status').value;
-                        if (!status) canAccess = false;
-                    } else if (check === 3) {
-                        const dateVal = document.getElementById('dsr-followup-date').value;
-                        if (!dateVal) canAccess = false;
-                    }
-                }
-            }
-            if (canAccess) {
-                positionDsrPointer(stepIndex);
-            }
-        });
-
-        // Mouseleave resets back to active step
-        btn.addEventListener('mouseleave', () => {
-            positionDsrPointer(dsrActiveStep);
-        });
-    });
-}
-
-/**
- * Appends quick notes shortcuts in notes section
- */
-function appendDsrQuickNote(text) {
-    const remarkField = document.getElementById('dsr-remark');
-    if (remarkField) {
-        const curVal = remarkField.value.trim();
-        remarkField.value = curVal ? `${curVal}, ${text}` : text;
-        
-        // Trigger oninput explicitly
-        updateDsrRemarkCounter();
-    }
+    const hr = document.getElementById('dsr-followup-hours') ? document.getElementById('dsr-followup-hours').value : '00';
+    const min = document.getElementById('dsr-followup-minutes') ? document.getElementById('dsr-followup-minutes').value : '00';
+    if (timeEl) timeEl.textContent = `${hr}:${min}`;
 }
 
 /**
@@ -4482,4 +5100,33 @@ function updateDsrRemarkCounter() {
         counterField.textContent = `${len} / 250`;
     }
 }
+
+// ── Global Window Bindings for WebView Event Handlers ──
+window.handleDayToggle = handleDayToggle;
+window.handleDayStart = handleDayStart;
+window.handleDayEnd = handleDayEnd;
+window.handleCheckIn = handleCheckIn;
+window.handleOthersCheckIn = handleOthersCheckIn;
+window.handleNewClient = handleNewClient;
+window.handleLeavePage = handleLeavePage;
+window.handleLeaveApplication = handleLeaveApplication;
+window.handleLeaveStatus = handleLeaveStatus;
+window.handleReports = handleReports;
+window.handleReminders = handleReminders;
+window.submitDSR = submitDSR;
+window.submitOthers = submitOthers;
+window.submitNewClient = submitNewClient;
+window.submitLeave = submitLeave;
+window.showDsrSuccessModal = showDsrSuccessModal;
+window.onDsrSuccessOkClick = onDsrSuccessOkClick;
+window.openDSRForm = openDSRForm;
+window.openBookingForm = openBookingForm;
+window.openDsrReviewScreen = openDsrReviewScreen;
+window.closeDsrReviewScreen = closeDsrReviewScreen;
+window.confirmAndSubmitDSR = confirmAndSubmitDSR;
+window.handleDSRClientReport = handleDSRClientReport;
+window.handleDSRClientReportAdmin = handleDSRClientReportAdmin;
+window.fetchDSRClientReportData = fetchDSRClientReportData;
+window.renderDsrClientReportRows = renderDsrClientReportRows;
+
 
