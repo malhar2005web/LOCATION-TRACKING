@@ -275,17 +275,45 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
     console.log('[Reports] getiamatsummaryrtp_2 response:', data);
     const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
 
-    return records.map((row, i) => {
+    // Filter out dummy/empty tail records from server
+    const validRecords = records.filter(r => r && (r.activity || r.datetimeis || r.startday || r.checkintime || r.dsrtime || r.checkouttime || r.endday || (r.srno !== null && r.srno !== undefined)));
+
+    // Strict chronological activity cycle sorting: START (1) -> CHECKIN (2) -> DSR (3) -> CHECKOUT (4) -> END (5)
+    const ACTIVITY_ORDER = {
+        'START': 1,
+        'CHECKIN': 2,
+        'DSR_UPDATE': 3,
+        'NEW_CLIENT': 3,
+        'OTHERS': 3,
+        'CHECKOUT': 4,
+        'END': 5
+    };
+
+    validRecords.sort((a, b) => {
+        if (a.srno != null && b.srno != null && Number(a.srno) !== Number(b.srno)) {
+            return Number(a.srno) - Number(b.srno);
+        }
+        const timeA = new Date(a.datetimeis || a.dated || 0).getTime();
+        const timeB = new Date(b.datetimeis || b.dated || 0).getTime();
+        if (timeA !== timeB) {
+            return timeA - timeB;
+        }
+        const orderA = ACTIVITY_ORDER[a.activity] || 99;
+        const orderB = ACTIVITY_ORDER[b.activity] || 99;
+        return orderA - orderB;
+    });
+
+    return validRecords.map((row, i) => {
         const status = row.activity || 'CHECKIN';
         const rawDate = row.datetimeis || row.dated || '--';
         const dateStr = formatCellDateIST(rawDate);
-        const timeOnly = getTimeOnlyIST(rawDate);
+        const timeOnly = dateStr.includes(' ') ? dateStr.split(' ')[1] : dateStr;
 
-        const startdayIST = convertTimeStringToIST(row.startday || (status === 'START' ? timeOnly : ''));
-        const checkintimeIST = convertTimeStringToIST(row.checkintime || (status === 'CHECKIN' ? timeOnly : ''));
-        const dsrtimeIST = convertTimeStringToIST(row.dsrtime || (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS' ? timeOnly : ''));
-        const checkouttimeIST = convertTimeStringToIST(row.checkouttime || (status === 'CHECKOUT' ? timeOnly : ''));
-        const enddayIST = convertTimeStringToIST(row.endday || (status === 'END' ? timeOnly : ''));
+        const startdayIST = (status === 'START') ? convertTimeStringToIST(row.startday || timeOnly) : '';
+        const checkintimeIST = (status === 'CHECKIN') ? convertTimeStringToIST(row.checkintime || timeOnly) : '';
+        const dsrtimeIST = (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS') ? convertTimeStringToIST(row.dsrtime || timeOnly) : '';
+        const checkouttimeIST = (status === 'CHECKOUT') ? convertTimeStringToIST(row.checkouttime || row.endday || timeOnly) : '';
+        const enddayIST = (status === 'END') ? convertTimeStringToIST(row.endday || row.dsrtime || timeOnly) : '';
 
         return [
             String(row.srno || i + 1),
