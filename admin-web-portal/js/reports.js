@@ -430,6 +430,20 @@ async function fetchDsrSummaryReport(fromDate, toDate, user, client) {
     ]);
 }
 
+function calculateDayDuration(dStart, dEnd) {
+    if (!dStart || !dEnd) return '--';
+    const tStart = new Date(dStart).getTime();
+    const tEnd = new Date(dEnd).getTime();
+    if (isNaN(tStart) || isNaN(tEnd)) return '--';
+    const diffMs = tEnd - tStart;
+    if (diffMs < 0) return '00 min';
+    const totalMinutes = Math.floor(diffMs / 60000);
+    const hrs = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+    if (hrs > 0) return `${hrs} hrs ${mins} min`;
+    return `${String(mins).padStart(2, '0')} min`;
+}
+
 /* ── API 4: Fetch Start/End Day Attendance Report ── */
 async function fetchStartEndReport(fromDate, toDate, user) {
     const sDateFormatted = formatDateForApi(fromDate);
@@ -443,27 +457,74 @@ async function fetchStartEndReport(fromDate, toDate, user) {
         username: (user === 'All Users' || !user) ? 'All' : user
     };
 
+    console.log('[Reports] Fetching getcheckinoutrtp:', payload);
     const res = await fetch(`${API_BASE_URL}/getcheckinoutrtp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
     const data = await res.json();
+    console.log('[Reports] getcheckinoutrtp response:', data);
     const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
 
-    return records.map((row, i) => [
-        String(row.srno || i + 1),
-        row.empname || groupUser,
-        formatCellDateIST(row.startendtime || row.starttime || '--'),
-        formatCellDateIST(row.receivedon || '--'),
-        row.statusis || row.activity || 'START',
-        row.gaddress || row.gpsaddress || '--',
-        formatCellDateIST(row.end_startendtime || row.checkouttime || '--'),
-        formatCellDateIST(row.end_receivedon || '--'),
-        'END',
-        row.end_gaddress || row.gaddress || '--',
-        row.duration || '--'
-    ]);
+    const validRecords = records.filter(r => r && (r.statusis || r.startendtime));
+
+    // Pair START and CHECKOUT/END records per day session
+    const pairs = [];
+    let currentStart = null;
+    let currentEnd = null;
+
+    validRecords.forEach(r => {
+        const status = (r.statusis || '').toUpperCase();
+        if (status === 'START') {
+            if (currentStart) {
+                pairs.push({ start: currentStart, end: currentEnd });
+                currentEnd = null;
+            }
+            currentStart = r;
+        } else if (status === 'CHECKOUT' || status === 'END') {
+            // Prioritize actual checkout/end with real location over "No Out Punch"
+            if (!currentEnd || (currentEnd.gaddress === 'No Out Punch' && r.gaddress !== 'No Out Punch')) {
+                currentEnd = r;
+            }
+        }
+    });
+
+    if (currentStart || currentEnd) {
+        pairs.push({ start: currentStart, end: currentEnd });
+    }
+
+    return pairs.map((pair, idx) => {
+        const start = pair.start || {};
+        const end = pair.end || {};
+        const emp = start.empname || end.empname || groupUser;
+
+        const startTimed = start.startendtime ? formatCellDateIST(start.startendtime) : '--';
+        const startReceived = start.receivedon ? formatCellDateIST(start.receivedon) : '--';
+        const startStatus = start.statusis || 'START';
+        const startLoc = start.gaddress || '--';
+
+        const endTimed = end.startendtime ? formatCellDateIST(end.startendtime) : '--';
+        const endReceived = end.receivedon ? formatCellDateIST(end.receivedon) : '--';
+        const endStatus = end.statusis || 'CHECKOUT';
+        const endLoc = end.gaddress || '--';
+
+        const duration = calculateDayDuration(start.startendtime || start.receivedon, end.startendtime || end.receivedon);
+
+        return [
+            String(idx + 1),
+            emp,
+            startTimed,
+            startReceived,
+            startStatus,
+            startLoc,
+            endTimed,
+            endReceived,
+            endStatus,
+            endLoc,
+            duration
+        ];
+    });
 }
 
 /* ── API 5: Fetch Travel Path Location Data ── */
