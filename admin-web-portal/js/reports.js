@@ -60,6 +60,25 @@ async function renderReport(tabId) {
     const titleEl = document.getElementById('report-title');
     if (titleEl) titleEl.textContent = title;
 
+    // Get filter inputs
+    const user = (document.getElementById('search-user') ? document.getElementById('search-user').value : 'demo group') || 'demo group';
+    const client = (document.getElementById('search-client') ? document.getElementById('search-client').value.trim() : '') || 'All';
+    const fromDate = document.getElementById('from-date') ? document.getElementById('from-date').value : '';
+    const toDate = document.getElementById('to-date') ? document.getElementById('to-date').value : '';
+    const fromTime = document.getElementById('from-time') ? document.getElementById('from-time').value : '00:00';
+    const toTime = document.getElementById('to-time') ? document.getElementById('to-time').value : '23:59';
+
+    // Update header meta info
+    const rangeEl = document.getElementById('report-range');
+    const dateEl = document.getElementById('report-date');
+    if (rangeEl && fromDate && toDate) {
+        rangeEl.textContent = `${fromDate} ${fromTime} - ${toDate} ${toTime}`;
+    }
+    if (dateEl) {
+        const now = new Date();
+        dateEl.textContent = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    }
+
     // Render table header
     const thead = document.querySelector('#report-table thead tr');
     if (thead) {
@@ -71,12 +90,6 @@ async function renderReport(tabId) {
     if (tbody) {
         tbody.innerHTML = `<tr><td colspan="${columns.length}" style="text-align: center; padding: 24px; color: var(--text-sub);">Loading live report data from server...</td></tr>`;
     }
-
-    // Get filter inputs
-    const user = (document.getElementById('search-user') ? document.getElementById('search-user').value : 'demo group') || 'demo group';
-    const client = (document.getElementById('search-client') ? document.getElementById('search-client').value.trim() : '') || 'All';
-    const fromDate = document.getElementById('from-date') ? document.getElementById('from-date').value : '';
-    const toDate = document.getElementById('to-date') ? document.getElementById('to-date').value : '';
 
     try {
         let rows = [];
@@ -198,7 +211,7 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
     const sDateFormatted = formatDateForApi(fromDate);
     const eDateFormatted = formatDateForApi(toDate);
     const usernameis = (user === 'All Users' || !user) ? 'All' : user;
-    const sessionUser = 'skywaydigital';
+    const sessionUser = (user === 'All Users' || !user) ? 'demo group' : user;
 
     if (tabId === 'checkin-status') {
         const payload = {
@@ -296,15 +309,17 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
 async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
     const sDateFormatted = formatDateForApi(fromDate);
     const eDateFormatted = formatDateForApi(toDate);
+    const groupUser = (user === 'All Users' || !user) ? 'demo group' : user;
 
     const payload = {
         startdatep: `${sDateFormatted} 00:00`,
         enddatep: `${eDateFormatted} 23:59`,
-        userv: user === 'All Users' ? 'All' : user,
-        clientv: client || 'All',
-        gempname: 'skywaydigital'
+        userv: (user === 'All Users' || !user) ? 'All' : user,
+        clientv: (client && client !== 'All') ? client : 'All',
+        gempname: groupUser
     };
 
+    console.log('[Reports] Fetching getdsrleadreport_v1:', payload);
     const res = await fetch(`${API_BASE_URL}/getdsrleadreport_v1`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -312,20 +327,21 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
     });
 
     const data = await res.json();
+    console.log('[Reports] getdsrleadreport_v1 response:', data);
     const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
 
     if (tabId === 'dsr-client') {
         return records.map((row, i) => [
             String(i + 1),
-            row.assignedemp || row.assigned_emp || row.gempname || user,
+            row.assignedemp || row.assigned_emp || row.gempname || groupUser,
             formatCellDateIST(row.leaddatetime || row.created_timestamp || row.currentdatetime || '--'),
-            row.leadname || row.outletname || row.client || '--',
-            row.leadsitename || row.site_name || '--',
+            row.customername || row.nleadname || row.leadname || row.outletname || row.client || '--',
+            row.leadsitename || row.sitename || row.site_name || row.nleadname || '--',
             row.officeaddres || row.office_address || '--',
             row.contactperson || row.contact_person || '--',
-            row.contactno || row.contact_no || '--',
-            row.remark || row.nremark || '--',
-            formatCellDateIST(row.nextfollowup || row.nfollowup || '--')
+            row.ncontact || row.contactno || row.contact_no || '--',
+            row.n_nremark || row.remark || row.nremark || '--',
+            formatCellDateIST(row.nfollowup || row.nextfollowup || '--')
         ]);
     }
 
@@ -334,8 +350,8 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
             String(i + 1),
             row.lleadno || row.bookingno || `BK-${i + 101}`,
             formatCellDateIST(row.leaddatetime || row.currentdatetime || '--'),
-            row.leadname || row.outletname || '--',
-            row.leadsitename || '--',
+            row.customername || row.leadname || row.outletname || '--',
+            row.leadsitename || row.sitename || '--',
             row.quantity || '1',
             row.rate || '--',
             row.totalamount || '--',
@@ -348,31 +364,40 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
 
 /* ── API 3: Fetch DSR Summary Report ── */
 async function fetchDsrSummaryReport(fromDate, toDate, user, client) {
-    const sDateFormatted = formatDateForApi(fromDate);
-    const eDateFormatted = formatDateForApi(toDate);
+    const sDate = fromDate || new Date().toISOString().split('T')[0];
+    const tDate = toDate || sDate;
+    
+    // Increment sum_till by 1 day so SQL query `date < sum_till` includes the full end date
+    const dTill = new Date(tDate);
+    dTill.setDate(dTill.getDate() + 1);
+    const sumTill = dTill.toISOString().split('T')[0];
+
+    const groupUser = (user === 'All Users' || !user) ? 'demo group' : user;
 
     const payload = {
-        startdatep: `${sDateFormatted} 00:00`,
-        enddatep: `${eDateFormatted} 23:59`,
-        userv: user === 'All Users' ? 'All' : user,
-        clientv: client || 'All',
-        gempname: 'skywaydigital'
+        gemptype: 'admin',
+        gempname: groupUser,
+        sum_from: sDate,
+        sum_till: sumTill,
+        dsruser: (client && client !== 'All') ? client : 'All'
     };
 
-    const res = await fetch(`${API_BASE_URL}/dailyreportformatsummary_v1`, {
+    console.log('[Reports] Fetching dailyreportformatsummary_v3:', payload);
+    const res = await fetch(`${API_BASE_URL}/dailyreportformatsummary_v3`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
     const data = await res.json();
+    console.log('[Reports] dailyreportformatsummary_v3 response:', data);
     const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
 
     return records.map((row, i) => [
         String(i + 1),
         row.vendorname || row.clientname || row.client || '--',
         row.sitename || row.site_name || '--',
-        row.visitedfor || row.visited_for || 'DSR Update',
-        row.assignedto || row.assignedemp || user,
+        row.gonefor || row.visitedfor || row.visited_for || 'DSR Update',
+        row.assignedto || row.assignedemp || groupUser,
         String(row.noofvisite || row.visitcount || 1)
     ]);
 }
@@ -381,12 +406,13 @@ async function fetchDsrSummaryReport(fromDate, toDate, user, client) {
 async function fetchStartEndReport(fromDate, toDate, user) {
     const sDateFormatted = formatDateForApi(fromDate);
     const eDateFormatted = formatDateForApi(toDate);
+    const groupUser = (user === 'All Users' || !user) ? 'demo group' : user;
 
     const payload = {
         startdate: `${sDateFormatted} 00:00`,
         enddate: `${eDateFormatted} 23:59`,
-        gempname: 'skywaydigital',
-        username: user === 'All Users' ? 'All' : user
+        gempname: groupUser,
+        username: (user === 'All Users' || !user) ? 'All' : user
     };
 
     const res = await fetch(`${API_BASE_URL}/getcheckinoutrtp`, {
@@ -399,7 +425,7 @@ async function fetchStartEndReport(fromDate, toDate, user) {
 
     return records.map((row, i) => [
         String(row.srno || i + 1),
-        row.empname || user,
+        row.empname || groupUser,
         formatCellDateIST(row.startendtime || row.starttime || '--'),
         formatCellDateIST(row.receivedon || '--'),
         row.statusis || row.activity || 'START',
