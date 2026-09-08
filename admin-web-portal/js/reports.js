@@ -290,33 +290,58 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
     };
 
     validRecords.sort((a, b) => {
-        if (a.srno != null && b.srno != null && Number(a.srno) !== Number(b.srno)) {
-            return Number(a.srno) - Number(b.srno);
-        }
+        const actA = (a.activity || '').toUpperCase().trim();
+        const actB = (b.activity || '').toUpperCase().trim();
+
+        // 1. START is ALWAYS first (attendance day start punch)
+        if (actA === 'START' && actB !== 'START') return -1;
+        if (actB === 'START' && actA !== 'START') return 1;
+
+        // 2. END is ALWAYS last (attendance day end punch)
+        if (actA === 'END' && actB !== 'END') return 1;
+        if (actB === 'END' && actA !== 'END') return -1;
+
+        // 3. For intermediate activities, compare timestamps
         const timeA = new Date(a.datetimeis || a.dated || 0).getTime();
         const timeB = new Date(b.datetimeis || b.dated || 0).getTime();
-        if (timeA !== timeB) {
+
+        // If timestamps are significantly different (> 2 mins apart), follow real time
+        if (!isNaN(timeA) && !isNaN(timeB) && Math.abs(timeA - timeB) > 120000) {
             return timeA - timeB;
         }
-        const orderA = ACTIVITY_ORDER[a.activity] || 99;
-        const orderB = ACTIVITY_ORDER[b.activity] || 99;
-        return orderA - orderB;
+
+        // If timestamps are within same session / close, enforce strict logical cycle: CHECKIN (2) -> DSR (3) -> CHECKOUT (4)
+        const orderA = ACTIVITY_ORDER[actA] || 3;
+        const orderB = ACTIVITY_ORDER[actB] || 3;
+        if (orderA !== orderB) {
+            return orderA - orderB;
+        }
+
+        if (!isNaN(timeA) && !isNaN(timeB) && timeA !== timeB) {
+            return timeA - timeB;
+        }
+
+        if (a.srno != null && b.srno != null) {
+            return Number(a.srno) - Number(b.srno);
+        }
+
+        return 0;
     });
 
     return validRecords.map((row, i) => {
-        const status = row.activity || 'CHECKIN';
+        const status = (row.activity || 'CHECKIN').toUpperCase().trim();
         const rawDate = row.datetimeis || row.dated || '--';
         const dateStr = formatCellDateIST(rawDate);
         const timeOnly = dateStr.includes(' ') ? dateStr.split(' ')[1] : dateStr;
 
-        const startdayIST = (status === 'START') ? convertTimeStringToIST(row.startday || timeOnly) : '';
-        const checkintimeIST = (status === 'CHECKIN') ? convertTimeStringToIST(row.checkintime || timeOnly) : '';
-        const dsrtimeIST = (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS') ? convertTimeStringToIST(row.dsrtime || timeOnly) : '';
-        const checkouttimeIST = (status === 'CHECKOUT') ? convertTimeStringToIST(row.checkouttime || row.endday || timeOnly) : '';
-        const enddayIST = (status === 'END') ? convertTimeStringToIST(row.endday || row.dsrtime || timeOnly) : '';
+        const startdayIST = (status === 'START') ? (row.startday ? convertTimeStringToIST(row.startday) : timeOnly) : '';
+        const checkintimeIST = (status === 'CHECKIN') ? (row.checkintime ? convertTimeStringToIST(row.checkintime) : timeOnly) : '';
+        const dsrtimeIST = (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS') ? (row.dsrtime ? convertTimeStringToIST(row.dsrtime) : timeOnly) : '';
+        const checkouttimeIST = (status === 'CHECKOUT') ? (row.checkouttime ? convertTimeStringToIST(row.checkouttime) : (row.endday ? convertTimeStringToIST(row.endday) : timeOnly)) : '';
+        const enddayIST = (status === 'END') ? (row.endday ? convertTimeStringToIST(row.endday) : (row.dsrtime ? convertTimeStringToIST(row.dsrtime) : timeOnly)) : '';
 
         return [
-            String(row.srno || i + 1),
+            String(i + 1),
             row.empname || user,
             dateStr,
             startdayIST,
