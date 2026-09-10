@@ -270,7 +270,28 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
     // Filter out dummy/empty tail records from server
     const validRecords = records.filter(r => r && (r.activity || r.datetimeis || r.startday || r.checkintime || r.dsrtime || r.checkouttime || r.endday || (r.srno !== null && r.srno !== undefined)));
 
-    // Strict chronological activity cycle sorting: START (1) -> CHECKIN (2) -> DSR (3) -> CHECKOUT (4) -> END (5)
+    // Helper to get true timestamp in milliseconds for strict chronological ordering
+    function getRecordTimestamp(r) {
+        if (!r) return 0;
+        if (r.datetimeis) {
+            const d = new Date(r.datetimeis);
+            if (!isNaN(d.getTime()) && d.getTime() > 0) return d.getTime();
+        }
+        if (r.dated) {
+            const d = new Date(r.dated);
+            if (!isNaN(d.getTime()) && d.getTime() > 0) return d.getTime();
+        }
+        const baseDateStr = (r.dated || r.datetimeis || '').toString().split('T')[0].split(' ')[0] || new Date().toISOString().split('T')[0];
+        const timeStr = r.startday || r.checkintime || r.dsrtime || r.checkouttime || r.endday;
+        if (timeStr) {
+            const d = new Date(`${baseDateStr} ${timeStr}`);
+            if (!isNaN(d.getTime())) return d.getTime();
+        }
+        if (r.srno != null) return Number(r.srno);
+        return 0;
+    }
+
+    // Logical cycle tie-breaker ONLY when two records have the exact same millisecond timestamp
     const ACTIVITY_ORDER = {
         'START': 1,
         'CHECKIN': 2,
@@ -281,36 +302,22 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         'END': 5
     };
 
+    // Pure chronological sort: Natural timeline of employee activity
     validRecords.sort((a, b) => {
-        const actA = (a.activity || '').toUpperCase().trim();
-        const actB = (b.activity || '').toUpperCase().trim();
+        const timeA = getRecordTimestamp(a);
+        const timeB = getRecordTimestamp(b);
 
-        // 1. START is ALWAYS first (attendance day start punch)
-        if (actA === 'START' && actB !== 'START') return -1;
-        if (actB === 'START' && actA !== 'START') return 1;
-
-        // 2. END is ALWAYS last (attendance day end punch)
-        if (actA === 'END' && actB !== 'END') return 1;
-        if (actB === 'END' && actA !== 'END') return -1;
-
-        // 3. For intermediate activities, compare timestamps
-        const timeA = new Date(a.datetimeis || a.dated || 0).getTime();
-        const timeB = new Date(b.datetimeis || b.dated || 0).getTime();
-
-        // If timestamps are significantly different (> 2 mins apart), follow real time
-        if (!isNaN(timeA) && !isNaN(timeB) && Math.abs(timeA - timeB) > 120000) {
+        if (timeA !== timeB && timeA > 0 && timeB > 0) {
             return timeA - timeB;
         }
 
-        // If timestamps are within same session / close, enforce strict logical cycle: CHECKIN (2) -> DSR (3) -> CHECKOUT (4)
+        // Secondary tie-breaker if same second/millisecond
+        const actA = (a.activity || '').toUpperCase().trim();
+        const actB = (b.activity || '').toUpperCase().trim();
         const orderA = ACTIVITY_ORDER[actA] || 3;
         const orderB = ACTIVITY_ORDER[actB] || 3;
         if (orderA !== orderB) {
             return orderA - orderB;
-        }
-
-        if (!isNaN(timeA) && !isNaN(timeB) && timeA !== timeB) {
-            return timeA - timeB;
         }
 
         if (a.srno != null && b.srno != null) {
