@@ -4336,6 +4336,20 @@ async function handleDayEnd() {
             })
         }).catch(err => console.error('iamatevent END error:', err));
 
+        // Call startendday END (updates Start/End Day Attendance report with real location & timestamp)
+        fetch(`${API_BASE_URL}/startendday`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                gcdatetime: currentDate.slice(0, 16),
+                glaststatus: "END",
+                empid: empid,
+                imeino: imeino,
+                gpsLatitude: latVal,
+                gpsLongitude: lngVal
+            })
+        }).catch(err => console.error('startendday END error:', err));
+
         // Sync day end event locally
         let durationFormatted = '00 min';
         const startTime = localStorage.getItem('dayStartTime');

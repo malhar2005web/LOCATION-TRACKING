@@ -117,16 +117,13 @@ async function renderReport(tabId) {
 }
 
 /**
- * Master Indian Standard Time (IST GMT+5:30) Converter
- * Converts any date string ("2026-08-20T23:07:00.000Z"), date-time ("21/08/2026 04:37"),
- * or time string ("04:54:54" / "04:37") to Indian Standard Time (GMT+5:30).
- */
+/* ── Master Indian Standard Time (IST GMT+5:30) Converter ── */
 function formatToIndianTime(val) {
     if (!val || val === '--' || typeof val !== 'string' || !val.trim()) return val || '--';
 
     const trimmed = val.trim();
 
-    // Pure Time String like "04:37:00" or "04:54" or "05:08:18"
+    // 1. Pure Time String like "04:37:00" or "04:54" or "04:41:00" (stored in DB in UTC)
     if (trimmed.match(/^\d{1,2}:\d{2}(:\d{2})?$/)) {
         const parts = trimmed.split(':');
         let h = parseInt(parts[0], 10);
@@ -146,21 +143,18 @@ function formatToIndianTime(val) {
             const hh = String(h).padStart(2, '0');
             const mm = String(m).padStart(2, '0');
             if (s !== null && !isNaN(s)) {
-                const ss = String(s).padStart(2, '0');
-                return `${hh}:${mm}:${ss}`;
+                return `${hh}:${mm}:${String(s).padStart(2, '0')}`;
             }
             return `${hh}:${mm}`;
         }
     }
 
-    // Date-Time string like "21/08/2026 04:37" or "2026-08-21 04:37"
-    if (trimmed.includes(' ') && !trimmed.includes('T')) {
-        const parts = trimmed.split(' ');
-        const convertedTime = formatToIndianTime(parts[1]);
-        return `${parts[0]} ${convertedTime}`;
+    // 2. Already formatted date string like "10/09/2026 10:11" or "10/09/2026 10:11:48"
+    if (trimmed.match(/^\d{2}\/\d{2}\/\d{4}\s+\d{2}:\d{2}(:\d{2})?$/)) {
+        return trimmed;
     }
 
-    // ISO Timestamp like "2026-08-20T23:07:00.000Z"
+    // 3. ISO Timestamp like "2026-08-20T23:07:00.000Z" or "2026-09-10 04:41:48"
     let dt = null;
     if (trimmed.includes('T') || trimmed.endsWith('Z')) {
         dt = new Date(trimmed);
@@ -180,9 +174,7 @@ function formatToIndianTime(val) {
             hour12: false
         };
         const formatted = new Intl.DateTimeFormat('en-GB', options).format(dt);
-        const parts = formatted.replace(',', '').split(' ');
-        const convertedTime = formatToIndianTime(parts[1]);
-        return `${parts[0]} ${convertedTime}`;
+        return formatted.replace(',', '');
     }
 
     return trimmed;
@@ -482,15 +474,37 @@ async function fetchStartEndReport(fromDate, toDate, user) {
         username: (user === 'All Users' || !user) ? 'All' : user
     };
 
-    console.log('[Reports] Fetching getcheckinoutrtp:', payload);
-    const res = await fetch(`${API_BASE_URL}/getcheckinoutrtp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    console.log('[Reports] getcheckinoutrtp response:', data);
-    const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+    const iamatPayload = {
+        startdate: sDateFormatted,
+        enddate: `${eDateFormatted} 23:59`,
+        gempname: groupUser,
+        username: (user === 'All Users' || !user) ? 'All' : user
+    };
+
+    console.log('[Reports] Fetching getcheckinoutrtp & getiamatsummaryrtp_2:', payload);
+    const [res1, res2] = await Promise.all([
+        fetch(`${API_BASE_URL}/getcheckinoutrtp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(r => r.json()).catch(err => {
+            console.error('[Reports] getcheckinoutrtp error:', err);
+            return {};
+        }),
+        fetch(`${API_BASE_URL}/getiamatsummaryrtp_2`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(iamatPayload)
+        }).then(r => r.json()).catch(err => {
+            console.error('[Reports] getiamatsummaryrtp_2 error:', err);
+            return {};
+        })
+    ]);
+
+    const records = (res1 && res1.trackerid) ? res1.trackerid : (Array.isArray(res1) ? res1 : []);
+    const iamatRecords = (res2 && res2.trackerid) ? res2.trackerid : (Array.isArray(res2) ? res2 : []);
+
+    const iamatEndEvents = iamatRecords.filter(r => r && (r.activity === 'END' || r.endday || (r.dsrtime && r.activity === 'END')));
 
     const validRecords = records.filter(r => r && (r.statusis || r.startendtime));
 
@@ -521,8 +535,22 @@ async function fetchStartEndReport(fromDate, toDate, user) {
 
     return pairs.map((pair, idx) => {
         const start = pair.start || {};
-        const end = pair.end || {};
+        let end = pair.end || {};
         const emp = start.empname || end.empname || groupUser;
+
+        // If end has "No Out Punch" or is missing, merge real Day End event from iamatevent
+        if (!end.gaddress || end.gaddress === 'No Out Punch' || !end.startendtime) {
+            const matchingEnd = iamatEndEvents.length > 0 ? iamatEndEvents[iamatEndEvents.length - 1] : null;
+            if (matchingEnd) {
+                end = {
+                    statusis: 'END',
+                    startendtime: matchingEnd.datetimeis || start.startendtime,
+                    receivedon: matchingEnd.datetimeis || start.receivedon,
+                    gaddress: matchingEnd.gpsaddress || start.gaddress,
+                    duration: matchingEnd.duration
+                };
+            }
+        }
 
         const startTimed = start.startendtime ? formatCellDateIST(start.startendtime) : '--';
         const startReceived = start.receivedon ? formatCellDateIST(start.receivedon) : '--';
@@ -531,10 +559,10 @@ async function fetchStartEndReport(fromDate, toDate, user) {
 
         const endTimed = end.startendtime ? formatCellDateIST(end.startendtime) : '--';
         const endReceived = end.receivedon ? formatCellDateIST(end.receivedon) : '--';
-        const endStatus = end.statusis || 'CHECKOUT';
+        const endStatus = end.statusis || 'END';
         const endLoc = end.gaddress || '--';
 
-        const duration = calculateDayDuration(start.startendtime || start.receivedon, end.startendtime || end.receivedon);
+        const duration = end.duration || calculateDayDuration(start.startendtime || start.receivedon, end.startendtime || end.receivedon);
 
         return [
             String(idx + 1),
