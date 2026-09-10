@@ -154,6 +154,11 @@ function initClientDashboard(clientData) {
     updateNetworkStatus();
     updateSyncUI();
 
+    // Auto Day-End check on launch (8:00 PM cutoff or date rollover)
+    if (typeof checkAndHandleAutoDayEnd === 'function') {
+        checkAndHandleAutoDayEnd();
+    }
+
     // Restore workday state
     isDayStarted = localStorage.getItem('isDayStarted') === 'true';
     isCheckedIn = localStorage.getItem('isCheckedIn') === 'true';
@@ -1132,6 +1137,11 @@ async function handleDayStart() {
 
     isDayStarted = true;
     localStorage.setItem('isDayStarted', 'true');
+    const nowStart = new Date();
+    const yStart = nowStart.getFullYear();
+    const mStart = String(nowStart.getMonth() + 1).padStart(2, '0');
+    const dStart = String(nowStart.getDate()).padStart(2, '0');
+    localStorage.setItem('dayStartDate', `${yStart}-${mStart}-${dStart}`);
     localStorage.setItem('visitsToday', '0');
     localStorage.setItem('dsrUpdatesToday', '0');
     localStorage.setItem('dayStartTime', Date.now().toString());
@@ -4373,6 +4383,7 @@ async function handleDayEnd() {
         localStorage.setItem('lastWorkDuration', finalDuration);
     }
     localStorage.removeItem('dayStartTime');
+    localStorage.removeItem('dayStartDate');
 
     // Update UI
     updateWorkdayUI();
@@ -4380,6 +4391,134 @@ async function handleDayEnd() {
 
     // Location tracking remains active even when workday is ended
     showToast('Workday ended. Location tracking remains active.', 'warning');
+}
+
+/**
+ * Auto Day-End System (8:00 PM Cutoff & Date Rollover)
+ * Automatically ends the workday if:
+ * 1. Time reaches or passes 8:00 PM (20:00:00) on the current workday.
+ * 2. Or the app is opened on a new day and previous workday was left open.
+ */
+async function checkAndHandleAutoDayEnd() {
+    const isStarted = localStorage.getItem('isDayStarted') === 'true';
+    if (!isStarted) return false;
+
+    const dayStartDate = localStorage.getItem('dayStartDate'); // "YYYY-MM-DD"
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const todayDateStr = `${y}-${m}-${d}`;
+    const currentHour = now.getHours();
+
+    let shouldAutoEnd = false;
+    let autoEndDateTime = '';
+    let isPrevDay = false;
+
+    if (dayStartDate && dayStartDate !== todayDateStr) {
+        // Day started on a previous calendar date and never ended -> Auto-end at 20:00 on that date
+        shouldAutoEnd = true;
+        isPrevDay = true;
+        autoEndDateTime = `${dayStartDate} 20:00:00`;
+    } else if (currentHour >= 20) {
+        // Today's date, but time is 8:00 PM (20:00) or later -> Auto-end today
+        shouldAutoEnd = true;
+        isPrevDay = false;
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        autoEndDateTime = `${todayDateStr} ${hh}:${mm}:${ss}`;
+    }
+
+    if (shouldAutoEnd) {
+        console.log('[Auto Day End] Closing workday at 8:00 PM cutoff:', autoEndDateTime);
+        await executeAutoDayEnd(autoEndDateTime, isPrevDay);
+        return true;
+    }
+
+    return false;
+}
+
+async function executeAutoDayEnd(endDateTime, isPrevDay) {
+    const session = typeof getSession === 'function' ? getSession() : null;
+
+    let latVal = 18.4748182;
+    let lngVal = 73.8119225;
+
+    const curLatEl = document.getElementById('current-lat');
+    const curLngEl = document.getElementById('current-lng');
+    if (curLatEl && curLngEl) {
+        const latText = curLatEl.textContent.trim();
+        const lngText = curLngEl.textContent.trim();
+        if (latText !== '--' && lngText !== '--' && latText !== 'Fetching...' && latText !== '0' && latText !== '0.0') {
+            latVal = parseFloat(latText);
+            lngVal = parseFloat(lngText);
+        }
+    }
+
+    if (session && session.userData) {
+        if ((latVal === 18.4748182 || latVal === 0) && session.userData.lat && session.userData.lat !== '0') {
+            latVal = parseFloat(session.userData.lat);
+            lngVal = parseFloat(session.userData.long);
+        }
+
+        const empid = (session.userData.name) || 'demo admin2';
+        const imeino = session.userData.deviceId || '';
+
+        if (navigator.onLine) {
+            // 1. Call iamatevent END (API 4)
+            fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: endDateTime,
+                    gotempname: empid,
+                    gotempid: session.userData.clientId || imeino,
+                    gotinoutstatus: "END",
+                    gotiamatclient: "",
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
+                })
+            }).catch(err => console.error('[Auto Day End] iamatevent END error:', err));
+
+            // 2. Call startendday END (API 5)
+            fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gcdatetime: endDateTime.slice(0, 16),
+                    glaststatus: "END",
+                    empid: empid,
+                    imeino: imeino,
+                    gpsLatitude: latVal,
+                    gpsLongitude: lngVal
+                })
+            }).catch(err => console.error('[Auto Day End] startendday END error:', err));
+        }
+    }
+
+    // Reset workday states
+    isDayStarted = false;
+    isCheckedIn = false;
+    localStorage.setItem('isDayStarted', 'false');
+    localStorage.setItem('isCheckedIn', 'false');
+    localStorage.removeItem('dayStartDate');
+    localStorage.removeItem('dayStartTime');
+
+    if (window.durationInterval) {
+        clearInterval(window.durationInterval);
+        window.durationInterval = null;
+    }
+
+    updateWorkdayUI();
+    updateMetricsUI();
+
+    if (isPrevDay) {
+        showToast('Previous workday was auto-ended at 08:00 PM. Please start your day for today.', 'info');
+    } else {
+        showToast('Workday auto-ended at 08:00 PM.', 'info');
+    }
 }
 
 /**
@@ -5121,5 +5260,19 @@ window.handleDSRClientReport = handleDSRClientReport;
 window.handleDSRClientReportAdmin = handleDSRClientReportAdmin;
 window.fetchDSRClientReportData = fetchDSRClientReportData;
 window.renderDsrClientReportRows = renderDsrClientReportRows;
+window.checkAndHandleAutoDayEnd = checkAndHandleAutoDayEnd;
+window.executeAutoDayEnd = executeAutoDayEnd;
+
+// Auto Day-End listeners on App visibility change and window focus
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && typeof checkAndHandleAutoDayEnd === 'function') {
+        checkAndHandleAutoDayEnd();
+    }
+});
+window.addEventListener('focus', () => {
+    if (typeof checkAndHandleAutoDayEnd === 'function') {
+        checkAndHandleAutoDayEnd();
+    }
+});
 
 
