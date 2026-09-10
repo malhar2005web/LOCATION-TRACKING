@@ -3605,8 +3605,9 @@ async function onDsrSuccessOkClick() {
         try {
             if (activityType === 'OTHERS') {
                 // 1. Trigger OTHERS event
+                const othersDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
                 const othersPayload = {
-                    gotiamatdate: currentDate,
+                    gotiamatdate: othersDate,
                     gotempname: empid,
                     gotempid: userid,
                     gotinoutstatus: "OTHERS",
@@ -3622,9 +3623,10 @@ async function onDsrSuccessOkClick() {
                     body: JSON.stringify(othersPayload)
                 }).then(r => r.text()).catch(err => console.error('[OTHERS] iamatevent failed:', err));
 
-                // 2. Trigger CHECKOUT event together with OTHERS
+                // 2. Trigger CHECKOUT event immediately after OTHERS
+                const checkoutDate = new Date(Date.now() + 1000).toISOString().replace('T', ' ').slice(0, 19);
                 const checkoutPayload = {
-                    gotiamatdate: currentDate,
+                    gotiamatdate: checkoutDate,
                     gotempname: empid,
                     gotempid: userid,
                     gotinoutstatus: "CHECKOUT",
@@ -3644,8 +3646,9 @@ async function onDsrSuccessOkClick() {
 
             } else {
                 // Regular DSR Update
+                const dsrDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
                 const dsrPayload = {
-                    gotiamatdate: currentDate,
+                    gotiamatdate: dsrDate,
                     gotempname: empid,
                     gotempid: userid,
                     gotinoutstatus: "DSR_UPDATE",
@@ -3661,25 +3664,24 @@ async function onDsrSuccessOkClick() {
                     body: JSON.stringify(dsrPayload)
                 }).then(r => r.text()).catch(err => console.error('[DSR_UPDATE] iamatevent failed:', err));
 
-                // If employee had checked in, also trigger CHECKOUT event in iamatevent
-                if (isCheckedIn) {
-                    const checkoutPayload = {
-                        gotiamatdate: currentDate,
-                        gotempname: empid,
-                        gotempid: userid,
-                        gotinoutstatus: "CHECKOUT",
-                        gotiamatclient: clientNameVal,
-                        gotiamatlat: latVal,
-                        gotiamatlong: lngVal,
-                        gimeinumber: imeino
-                    };
-                    console.log('[DSR OK Click] Triggering CHECKOUT iamatevent:', checkoutPayload);
-                    await fetch(`${API_BASE_URL}/iamatevent`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(checkoutPayload)
-                    }).then(r => r.text()).catch(err => console.error('[CHECKOUT] iamatevent failed:', err));
-                }
+                // Trigger CHECKOUT event for DSR visit
+                const checkoutDate = new Date(Date.now() + 1000).toISOString().replace('T', ' ').slice(0, 19);
+                const checkoutPayload = {
+                    gotiamatdate: checkoutDate,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "CHECKOUT",
+                    gotiamatclient: clientNameVal,
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
+                };
+                console.log('[DSR OK Click] Triggering CHECKOUT iamatevent:', checkoutPayload);
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(checkoutPayload)
+                }).then(r => r.text()).catch(err => console.error('[CHECKOUT] iamatevent failed:', err));
 
                 showToast('DSR Update & Checkout Sent Successfully!', 'success');
             }

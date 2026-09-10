@@ -1464,22 +1464,6 @@ async function submitOthers() {
                     body: JSON.stringify(dsrBody)
                 });
                 console.log('[Others] Third-party API registration success.');
-
-                // Also trigger iamatevent for OTHERS so server DAY END SUMMARY 2 displays the row!
-                await fetch(`${API_BASE_URL}/iamatevent`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        gotiamatdate: currentDateTime,
-                        gotempname: gempname || (session && session.userData && session.userData.name) || 'demo group',
-                        gotempid: userid,
-                        gotinoutstatus: "OTHERS",
-                        gotiamatclient: customerName || "Others",
-                        gotiamatlat: parseFloat(dsrBody.gpsLatitude) || 0.0,
-                        gotiamatlong: parseFloat(dsrBody.gpsLongitude) || 0.0,
-                        gimeinumber: (session && session.userData && session.userData.deviceId) || ""
-                    })
-                }).catch(err => console.error('iamatevent OTHERS error:', err));
             } catch (e) {
                 console.error('[Others] Third-party API failed:', e);
             }
@@ -1572,11 +1556,11 @@ async function submitOthers() {
         resetOthersForm();
         showToast('Activity submitted successfully!', 'success');
 
-        // Trigger Checkout success modal (user clicks OK -> sends Checkout & returns to Home Screen)
+        // Trigger Checkout success modal with activityType = 'OTHERS'
         const latNum = parseFloat(dsrBody.gpsLatitude) || 18.4748182;
         const lngNum = parseFloat(dsrBody.gpsLongitude) || 73.8119225;
         const clientDisplayName = customerName || 'Others';
-        showDsrSuccessModal('Activity Submitted!', '', clientDisplayName, latNum, lngNum);
+        showDsrSuccessModal('Activity Submitted!', '', clientDisplayName, latNum, lngNum, 'OTHERS');
     };
 
     // Show Payload Inspector Modal Window before sending!
@@ -3556,8 +3540,8 @@ async function submitDSR() {
 
 let pendingCheckoutData = null;
 
-function showDsrSuccessModal(title, timeStr, clientName, lat, lng) {
-    pendingCheckoutData = { clientName, lat, lng };
+function showDsrSuccessModal(title, timeStr, clientName, lat, lng, activityType = 'DSR_UPDATE') {
+    pendingCheckoutData = { clientName, lat, lng, activityType };
 
     const titleEl = document.getElementById('dsr-success-modal-title');
     if (titleEl) {
@@ -3581,7 +3565,7 @@ function showDsrSuccessModal(title, timeStr, clientName, lat, lng) {
 }
 
 async function onDsrSuccessOkClick() {
-    console.log('[DSR SUCCESS / CHECKOUT] OK BUTTON CLICKED');
+    console.log('[ACTIVITY SUCCESS / CHECKOUT] OK BUTTON CLICKED');
 
     // 1. Hide modal immediately
     const modalEl = document.getElementById('dsr-success-modal');
@@ -3615,31 +3599,75 @@ async function onDsrSuccessOkClick() {
     }
 
     const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
+    const activityType = (pendingCheckoutData && pendingCheckoutData.activityType) ? pendingCheckoutData.activityType : 'DSR_UPDATE';
 
     if (navigator.onLine) {
         try {
-            // Trigger DSR_UPDATE event in iamatevent upon final confirmation
-            const dsrPayload = {
-                gotiamatdate: currentDate,
-                gotempname: empid,
-                gotempid: userid,
-                gotinoutstatus: "DSR_UPDATE",
-                gotiamatclient: clientNameVal,
-                gotiamatlat: latVal,
-                gotiamatlong: lngVal,
-                gimeinumber: imeino
-            };
-            console.log('[DSR OK Click] Triggering DSR_UPDATE iamatevent:', dsrPayload);
-            await fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dsrPayload)
-            }).then(r => r.text()).catch(err => console.error('[DSR_UPDATE] iamatevent failed:', err));
+            if (activityType === 'OTHERS') {
+                // 1. Trigger OTHERS event
+                const othersDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+                const othersPayload = {
+                    gotiamatdate: othersDate,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "OTHERS",
+                    gotiamatclient: clientNameVal || "Others",
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
+                };
+                console.log('[Others OK Click] Triggering OTHERS iamatevent:', othersPayload);
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(othersPayload)
+                }).then(r => r.text()).catch(err => console.error('[OTHERS] iamatevent failed:', err));
 
-            // If employee had checked in, also trigger CHECKOUT event in iamatevent
-            if (isCheckedIn) {
+                // 2. Trigger CHECKOUT event immediately after OTHERS
+                const checkoutDate = new Date(Date.now() + 1000).toISOString().replace('T', ' ').slice(0, 19);
                 const checkoutPayload = {
-                    gotiamatdate: currentDate,
+                    gotiamatdate: checkoutDate,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "CHECKOUT",
+                    gotiamatclient: clientNameVal || "Others",
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
+                };
+                console.log('[Others OK Click] Triggering CHECKOUT iamatevent:', checkoutPayload);
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(checkoutPayload)
+                }).then(r => r.text()).catch(err => console.error('[CHECKOUT] iamatevent failed:', err));
+
+                showToast('Others Activity & Checkout Sent Successfully!', 'success');
+
+            } else {
+                // Regular DSR Update
+                const dsrDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+                const dsrPayload = {
+                    gotiamatdate: dsrDate,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "DSR_UPDATE",
+                    gotiamatclient: clientNameVal,
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
+                };
+                console.log('[DSR OK Click] Triggering DSR_UPDATE iamatevent:', dsrPayload);
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dsrPayload)
+                }).then(r => r.text()).catch(err => console.error('[DSR_UPDATE] iamatevent failed:', err));
+
+                // Trigger CHECKOUT event for DSR visit
+                const checkoutDate = new Date(Date.now() + 1000).toISOString().replace('T', ' ').slice(0, 19);
+                const checkoutPayload = {
+                    gotiamatdate: checkoutDate,
                     gotempname: empid,
                     gotempid: userid,
                     gotinoutstatus: "CHECKOUT",
@@ -3654,11 +3682,11 @@ async function onDsrSuccessOkClick() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(checkoutPayload)
                 }).then(r => r.text()).catch(err => console.error('[CHECKOUT] iamatevent failed:', err));
-            }
 
-            showToast('DSR Update & Checkout Sent Successfully!', 'success');
+                showToast('DSR Update & Checkout Sent Successfully!', 'success');
+            }
         } catch (err) {
-            console.error('[DSR OK Click] Error sending event:', err);
+            console.error('[Activity OK Click] Error sending event:', err);
             showToast(`Event Error: ${err.message}`, 'error');
         }
     }
