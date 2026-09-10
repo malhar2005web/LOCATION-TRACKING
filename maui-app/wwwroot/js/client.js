@@ -3677,12 +3677,8 @@ async function onDsrSuccessOkClick() {
     console.log('[CHECKOUT OK Click] Triggering CHECKOUT APIs (startendday + iamatevent):', payload);
 
     if (navigator.onLine) {
-        try {
-            console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
-            console.log('[CHECKOUT TEST] Payload:', JSON.stringify(payload));
-
-            // Execute both iamatevent and startendday in parallel so iamatevent CHECKOUT is never blocked!
-            const p1 = fetch(`${API_BASE_URL}/iamatevent`, {
+            // Execute iamatevent for client visit checkout (startendday is ONLY for Day Start and Day End)
+            const resIamAt = await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -3691,24 +3687,7 @@ async function onDsrSuccessOkClick() {
                 return 'error';
             });
 
-            const p2 = fetch(`${API_BASE_URL}/startendday`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gcdatetime: currentDate.slice(0, 16),
-                    glaststatus: "CHECKOUT",
-                    empid: empid,
-                    imeino: imeino,
-                    gpsLatitude: latVal,
-                    gpsLongitude: lngVal
-                })
-            }).then(r => r.text()).catch(err => {
-                console.error('[CHECKOUT] startendday failed:', err);
-                return 'error';
-            });
-
-            const [resIamAt, resStartEnd] = await Promise.all([p1, p2]);
-            console.log('[CHECKOUT] Parallel checkout responses -> iamatevent:', resIamAt, '| startendday:', resStartEnd);
+            console.log('[CHECKOUT] iamatevent checkout response:', resIamAt);
             showToast('CHECKOUT Sent Successfully!', 'success');
         } catch (err) {
             console.error('[CHECKOUT TEST] Error sending checkout:', err);

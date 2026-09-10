@@ -554,12 +554,12 @@ async function fetchStartEndReport(fromDate, toDate, user) {
 
         const startTimed = start.startendtime ? formatCellDateIST(start.startendtime) : '--';
         const startReceived = start.receivedon ? formatCellDateIST(start.receivedon) : '--';
-        const startStatus = start.statusis || 'START';
+        const startStatus = 'START';
         const startLoc = start.gaddress || '--';
 
         const endTimed = end.startendtime ? formatCellDateIST(end.startendtime) : '--';
         const endReceived = end.receivedon ? formatCellDateIST(end.receivedon) : '--';
-        const endStatus = end.statusis || 'END';
+        const endStatus = 'END';
         const endLoc = end.gaddress || '--';
 
         const duration = end.duration || calculateDayDuration(start.startendtime || start.receivedon, end.startendtime || end.receivedon);
