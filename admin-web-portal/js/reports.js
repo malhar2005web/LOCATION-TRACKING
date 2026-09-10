@@ -528,9 +528,10 @@ async function fetchStartEndReport(fromDate, toDate, user) {
                 currentEnd = null;
             }
             currentStart = r;
-        } else if (status === 'CHECKOUT' || status === 'END') {
-            // Prioritize actual checkout/end with real location over "No Out Punch"
-            if (!currentEnd || (currentEnd.gaddress === 'No Out Punch' && r.gaddress !== 'No Out Punch')) {
+        } else if (status === 'END') {
+            currentEnd = r;
+        } else if (status === 'CHECKOUT') {
+            if (!currentEnd || (currentEnd.statusis !== 'END' && (!currentEnd.gaddress || currentEnd.gaddress === 'No Out Punch' || r.gaddress !== 'No Out Punch'))) {
                 currentEnd = r;
             }
         }

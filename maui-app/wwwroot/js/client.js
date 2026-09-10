@@ -3648,100 +3648,77 @@ async function onDsrSuccessOkClick() {
 
     if (navigator.onLine) {
         try {
-            if (activityType === 'OTHERS') {
-                // 1. Trigger OTHERS event
-                const othersDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-                const othersPayload = {
-                    gotiamatdate: othersDate,
-                    gotempname: empid,
-                    gotempid: userid,
-                    gotinoutstatus: "OTHERS",
-                    gotiamatclient: clientNameVal || "Others",
-                    gotiamatlat: latVal,
-                    gotiamatlong: lngVal,
-                    gimeinumber: imeino
-                };
-                console.log('[Others OK Click] Triggering OTHERS iamatevent:', othersPayload);
-                await fetch(`${API_BASE_URL}/iamatevent`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(othersPayload)
-                }).then(r => r.text()).catch(err => console.error('[OTHERS] iamatevent failed:', err));
+            const now = new Date();
+            const actDate = now.toISOString().replace('T', ' ').slice(0, 19);
+            const checkoutDate = new Date(now.getTime() + 1000).toISOString().replace('T', ' ').slice(0, 19);
+            const checkoutDateShort = checkoutDate.slice(0, 16);
 
-                // 2. Trigger CHECKOUT event immediately after OTHERS
-                const checkoutDate = new Date(Date.now() + 1000).toISOString().replace('T', ' ').slice(0, 19);
-                const checkoutPayload = {
-                    gotiamatdate: checkoutDate,
-                    gotempname: empid,
-                    gotempid: userid,
-                    gotinoutstatus: "CHECKOUT",
-                    gotiamatclient: clientNameVal || "Others",
-                    gotiamatlat: latVal,
-                    gotiamatlong: lngVal,
-                    gimeinumber: imeino
-                };
-                console.log('[Others OK Click] Triggering CHECKOUT iamatevent:', checkoutPayload);
-                await fetch(`${API_BASE_URL}/iamatevent`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(checkoutPayload)
-                }).then(r => r.text()).catch(err => console.error('[CHECKOUT] iamatevent failed:', err));
+            // 1. Send specific Activity Punch to iamatevent (OTHERS / DSR_UPDATE / NEW_CLIENT)
+            const actPayload = {
+                gotiamatdate: actDate,
+                gotempname: empid,
+                gotempid: userid,
+                gotinoutstatus: activityType,
+                gotiamatclient: clientNameVal || (activityType === 'OTHERS' ? 'Others' : ''),
+                gotiamatlat: latVal,
+                gotiamatlong: lngVal,
+                gimeinumber: imeino
+            };
+            console.log(`[Activity OK Click] Triggering ${activityType} iamatevent:`, actPayload);
+            await fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(actPayload)
+            }).then(r => r.text()).catch(err => console.error(`[${activityType}] iamatevent failed:`, err));
 
-                showToast('Others Activity & Checkout Sent Successfully!', 'success');
+            // 2. Send CHECKOUT to startendday (API 5) - CRITICAL: Stored procedure uses this to create CHECKOUT record & duration in getiamatsummaryrtp_2
+            const startEndCheckoutBody = {
+                gcdatetime: checkoutDateShort,
+                glaststatus: "CHECKOUT",
+                empid: empid,
+                imeino: imeino,
+                gpsLatitude: latVal,
+                gpsLongitude: lngVal
+            };
+            console.log('[Activity OK Click] Triggering CHECKOUT startendday:', startEndCheckoutBody);
+            await fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(startEndCheckoutBody)
+            }).then(r => r.text()).catch(err => console.error('[CHECKOUT] startendday failed:', err));
 
-            } else {
-                // Regular DSR Update
-                const dsrDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
-                const dsrPayload = {
-                    gotiamatdate: dsrDate,
-                    gotempname: empid,
-                    gotempid: userid,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: clientNameVal,
-                    gotiamatlat: latVal,
-                    gotiamatlong: lngVal,
-                    gimeinumber: imeino
-                };
-                console.log('[DSR OK Click] Triggering DSR_UPDATE iamatevent:', dsrPayload);
-                await fetch(`${API_BASE_URL}/iamatevent`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dsrPayload)
-                }).then(r => r.text()).catch(err => console.error('[DSR_UPDATE] iamatevent failed:', err));
+            // 3. Send CHECKOUT to iamatevent (API 4) - Updates user status snapshot to CHECKOUT
+            const checkoutPayload = {
+                gotiamatdate: checkoutDate,
+                gotempname: empid,
+                gotempid: userid,
+                gotinoutstatus: "CHECKOUT",
+                gotiamatclient: clientNameVal || (activityType === 'OTHERS' ? 'Others' : ''),
+                gotiamatlat: latVal,
+                gotiamatlong: lngVal,
+                gimeinumber: imeino
+            };
+            console.log('[Activity OK Click] Triggering CHECKOUT iamatevent:', checkoutPayload);
+            await fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(checkoutPayload)
+            }).then(r => r.text()).catch(err => console.error('[CHECKOUT] iamatevent failed:', err));
 
-                // Trigger CHECKOUT event for DSR visit
-                const checkoutDate = new Date(Date.now() + 1000).toISOString().replace('T', ' ').slice(0, 19);
-                const checkoutPayload = {
-                    gotiamatdate: checkoutDate,
-                    gotempname: empid,
-                    gotempid: userid,
-                    gotinoutstatus: "CHECKOUT",
-                    gotiamatclient: clientNameVal,
-                    gotiamatlat: latVal,
-                    gotiamatlong: lngVal,
-                    gimeinumber: imeino
-                };
-                console.log('[DSR OK Click] Triggering CHECKOUT iamatevent:', checkoutPayload);
-                await fetch(`${API_BASE_URL}/iamatevent`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(checkoutPayload)
-                }).then(r => r.text()).catch(err => console.error('[CHECKOUT] iamatevent failed:', err));
+            showToast(`${activityType === 'OTHERS' ? 'Others' : 'DSR'} & Check-Out Sent Successfully!`, 'success');
 
-                showToast('DSR Update & Checkout Sent Successfully!', 'success');
-            }
         } catch (err) {
             console.error('[Activity OK Click] Error sending event:', err);
             showToast(`Event Error: ${err.message}`, 'error');
         }
     }
 
-    // 3. Reset isCheckedIn state so user can Check In again for subsequent client visits
+    // 4. Reset isCheckedIn state so user can Check In again for subsequent client visits
     isCheckedIn = false;
     localStorage.setItem('isCheckedIn', 'false');
     updateWorkdayUI();
 
-    // 4. Return to Home screen AFTER await completes
+    // 5. Return to Home screen AFTER await completes
     showView('client-view');
 }
 

@@ -192,12 +192,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>hf2aajj5jr</Fingerprint>
-      <Integrity>zRCmfcK3k8hZslHmSrauECZGD8N09X/gphqzn/2RNoE=</Integrity>
+      <Fingerprint>vwy4cg9al7</Fingerprint>
+      <Integrity>v2VoK1nI3wB27X/Qz54OImlcVgF+CiJ4DGFtCjjUmts=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>210767</FileLength>
-      <LastWriteTime>Thu, 10 Sep 2026 10:34:21 GMT</LastWriteTime>
+      <FileLength>209666</FileLength>
+      <LastWriteTime>Thu, 10 Sep 2026 11:10:39 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\client.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\dsrDb.js'))">
