@@ -1,5 +1,5 @@
-<api type="release" assembly-name="LOCATION_TRACKING" mvid="7e8e83c1ae1d464792ae5ae9bb791279">
-  <module assembly-name="LOCATION_TRACKING" mvid="7e8e83c1ae1d464792ae5ae9bb791279" mvid-bytes="wYOOfh2uR0aSrlrpu3kSeQ==">
+<api type="release" assembly-name="LOCATION_TRACKING" mvid="f9cf8060d54249e2b236e68d8986ce45">
+  <module assembly-name="LOCATION_TRACKING" mvid="f9cf8060d54249e2b236e68d8986ce45" mvid-bytes="YIDP+ULV4kmyNuaNiYbORQ==">
     <types-scratch>
       <entry key="com/locationtracker/app/AndroidBackgroundService" java-name="com/locationtracker/app/AndroidBackgroundService" managed-type-name="LocationTracker.Platforms.Android.AndroidBackgroundService" token="33554450" />
       <entry key="com/locationtracker/app/AndroidBackgroundService_ActiveLocationListener" java-name="com/locationtracker/app/AndroidBackgroundService_ActiveLocationListener" managed-type-name="LocationTracker.Platforms.Android.AndroidBackgroundService/ActiveLocationListener" token="33554489" />

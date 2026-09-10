@@ -3543,39 +3543,84 @@ let pendingCheckoutData = null;
 function showDsrSuccessModal(title, timeStr, clientName, lat, lng, activityType = 'DSR_UPDATE') {
     pendingCheckoutData = { clientName, lat, lng, activityType };
 
-    const titleEl = document.getElementById('dsr-success-modal-title');
-    if (titleEl) {
-        titleEl.textContent = title || 'DSR Submitted!';
-    }
+    // Remove any existing modal
+    const existing = document.getElementById('dsr-success-modal');
+    if (existing) existing.remove();
 
-    const msgEl = document.getElementById('dsr-success-modal-msg');
-    if (msgEl) {
-        if (timeStr) {
-            msgEl.textContent = `You filled the form in ${timeStr}.`;
-        } else if (title) {
-            msgEl.textContent = `${title} successfully!`;
-        } else {
-            msgEl.textContent = 'Submitted successfully!';
-        }
-    }
-    const modalEl = document.getElementById('dsr-success-modal');
-    if (modalEl) {
-        modalEl.style.display = 'flex';
-    }
+    const overlay = document.createElement('div');
+    overlay.id = 'dsr-success-modal';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.82);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+    `;
+
+    const subText = timeStr ? `You filled the form in <strong>${timeStr}</strong>.` : `Details saved and processed successfully.`;
+
+    const card = document.createElement('div');
+    card.style.cssText = `
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 380px;
+        padding: 32px 24px 28px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-sizing: border-box;
+    `;
+
+    card.innerHTML = `
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 8px 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+            ${escapeHtmlHelper(title || 'Submission Successful!')}
+        </h3>
+        <p style="font-size: 14px; color: #64748b; line-height: 1.5; margin: 0 0 24px 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+            ${subText}
+        </p>
+        <button id="btn-dsr-modal-ok" style="width: 100%; padding: 14px 20px; border-radius: 14px; border: none; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);">
+            OK / Check-Out
+        </button>
+    `;
+
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+
+    document.getElementById('btn-dsr-modal-ok').onclick = function() {
+        overlay.remove();
+        onDsrSuccessOkClick();
+    };
 }
 
 async function onDsrSuccessOkClick() {
     console.log('[ACTIVITY SUCCESS / CHECKOUT] OK BUTTON CLICKED');
 
-    // 1. Hide modal immediately
+    // 1. Hide modal immediately if present
     const modalEl = document.getElementById('dsr-success-modal');
     if (modalEl) {
-        modalEl.style.display = 'none';
+        modalEl.remove();
     }
 
     // 2. Extract session & user details with solid fallbacks
     const session = typeof getSession === 'function' ? getSession() : null;
-    const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
     
     const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
     const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
