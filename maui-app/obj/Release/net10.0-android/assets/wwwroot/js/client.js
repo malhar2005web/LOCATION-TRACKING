@@ -154,6 +154,11 @@ function initClientDashboard(clientData) {
     updateNetworkStatus();
     updateSyncUI();
 
+    // Auto Day-End check on launch (8:00 PM cutoff or date rollover)
+    if (typeof checkAndHandleAutoDayEnd === 'function') {
+        checkAndHandleAutoDayEnd();
+    }
+
     // Restore workday state
     isDayStarted = localStorage.getItem('isDayStarted') === 'true';
     isCheckedIn = localStorage.getItem('isCheckedIn') === 'true';
@@ -163,6 +168,13 @@ function initClientDashboard(clientData) {
     ReminderDb.init(() => {
         refreshRemindersCount();
         syncReminders();
+        if (typeof fetchTodayFollowupAlerts === 'function') {
+            fetchTodayFollowupAlerts().then(() => {
+                refreshRemindersCount();
+            }).catch(() => {
+                refreshRemindersCount();
+            });
+        }
     });
     LeaveDb.init(() => {
         syncLeaves();
@@ -1125,6 +1137,11 @@ async function handleDayStart() {
 
     isDayStarted = true;
     localStorage.setItem('isDayStarted', 'true');
+    const nowStart = new Date();
+    const yStart = nowStart.getFullYear();
+    const mStart = String(nowStart.getMonth() + 1).padStart(2, '0');
+    const dStart = String(nowStart.getDate()).padStart(2, '0');
+    localStorage.setItem('dayStartDate', `${yStart}-${mStart}-${dStart}`);
     localStorage.setItem('visitsToday', '0');
     localStorage.setItem('dsrUpdatesToday', '0');
     localStorage.setItem('dayStartTime', Date.now().toString());
@@ -2375,9 +2392,16 @@ async function fetchReportData(reportType) {
     const tbody = document.querySelector(`#${config.tableId} tbody`);
     if (!tbody) return;
 
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    const firstDayStr = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+
     const selectedUserId = userEl && userEl.value ? userEl.value : 'All';
-    const selectedFromDate = fromEl ? fromEl.value : '';
-    const selectedTillDate = tillEl ? tillEl.value : '';
+    const selectedFromDate = (fromEl && fromEl.value) ? fromEl.value : firstDayStr;
+    const selectedTillDate = (tillEl && tillEl.value) ? tillEl.value : todayStr;
+
+    if (fromEl && !fromEl.value) fromEl.value = selectedFromDate;
+    if (tillEl && !tillEl.value) tillEl.value = selectedTillDate;
 
     if (reportType === 'dsr-client') {
         tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR client report data...</td></tr>`;
@@ -2417,7 +2441,6 @@ async function fetchReportData(reportType) {
                 return;
             } catch (err) {
                 console.error('[Reports] Failed to fetch getdsrleadreport_v1:', err);
-                showToast(`Failed to fetch DSR Client Report: ${err.message}`, 'error');
             }
         }
 
@@ -2438,7 +2461,7 @@ async function fetchReportData(reportType) {
                 config.render(tbody, mappedLocal);
             });
         } else {
-            tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Offline: Local data unavailable.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">No records found.</td></tr>`;
         }
         return;
     }
@@ -2448,7 +2471,7 @@ async function fetchReportData(reportType) {
         tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR Summary Report...</td></tr>`;
         const session = getSession();
         const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-        const gemptype = (session && session.role) || 'grouphead';
+        const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
 
         const payload16 = {
             gemptype: gemptype,
@@ -2470,12 +2493,12 @@ async function fetchReportData(reportType) {
                 console.log('[Reports API 16] dailyreportformatsummary_v3 response:', data);
 
                 let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-                if (records.length > 0) {
-                    config.render(tbody, records, data);
-                    return;
-                }
+                config.render(tbody, records, data);
+                return;
             } catch (err) {
                 console.error('[Reports API 16] Error fetching dailyreportformatsummary_v3:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch summary report.</td></tr>`;
+                return;
             }
         }
     }
@@ -2485,7 +2508,7 @@ async function fetchReportData(reportType) {
         tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Loading DSR Updated List...</td></tr>`;
         const session = getSession();
         const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-        const gemptype = (session && session.role) || 'grouphead';
+        const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
 
         const payload17 = {
             aim: 'aim',
@@ -2506,12 +2529,12 @@ async function fetchReportData(reportType) {
                 console.log('[Reports API 17] getdsrleadreport_vo1 response:', data);
 
                 let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-                if (records.length > 0) {
-                    config.render(tbody, records, data);
-                    return;
-                }
+                config.render(tbody, records, data);
+                return;
             } catch (err) {
                 console.error('[Reports API 17] Error fetching getdsrleadreport_vo1:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch DSR list.</td></tr>`;
+                return;
             }
         }
     }
@@ -2541,12 +2564,12 @@ async function fetchReportData(reportType) {
                 console.log('[Reports API 18] getcheckinoutrtp response:', data);
 
                 let records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-                if (records.length > 0) {
-                    config.render(tbody, records, data);
-                    return;
-                }
+                config.render(tbody, records, data);
+                return;
             } catch (err) {
                 console.error('[Reports API 18] Error fetching getcheckinoutrtp:', err);
+                tbody.innerHTML = `<tr><td colspan="${config.colspan}" class="table-empty">Unable to fetch attendance report.</td></tr>`;
+                return;
             }
         }
     }
@@ -2942,11 +2965,11 @@ function reportEscape(value) {
 async function fetchTodayFollowupAlerts() {
     const session = getSession();
     const empName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
-    const gemptype = (session && session.role) || 'grouphead';
+    const gemptype = (typeof getGempType === 'function') ? getGempType() : ((session && session.role) || 'grouphead');
 
     if (navigator.onLine) {
         try {
-            console.log('[Reminders API 19] Fetching getfollowupalert for:', empName);
+            console.log('[Reminders API 19] Fetching getfollowupalert for:', empName, 'Role:', gemptype);
             const res = await fetch(`${API_BASE_URL}/getfollowupalert`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2961,13 +2984,14 @@ async function fetchTodayFollowupAlerts() {
             const serverAlerts = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
             if (serverAlerts.length > 0 && typeof ReminderDb !== 'undefined') {
                 for (const alert of serverAlerts) {
-                    const alertDate = alert.nextfollowup || alert.followup || new Date().toISOString().split('T')[0];
+                    let rawDate = alert.nextfollowup || alert.followup || new Date().toISOString().split('T')[0];
+                    let alertDate = rawDate.includes('T') ? rawDate.split('T')[0] : (rawDate.includes('/') ? rawDate.split(' ')[0].replace(/\//g, '-') : rawDate.slice(0, 10));
                     const alertTime = alert.nfollowuptime || alert.followuptime || '11:00';
                     const newRem = {
                         id: `REM-SRV-${alert.leadno || alert.id || Date.now()}`,
                         client_name: alert.leadname || alert.client || alert.outletname || 'Client',
                         reminder_type: alert.visited_for || alert.leadstatus || 'Follow Up',
-                        reminder_date: alertDate.includes('T') ? alertDate.split('T')[0] : alertDate.slice(0, 10),
+                        reminder_date: alertDate,
                         reminder_time: alertTime,
                         notes: alert.remark || alert.nremark || 'Follow up meeting scheduled',
                         status: 'Pending',
@@ -2977,8 +3001,18 @@ async function fetchTodayFollowupAlerts() {
                     ReminderDb.saveReminder(newRem, () => {});
                 }
             }
+            if (typeof refreshRemindersCount === 'function') {
+                refreshRemindersCount();
+            }
         } catch (err) {
             console.error('[Reminders API 19] Error fetching getfollowupalert:', err);
+            if (typeof refreshRemindersCount === 'function') {
+                refreshRemindersCount();
+            }
+        }
+    } else {
+        if (typeof refreshRemindersCount === 'function') {
+            refreshRemindersCount();
         }
     }
 }
@@ -3302,63 +3336,6 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     document.getElementById('dsr-followup-hours').value = '00';
     document.getElementById('dsr-followup-minutes').value = '00';
 
-    // Trigger DSR_UPDATE event on Update DSR button click with REAL GPS coordinates
-    const session = typeof getSession === 'function' ? getSession() : null;
-    if (navigator.onLine && session && session.userData) {
-        (async () => {
-            const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
-            const empid = (session.userData.name) || 'demo group';
-            const userid = session.userData.clientId || session.userData.deviceId || '';
-
-            let latVal = 18.4748182;
-            let lngVal = 73.8119225;
-
-            const curLatEl = document.getElementById('current-lat');
-            const curLngEl = document.getElementById('current-lng');
-            if (curLatEl && curLngEl) {
-                const domLat = curLatEl.textContent.trim();
-                const domLng = curLngEl.textContent.trim();
-                if (domLat !== '--' && domLng !== '--' && domLat !== '0' && domLat !== '0.0' && domLat !== 'Fetching...') {
-                    latVal = parseFloat(domLat);
-                    lngVal = parseFloat(domLng);
-                }
-            }
-
-            if (latVal === 18.4748182) {
-                try {
-                    const coords = await Promise.race([
-                        getCurrentLocationPromise(),
-                        new Promise(resolve => setTimeout(() => resolve(null), 2000))
-                    ]);
-                    if (coords && coords.latitude && coords.longitude) {
-                        latVal = coords.latitude;
-                        lngVal = coords.longitude;
-                    }
-                } catch (e) {}
-            }
-
-            if ((latVal === 18.4748182 || latVal === 0) && session.userData.lat && session.userData.lat !== '0') {
-                latVal = parseFloat(session.userData.lat);
-                lngVal = parseFloat(session.userData.long);
-            }
-
-            fetch(`${API_BASE_URL}/iamatevent`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gotiamatdate: currentDateTime,
-                    gotempname: empid,
-                    gotempid: userid,
-                    gotinoutstatus: "DSR_UPDATE",
-                    gotiamatclient: name || "",
-                    gotiamatlat: latVal,
-                    gotiamatlong: lngVal,
-                    gimeinumber: session.userData.deviceId || ""
-                })
-            }).catch(err => console.error('iamatevent DSR_UPDATE error:', err));
-        })();
-    }
-
     showView('existing-client-dsr-view');
 
     // Start the DSR live timer
@@ -3604,7 +3581,7 @@ function showDsrSuccessModal(title, timeStr, clientName, lat, lng) {
 }
 
 async function onDsrSuccessOkClick() {
-    console.log('[CHECKOUT] OK BUTTON CLICKED');
+    console.log('[DSR SUCCESS / CHECKOUT] OK BUTTON CLICKED');
 
     // 1. Hide modal immediately
     const modalEl = document.getElementById('dsr-success-modal');
@@ -3639,56 +3616,50 @@ async function onDsrSuccessOkClick() {
 
     const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
 
-    const payload = {
-        gotiamatdate: currentDate,
-        gotempname: empid,
-        gotempid: userid,
-        gotinoutstatus: "CHECKOUT",
-        gotiamatclient: clientNameVal,
-        gotiamatlat: latVal,
-        gotiamatlong: lngVal,
-        gimeinumber: imeino
-    };
-
-    console.log('[CHECKOUT OK Click] Triggering CHECKOUT APIs (startendday + iamatevent):', payload);
-
     if (navigator.onLine) {
         try {
-            console.log('[CHECKOUT TEST] OK BUTTON CLICKED');
-            console.log('[CHECKOUT TEST] Payload:', JSON.stringify(payload));
-
-            // Execute both iamatevent and startendday in parallel so iamatevent CHECKOUT is never blocked!
-            const p1 = fetch(`${API_BASE_URL}/iamatevent`, {
+            // Trigger DSR_UPDATE event in iamatevent upon final confirmation
+            const dsrPayload = {
+                gotiamatdate: currentDate,
+                gotempname: empid,
+                gotempid: userid,
+                gotinoutstatus: "DSR_UPDATE",
+                gotiamatclient: clientNameVal,
+                gotiamatlat: latVal,
+                gotiamatlong: lngVal,
+                gimeinumber: imeino
+            };
+            console.log('[DSR OK Click] Triggering DSR_UPDATE iamatevent:', dsrPayload);
+            await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).then(r => r.text()).catch(err => {
-                console.error('[CHECKOUT] iamatevent failed:', err);
-                return 'error';
-            });
+                body: JSON.stringify(dsrPayload)
+            }).then(r => r.text()).catch(err => console.error('[DSR_UPDATE] iamatevent failed:', err));
 
-            const p2 = fetch(`${API_BASE_URL}/startendday`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    gcdatetime: currentDate.slice(0, 16),
-                    glaststatus: "CHECKOUT",
-                    empid: empid,
-                    imeino: imeino,
-                    gpsLatitude: latVal,
-                    gpsLongitude: lngVal
-                })
-            }).then(r => r.text()).catch(err => {
-                console.error('[CHECKOUT] startendday failed:', err);
-                return 'error';
-            });
+            // If employee had checked in, also trigger CHECKOUT event in iamatevent
+            if (isCheckedIn) {
+                const checkoutPayload = {
+                    gotiamatdate: currentDate,
+                    gotempname: empid,
+                    gotempid: userid,
+                    gotinoutstatus: "CHECKOUT",
+                    gotiamatclient: clientNameVal,
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
+                };
+                console.log('[DSR OK Click] Triggering CHECKOUT iamatevent:', checkoutPayload);
+                await fetch(`${API_BASE_URL}/iamatevent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(checkoutPayload)
+                }).then(r => r.text()).catch(err => console.error('[CHECKOUT] iamatevent failed:', err));
+            }
 
-            const [resIamAt, resStartEnd] = await Promise.all([p1, p2]);
-            console.log('[CHECKOUT] Parallel checkout responses -> iamatevent:', resIamAt, '| startendday:', resStartEnd);
-            showToast('CHECKOUT Sent Successfully!', 'success');
+            showToast('DSR Update & Checkout Sent Successfully!', 'success');
         } catch (err) {
-            console.error('[CHECKOUT TEST] Error sending checkout:', err);
-            showToast(`CHECKOUT Error: ${err.message}`, 'error');
+            console.error('[DSR OK Click] Error sending event:', err);
+            showToast(`Event Error: ${err.message}`, 'error');
         }
     }
 
@@ -4312,6 +4283,20 @@ async function handleDayEnd() {
             })
         }).catch(err => console.error('iamatevent END error:', err));
 
+        // Call startendday END (updates Start/End Day Attendance report with real location & timestamp)
+        fetch(`${API_BASE_URL}/startendday`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                gcdatetime: currentDate.slice(0, 16),
+                glaststatus: "END",
+                empid: empid,
+                imeino: imeino,
+                gpsLatitude: latVal,
+                gpsLongitude: lngVal
+            })
+        }).catch(err => console.error('startendday END error:', err));
+
         // Sync day end event locally
         let durationFormatted = '00 min';
         const startTime = localStorage.getItem('dayStartTime');
@@ -4356,6 +4341,7 @@ async function handleDayEnd() {
         localStorage.setItem('lastWorkDuration', finalDuration);
     }
     localStorage.removeItem('dayStartTime');
+    localStorage.removeItem('dayStartDate');
 
     // Update UI
     updateWorkdayUI();
@@ -4363,6 +4349,134 @@ async function handleDayEnd() {
 
     // Location tracking remains active even when workday is ended
     showToast('Workday ended. Location tracking remains active.', 'warning');
+}
+
+/**
+ * Auto Day-End System (8:00 PM Cutoff & Date Rollover)
+ * Automatically ends the workday if:
+ * 1. Time reaches or passes 8:00 PM (20:00:00) on the current workday.
+ * 2. Or the app is opened on a new day and previous workday was left open.
+ */
+async function checkAndHandleAutoDayEnd() {
+    const isStarted = localStorage.getItem('isDayStarted') === 'true';
+    if (!isStarted) return false;
+
+    const dayStartDate = localStorage.getItem('dayStartDate'); // "YYYY-MM-DD"
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const todayDateStr = `${y}-${m}-${d}`;
+    const currentHour = now.getHours();
+
+    let shouldAutoEnd = false;
+    let autoEndDateTime = '';
+    let isPrevDay = false;
+
+    if (dayStartDate && dayStartDate !== todayDateStr) {
+        // Day started on a previous calendar date and never ended -> Auto-end at 20:00 on that date
+        shouldAutoEnd = true;
+        isPrevDay = true;
+        autoEndDateTime = `${dayStartDate} 20:00:00`;
+    } else if (currentHour >= 20) {
+        // Today's date, but time is 8:00 PM (20:00) or later -> Auto-end today
+        shouldAutoEnd = true;
+        isPrevDay = false;
+        const hh = String(now.getHours()).padStart(2, '0');
+        const mm = String(now.getMinutes()).padStart(2, '0');
+        const ss = String(now.getSeconds()).padStart(2, '0');
+        autoEndDateTime = `${todayDateStr} ${hh}:${mm}:${ss}`;
+    }
+
+    if (shouldAutoEnd) {
+        console.log('[Auto Day End] Closing workday at 8:00 PM cutoff:', autoEndDateTime);
+        await executeAutoDayEnd(autoEndDateTime, isPrevDay);
+        return true;
+    }
+
+    return false;
+}
+
+async function executeAutoDayEnd(endDateTime, isPrevDay) {
+    const session = typeof getSession === 'function' ? getSession() : null;
+
+    let latVal = 18.4748182;
+    let lngVal = 73.8119225;
+
+    const curLatEl = document.getElementById('current-lat');
+    const curLngEl = document.getElementById('current-lng');
+    if (curLatEl && curLngEl) {
+        const latText = curLatEl.textContent.trim();
+        const lngText = curLngEl.textContent.trim();
+        if (latText !== '--' && lngText !== '--' && latText !== 'Fetching...' && latText !== '0' && latText !== '0.0') {
+            latVal = parseFloat(latText);
+            lngVal = parseFloat(lngText);
+        }
+    }
+
+    if (session && session.userData) {
+        if ((latVal === 18.4748182 || latVal === 0) && session.userData.lat && session.userData.lat !== '0') {
+            latVal = parseFloat(session.userData.lat);
+            lngVal = parseFloat(session.userData.long);
+        }
+
+        const empid = (session.userData.name) || 'demo admin2';
+        const imeino = session.userData.deviceId || '';
+
+        if (navigator.onLine) {
+            // 1. Call iamatevent END (API 4)
+            fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gotiamatdate: endDateTime,
+                    gotempname: empid,
+                    gotempid: session.userData.clientId || imeino,
+                    gotinoutstatus: "END",
+                    gotiamatclient: "",
+                    gotiamatlat: latVal,
+                    gotiamatlong: lngVal,
+                    gimeinumber: imeino
+                })
+            }).catch(err => console.error('[Auto Day End] iamatevent END error:', err));
+
+            // 2. Call startendday END (API 5)
+            fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gcdatetime: endDateTime.slice(0, 16),
+                    glaststatus: "END",
+                    empid: empid,
+                    imeino: imeino,
+                    gpsLatitude: latVal,
+                    gpsLongitude: lngVal
+                })
+            }).catch(err => console.error('[Auto Day End] startendday END error:', err));
+        }
+    }
+
+    // Reset workday states
+    isDayStarted = false;
+    isCheckedIn = false;
+    localStorage.setItem('isDayStarted', 'false');
+    localStorage.setItem('isCheckedIn', 'false');
+    localStorage.removeItem('dayStartDate');
+    localStorage.removeItem('dayStartTime');
+
+    if (window.durationInterval) {
+        clearInterval(window.durationInterval);
+        window.durationInterval = null;
+    }
+
+    updateWorkdayUI();
+    updateMetricsUI();
+
+    if (isPrevDay) {
+        showToast('Previous workday was auto-ended at 08:00 PM. Please start your day for today.', 'info');
+    } else {
+        showToast('Workday auto-ended at 08:00 PM.', 'info');
+    }
 }
 
 /**
@@ -5104,5 +5218,19 @@ window.handleDSRClientReport = handleDSRClientReport;
 window.handleDSRClientReportAdmin = handleDSRClientReportAdmin;
 window.fetchDSRClientReportData = fetchDSRClientReportData;
 window.renderDsrClientReportRows = renderDsrClientReportRows;
+window.checkAndHandleAutoDayEnd = checkAndHandleAutoDayEnd;
+window.executeAutoDayEnd = executeAutoDayEnd;
+
+// Auto Day-End listeners on App visibility change and window focus
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && typeof checkAndHandleAutoDayEnd === 'function') {
+        checkAndHandleAutoDayEnd();
+    }
+});
+window.addEventListener('focus', () => {
+    if (typeof checkAndHandleAutoDayEnd === 'function') {
+        checkAndHandleAutoDayEnd();
+    }
+});
 
 

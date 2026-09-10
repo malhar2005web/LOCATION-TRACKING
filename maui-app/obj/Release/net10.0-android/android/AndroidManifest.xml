@@ -5,7 +5,7 @@
     Changes to this file may cause incorrect behavior and will be lost if
     the contents are regenerated.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="com.locationtracker.app" android:versionCode="1" android:versionName="1.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="com.locationtracker.app" android:versionCode="12" android:versionName="1.1.2">
   <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34" />
   <!-- Geolocation Permissions -->
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -27,7 +27,7 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <permission android:name="com.locationtracker.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" android:protectionLevel="signature" />
   <uses-permission android:name="com.locationtracker.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-  <application android:name="android.app.Application" android:allowBackup="false" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:extractNativeLibs="true" android:icon="@mipmap/appicon" android:label="Sky-Diary" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:usesCleartextTraffic="true">
+  <application android:name="crc64f3443bf5f88e657c.MainApplication" android:allowBackup="false" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:extractNativeLibs="true" android:icon="@mipmap/appicon" android:label="Sky-Diary" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:usesCleartextTraffic="true">
     <receiver android:name="com.locationtracker.app.BootReceiver" android:enabled="true" android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
