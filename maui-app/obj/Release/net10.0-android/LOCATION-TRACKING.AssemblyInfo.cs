@@ -12,11 +12,11 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("LOCATION_TRACKING")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.4.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.4+ea52ae619fcf121d3f42006d51950d5af59436a3")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.5.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.5+a5bd750af5eccd8fb14ba15809728fffcca69eeb")]
 [assembly: System.Reflection.AssemblyProductAttribute("LOCATION_TRACKING")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LOCATION_TRACKING")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.1.4.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.1.5.0")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Android36.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Android24.0")]
 

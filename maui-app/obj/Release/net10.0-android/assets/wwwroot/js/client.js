@@ -496,6 +496,11 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
 
     updateSyncUI();
 
+    // Check 200m geofence boundary for auto-checkout
+    if (typeof checkGeofenceAutoCheckout === 'function') {
+        checkGeofenceAutoCheckout(coords.latitude, coords.longitude);
+    }
+
     // Check if network is online
     if (!navigator.onLine) {
         console.log('[Tracking] Device is offline, location queued.');
@@ -1221,6 +1226,11 @@ function handleCheckIn() {
         updateWorkdayUI();
         showToast('Attendance check-in successful.', 'success');
 
+        // Lock Geofence Visit Center for 200m Auto-Checkout
+        if (typeof setGeofenceVisitCenter === 'function') {
+            setGeofenceVisitCenter('Attendance Check-In');
+        }
+
         // Call iamatevent CHECKIN if online with robust GPS coordinates
         if (navigator.onLine && session && session.userData) {
             (async () => {
@@ -1324,12 +1334,22 @@ function handleNewClient() {
         newClientLat.value = curLatEl.textContent.trim() !== '--' ? curLatEl.textContent.trim() : '0.0';
         newClientLng.value = curLngEl.textContent.trim() !== '--' ? curLngEl.textContent.trim() : '0.0';
     }
+
+    // Lock Geofence Visit Center for 200m Auto-Checkout
+    if (typeof setGeofenceVisitCenter === 'function') {
+        setGeofenceVisitCenter('New Client Registration');
+    }
 }
 
 function handleOthersCheckIn() {
     resetOthersForm();
     populateOthersTimeSelectors();
     showView('others-view');
+
+    // Lock Geofence Visit Center for 200m Auto-Checkout
+    if (typeof setGeofenceVisitCenter === 'function') {
+        setGeofenceVisitCenter('Others Activity');
+    }
 }
 
 function resetOthersForm() {
@@ -3325,6 +3345,11 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
     // Start the DSR live timer
     startDsrTimer();
 
+    // Lock Geofence Visit Center for 200m Auto-Checkout
+    if (typeof setGeofenceVisitCenter === 'function') {
+        setGeofenceVisitCenter(name || 'Existing Client');
+    }
+
     // REDESIGNED: Initialize premium wizard flow
     if (typeof initDsrWizard === 'function') {
         initDsrWizard(name, address);
@@ -3712,7 +3737,10 @@ async function onDsrSuccessOkClick() {
         }
     }
 
-    // 4. Reset isCheckedIn state so user can Check In again for subsequent client visits
+    // 4. Reset isCheckedIn state & clear Geofence visit center so user can Check In again for subsequent visits
+    if (typeof clearGeofenceVisitCenter === 'function') {
+        clearGeofenceVisitCenter();
+    }
     isCheckedIn = false;
     localStorage.setItem('isCheckedIn', 'false');
     updateWorkdayUI();
@@ -4392,12 +4420,244 @@ async function handleDayEnd() {
     localStorage.removeItem('dayStartTime');
     localStorage.removeItem('dayStartDate');
 
+    // Clear Geofence visit center
+    if (typeof clearGeofenceVisitCenter === 'function') {
+        clearGeofenceVisitCenter();
+    }
+
     // Update UI
     updateWorkdayUI();
     updateMetricsUI();
 
     // Location tracking remains active even when workday is ended
     showToast('Workday ended. Location tracking remains active.', 'warning');
+}
+
+/**
+ * =========================================================================
+ * 200m Geofencing Auto-Checkout System (Customer Location Exit Monitor)
+ * =========================================================================
+ * Automatically checks out the employee if:
+ * 1. An attendance check-in or DSR form was opened at a client location.
+ * 2. Employee moves >200 meters away from the check-in / client coordinates.
+ * 3. Auto-saves any open DSR form draft to DsrDb (with offline queue support)
+ *    and transmits CHECKOUT to startendday & iamatevent APIs.
+ * =========================================================================
+ */
+
+let isAutoCheckingOut = false;
+let geofenceWatchdogInterval = null;
+
+function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
+    if (!lat1 || !lon1 || !lat2 || !lon2 || isNaN(lat1) || isNaN(lon1) || isNaN(lat2) || isNaN(lon2)) return 0;
+    const R = 6371e3; // Earth radius in meters
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+async function setGeofenceVisitCenter(clientName = 'Client') {
+    let latVal = 0.0;
+    let lngVal = 0.0;
+
+    const curLatEl = document.getElementById('current-lat');
+    const curLngEl = document.getElementById('current-lng');
+    if (curLatEl && curLngEl) {
+        const latText = curLatEl.textContent.trim();
+        const lngText = curLngEl.textContent.trim();
+        if (latText !== '--' && lngText !== '--' && latText !== '0' && latText !== '0.0' && latText !== 'Fetching...') {
+            latVal = parseFloat(latText);
+            lngVal = parseFloat(lngText);
+        }
+    }
+
+    if (latVal === 0.0 || isNaN(latVal)) {
+        try {
+            const coords = await Promise.race([
+                getCurrentLocationPromise(),
+                new Promise(resolve => setTimeout(() => resolve(null), 2000))
+            ]);
+            if (coords && coords.latitude && coords.longitude) {
+                latVal = coords.latitude;
+                lngVal = coords.longitude;
+            }
+        } catch (e) {}
+    }
+
+    if (latVal === 0.0 || isNaN(latVal)) {
+        const session = typeof getSession === 'function' ? getSession() : null;
+        if (session && session.userData && session.userData.lat && session.userData.lat !== '0') {
+            latVal = parseFloat(session.userData.lat);
+            lngVal = parseFloat(session.userData.long);
+        }
+    }
+
+    if (latVal !== 0.0 && !isNaN(latVal) && lngVal !== 0.0 && !isNaN(lngVal)) {
+        localStorage.setItem('activeCheckinLat', latVal.toString());
+        localStorage.setItem('activeCheckinLng', lngVal.toString());
+        localStorage.setItem('activeCheckinClient', clientName || 'Client');
+        localStorage.setItem('activeCheckinTime', Date.now().toString());
+        localStorage.setItem('isDsrFormOpen', 'true');
+        console.log(`[Geofence] Set active visit center at (${latVal}, ${lngVal}) for "${clientName}". Auto-Checkout active at >200m.`);
+    }
+
+    startGeofenceWatchdog();
+}
+
+function clearGeofenceVisitCenter() {
+    localStorage.removeItem('activeCheckinLat');
+    localStorage.removeItem('activeCheckinLng');
+    localStorage.removeItem('activeCheckinClient');
+    localStorage.removeItem('activeCheckinTime');
+    localStorage.removeItem('isDsrFormOpen');
+    console.log('[Geofence] Cleared active visit center.');
+}
+
+function startGeofenceWatchdog() {
+    if (geofenceWatchdogInterval) return;
+    geofenceWatchdogInterval = setInterval(() => {
+        const curLatEl = document.getElementById('current-lat');
+        const curLngEl = document.getElementById('current-lng');
+        if (curLatEl && curLngEl) {
+            const latText = curLatEl.textContent.trim();
+            const lngText = curLngEl.textContent.trim();
+            if (latText !== '--' && lngText !== '--' && latText !== '0' && latText !== '0.0' && latText !== 'Fetching...') {
+                checkGeofenceAutoCheckout(parseFloat(latText), parseFloat(lngText));
+            }
+        }
+    }, 10000);
+}
+
+function checkGeofenceAutoCheckout(curLat, curLng) {
+    if (isAutoCheckingOut) return;
+    if (!curLat || !curLng || isNaN(curLat) || isNaN(curLng) || curLat === 0 || curLng === 0) return;
+
+    const isCheckedIn = localStorage.getItem('isCheckedIn') === 'true';
+    const isFormOpen = localStorage.getItem('isDsrFormOpen') === 'true';
+    const checkinLat = parseFloat(localStorage.getItem('activeCheckinLat'));
+    const checkinLng = parseFloat(localStorage.getItem('activeCheckinLng'));
+    const clientName = localStorage.getItem('activeCheckinClient') || 'Client';
+
+    if ((isCheckedIn || isFormOpen) && !isNaN(checkinLat) && !isNaN(checkinLng) && checkinLat !== 0 && checkinLng !== 0) {
+        const dist = calculateDistanceMeters(curLat, curLng, checkinLat, checkinLng);
+        
+        // If employee moved more than 200 meters away from checkin/client location
+        if (dist > 200 && dist < 5000000) {
+            console.warn(`[Geofence] Boundary crossed! Distance = ${dist.toFixed(1)}m (>200m) from "${clientName}". Triggering Auto-Checkout.`);
+            triggerGeofenceAutoCheckout(curLat, curLng, dist, clientName);
+        }
+    }
+}
+
+async function triggerGeofenceAutoCheckout(curLat, curLng, distanceMeters, clientName) {
+    if (isAutoCheckingOut) return;
+    isAutoCheckingOut = true;
+
+    try {
+        console.log(`[Auto-Checkout] Processing automatic checkout for ${clientName} (${distanceMeters.toFixed(1)}m away)...`);
+
+        const session = typeof getSession === 'function' ? getSession() : null;
+        const imeino = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
+        const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+        const userid = (session && session.userData && session.userData.clientId) || imeino;
+
+        const now = new Date();
+        const actDate = now.toISOString().replace('T', ' ').slice(0, 19);
+        const checkoutDate = new Date(now.getTime() + 1000).toISOString().replace('T', ' ').slice(0, 19);
+
+        // 1. If a DSR or Others form was open and had customer name or remark, auto-save DSR
+        const isFormOpen = localStorage.getItem('isDsrFormOpen') === 'true';
+        const dsrCustName = (document.getElementById('dsr-customer-name')?.value || document.getElementById('others-customer-name')?.value || clientName || '').trim();
+        const dsrRemark = (document.getElementById('dsr-remark')?.value || document.getElementById('others-remark')?.value || '').trim();
+
+        if (isFormOpen && dsrCustName && typeof DsrDb !== 'undefined') {
+            const autoRemark = dsrRemark ? `${dsrRemark} [Auto-Checkout: Moved ${Math.round(distanceMeters)}m away]` : `Auto-Checkout: Left client location (${Math.round(distanceMeters)}m away)`;
+            const autoDsr = {
+                client_id: userid,
+                client_name: empid,
+                customer_name: dsrCustName,
+                office_address: document.getElementById('dsr-office-address')?.value || document.getElementById('others-office-address')?.value || '',
+                site_name: document.getElementById('dsr-site-details')?.value || document.getElementById('others-site-details')?.value || '',
+                contact_person: document.getElementById('dsr-contact-person')?.value || document.getElementById('others-contact-person')?.value || '',
+                contact_no: document.getElementById('dsr-contact-number')?.value || document.getElementById('others-contact-number')?.value || '',
+                last_remark: autoRemark,
+                visited_for: 'Visit Done',
+                latitude: curLat,
+                longitude: curLng,
+                sync_status: 'Pending',
+                created_timestamp: actDate
+            };
+            DsrDb.saveDsr(autoDsr, () => {
+                if (typeof syncDSRs === 'function') syncDSRs();
+            });
+        }
+
+        if (navigator.onLine) {
+            // 2. Send CHECKOUT to startendday (API 5)
+            const startEndBody = {
+                gcdatetime: checkoutDate,
+                glaststatus: "CHECKOUT",
+                empid: empid,
+                imeino: imeino,
+                gpsLatitude: curLat,
+                gpsLongitude: curLng
+            };
+            await fetch(`${API_BASE_URL}/startendday`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(startEndBody)
+            }).then(r => r.text()).catch(e => console.error('[Auto-Checkout] startendday error:', e));
+
+            // 3. Send CHECKOUT to iamatevent (API 4)
+            const checkoutPayload = {
+                gotiamatdate: checkoutDate,
+                gotempname: empid,
+                gotempid: userid,
+                gotinoutstatus: "CHECKOUT",
+                gotiamatclient: clientName || '',
+                gotiamatlat: curLat,
+                gotiamatlong: curLng,
+                gimeinumber: imeino
+            };
+            await fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(checkoutPayload)
+            }).then(r => r.text()).catch(e => console.error('[Auto-Checkout] iamatevent error:', e));
+        }
+
+        // 4. Stop DSR Timer
+        if (typeof stopDsrTimer === 'function') {
+            stopDsrTimer();
+        }
+
+        // 5. Remove any open success modals or wizard overlays
+        const existingModal = document.getElementById('dsr-success-modal');
+        if (existingModal) existingModal.remove();
+
+        // 6. Reset check-in & geofence states
+        clearGeofenceVisitCenter();
+        isCheckedIn = false;
+        localStorage.setItem('isCheckedIn', 'false');
+
+        updateWorkdayUI();
+        showView('client-view');
+
+        // 7. Show warning/notification
+        showToast(`Auto Check-Out: You moved ${Math.round(distanceMeters)}m away from ${clientName || 'client'}.`, 'warning');
+        if (typeof showNativeToast === 'function') {
+            showNativeToast(`Auto Check-Out: Left ${clientName} (${Math.round(distanceMeters)}m away)`);
+        }
+
+    } catch (err) {
+        console.error('[Auto-Checkout] Error:', err);
+    } finally {
+        isAutoCheckingOut = false;
+    }
 }
 
 /**
@@ -5269,17 +5529,27 @@ window.fetchDSRClientReportData = fetchDSRClientReportData;
 window.renderDsrClientReportRows = renderDsrClientReportRows;
 window.checkAndHandleAutoDayEnd = checkAndHandleAutoDayEnd;
 window.executeAutoDayEnd = executeAutoDayEnd;
+window.calculateDistanceMeters = calculateDistanceMeters;
+window.setGeofenceVisitCenter = setGeofenceVisitCenter;
+window.clearGeofenceVisitCenter = clearGeofenceVisitCenter;
+window.checkGeofenceAutoCheckout = checkGeofenceAutoCheckout;
+window.triggerGeofenceAutoCheckout = triggerGeofenceAutoCheckout;
 
-// Auto Day-End listeners on App visibility change and window focus
+// Auto Day-End and Geofence Watchdog listeners on App visibility change and window focus
 document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible' && typeof checkAndHandleAutoDayEnd === 'function') {
-        checkAndHandleAutoDayEnd();
+    if (document.visibilityState === 'visible') {
+        if (typeof checkAndHandleAutoDayEnd === 'function') checkAndHandleAutoDayEnd();
+        if (typeof startGeofenceWatchdog === 'function') startGeofenceWatchdog();
     }
 });
 window.addEventListener('focus', () => {
-    if (typeof checkAndHandleAutoDayEnd === 'function') {
-        checkAndHandleAutoDayEnd();
-    }
+    if (typeof checkAndHandleAutoDayEnd === 'function') checkAndHandleAutoDayEnd();
+    if (typeof startGeofenceWatchdog === 'function') startGeofenceWatchdog();
 });
+
+// Auto-start Geofence Watchdog on initial script execution if a checkin/form is active
+if (typeof startGeofenceWatchdog === 'function') {
+    startGeofenceWatchdog();
+}
 
 
