@@ -3650,8 +3650,7 @@ async function onDsrSuccessOkClick() {
         try {
             const now = new Date();
             const actDate = now.toISOString().replace('T', ' ').slice(0, 19);
-            const checkoutDate = new Date(now.getTime() + 1000).toISOString().replace('T', ' ').slice(0, 19);
-            const checkoutDateShort = checkoutDate.slice(0, 16);
+            const checkoutDate = new Date(now.getTime() + 2000).toISOString().replace('T', ' ').slice(0, 19);
 
             // 1. Send specific Activity Punch to iamatevent (OTHERS / DSR_UPDATE / NEW_CLIENT)
             const actPayload = {
@@ -3673,7 +3672,7 @@ async function onDsrSuccessOkClick() {
 
             // 2. Send CHECKOUT to startendday (API 5) - CRITICAL: Stored procedure uses this to create CHECKOUT record & duration in getiamatsummaryrtp_2
             const startEndCheckoutBody = {
-                gcdatetime: checkoutDateShort,
+                gcdatetime: checkoutDate,
                 glaststatus: "CHECKOUT",
                 empid: empid,
                 imeino: imeino,

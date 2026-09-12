@@ -307,15 +307,21 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         const timeA = getRecordTimestamp(a);
         const timeB = getRecordTimestamp(b);
 
-        if (timeA !== timeB && timeA > 0 && timeB > 0) {
-            return timeA - timeB;
-        }
-
-        // Secondary tie-breaker if same second/millisecond
         const actA = (a.activity || '').toUpperCase().trim();
         const actB = (b.activity || '').toUpperCase().trim();
         const orderA = ACTIVITY_ORDER[actA] || 3;
         const orderB = ACTIVITY_ORDER[actB] || 3;
+
+        // If records occurred within the same 5-minute visit transaction window, enforce natural lifecycle order:
+        // START (1) -> CHECKIN (2) -> DSR_UPDATE/OTHERS (3) -> CHECKOUT (4) -> END (5)
+        if (Math.abs(timeA - timeB) <= 300000 && orderA !== orderB) {
+            return orderA - orderB;
+        }
+
+        if (timeA !== timeB && timeA > 0 && timeB > 0) {
+            return timeA - timeB;
+        }
+
         if (orderA !== orderB) {
             return orderA - orderB;
         }
