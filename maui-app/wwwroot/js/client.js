@@ -267,6 +267,7 @@ function startLocationTracking(clientId, deviceId) {
                         locationSentCount = data.sentCount;
                         const countEl = document.getElementById('locations-sent-count');
                         if (countEl) countEl.textContent = locationSentCount.toString();
+                        if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
 
                         // Update last sync time
                         if (data.lastSync && data.lastSync !== 'Never') {
@@ -616,6 +617,42 @@ function updateSyncUI() {
         }
     }
 
+    // Update Locations Sent count
+    const locSentEl = document.getElementById('locations-sent-count');
+    if (locSentEl) {
+        locSentEl.textContent = (locationSentCount || 0).toString();
+    }
+
+    // Update Pending Forms / DSRs count & Forms Sent & Total Requests
+    if (typeof DsrDb !== 'undefined') {
+        DsrDb.getPendingCount((pendingDsrs) => {
+            const pendingDsrsEl = document.getElementById('pending-dsrs-count');
+            if (pendingDsrsEl) {
+                pendingDsrsEl.textContent = (pendingDsrs || 0).toString();
+                if (pendingDsrs > 0) {
+                    pendingDsrsEl.style.backgroundColor = '#f59e0b';
+                } else {
+                    pendingDsrsEl.style.backgroundColor = '#10b981';
+                }
+            }
+
+            DsrDb.getTodayCount((todayTotal) => {
+                const dsrsSent = Math.max(0, (todayTotal || 0) - (pendingDsrs || 0));
+                const dsrsSentEl = document.getElementById('dsrs-sent-count');
+                if (dsrsSentEl) {
+                    dsrsSentEl.textContent = dsrsSent.toString();
+                }
+
+                const locSent = parseInt(locationSentCount || 0, 10);
+                const totalReqs = locSent + dsrsSent;
+                const totalReqsEl = document.getElementById('total-requests-sent-count');
+                if (totalReqsEl) {
+                    totalReqsEl.textContent = totalReqs.toString();
+                }
+            });
+        });
+    }
+
     const lastSyncEl = document.getElementById('last-sync-time-display');
     const lastSyncBadge = document.getElementById('last-sync-time-display-badge');
     const lastSync = StorageService.getLastSyncTime();
@@ -649,6 +686,10 @@ function updateSyncUI() {
             syncBadge.style.color = '#8ABF9A';
         }
     }
+}
+
+function updateDiagnosticsUI() {
+    updateSyncUI();
 }
 
 function updateSyncStatusText(statusText) {
@@ -1506,12 +1547,16 @@ async function submitOthers() {
                 followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
                 latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
                 longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
+                activity_type: 'OTHERS',
+                checkout_timestamp: new Date(Date.now() + 2000).toISOString(),
+                leadno: '',
                 sync_status: 'Pending',
                 created_timestamp: new Date().toISOString()
             };
 
             DsrDb.saveDsr(localDsr, (saved) => {
                 console.log('[Others] DSR saved locally:', saved);
+                if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
                 syncDSRs();
             });
         }
@@ -3473,12 +3518,16 @@ async function submitDSR() {
             followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
             latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
             longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
+            activity_type: 'DSR_UPDATE',
+            checkout_timestamp: new Date(Date.now() + 2000).toISOString(),
+            leadno: (selectedClient && selectedClient.leadno) || "",
             sync_status: 'Pending',
             created_timestamp: new Date().toISOString()
         };
 
         DsrDb.saveDsr(localDsr, (saved) => {
             console.log('[DSR] DSR saved locally:', saved);
+            if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
             syncDSRs();
         });
     }
@@ -3906,59 +3955,98 @@ async function syncReminders() {
 let isDsrSyncing = false;
 async function syncDSRs() {
     if (isDsrSyncing) return;
-    if (!navigator.onLine) return;
+    if (!navigator.onLine) {
+        if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
+        return;
+    }
 
     if (typeof DsrDb === 'undefined') return;
 
     DsrDb.getPendingSync(async (pendingList) => {
-        if (!pendingList || pendingList.length === 0) return;
+        if (!pendingList || pendingList.length === 0) {
+            if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
+            return;
+        }
 
         isDsrSyncing = true;
-        console.log(`[SyncDsr] Found ${pendingList.length} DSR records to sync.`);
+        console.log(`[SyncDsr] Found ${pendingList.length} DSR/Form records to sync.`);
 
-        const session = getSession();
-        const defaultUserid = (session && session.userData && session.userData.clientId) || '';
-        const defaultGempType = getGempType();
-        const defaultGempName = (session && session.userData && session.userData.name) || '';
-        const defaultDeviceId = (session && session.userData && session.userData.deviceId) || '';
-        const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+        const session = typeof getSession === 'function' ? getSession() : null;
+        const defaultDeviceId = (session && session.userData && session.userData.deviceId) || localStorage.getItem('device_id') || 'a057d027fed7bace';
+        const defaultGempName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
+        const defaultUserid = (session && session.userData && session.userData.clientId) || defaultDeviceId;
+        const defaultGempType = typeof getGempType === 'function' ? getGempType() : 'group';
+        const nowIso = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
         let successIds = [];
         for (const dsr of pendingList) {
             try {
-                // 1. Sync to local backend
-                const response = await apiRequest('/api/client/dsr-update', 'POST', {
-                    customer_name: dsr.customer_name,
-                    office_address: dsr.office_address,
-                    site_name: dsr.site_name,
-                    contact_person: dsr.contact_person,
-                    contact_no: dsr.contact_no,
-                    last_remark: dsr.last_remark,
-                    visited_for: dsr.visited_for,
-                    followup: dsr.followup,
-                    latitude: dsr.latitude,
-                    longitude: dsr.longitude,
-                    client_name: dsr.client_name
-                });
+                const followupParts = dsr.followup ? dsr.followup.split(' ') : [];
+                const followupDate = followupParts[0] || '';
+                const followupTime = followupParts[1] ? followupParts[1].substring(0, 5) : '';
 
-                if (response && response.success) {
-                    // 2. Sync to third-party fleettrackon API (updateleaddeatils_sky)
-                    const followupParts = dsr.followup ? dsr.followup.split(' ') : [];
-                    const followupDate = followupParts[0] || '';
-                    const followupTime = followupParts[1] ? followupParts[1].substring(0, 5) : '';
+                const clientNameText = dsr.client_name || defaultGempName;
+                const useridVal = dsr.client_id || defaultUserid;
+                const activityType = dsr.activity_type || (dsr.visited_for === 'Others' ? 'OTHERS' : (dsr.visited_for === 'New Registration' || dsr.visited_for === 'New Client' ? 'NEW_CLIENT' : 'DSR_UPDATE'));
+                const createdDateStr = dsr.created_timestamp ? dsr.created_timestamp.replace('T', ' ').slice(0, 19) : nowIso;
+                
+                // Calculate checkout date (2 seconds after create timestamp if not specified)
+                let checkoutDateStr = dsr.checkout_timestamp ? dsr.checkout_timestamp.replace('T', ' ').slice(0, 19) : '';
+                if (!checkoutDateStr) {
+                    const parsedCreated = new Date(dsr.created_timestamp || Date.now());
+                    checkoutDateStr = new Date(parsedCreated.getTime() + 2000).toISOString().replace('T', ' ').slice(0, 19);
+                }
 
-                    const clientNameText = dsr.client_name || defaultGempName;
-                    const useridVal = dsr.client_id || defaultUserid;
+                const latVal = parseFloat(dsr.latitude) || 18.4748182;
+                const lngVal = parseFloat(dsr.longitude) || 73.8119225;
 
-                    const thirdPartyBody = {
+                // 1. Sync form details to updateleaddeatils_sky or generatenewlead
+                if (activityType === 'NEW_CLIENT') {
+                    const newLeadBody = {
                         userid: useridVal,
                         gemptype: defaultGempType,
-                        leaddatetime: dsr.created_timestamp ? dsr.created_timestamp.replace('T', ' ').slice(0, 19) : currentDateTime,
+                        currentdatetime: createdDateStr,
+                        intime: "00:00:00",
+                        outtime: "00:00:00",
+                        outletname: dsr.customer_name || '',
+                        nleadname: dsr.customer_name || '',
+                        ncontact: dsr.contact_no || '',
+                        nremark: dsr.last_remark || '',
+                        nfollowup: followupDate,
+                        nfollowuptime: followupTime,
+                        assignedemp: "All",
+                        gpsLatitude: String(latVal),
+                        gpsLongitude: String(lngVal),
+                        l_nremark: dsr.last_remark || '',
+                        n_nremark: dsr.last_remark || '',
+                        leaddatetime: createdDateStr,
                         officeaddres: dsr.office_address || '',
-                        nleadname: dsr.customer_name,
+                        contactperson: dsr.contact_person || '',
+                        gempname: clientNameText,
+                        follow_rem: dsr.last_remark || '',
+                        lleadno: dsr.leadno || ''
+                    };
+                    try {
+                        console.log('[SyncDsr] Posting generatenewlead:', newLeadBody);
+                        await fetch(`${API_BASE_URL}/generatenewlead`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(newLeadBody)
+                        });
+                    } catch (e) {
+                        console.error('[SyncDsr] generatenewlead error:', e);
+                    }
+                } else {
+                    // DSR_UPDATE or OTHERS
+                    const updateLeadBody = {
+                        userid: useridVal,
+                        gemptype: defaultGempType,
+                        leaddatetime: createdDateStr,
+                        officeaddres: dsr.office_address || '',
+                        nleadname: dsr.customer_name || '',
                         contactperson: dsr.contact_person || '',
                         ncontact: dsr.contact_no || '',
-                        currentdatetime: dsr.created_timestamp ? dsr.created_timestamp.replace('T', ' ').slice(0, 19) : currentDateTime,
+                        currentdatetime: createdDateStr,
                         intime: "00:00:00",
                         outtime: "00:00:00",
                         follow_rem: dsr.last_remark || '',
@@ -3967,54 +4055,101 @@ async function syncDSRs() {
                         nfollowup: followupDate,
                         nfollowuptime: followupTime,
                         assignedemp: "All",
-                        gpsLatitude: String(dsr.latitude || 0.0),
-                        gpsLongitude: String(dsr.longitude || 0.0),
-                        outletname: dsr.customer_name,
+                        gpsLatitude: String(latVal),
+                        gpsLongitude: String(lngVal),
+                        outletname: dsr.customer_name || '',
                         lleadno: dsr.leadno || '',
                         l_nremark: dsr.last_remark || '',
                         gempname: clientNameText
                     };
-
                     try {
-                        console.log('[SyncDsr] Posting to third-party updateleaddeatils_sky...');
+                        console.log('[SyncDsr] Posting updateleaddeatils_sky:', updateLeadBody);
                         await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(thirdPartyBody)
+                            body: JSON.stringify(updateLeadBody)
                         });
-                    } catch (tpErr) {
-                        console.error('[SyncDsr] Third-party API updateleaddeatils_sky failed:', tpErr);
+                    } catch (e) {
+                        console.error('[SyncDsr] updateleaddeatils_sky error:', e);
                     }
-
-                    // 3. Sync to iamatevent
-                    try {
-                        await fetch(`${API_BASE_URL}/iamatevent`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                gotiamatdate: thirdPartyBody.currentdatetime,
-                                gotempname: thirdPartyBody.gempname,
-                                gotempid: thirdPartyBody.userid,
-                                gotinoutstatus: "DSR_UPDATE",
-                                gotiamatclient: dsr.customer_name,
-                                gotiamatlat: parseFloat(thirdPartyBody.gpsLatitude),
-                                gotiamatlong: parseFloat(thirdPartyBody.gpsLongitude),
-                                gimeinumber: defaultDeviceId
-                            })
-                        });
-                    } catch (tpErr) { }
-
-                    successIds.push(dsr.id);
                 }
+
+                // 2. Punch the specific Activity to iamatevent (DSR_UPDATE / OTHERS / NEW_CLIENT)
+                try {
+                    const actPayload = {
+                        gotiamatdate: createdDateStr,
+                        gotempname: clientNameText,
+                        gotempid: useridVal,
+                        gotinoutstatus: activityType,
+                        gotiamatclient: dsr.customer_name || (activityType === 'OTHERS' ? 'Others' : ''),
+                        gotiamatlat: latVal,
+                        gotiamatlong: lngVal,
+                        gimeinumber: defaultDeviceId
+                    };
+                    console.log(`[SyncDsr] Posting activity ${activityType} to iamatevent:`, actPayload);
+                    await fetch(`${API_BASE_URL}/iamatevent`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(actPayload)
+                    });
+                } catch (e) {
+                    console.error(`[SyncDsr] iamatevent ${activityType} error:`, e);
+                }
+
+                // 3. Send CHECKOUT to startendday (Crucial for Day End Summary 2 visit duration)
+                try {
+                    const checkoutBody = {
+                        gcdatetime: checkoutDateStr,
+                        glaststatus: "CHECKOUT",
+                        empid: clientNameText,
+                        imeino: defaultDeviceId,
+                        gpsLatitude: latVal,
+                        gpsLongitude: lngVal
+                    };
+                    console.log('[SyncDsr] Posting CHECKOUT to startendday:', checkoutBody);
+                    await fetch(`${API_BASE_URL}/startendday`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(checkoutBody)
+                    });
+                } catch (e) {
+                    console.error('[SyncDsr] startendday CHECKOUT error:', e);
+                }
+
+                // 4. Send CHECKOUT to iamatevent (Updates status snapshot)
+                try {
+                    const checkoutPayload = {
+                        gotiamatdate: checkoutDateStr,
+                        gotempname: clientNameText,
+                        gotempid: useridVal,
+                        gotinoutstatus: "CHECKOUT",
+                        gotiamatclient: dsr.customer_name || (activityType === 'OTHERS' ? 'Others' : ''),
+                        gotiamatlat: latVal,
+                        gotiamatlong: lngVal,
+                        gimeinumber: defaultDeviceId
+                    };
+                    await fetch(`${API_BASE_URL}/iamatevent`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(checkoutPayload)
+                    });
+                } catch (e) {
+                    console.error('[SyncDsr] iamatevent CHECKOUT error:', e);
+                }
+
+                successIds.push(dsr.id);
             } catch (err) {
-                console.error('[SyncDsr] Failed to sync individual DSR:', dsr.id, err);
+                console.error('[SyncDsr] Error syncing individual DSR:', dsr.id, err);
             }
         }
 
         if (successIds.length > 0) {
             DsrDb.markAsSynced(successIds, () => {
-                console.log(`[SyncDsr] Synced ${successIds.length} DSRs.`);
-                showNativeToast(`Synced ${successIds.length} offline DSRs`);
+                console.log(`[SyncDsr] Successfully synced ${successIds.length} offline DSRs/Forms.`);
+                if (typeof showToast === 'function') {
+                    showToast(`Synced ${successIds.length} offline DSRs/Forms to server!`, 'success');
+                }
+                if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
             });
         }
         isDsrSyncing = false;
@@ -4588,10 +4723,14 @@ async function triggerGeofenceAutoCheckout(curLat, curLng, distanceMeters, clien
                 visited_for: 'Visit Done',
                 latitude: curLat,
                 longitude: curLng,
+                activity_type: 'DSR_UPDATE',
+                checkout_timestamp: checkoutDate,
+                leadno: '',
                 sync_status: 'Pending',
                 created_timestamp: actDate
             };
             DsrDb.saveDsr(autoDsr, () => {
+                if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
                 if (typeof syncDSRs === 'function') syncDSRs();
             });
         }
@@ -5237,12 +5376,16 @@ async function submitNewClient() {
                 followup: followupDate ? `${followupDate} ${hours}:${minutes}:00` : null,
                 latitude: parseFloat(newClientBody.gpsLatitude) || 0.0,
                 longitude: parseFloat(newClientBody.gpsLongitude) || 0.0,
+                activity_type: 'NEW_CLIENT',
+                checkout_timestamp: new Date(Date.now() + 2000).toISOString(),
+                leadno: '',
                 sync_status: 'Pending',
                 created_timestamp: new Date().toISOString()
             };
 
             DsrDb.saveDsr(localDsr, (saved) => {
                 console.log('[NewClient] DSR saved locally:', saved);
+                if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
                 syncDSRs();
             });
         }

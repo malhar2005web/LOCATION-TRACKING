@@ -48,11 +48,18 @@ const DsrDb = {
                         followup TEXT,
                         latitude REAL,
                         longitude REAL,
+                        activity_type TEXT DEFAULT 'DSR_UPDATE',
+                        checkout_timestamp TEXT,
+                        leadno TEXT,
                         sync_status TEXT DEFAULT 'Pending',
                         created_timestamp TEXT
                     )
                 `, [], () => {
                     console.log('[DsrDb] DSRs table verified successfully.');
+                    // Run non-destructive column additions for existing schema upgrades
+                    tx.executeSql(`ALTER TABLE dsrs ADD COLUMN activity_type TEXT DEFAULT 'DSR_UPDATE'`, [], () => {}, () => {});
+                    tx.executeSql(`ALTER TABLE dsrs ADD COLUMN checkout_timestamp TEXT`, [], () => {}, () => {});
+                    tx.executeSql(`ALTER TABLE dsrs ADD COLUMN leadno TEXT`, [], () => {}, () => {});
                     if (callback) callback();
                 }, (tx, err) => {
                     console.error('[DsrDb] Failed to verify dsrs table:', err);
@@ -83,6 +90,9 @@ const DsrDb = {
             followup: dsr.followup || '',
             latitude: parseFloat(dsr.latitude) || 0.0,
             longitude: parseFloat(dsr.longitude) || 0.0,
+            activity_type: dsr.activity_type || (dsr.visited_for === 'Others' ? 'OTHERS' : (dsr.visited_for === 'New Client' ? 'NEW_CLIENT' : 'DSR_UPDATE')),
+            checkout_timestamp: dsr.checkout_timestamp || '',
+            leadno: dsr.leadno || '',
             sync_status: dsr.sync_status || 'Pending',
             created_timestamp: dsr.created_timestamp || new Date().toISOString()
         };
@@ -103,9 +113,9 @@ const DsrDb = {
         self.db.transaction(tx => {
             tx.executeSql(`
                 INSERT INTO dsrs 
-                    (id, client_id, client_name, customer_name, office_address, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, sync_status, created_timestamp)
+                    (id, client_id, client_name, customer_name, office_address, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, activity_type, checkout_timestamp, leadno, sync_status, created_timestamp)
                 VALUES 
-                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(id) DO UPDATE SET
                     client_name = excluded.client_name,
                     customer_name = excluded.customer_name,
@@ -118,11 +128,15 @@ const DsrDb = {
                     followup = excluded.followup,
                     latitude = excluded.latitude,
                     longitude = excluded.longitude,
+                    activity_type = excluded.activity_type,
+                    checkout_timestamp = excluded.checkout_timestamp,
+                    leadno = excluded.leadno,
                     sync_status = excluded.sync_status
             `, [
                 record.id, record.client_id, record.client_name, record.customer_name,
                 record.office_address, record.site_name, record.contact_person, record.contact_no,
                 record.last_remark, record.visited_for, record.followup, record.latitude, record.longitude,
+                record.activity_type, record.checkout_timestamp, record.leadno,
                 record.sync_status, record.created_timestamp
             ], () => {
                 if (callback) callback(record);
@@ -130,13 +144,14 @@ const DsrDb = {
                 tx.executeSql(`DELETE FROM dsrs WHERE id = ?`, [record.id], () => {
                     tx.executeSql(`
                         INSERT INTO dsrs 
-                            (id, client_id, client_name, customer_name, office_address, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, sync_status, created_timestamp)
+                            (id, client_id, client_name, customer_name, office_address, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, activity_type, checkout_timestamp, leadno, sync_status, created_timestamp)
                         VALUES 
-                            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     `, [
                         record.id, record.client_id, record.client_name, record.customer_name,
                         record.office_address, record.site_name, record.contact_person, record.contact_no,
                         record.last_remark, record.visited_for, record.followup, record.latitude, record.longitude,
+                        record.activity_type, record.checkout_timestamp, record.leadno,
                         record.sync_status, record.created_timestamp
                     ], () => {
                         if (callback) callback(record);
@@ -191,6 +206,54 @@ const DsrDb = {
                 if (callback) callback(list);
             }, (tx, err) => {
                 if (callback) callback([]);
+            });
+        });
+    },
+
+    getPendingCount: function(callback) {
+        const self = this;
+        if (self.useFallback) {
+            const count = self._getLocalStorageList().filter(r => r.sync_status === 'Pending').length;
+            if (callback) callback(count);
+            return;
+        }
+
+        if (!self.db) {
+            if (callback) callback(0);
+            return;
+        }
+
+        self.db.transaction(tx => {
+            tx.executeSql(`SELECT COUNT(*) AS total FROM dsrs WHERE sync_status = 'Pending'`, [], (tx, results) => {
+                const count = results.rows.length > 0 ? results.rows.item(0).total : 0;
+                if (callback) callback(count);
+            }, () => {
+                if (callback) callback(0);
+            });
+        });
+    },
+
+    getTodayCount: function(callback) {
+        const self = this;
+        const todayStr = new Date().toISOString().split('T')[0];
+        if (self.useFallback) {
+            const list = self._getLocalStorageList();
+            const count = list.filter(r => (r.created_timestamp || '').startsWith(todayStr)).length;
+            if (callback) callback(count);
+            return;
+        }
+
+        if (!self.db) {
+            if (callback) callback(0);
+            return;
+        }
+
+        self.db.transaction(tx => {
+            tx.executeSql(`SELECT COUNT(*) AS total FROM dsrs WHERE created_timestamp LIKE ?`, [`${todayStr}%`], (tx, results) => {
+                const count = results.rows.length > 0 ? results.rows.item(0).total : 0;
+                if (callback) callback(count);
+            }, () => {
+                if (callback) callback(0);
             });
         });
     },
