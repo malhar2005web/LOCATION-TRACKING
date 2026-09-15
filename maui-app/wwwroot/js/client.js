@@ -263,15 +263,18 @@ function startLocationTracking(clientId, deviceId) {
                             updateLocationUI(data.latitude, data.longitude);
                         }
 
-                        // Update Locations Sent counter
-                        locationSentCount = data.sentCount;
+                        // Update Locations Sent & Pending counter from native service
+                        locationSentCount = data.sentCount || 0;
+                        locationPendingCount = data.pendingCount || 0;
                         const countEl = document.getElementById('locations-sent-count');
                         if (countEl) countEl.textContent = locationSentCount.toString();
                         if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
 
                         // Update last sync time
                         if (data.lastSync && data.lastSync !== 'Never') {
-                            updateSyncStatusText(`Last Location Sent: ${data.lastSync}`);
+                            if (navigator.onLine && (data.pendingCount || 0) === 0) {
+                                updateSyncStatusText(`Last Location Sent: ${data.lastSync}`);
+                            }
                             StorageService.setLastSyncTime(data.lastSync);
 
                             const lastSyncEl = document.getElementById('last-sync-time-display');
@@ -574,9 +577,13 @@ function updateNetworkStatus() {
     const netDisplay = document.getElementById('network-status-display');
     const netBadge = document.getElementById('network-status-display-badge');
 
+    const nativePending = typeof locationPendingCount !== 'undefined' ? locationPendingCount : 0;
+    const storagePending = (typeof StorageService !== 'undefined' && typeof StorageService.getPendingCount === 'function') ? StorageService.getPendingCount() : 0;
+    const pendingCount = Math.max(nativePending, storagePending);
+
     if (isOnline) {
         if (netDisplay) {
-            netDisplay.textContent = 'Online';
+            netDisplay.innerHTML = '<span class="diag-dot diag-dot-green"></span> Online';
             netDisplay.style.color = '#10b981';
         }
         if (netBadge) {
@@ -591,9 +598,12 @@ function updateNetworkStatus() {
         if (typeof syncDSRs === 'function') {
             syncDSRs();
         }
+        if (pendingCount === 0) {
+            updateSyncStatusText('Synced');
+        }
     } else {
         if (netDisplay) {
-            netDisplay.textContent = 'Offline';
+            netDisplay.innerHTML = '<span class="diag-dot diag-dot-orange"></span> Offline';
             netDisplay.style.color = '#ef4444';
         }
         if (netBadge) {
@@ -601,12 +611,16 @@ function updateNetworkStatus() {
             netBadge.style.backgroundColor = '#FFE6D5';
             netBadge.style.color = '#F28C52';
         }
-        updateSyncStatusText(`Offline Mode – ${StorageService.getPendingCount()} locations pending sync`);
+        updateSyncStatusText(`Offline Mode – ${pendingCount} locations pending sync`);
     }
+    updateSyncUI();
 }
 
 function updateSyncUI() {
-    const pendingCount = StorageService.getPendingCount();
+    const nativePending = typeof locationPendingCount !== 'undefined' ? locationPendingCount : 0;
+    const storagePending = (typeof StorageService !== 'undefined' && typeof StorageService.getPendingCount === 'function') ? StorageService.getPendingCount() : 0;
+    const pendingCount = Math.max(nativePending, storagePending);
+
     const countEl = document.getElementById('pending-locations-count');
     if (countEl) {
         countEl.textContent = pendingCount.toString();

@@ -21,10 +21,135 @@ namespace LocationTracker.Platforms.Android
         private PowerManager.WakeLock _wakeLock;
         private int _locationsSentCount = 0;
 
+        private static readonly object _pendingLock = new object();
+        private static string PendingLocationsFilePath => Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "pending_locations_queue.json");
+
         public static int LocationsSentCount { get; set; } = 0;
         public static double LastLatitude { get; set; } = 0.0;
         public static double LastLongitude { get; set; } = 0.0;
         public static string LastSyncTime { get; set; } = "Never";
+
+        public static int PendingLocationsCount
+        {
+            get
+            {
+                lock (_pendingLock)
+                {
+                    try
+                    {
+                        if (!File.Exists(PendingLocationsFilePath)) return 0;
+                        var json = File.ReadAllText(PendingLocationsFilePath);
+                        if (string.IsNullOrWhiteSpace(json)) return 0;
+                        var list = System.Text.Json.JsonSerializer.Deserialize<List<string>>(json);
+                        return list?.Count ?? 0;
+                    }
+                    catch
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+
+        public static void SavePendingLocation(string payloadJson)
+        {
+            lock (_pendingLock)
+            {
+                try
+                {
+                    List<string> list = new List<string>();
+                    if (File.Exists(PendingLocationsFilePath))
+                    {
+                        var existingJson = File.ReadAllText(PendingLocationsFilePath);
+                        if (!string.IsNullOrWhiteSpace(existingJson))
+                        {
+                            list = System.Text.Json.JsonSerializer.Deserialize<List<string>>(existingJson) ?? new List<string>();
+                        }
+                    }
+                    list.Add(payloadJson);
+                    if (list.Count > 1000)
+                    {
+                        list.RemoveRange(0, list.Count - 1000);
+                    }
+                    File.WriteAllText(PendingLocationsFilePath, System.Text.Json.JsonSerializer.Serialize(list));
+                    GpsDiagnostics.Log($"[Offline Storage] Saved offline location. Total pending: {list.Count}");
+                }
+                catch (Exception ex)
+                {
+                    GpsDiagnostics.Log($"[Offline Storage] Error saving location: {ex.Message}");
+                }
+            }
+        }
+
+        public static async Task FlushPendingLocationsAsync(HttpClient client)
+        {
+            List<string> itemsToFlush;
+            lock (_pendingLock)
+            {
+                try
+                {
+                    if (!File.Exists(PendingLocationsFilePath)) return;
+                    var json = File.ReadAllText(PendingLocationsFilePath);
+                    if (string.IsNullOrWhiteSpace(json)) return;
+                    itemsToFlush = System.Text.Json.JsonSerializer.Deserialize<List<string>>(json);
+                    if (itemsToFlush == null || itemsToFlush.Count == 0) return;
+                }
+                catch
+                {
+                    return;
+                }
+            }
+
+            if (itemsToFlush == null || itemsToFlush.Count == 0) return;
+            GpsDiagnostics.Log($"[Offline Storage] Flushing {itemsToFlush.Count} pending offline locations...");
+
+            var remaining = new List<string>(itemsToFlush);
+            int flushedCount = 0;
+
+            foreach (var itemJson in itemsToFlush)
+            {
+                try
+                {
+                    var content = new StringContent(itemJson, System.Text.Encoding.UTF8, "application/json");
+                    var res = await client.PostAsync("https://fleettrackon.co.in/pcsdia/receiveddata", content);
+                    if (res.IsSuccessStatusCode)
+                    {
+                        remaining.Remove(itemJson);
+                        flushedCount++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                catch
+                {
+                    break;
+                }
+            }
+
+            lock (_pendingLock)
+            {
+                try
+                {
+                    if (remaining.Count > 0)
+                    {
+                        File.WriteAllText(PendingLocationsFilePath, System.Text.Json.JsonSerializer.Serialize(remaining));
+                    }
+                    else if (File.Exists(PendingLocationsFilePath))
+                    {
+                        File.Delete(PendingLocationsFilePath);
+                    }
+                }
+                catch {}
+            }
+
+            if (flushedCount > 0)
+            {
+                LocationsSentCount += flushedCount;
+                GpsDiagnostics.Log($"[Offline Storage] Flushed {flushedCount} locations. Remaining: {remaining.Count}");
+            }
+        }
 
         public override IBinder OnBind(Intent intent) => null;
 
@@ -144,45 +269,84 @@ namespace LocationTracker.Platforms.Android
                             LastLatitude = location.Latitude;
                             LastLongitude = location.Longitude;
 
-                            using (var client = new HttpClient())
+                            var payloadObj = new
+                            {
+                                useruniqeid = numericUserId > 0 ? (object)numericUserId : clientId,
+                                imeino = deviceId,
+                                deviceid = "GPS FIX",
+                                gpsLatitude = location.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                gpsLongitude = location.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                gpsAccuracy = location.Accuracy.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                gpsSpeed = location.Speed.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                gpsTimestamp = timestampStr,
+                                calbaering = Math.Round(location.Bearing)
+                            };
+                            string payloadJson = System.Text.Json.JsonSerializer.Serialize(payloadObj);
+
+                            bool sentSuccessfully = false;
+                            using (var client = new HttpClient { Timeout = TimeSpan.FromSeconds(15) })
                             {
                                 client.DefaultRequestHeaders.Add("Bypass-Tunnel-Reminder", "true");
 
-                                var payload = new
+                                try
                                 {
-                                    useruniqeid = numericUserId > 0 ? (object)numericUserId : clientId,
-                                    imeino = deviceId,
-                                    deviceid = "GPS FIX",
-                                    gpsLatitude = location.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                                    gpsLongitude = location.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                                    gpsAccuracy = location.Accuracy.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                                    gpsSpeed = location.Speed.ToString(System.Globalization.CultureInfo.InvariantCulture),
-                                    gpsTimestamp = timestampStr,
-                                    calbaering = Math.Round(location.Bearing)
-                                };
+                                    GpsDiagnostics.Log("Posting native coordinates payload to Skyway...");
+                                    var content = new StringContent(payloadJson, System.Text.Encoding.UTF8, "application/json");
+                                    var response = await client.PostAsync("https://fleettrackon.co.in/pcsdia/receiveddata", content);
+                                    if (response.IsSuccessStatusCode)
+                                    {
+                                        sentSuccessfully = true;
+                                        _locationsSentCount++;
+                                        LocationsSentCount = _locationsSentCount;
+                                        var localTime = DateTime.Now.ToString("h:mm:ss tt");
+                                        LastSyncTime = localTime;
+                                        GpsDiagnostics.Log($"[Background Service] Sent coordinates natively: Lat={location.Latitude}, Lng={location.Longitude}");
 
-                                 GpsDiagnostics.Log("Posting native coordinates payload to Skyway...");
-                                 var response = await client.PostAsJsonAsync("https://fleettrackon.co.in/pcsdia/receiveddata", payload);
-                                if (response.IsSuccessStatusCode)
-                                {
-                                    _locationsSentCount++;
-                                    LocationsSentCount = _locationsSentCount;
-                                    var localTime = DateTime.Now.ToString("h:mm:ss tt");
-                                    LastSyncTime = localTime;
-                                    GpsDiagnostics.Log($"[Background Service] Sent coordinates natively: Lat={location.Latitude}, Lng={location.Longitude}");
-                                    UpdateNotification($"Location sent to admin • Total: {_locationsSentCount} strings sent • Last: {localTime}");
+                                        // Flush any pending offline locations
+                                        await FlushPendingLocationsAsync(client);
+
+                                        int pendingNow = PendingLocationsCount;
+                                        if (pendingNow > 0)
+                                        {
+                                            UpdateNotification($"Location sent • {pendingNow} pending • Total sent: {LocationsSentCount}");
+                                        }
+                                        else
+                                        {
+                                            UpdateNotification($"Location sent to admin • Total: {LocationsSentCount} sent • Last: {localTime}");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        GpsDiagnostics.Log($"[Background Service] Failed to send natively: {response.StatusCode} {response.ReasonPhrase}");
+                                    }
                                 }
-                                else
+                                catch (Exception netEx)
                                 {
-                                    GpsDiagnostics.Log($"[Background Service] Failed to send natively: {response.StatusCode} {response.ReasonPhrase}");
-                                    UpdateNotification($"Send failed ({response.StatusCode}) • Total sent: {_locationsSentCount}");
+                                    GpsDiagnostics.Log($"[Background Service] Network error sending location: {netEx.Message}");
                                 }
+                            }
+
+                            if (!sentSuccessfully)
+                            {
+                                // Offline mode or network error: Save to offline queue
+                                SavePendingLocation(payloadJson);
+                                int pending = PendingLocationsCount;
+                                GpsDiagnostics.Log($"[Background Service] Saved location offline. Pending count: {pending}");
+                                UpdateNotification($"Offline Mode • {pending} locations pending • Total sent: {LocationsSentCount}");
                             }
                         }
                         else
                         {
                             GpsDiagnostics.Log("Native location resolved to null.");
-                            UpdateNotification($"Waiting for GPS fix... • Total sent: {_locationsSentCount}");
+                            int pending = PendingLocationsCount;
+                            if (pending > 0)
+                            {
+                                UpdateNotification($"Offline Mode • {pending} locations pending • Total sent: {LocationsSentCount}");
+                            }
+                            else
+                            {
+                                UpdateNotification($"Waiting for GPS fix... • Total sent: {_locationsSentCount}");
+                            }
                         }
                     }
                 }

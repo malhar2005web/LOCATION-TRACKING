@@ -218,11 +218,12 @@ namespace LOCATION_TRACKING
                 latitude = LocationTracker.Platforms.Android.AndroidBackgroundService.LastLatitude,
                 longitude = LocationTracker.Platforms.Android.AndroidBackgroundService.LastLongitude,
                 sentCount = LocationTracker.Platforms.Android.AndroidBackgroundService.LocationsSentCount,
+                pendingCount = LocationTracker.Platforms.Android.AndroidBackgroundService.PendingLocationsCount,
                 lastSync = LocationTracker.Platforms.Android.AndroidBackgroundService.LastSyncTime
             };
             return Task.FromResult(System.Text.Json.JsonSerializer.Serialize(data));
 #else
-            var data = new { latitude = 0.0, longitude = 0.0, sentCount = 0, lastSync = "Never" };
+            var data = new { latitude = 0.0, longitude = 0.0, sentCount = 0, pendingCount = 0, lastSync = "Never" };
             return Task.FromResult(System.Text.Json.JsonSerializer.Serialize(data));
 #endif
         }
