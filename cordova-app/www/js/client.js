@@ -1715,14 +1715,16 @@ async function submitOthers() {
                 checkin_timestamp: visitCheckinTs,
                 checkout_timestamp: visitCheckoutTs,
                 leadno: '',
-                sync_status: 'Pending',
+                sync_status: navigator.onLine ? 'Synced' : 'Pending',
                 created_timestamp: new Date().toISOString()
             };
 
             DsrDb.saveDsr(localDsr, (saved) => {
                 console.log('[Others] DSR saved locally:', saved);
                 if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
-                syncDSRs();
+                if (!navigator.onLine) {
+                    syncDSRs();
+                }
             });
         }
 
@@ -3824,14 +3826,16 @@ async function submitDSR() {
             checkin_timestamp: visitCheckinTs,
             checkout_timestamp: visitCheckoutTs,
             leadno: (selectedClient && selectedClient.leadno) || "",
-            sync_status: 'Pending',
+            sync_status: navigator.onLine ? 'Synced' : 'Pending',
             created_timestamp: new Date().toISOString()
         };
 
         DsrDb.saveDsr(localDsr, (saved) => {
             console.log('[DSR] DSR saved locally:', saved);
             if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
-            syncDSRs();
+            if (!navigator.onLine) {
+                syncDSRs();
+            }
         });
     }
 
@@ -5752,14 +5756,16 @@ async function submitNewClient() {
                 checkin_timestamp: visitCheckinTs,
                 checkout_timestamp: visitCheckoutTs,
                 leadno: '',
-                sync_status: 'Pending',
+                sync_status: navigator.onLine ? 'Synced' : 'Pending',
                 created_timestamp: new Date().toISOString()
             };
 
             DsrDb.saveDsr(localDsr, (saved) => {
                 console.log('[NewClient] DSR saved locally:', saved);
                 if (typeof updateDiagnosticsUI === 'function') updateDiagnosticsUI();
-                syncDSRs();
+                if (!navigator.onLine) {
+                    syncDSRs();
+                }
             });
         }
 

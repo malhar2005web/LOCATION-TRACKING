@@ -273,10 +273,15 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
     // Helper to get true timestamp in milliseconds for strict chronological ordering
     function getRecordTimestamp(r) {
         if (!r) return 0;
+        const act = (r.activity || '').toUpperCase().trim();
+
+        // Synthetic "No End Punch" row from server stored procedure always belongs at the very end of the day
+        if (act === 'END' && (r.gpsaddress === 'No End Punch' || r.address === 'No End Punch' || !r.endday || r.endday === '--')) {
+            return Number.MAX_SAFE_INTEGER;
+        }
+
         const baseDateStr = (r.dated || r.datetimeis || '').toString().split('T')[0].split(' ')[0] || new Date().toISOString().split('T')[0];
         
-        // Status-specific exact time
-        const act = (r.activity || '').toUpperCase().trim();
         let specificTime = null;
         if (act === 'START') specificTime = r.startday;
         else if (act === 'CHECKIN') specificTime = r.checkintime;
@@ -290,21 +295,22 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
 
         if (specificTime && typeof specificTime === 'string') {
             const cleanTime = specificTime.trim();
-            if (cleanTime.includes('-') || cleanTime.includes('/')) {
-                const d = new Date(cleanTime.replace(' ', 'T'));
-                if (!isNaN(d.getTime())) return d.getTime();
-            }
-            const combined = `${baseDateStr} ${cleanTime}`;
+            // Convert to IST if UTC time string
+            const istTime = formatToIndianTime(cleanTime);
+            const timePart = istTime.includes(' ') ? istTime.split(' ')[1] : istTime;
+            const combined = `${baseDateStr} ${timePart}`;
             const d = new Date(combined.replace(/-/g, '/'));
             if (!isNaN(d.getTime())) return d.getTime();
         }
 
         if (r.datetimeis) {
-            const d = new Date(r.datetimeis.toString().replace(/-/g, '/'));
+            const formatted = formatToIndianTime(r.datetimeis.toString());
+            const d = new Date(formatted.replace(/-/g, '/'));
             if (!isNaN(d.getTime()) && d.getTime() > 0) return d.getTime();
         }
         if (r.dated) {
-            const d = new Date(r.dated.toString().replace(/-/g, '/'));
+            const formatted = formatToIndianTime(r.dated.toString());
+            const d = new Date(formatted.replace(/-/g, '/'));
             if (!isNaN(d.getTime()) && d.getTime() > 0) return d.getTime();
         }
 
@@ -320,7 +326,7 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         'NEW_CLIENT': 3,
         'OTHERS': 3,
         'CHECKOUT': 4,
-        'END': 5
+        'END': 999
     };
 
     // Strict Pure Chronological Sorting: Natural timeline of employee activity
@@ -334,7 +340,7 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         }
 
         // 2. If exact same timestamp, use natural lifecycle as tie-breaker:
-        // START (1) -> CHECKIN (2) -> DSR_UPDATE/OTHERS (3) -> CHECKOUT (4) -> END (5)
+        // START (1) -> CHECKIN (2) -> DSR_UPDATE/OTHERS (3) -> CHECKOUT (4) -> END (999)
         const actA = (a.activity || '').toUpperCase().trim();
         const actB = (b.activity || '').toUpperCase().trim();
         const orderA = ACTIVITY_ORDER[actA] || 3;
@@ -379,7 +385,28 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         }
     }
 
-    return validRecords.map((row, i) => {
+    // De-duplicate identical consecutive records (same activity & client within 5 seconds)
+    const dedupedRecords = [];
+    for (let i = 0; i < validRecords.length; i++) {
+        const curr = validRecords[i];
+        if (dedupedRecords.length > 0) {
+            const last = dedupedRecords[dedupedRecords.length - 1];
+            const currAct = (curr.activity || '').toUpperCase().trim();
+            const lastAct = (last.activity || '').toUpperCase().trim();
+            const currTime = getRecordTimestamp(curr);
+            const lastTime = getRecordTimestamp(last);
+            const currClient = (curr.clientname || curr.client || '').trim().toLowerCase();
+            const lastClient = (last.clientname || last.client || '').trim().toLowerCase();
+
+            // If same activity, same client, and within 5 seconds -> skip duplicate
+            if (currAct === lastAct && currClient === lastClient && Math.abs(currTime - lastTime) <= 5000 && currAct !== 'START' && currAct !== 'END') {
+                continue;
+            }
+        }
+        dedupedRecords.push(curr);
+    }
+
+    return dedupedRecords.map((row, i) => {
         const status = (row.activity || 'CHECKIN').toUpperCase().trim();
         const rawDate = row.datetimeis || row.dated || '--';
         const dateStr = formatCellDateIST(rawDate);
