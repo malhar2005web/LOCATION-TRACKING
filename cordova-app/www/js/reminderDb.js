@@ -329,10 +329,11 @@ const ReminderDb = {
 
     saveCachedClients: function(clients, callback) {
         const self = this;
+        try {
+            localStorage.setItem('cached_clients_store', JSON.stringify(clients));
+        } catch (e) {}
+
         if (self.useFallback) {
-            try {
-                localStorage.setItem('cached_clients_store', JSON.stringify(clients));
-            } catch (e) {}
             if (callback) callback();
             return;
         }

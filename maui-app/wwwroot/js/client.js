@@ -108,6 +108,100 @@ function updateGreeting() {
 }
 
 /**
+ * ============================================
+ * Workday & Attendance Server Synchronization
+ * ============================================
+ * Checks last START/END and CHECKIN/CHECKOUT from server
+ * - POST /laststartendday { empid: "..." }
+ * - POST /lastcheckinout { empid: "..." }
+ */
+async function syncWorkdayStateFromServer() {
+    if (!navigator.onLine) return;
+
+    const session = typeof getSession === 'function' ? getSession() : null;
+    if (!session || !session.userData) return;
+
+    const empid = (session.userData.name) || session.userData.clientId || 'demo group';
+
+    try {
+        console.log('[SyncWorkday] Checking server workday status for:', empid);
+
+        // 1. Check Last START/END status
+        const startEndReq = fetch(`${API_BASE_URL}/laststartendday`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ empid: empid })
+        }).then(r => r.json()).catch(err => {
+            console.warn('[SyncWorkday] laststartendday fetch failed:', err);
+            return null;
+        });
+
+        // 2. Check Last CHECKIN/CHECKOUT status
+        const checkInOutReq = fetch(`${API_BASE_URL}/lastcheckinout`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ empid: empid })
+        }).then(r => r.json()).catch(err => {
+            console.warn('[SyncWorkday] lastcheckinout fetch failed:', err);
+            return null;
+        });
+
+        const [startEndRes, checkInOutRes] = await Promise.all([startEndReq, checkInOutReq]);
+
+        let stateChanged = false;
+
+        // Process START/END status
+        if (startEndRes && Array.isArray(startEndRes.trackerid) && startEndRes.trackerid.length > 0) {
+            const latest = startEndRes.trackerid[0];
+            const serverStatus = String(latest.status || '').toUpperCase().trim();
+            console.log('[SyncWorkday] Server last start/end status:', serverStatus, latest.stratendtime);
+
+            if (serverStatus === 'START') {
+                if (!isDayStarted) {
+                    isDayStarted = true;
+                    localStorage.setItem('isDayStarted', 'true');
+                    stateChanged = true;
+                }
+            } else if (serverStatus === 'END') {
+                if (isDayStarted) {
+                    isDayStarted = false;
+                    localStorage.setItem('isDayStarted', 'false');
+                    stateChanged = true;
+                }
+            }
+        }
+
+        // Process CHECKIN/CHECKOUT status
+        if (checkInOutRes && Array.isArray(checkInOutRes.trackerid) && checkInOutRes.trackerid.length > 0) {
+            const latest = checkInOutRes.trackerid[0];
+            const serverStatus = String(latest.status || '').toUpperCase().trim();
+            console.log('[SyncWorkday] Server last check-in/out status:', serverStatus, latest.checkinouttime);
+
+            if (serverStatus === 'CHECKIN') {
+                if (!isCheckedIn) {
+                    isCheckedIn = true;
+                    localStorage.setItem('isCheckedIn', 'true');
+                    stateChanged = true;
+                }
+            } else if (serverStatus === 'CHECKOUT') {
+                if (isCheckedIn) {
+                    isCheckedIn = false;
+                    localStorage.setItem('isCheckedIn', 'false');
+                    stateChanged = true;
+                }
+            }
+        }
+
+        if (stateChanged) {
+            updateWorkdayUI();
+            updateMetricsUI();
+        }
+    } catch (e) {
+        console.error('[SyncWorkday] Error syncing workday status:', e);
+    }
+}
+
+/**
  * Initialize the client dashboard
  * @param {Object} clientData - { clientId, deviceId, name }
  */
@@ -162,6 +256,9 @@ function initClientDashboard(clientData) {
     // Restore workday state
     isDayStarted = localStorage.getItem('isDayStarted') === 'true';
     isCheckedIn = localStorage.getItem('isCheckedIn') === 'true';
+
+    // Sync latest Workday & Attendance status directly with server
+    syncWorkdayStateFromServer();
 
     // Initialize Reminders database and refresh count
     populateTimeSelectors();
@@ -592,6 +689,7 @@ function updateNetworkStatus() {
             netBadge.style.color = '#8ABF9A';
         }
         console.log('[Network] Connection restored. Triggering sync...');
+        syncWorkdayStateFromServer();
         syncPendingLocations();
         syncReminders();
         syncLeaves();
@@ -1369,7 +1467,50 @@ function handleReports() {
  */
 function handleUpdateDSR() {
     showView('dsr-client-list-view');
-    fetchClientList();
+
+    // Reset search inputs on opening
+    const clientSearchInput = document.getElementById('search-client-input');
+    const groupSearchInput = document.getElementById('search-group-input');
+    if (clientSearchInput) clientSearchInput.value = '';
+    if (groupSearchInput) groupSearchInput.value = '';
+
+    // 1. If App Memory already has clients, render immediately (ZERO network delay)
+    if (typeof appMemoryClientList !== 'undefined' && Array.isArray(appMemoryClientList) && appMemoryClientList.length > 0) {
+        currentClientList = appMemoryClientList;
+        renderClientList(appMemoryClientList);
+        return;
+    }
+
+    // 2. Check localStorage fast cache
+    try {
+        const localData = localStorage.getItem('cached_clients_store');
+        if (localData) {
+            const parsed = JSON.parse(localData);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                appMemoryClientList = parsed;
+                currentClientList = parsed;
+                renderClientList(parsed);
+                return;
+            }
+        }
+    } catch (e) {}
+
+    // 3. Check SQLite cached_clients table
+    if (typeof ReminderDb !== 'undefined') {
+        ReminderDb.searchCachedClients('', '', (localList) => {
+            if (localList && localList.length > 0) {
+                appMemoryClientList = localList;
+                currentClientList = localList;
+                renderClientList(localList);
+            } else {
+                // Client list is completely blank in memory and local storage -> fetch from server
+                console.log('[ClientList] Memory and local cache are blank. Fetching from server...');
+                fetchClientList(true);
+            }
+        });
+    } else {
+        fetchClientList(true);
+    }
 }
 
 function handleNewClient() {
@@ -3135,19 +3276,85 @@ function populateTimeSelectors() {
 
 /**
  * Client search & filter workflows
+ * In-Memory Caching & Offline-First Strategy
  */
+let appMemoryClientList = [];
 let currentClientList = [];
 let selectedClient = null;
+let isFetchingClientList = false;
 
-async function fetchClientList() {
+// Preload client list from local storage into memory on startup
+(function initClientListMemory() {
+    try {
+        const localData = localStorage.getItem('cached_clients_store');
+        if (localData) {
+            const parsed = JSON.parse(localData);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                appMemoryClientList = parsed;
+                currentClientList = parsed;
+                console.log(`[ClientList] Preloaded ${appMemoryClientList.length} clients from storage into App Memory.`);
+            }
+        }
+    } catch (e) {}
+})();
+
+/**
+ * Fetch Client List:
+ * - If forceServerFetch === false and memory has clients: filters in-memory instantly (0 network calls).
+ * - If forceServerFetch === true or memory/cache is blank: fetches from server, saves to App Memory & SQLite.
+ */
+async function fetchClientList(forceServerFetch = false) {
     const tableBody = document.getElementById('client-list-tbody');
     if (!tableBody) return;
 
-    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">Loading clients...</td></tr>`;
-    const clientSearch = document.getElementById('search-client-input').value.trim();
-    const groupSearch = document.getElementById('search-group-input').value.trim();
+    const clientSearchInput = document.getElementById('search-client-input');
+    const groupSearchInput = document.getElementById('search-group-input');
+    const clientSearch = clientSearchInput ? clientSearchInput.value.trim() : '';
+    const groupSearch = groupSearchInput ? groupSearchInput.value.trim() : '';
 
-    const session = getSession();
+    // 1. If not forced and memory is already populated, filter in-memory with zero network overhead
+    if (!forceServerFetch && appMemoryClientList && appMemoryClientList.length > 0) {
+        filterClientListInMemory(clientSearch, groupSearch);
+        return;
+    }
+
+    // 2. If not forced, check local storage / SQLite DB first before hitting server
+    if (!forceServerFetch) {
+        try {
+            const localData = localStorage.getItem('cached_clients_store');
+            if (localData) {
+                const parsed = JSON.parse(localData);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    appMemoryClientList = parsed;
+                    currentClientList = parsed;
+                    filterClientListInMemory(clientSearch, groupSearch);
+                    return;
+                }
+            }
+        } catch (e) {}
+
+        if (typeof ReminderDb !== 'undefined') {
+            ReminderDb.searchCachedClients(clientSearch, groupSearch, (localList) => {
+                if (localList && localList.length > 0) {
+                    appMemoryClientList = localList;
+                    currentClientList = localList;
+                    renderClientList(localList);
+                } else {
+                    // Blank in cache -> fetch from server
+                    fetchClientList(true);
+                }
+            });
+            return;
+        }
+    }
+
+    // 3. Server Fetch (Only when explicitly forced or cache is empty)
+    if (isFetchingClientList) return;
+    isFetchingClientList = true;
+
+    tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);"><i class="fa fa-spinner fa-spin" style="margin-right:8px;"></i>Loading clients from server...</td></tr>`;
+
+    const session = typeof getSession === 'function' ? getSession() : null;
     const userid = (session && session.userData && session.userData.name) || 'demo admin2';
     const gemptype = (session && session.role) || 'admin';
 
@@ -3157,7 +3364,7 @@ async function fetchClientList() {
     // Attempt to pull from API if online
     if (navigator.onLine) {
         try {
-            console.log('[ClientList] Fetching from API with search:', clientSearch, groupSearch);
+            console.log('[ClientList] Fetching fresh client list from server:', userid, gemptype);
             let response = await fetch(`${API_BASE_URL}/getclientlistbygroup`, {
                 method: 'POST',
                 headers: {
@@ -3166,8 +3373,8 @@ async function fetchClientList() {
                 body: JSON.stringify({
                     userid: userid,
                     gemptype: gemptype,
-                    leadnametosearch: clientSearch,
-                    groupnametosearch: groupSearch,
+                    leadnametosearch: "",
+                    groupnametosearch: "",
                     gempcluster: ""
                 })
             });
@@ -3176,8 +3383,6 @@ async function fetchClientList() {
                 list = data.trackerid;
                 success = true;
                 console.log(`[ClientList] Loaded ${list.length} clients from API.`);
-                // Cache clients in SQLite/localStorage
-                ReminderDb.saveCachedClients(list);
             } else {
                 // FALLBACK: Query with "demo admin2" and "admin" if empty
                 console.log('[ClientList] Empty response for user. Falling back to demo admin2...');
@@ -3187,8 +3392,8 @@ async function fetchClientList() {
                     body: JSON.stringify({
                         userid: "demo admin2",
                         gemptype: "admin",
-                        leadnametosearch: clientSearch,
-                        groupnametosearch: groupSearch,
+                        leadnametosearch: "",
+                        groupnametosearch: "",
                         gempcluster: ""
                     })
                 });
@@ -3197,8 +3402,6 @@ async function fetchClientList() {
                     list = data.trackerid;
                     success = true;
                     console.log(`[ClientList] Loaded ${list.length} clients from API (demo admin2).`);
-                    // Cache clients in SQLite/localStorage
-                    ReminderDb.saveCachedClients(list);
                 }
             }
         } catch (err) {
@@ -3206,17 +3409,38 @@ async function fetchClientList() {
         }
     }
 
-    if (!success) {
+    isFetchingClientList = false;
+
+    if (success && list.length > 0) {
+        // Save into App Memory and persistent storage
+        appMemoryClientList = list;
+        currentClientList = list;
+        try {
+            localStorage.setItem('cached_clients_store', JSON.stringify(list));
+        } catch (e) {}
+        if (typeof ReminderDb !== 'undefined') {
+            ReminderDb.saveCachedClients(list);
+        }
+        filterClientListInMemory(clientSearch, groupSearch);
+        showToast(`Loaded ${list.length} clients into memory`, 'success', 2500);
+    } else {
+        // API offline or failed, querying local cache
         console.log('[ClientList] API offline or failed, querying local cache...');
-        await new Promise(resolve => {
-            ReminderDb.searchCachedClients(clientSearch, groupSearch, localList => {
-                list = localList;
-                resolve();
+        let localLoaded = false;
+        if (typeof ReminderDb !== 'undefined') {
+            await new Promise(resolve => {
+                ReminderDb.searchCachedClients(clientSearch, groupSearch, localList => {
+                    if (localList && localList.length > 0) {
+                        list = localList;
+                        localLoaded = true;
+                    }
+                    resolve();
+                });
             });
-        });
+        }
 
         // If local SQLite is empty, fall back to default mock list
-        if (!list || list.length === 0) {
+        if (!localLoaded || !list || list.length === 0) {
             console.log('[ClientList] Local cache empty. Loading default mock clients...');
             const defaultMockList = [
                 {
@@ -3248,32 +3472,76 @@ async function fetchClientList() {
                 }
             ];
 
-            // Filter locally if search params entered
-            list = defaultMockList.filter(c => {
-                let match = true;
-                if (clientSearch) {
-                    match = match && c.leadname.toLowerCase().includes(clientSearch.toLowerCase());
-                }
-                if (groupSearch) {
-                    match = match && (c.reserved1 || '').toLowerCase().includes(groupSearch.toLowerCase());
-                }
-                return match;
-            });
-
-            // Cache default mocks
-            ReminderDb.saveCachedClients(defaultMockList);
+            appMemoryClientList = defaultMockList;
+            currentClientList = defaultMockList;
+            try {
+                localStorage.setItem('cached_clients_store', JSON.stringify(defaultMockList));
+            } catch (e) {}
+            if (typeof ReminderDb !== 'undefined') {
+                ReminderDb.saveCachedClients(defaultMockList);
+            }
+            filterClientListInMemory(clientSearch, groupSearch);
+        } else {
+            appMemoryClientList = list;
+            currentClientList = list;
+            filterClientListInMemory(clientSearch, groupSearch);
         }
     }
+}
 
-    currentClientList = list;
-    renderClientList(list);
+/**
+ * Explicit Refresh Trigger (when user taps the Refresh button)
+ */
+function refreshClientList() {
+    showToast('Refreshing client list from server...', 'info', 2000);
+    fetchClientList(true);
+}
+
+/**
+ * In-Memory Client Filtering (Zero network lag, instant filter)
+ */
+function filterClientListInMemory(clientSearch, groupSearch) {
+    const sourceList = (appMemoryClientList && appMemoryClientList.length > 0)
+        ? appMemoryClientList
+        : (currentClientList && currentClientList.length > 0 ? currentClientList : []);
+
+    if (!sourceList || sourceList.length === 0) {
+        renderClientList([]);
+        return;
+    }
+
+    const cSearch = (clientSearch || '').toLowerCase().trim();
+    const gSearch = (groupSearch || '').toLowerCase().trim();
+
+    if (!cSearch && !gSearch) {
+        renderClientList(sourceList);
+        return;
+    }
+
+    const filtered = sourceList.filter(c => {
+        let match = true;
+        if (cSearch) {
+            const name = (c.leadname || '').toLowerCase();
+            const addr = (c.address || '').toLowerCase();
+            const contact = (c.contactperson || '').toLowerCase();
+            const phone = (c.contactno || '').toLowerCase();
+            match = match && (name.includes(cSearch) || addr.includes(cSearch) || contact.includes(cSearch) || phone.includes(cSearch));
+        }
+        if (gSearch) {
+            const grp = (c.reserved1 || c.groupname || c.leadsitename || '').toLowerCase();
+            match = match && grp.includes(gSearch);
+        }
+        return match;
+    });
+
+    renderClientList(filtered);
 }
 
 function renderClientList(list) {
     const tableBody = document.getElementById('client-list-tbody');
     if (!tableBody) return;
 
-    if (list.length === 0) {
+    if (!list || list.length === 0) {
         tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--color-text-secondary);">No clients found</td></tr>`;
         return;
     }
@@ -3309,14 +3577,18 @@ let clientSearchTimeout = null;
 function filterClientList() {
     clearTimeout(clientSearchTimeout);
     clientSearchTimeout = setTimeout(() => {
-        fetchClientList();
-    }, 300);
+        const clientSearch = document.getElementById('search-client-input')?.value.trim() || '';
+        const groupSearch = document.getElementById('search-group-input')?.value.trim() || '';
+        filterClientListInMemory(clientSearch, groupSearch);
+    }, 150);
 }
 
 function clearClientListFilters() {
-    document.getElementById('search-client-input').value = '';
-    document.getElementById('search-group-input').value = '';
-    fetchClientList();
+    const clientInput = document.getElementById('search-client-input');
+    const groupInput = document.getElementById('search-group-input');
+    if (clientInput) clientInput.value = '';
+    if (groupInput) groupInput.value = '';
+    filterClientListInMemory('', '');
 }
 
 function openBookingForm(name, siteName, address, leadno) {

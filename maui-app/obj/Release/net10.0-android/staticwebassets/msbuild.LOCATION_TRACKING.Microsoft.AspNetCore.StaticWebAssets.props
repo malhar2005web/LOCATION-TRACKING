@@ -192,12 +192,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>1a85wdew2h</Fingerprint>
-      <Integrity>1/JMItelwiX0qQWtRQ9elugBgsrsKPx0kUh3h8+S/IA=</Integrity>
+      <Fingerprint>gvy7q7nezm</Fingerprint>
+      <Integrity>THLHw6Qo4opJf46MzT1ypAUMG3hshomJ3eCcpMZ6gvA=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>230329</FileLength>
-      <LastWriteTime>Tue, 15 Sep 2026 07:26:38 GMT</LastWriteTime>
+      <FileLength>241206</FileLength>
+      <LastWriteTime>Wed, 16 Sep 2026 14:25:09 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\client.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\dsrDb.js'))">
@@ -252,12 +252,12 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>gua1e9rvvk</Fingerprint>
-      <Integrity>2BCpIyBb7N3WckJ99KAtx47lKNyAW+TqOVnhX4dZ/B4=</Integrity>
+      <Fingerprint>a3yfe3iqqy</Fingerprint>
+      <Integrity>qktahn5wyQr8SwdRwnzxXEqNkHtae8ijLGjruHmwjCA=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <FileLength>16841</FileLength>
-      <LastWriteTime>Mon, 31 Dec 1979 18:30:00 GMT</LastWriteTime>
+      <FileLength>16830</FileLength>
+      <LastWriteTime>Wed, 16 Sep 2026 14:22:14 GMT</LastWriteTime>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\reminderDb.js'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\storage.js'))">
