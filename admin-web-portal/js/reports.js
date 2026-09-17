@@ -273,20 +273,41 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
     // Helper to get true timestamp in milliseconds for strict chronological ordering
     function getRecordTimestamp(r) {
         if (!r) return 0;
+        const baseDateStr = (r.dated || r.datetimeis || '').toString().split('T')[0].split(' ')[0] || new Date().toISOString().split('T')[0];
+        
+        // Status-specific exact time
+        const act = (r.activity || '').toUpperCase().trim();
+        let specificTime = null;
+        if (act === 'START') specificTime = r.startday;
+        else if (act === 'CHECKIN') specificTime = r.checkintime;
+        else if (act === 'DSR_UPDATE' || act === 'NEW_CLIENT' || act === 'OTHERS') specificTime = r.dsrtime;
+        else if (act === 'CHECKOUT') specificTime = r.checkouttime || r.endday;
+        else if (act === 'END') specificTime = r.endday;
+
+        if (!specificTime) {
+            specificTime = r.checkintime || r.dsrtime || r.checkouttime || r.startday || r.endday;
+        }
+
+        if (specificTime && typeof specificTime === 'string') {
+            const cleanTime = specificTime.trim();
+            if (cleanTime.includes('-') || cleanTime.includes('/')) {
+                const d = new Date(cleanTime.replace(' ', 'T'));
+                if (!isNaN(d.getTime())) return d.getTime();
+            }
+            const combined = `${baseDateStr} ${cleanTime}`;
+            const d = new Date(combined.replace(/-/g, '/'));
+            if (!isNaN(d.getTime())) return d.getTime();
+        }
+
         if (r.datetimeis) {
-            const d = new Date(r.datetimeis);
+            const d = new Date(r.datetimeis.toString().replace(/-/g, '/'));
             if (!isNaN(d.getTime()) && d.getTime() > 0) return d.getTime();
         }
         if (r.dated) {
-            const d = new Date(r.dated);
+            const d = new Date(r.dated.toString().replace(/-/g, '/'));
             if (!isNaN(d.getTime()) && d.getTime() > 0) return d.getTime();
         }
-        const baseDateStr = (r.dated || r.datetimeis || '').toString().split('T')[0].split(' ')[0] || new Date().toISOString().split('T')[0];
-        const timeStr = r.startday || r.checkintime || r.dsrtime || r.checkouttime || r.endday;
-        if (timeStr) {
-            const d = new Date(`${baseDateStr} ${timeStr}`);
-            if (!isNaN(d.getTime())) return d.getTime();
-        }
+
         if (r.srno != null) return Number(r.srno);
         return 0;
     }
@@ -302,25 +323,22 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
         'END': 5
     };
 
-    // Pure chronological sort: Natural timeline of employee activity
+    // Strict Pure Chronological Sorting: Natural timeline of employee activity
     validRecords.sort((a, b) => {
         const timeA = getRecordTimestamp(a);
         const timeB = getRecordTimestamp(b);
 
+        // 1. If timestamps are different, sort strictly by time
+        if (timeA !== timeB && timeA > 0 && timeB > 0) {
+            return timeA - timeB;
+        }
+
+        // 2. If exact same timestamp, use natural lifecycle as tie-breaker:
+        // START (1) -> CHECKIN (2) -> DSR_UPDATE/OTHERS (3) -> CHECKOUT (4) -> END (5)
         const actA = (a.activity || '').toUpperCase().trim();
         const actB = (b.activity || '').toUpperCase().trim();
         const orderA = ACTIVITY_ORDER[actA] || 3;
         const orderB = ACTIVITY_ORDER[actB] || 3;
-
-        // If records occurred within the same 5-minute visit transaction window, enforce natural lifecycle order:
-        // START (1) -> CHECKIN (2) -> DSR_UPDATE/OTHERS (3) -> CHECKOUT (4) -> END (5)
-        if (Math.abs(timeA - timeB) <= 300000 && orderA !== orderB) {
-            return orderA - orderB;
-        }
-
-        if (timeA !== timeB && timeA > 0 && timeB > 0) {
-            return timeA - timeB;
-        }
 
         if (orderA !== orderB) {
             return orderA - orderB;
@@ -332,6 +350,34 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
 
         return 0;
     });
+
+    // Propagate Client Name to CHECKIN and CHECKOUT records of the same visit triad
+    for (let i = 0; i < validRecords.length; i++) {
+        const curr = validRecords[i];
+        const status = (curr.activity || '').toUpperCase().trim();
+        
+        if (status === 'DSR_UPDATE' || status === 'NEW_CLIENT' || status === 'OTHERS') {
+            const clientName = curr.clientname || curr.client || (status === 'OTHERS' ? 'Others' : '');
+            if (clientName) {
+                // Look backward to prior CHECKIN if it has no client
+                if (i > 0) {
+                    const prev = validRecords[i - 1];
+                    const prevStatus = (prev.activity || '').toUpperCase().trim();
+                    if (prevStatus === 'CHECKIN' && (!prev.clientname && !prev.client)) {
+                        prev.clientname = clientName;
+                    }
+                }
+                // Look forward to next CHECKOUT if it has no client
+                if (i + 1 < validRecords.length) {
+                    const next = validRecords[i + 1];
+                    const nextStatus = (next.activity || '').toUpperCase().trim();
+                    if (nextStatus === 'CHECKOUT' && (!next.clientname && !next.client)) {
+                        next.clientname = clientName;
+                    }
+                }
+            }
+        }
+    }
 
     return validRecords.map((row, i) => {
         const status = (row.activity || 'CHECKIN').toUpperCase().trim();
