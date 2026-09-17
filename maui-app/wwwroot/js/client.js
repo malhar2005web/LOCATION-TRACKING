@@ -1514,6 +1514,9 @@ function handleUpdateDSR() {
 }
 
 function handleNewClient() {
+    // Capture visit check-in timestamp
+    window.currentVisitCheckinTime = new Date().toISOString();
+
     // Reset and initialize New Client Form
     resetNewClientForm();
     populateNewClientTimeSelectors();
@@ -1538,6 +1541,9 @@ function handleNewClient() {
 }
 
 function handleOthersCheckIn() {
+    // Capture visit check-in timestamp
+    window.currentVisitCheckinTime = new Date().toISOString();
+
     resetOthersForm();
     populateOthersTimeSelectors();
     showView('others-view');
@@ -1688,6 +1694,9 @@ async function submitOthers() {
         }
 
         // Save DSR record locally (offline-first & populates Day End Summary)
+        const visitCheckinTs = window.currentVisitCheckinTime || new Date(Date.now() - 20000).toISOString();
+        const visitCheckoutTs = new Date(Date.now() + 2000).toISOString();
+
         if (typeof DsrDb !== 'undefined') {
             const localDsr = {
                 client_id: userid,
@@ -1703,7 +1712,8 @@ async function submitOthers() {
                 latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
                 longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
                 activity_type: 'OTHERS',
-                checkout_timestamp: new Date(Date.now() + 2000).toISOString(),
+                checkin_timestamp: visitCheckinTs,
+                checkout_timestamp: visitCheckoutTs,
                 leadno: '',
                 sync_status: 'Pending',
                 created_timestamp: new Date().toISOString()
@@ -1776,11 +1786,11 @@ async function submitOthers() {
         resetOthersForm();
         showToast('Activity submitted successfully!', 'success');
 
-        // Trigger Checkout success modal with activityType = 'OTHERS'
+        // Trigger Checkout success modal with activityType = 'OTHERS' and visitCheckinTs
         const latNum = parseFloat(dsrBody.gpsLatitude) || 18.4748182;
         const lngNum = parseFloat(dsrBody.gpsLongitude) || 73.8119225;
         const clientDisplayName = customerName || 'Others';
-        showDsrSuccessModal('Activity Submitted!', '', clientDisplayName, latNum, lngNum, 'OTHERS');
+        showDsrSuccessModal('Activity Submitted!', '', clientDisplayName, latNum, lngNum, 'OTHERS', visitCheckinTs);
     };
 
     // Show Payload Inspector Modal Window before sending!
@@ -3673,6 +3683,9 @@ function openDSRForm(name, address, siteDetails, contactPerson, contactNo, leadn
 
     showView('existing-client-dsr-view');
 
+    // Capture visit check-in timestamp for this specific client visit
+    window.currentVisitCheckinTime = new Date().toISOString();
+
     // Start the DSR live timer
     startDsrTimer();
 
@@ -3790,6 +3803,9 @@ async function submitDSR() {
     }
 
     // Save DSR record locally
+    const visitCheckinTs = window.currentVisitCheckinTime || (dsrTimerStartTime ? new Date(dsrTimerStartTime).toISOString() : new Date(Date.now() - 15000).toISOString());
+    const visitCheckoutTs = new Date(Date.now() + 2000).toISOString();
+
     if (typeof DsrDb !== 'undefined') {
         const localDsr = {
             client_id: userid,
@@ -3805,7 +3821,8 @@ async function submitDSR() {
             latitude: parseFloat(dsrBody.gpsLatitude) || 0.0,
             longitude: parseFloat(dsrBody.gpsLongitude) || 0.0,
             activity_type: 'DSR_UPDATE',
-            checkout_timestamp: new Date(Date.now() + 2000).toISOString(),
+            checkin_timestamp: visitCheckinTs,
+            checkout_timestamp: visitCheckoutTs,
             leadno: (selectedClient && selectedClient.leadno) || "",
             sync_status: 'Pending',
             created_timestamp: new Date().toISOString()
@@ -3895,13 +3912,13 @@ async function submitDSR() {
     }
 
     // Show Custom Modal alert -> User taps OK -> triggers CHECKOUT & returns to Home Screen
-    showDsrSuccessModal('DSR Submitted!', timeStr, name, latNum, lngNum);
+    showDsrSuccessModal('DSR Submitted!', timeStr, name, latNum, lngNum, 'DSR_UPDATE', visitCheckinTs);
 }
 
 let pendingCheckoutData = null;
 
-function showDsrSuccessModal(title, timeStr, clientName, lat, lng, activityType = 'DSR_UPDATE') {
-    pendingCheckoutData = { clientName, lat, lng, activityType };
+function showDsrSuccessModal(title, timeStr, clientName, lat, lng, activityType = 'DSR_UPDATE', checkinTimestamp = null) {
+    pendingCheckoutData = { clientName, lat, lng, activityType, checkinTimestamp };
 
     // Remove any existing modal
     const existing = document.getElementById('dsr-success-modal');
@@ -4006,13 +4023,38 @@ async function onDsrSuccessOkClick() {
     const clientNameVal = (pendingCheckoutData && pendingCheckoutData.clientName) ? pendingCheckoutData.clientName : '';
     const activityType = (pendingCheckoutData && pendingCheckoutData.activityType) ? pendingCheckoutData.activityType : 'DSR_UPDATE';
 
+    const now = new Date();
+    let checkinIso = (pendingCheckoutData && pendingCheckoutData.checkinTimestamp) ? pendingCheckoutData.checkinTimestamp : '';
+    if (!checkinIso) {
+        checkinIso = new Date(now.getTime() - 15000).toISOString();
+    }
+    const checkinDate = checkinIso.replace('T', ' ').slice(0, 19);
+    const actDate = now.toISOString().replace('T', ' ').slice(0, 19);
+    const checkoutDate = new Date(now.getTime() + 2000).toISOString().replace('T', ' ').slice(0, 19);
+
     if (navigator.onLine) {
         try {
-            const now = new Date();
-            const actDate = now.toISOString().replace('T', ' ').slice(0, 19);
-            const checkoutDate = new Date(now.getTime() + 2000).toISOString().replace('T', ' ').slice(0, 19);
+            // 1. Send CHECKIN to iamatevent (Sets visit start timestamp for this specific client visit)
+            const checkinPayload = {
+                gotiamatdate: checkinDate,
+                gotempname: empid,
+                gotempid: userid,
+                gotinoutstatus: "CHECKIN",
+                gotiamatclient: clientNameVal || (activityType === 'OTHERS' ? 'Others' : ''),
+                gotiamatlat: latVal,
+                gotiamatlong: lngVal,
+                gimeinumber: imeino
+            };
+            console.log(`[Activity OK Click] 1/4 Triggering CHECKIN iamatevent:`, checkinPayload);
+            await fetch(`${API_BASE_URL}/iamatevent`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(checkinPayload)
+            }).then(r => r.text()).catch(err => console.error(`[CHECKIN] iamatevent failed:`, err));
 
-            // 1. Send specific Activity Punch to iamatevent (OTHERS / DSR_UPDATE / NEW_CLIENT)
+            await new Promise(r => setTimeout(r, 200));
+
+            // 2. Send specific Activity Punch to iamatevent (OTHERS / DSR_UPDATE / NEW_CLIENT)
             const actPayload = {
                 gotiamatdate: actDate,
                 gotempname: empid,
@@ -4023,14 +4065,16 @@ async function onDsrSuccessOkClick() {
                 gotiamatlong: lngVal,
                 gimeinumber: imeino
             };
-            console.log(`[Activity OK Click] Triggering ${activityType} iamatevent:`, actPayload);
+            console.log(`[Activity OK Click] 2/4 Triggering ${activityType} iamatevent:`, actPayload);
             await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(actPayload)
             }).then(r => r.text()).catch(err => console.error(`[${activityType}] iamatevent failed:`, err));
 
-            // 2. Send CHECKOUT to startendday (API 5) - CRITICAL: Stored procedure uses this to create CHECKOUT record & duration in getiamatsummaryrtp_2
+            await new Promise(r => setTimeout(r, 200));
+
+            // 3. Send CHECKOUT to startendday (API 5) - CRITICAL: Stored procedure uses this to create CHECKOUT record & duration in getiamatsummaryrtp_2
             const startEndCheckoutBody = {
                 gcdatetime: checkoutDate,
                 glaststatus: "CHECKOUT",
@@ -4039,14 +4083,14 @@ async function onDsrSuccessOkClick() {
                 gpsLatitude: latVal,
                 gpsLongitude: lngVal
             };
-            console.log('[Activity OK Click] Triggering CHECKOUT startendday:', startEndCheckoutBody);
+            console.log('[Activity OK Click] 3/4 Triggering CHECKOUT startendday:', startEndCheckoutBody);
             await fetch(`${API_BASE_URL}/startendday`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(startEndCheckoutBody)
             }).then(r => r.text()).catch(err => console.error('[CHECKOUT] startendday failed:', err));
 
-            // 3. Send CHECKOUT to iamatevent (API 4) - Updates user status snapshot to CHECKOUT
+            // 4. Send CHECKOUT to iamatevent (API 4) - Updates user status snapshot to CHECKOUT
             const checkoutPayload = {
                 gotiamatdate: checkoutDate,
                 gotempname: empid,
@@ -4057,7 +4101,7 @@ async function onDsrSuccessOkClick() {
                 gotiamatlong: lngVal,
                 gimeinumber: imeino
             };
-            console.log('[Activity OK Click] Triggering CHECKOUT iamatevent:', checkoutPayload);
+            console.log('[Activity OK Click] 4/4 Triggering CHECKOUT iamatevent:', checkoutPayload);
             await fetch(`${API_BASE_URL}/iamatevent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -4072,15 +4116,18 @@ async function onDsrSuccessOkClick() {
         }
     }
 
-    // 4. Reset isCheckedIn state & clear Geofence visit center so user can Check In again for subsequent visits
+    // 5. Reset isCheckedIn state & clear Geofence visit center so user can Check In again for subsequent visits
     if (typeof clearGeofenceVisitCenter === 'function') {
         clearGeofenceVisitCenter();
     }
     isCheckedIn = false;
     localStorage.setItem('isCheckedIn', 'false');
+    window.currentVisitCheckinTime = null;
+    pendingCheckoutData = null;
+
     updateWorkdayUI();
 
-    // 5. Return to Home screen AFTER await completes
+    // 6. Return to Home screen AFTER await completes
     showView('client-view');
 }
 
@@ -4276,7 +4323,15 @@ async function syncDSRs() {
                 const activityType = dsr.activity_type || (dsr.visited_for === 'Others' ? 'OTHERS' : (dsr.visited_for === 'New Registration' || dsr.visited_for === 'New Client' ? 'NEW_CLIENT' : 'DSR_UPDATE'));
                 const createdDateStr = dsr.created_timestamp ? dsr.created_timestamp.replace('T', ' ').slice(0, 19) : nowIso;
                 
-                // Calculate checkout date (2 seconds after create timestamp if not specified)
+                // 1. Calculate visit check-in timestamp (15-20s prior to form create timestamp if not specified)
+                let checkinIso = dsr.checkin_timestamp;
+                if (!checkinIso) {
+                    const parsedCreated = new Date(dsr.created_timestamp || Date.now());
+                    checkinIso = new Date(parsedCreated.getTime() - 20000).toISOString();
+                }
+                const checkinDateStr = checkinIso.replace('T', ' ').slice(0, 19);
+
+                // 2. Calculate visit checkout timestamp (2 seconds after create timestamp if not specified)
                 let checkoutDateStr = dsr.checkout_timestamp ? dsr.checkout_timestamp.replace('T', ' ').slice(0, 19) : '';
                 if (!checkoutDateStr) {
                     const parsedCreated = new Date(dsr.created_timestamp || Date.now());
@@ -4285,8 +4340,33 @@ async function syncDSRs() {
 
                 const latVal = parseFloat(dsr.latitude) || 18.4748182;
                 const lngVal = parseFloat(dsr.longitude) || 73.8119225;
+                const clientDisplayName = dsr.customer_name || (activityType === 'OTHERS' ? 'Others' : '');
 
-                // 1. Sync form details to updateleaddeatils_sky or generatenewlead
+                // Step 1: Punch CHECKIN to iamatevent (Sets visit start timestamp for this specific client visit)
+                try {
+                    const checkinPayload = {
+                        gotiamatdate: checkinDateStr,
+                        gotempname: clientNameText,
+                        gotempid: useridVal,
+                        gotinoutstatus: "CHECKIN",
+                        gotiamatclient: clientDisplayName,
+                        gotiamatlat: latVal,
+                        gotiamatlong: lngVal,
+                        gimeinumber: defaultDeviceId
+                    };
+                    console.log('[SyncDsr] 1/4 Posting CHECKIN to iamatevent:', checkinPayload);
+                    await fetch(`${API_BASE_URL}/iamatevent`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(checkinPayload)
+                    });
+                } catch (e) {
+                    console.error('[SyncDsr] CHECKIN iamatevent error:', e);
+                }
+
+                await new Promise(r => setTimeout(r, 150));
+
+                // Step 2: Sync form details to updateleaddeatils_sky or generatenewlead
                 if (activityType === 'NEW_CLIENT') {
                     const newLeadBody = {
                         userid: useridVal,
@@ -4313,7 +4393,7 @@ async function syncDSRs() {
                         lleadno: dsr.leadno || ''
                     };
                     try {
-                        console.log('[SyncDsr] Posting generatenewlead:', newLeadBody);
+                        console.log('[SyncDsr] 2/4 Posting generatenewlead:', newLeadBody);
                         await fetch(`${API_BASE_URL}/generatenewlead`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -4349,7 +4429,7 @@ async function syncDSRs() {
                         gempname: clientNameText
                     };
                     try {
-                        console.log('[SyncDsr] Posting updateleaddeatils_sky:', updateLeadBody);
+                        console.log('[SyncDsr] 2/4 Posting updateleaddeatils_sky:', updateLeadBody);
                         await fetch(`${API_BASE_URL}/updateleaddeatils_sky`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -4360,19 +4440,19 @@ async function syncDSRs() {
                     }
                 }
 
-                // 2. Punch the specific Activity to iamatevent (DSR_UPDATE / OTHERS / NEW_CLIENT)
+                // Step 3: Punch the specific Activity to iamatevent (DSR_UPDATE / OTHERS / NEW_CLIENT)
                 try {
                     const actPayload = {
                         gotiamatdate: createdDateStr,
                         gotempname: clientNameText,
                         gotempid: useridVal,
                         gotinoutstatus: activityType,
-                        gotiamatclient: dsr.customer_name || (activityType === 'OTHERS' ? 'Others' : ''),
+                        gotiamatclient: clientDisplayName,
                         gotiamatlat: latVal,
                         gotiamatlong: lngVal,
                         gimeinumber: defaultDeviceId
                     };
-                    console.log(`[SyncDsr] Posting activity ${activityType} to iamatevent:`, actPayload);
+                    console.log(`[SyncDsr] 2b/4 Posting activity ${activityType} to iamatevent:`, actPayload);
                     await fetch(`${API_BASE_URL}/iamatevent`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -4382,7 +4462,9 @@ async function syncDSRs() {
                     console.error(`[SyncDsr] iamatevent ${activityType} error:`, e);
                 }
 
-                // 3. Send CHECKOUT to startendday (Crucial for Day End Summary 2 visit duration)
+                await new Promise(r => setTimeout(r, 150));
+
+                // Step 4: Send CHECKOUT to startendday (Crucial for Day End Summary 2 visit duration)
                 try {
                     const checkoutBody = {
                         gcdatetime: checkoutDateStr,
@@ -4392,7 +4474,7 @@ async function syncDSRs() {
                         gpsLatitude: latVal,
                         gpsLongitude: lngVal
                     };
-                    console.log('[SyncDsr] Posting CHECKOUT to startendday:', checkoutBody);
+                    console.log('[SyncDsr] 3/4 Posting CHECKOUT to startendday:', checkoutBody);
                     await fetch(`${API_BASE_URL}/startendday`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -4402,18 +4484,19 @@ async function syncDSRs() {
                     console.error('[SyncDsr] startendday CHECKOUT error:', e);
                 }
 
-                // 4. Send CHECKOUT to iamatevent (Updates status snapshot)
+                // Step 5: Send CHECKOUT to iamatevent (Updates status snapshot)
                 try {
                     const checkoutPayload = {
                         gotiamatdate: checkoutDateStr,
                         gotempname: clientNameText,
                         gotempid: useridVal,
                         gotinoutstatus: "CHECKOUT",
-                        gotiamatclient: dsr.customer_name || (activityType === 'OTHERS' ? 'Others' : ''),
+                        gotiamatclient: clientDisplayName,
                         gotiamatlat: latVal,
                         gotiamatlong: lngVal,
                         gimeinumber: defaultDeviceId
                     };
+                    console.log('[SyncDsr] 4/4 Posting CHECKOUT to iamatevent:', checkoutPayload);
                     await fetch(`${API_BASE_URL}/iamatevent`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -5647,7 +5730,10 @@ async function submitNewClient() {
             showToast('Offline Mode: DSR saved locally.', 'info');
         }
 
-        // Save DSR record locally
+        // Save DSR record locally (offline-first & populates Day End Summary)
+        const visitCheckinTs = window.currentVisitCheckinTime || new Date(Date.now() - 20000).toISOString();
+        const visitCheckoutTs = new Date(Date.now() + 2000).toISOString();
+
         if (typeof DsrDb !== 'undefined') {
             const localDsr = {
                 client_id: userid,
@@ -5663,7 +5749,8 @@ async function submitNewClient() {
                 latitude: parseFloat(newClientBody.gpsLatitude) || 0.0,
                 longitude: parseFloat(newClientBody.gpsLongitude) || 0.0,
                 activity_type: 'NEW_CLIENT',
-                checkout_timestamp: new Date(Date.now() + 2000).toISOString(),
+                checkin_timestamp: visitCheckinTs,
+                checkout_timestamp: visitCheckoutTs,
                 leadno: '',
                 sync_status: 'Pending',
                 created_timestamp: new Date().toISOString()
@@ -5735,7 +5822,7 @@ async function submitNewClient() {
         // Trigger Checkout success modal (user clicks OK -> sends Checkout & returns to Home Screen)
         const latNum = parseFloat(newClientBody.gpsLatitude) || 18.4748182;
         const lngNum = parseFloat(newClientBody.gpsLongitude) || 73.8119225;
-        showDsrSuccessModal('New Client Registered!', '', clientName, latNum, lngNum);
+        showDsrSuccessModal('New Client Registered!', '', clientName, latNum, lngNum, 'NEW_CLIENT', visitCheckinTs);
     };
 
     // Show Payload Inspector Modal Window before sending!

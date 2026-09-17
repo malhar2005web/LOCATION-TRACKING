@@ -49,6 +49,7 @@ const DsrDb = {
                         latitude REAL,
                         longitude REAL,
                         activity_type TEXT DEFAULT 'DSR_UPDATE',
+                        checkin_timestamp TEXT,
                         checkout_timestamp TEXT,
                         leadno TEXT,
                         sync_status TEXT DEFAULT 'Pending',
@@ -58,6 +59,7 @@ const DsrDb = {
                     console.log('[DsrDb] DSRs table verified successfully.');
                     // Run non-destructive column additions for existing schema upgrades
                     tx.executeSql(`ALTER TABLE dsrs ADD COLUMN activity_type TEXT DEFAULT 'DSR_UPDATE'`, [], () => {}, () => {});
+                    tx.executeSql(`ALTER TABLE dsrs ADD COLUMN checkin_timestamp TEXT`, [], () => {}, () => {});
                     tx.executeSql(`ALTER TABLE dsrs ADD COLUMN checkout_timestamp TEXT`, [], () => {}, () => {});
                     tx.executeSql(`ALTER TABLE dsrs ADD COLUMN leadno TEXT`, [], () => {}, () => {});
                     if (callback) callback();
@@ -76,6 +78,10 @@ const DsrDb = {
 
     saveDsr: function(dsr, callback) {
         const self = this;
+        const nowIso = new Date().toISOString();
+        const checkinTs = dsr.checkin_timestamp || (dsr.created_timestamp ? new Date(new Date(dsr.created_timestamp).getTime() - 15000).toISOString() : new Date(Date.now() - 15000).toISOString());
+        const checkoutTs = dsr.checkout_timestamp || new Date(new Date(dsr.created_timestamp || Date.now()).getTime() + 2000).toISOString();
+
         const record = {
             id: dsr.id || 'DSR_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
             client_id: dsr.client_id || '',
@@ -91,10 +97,11 @@ const DsrDb = {
             latitude: parseFloat(dsr.latitude) || 0.0,
             longitude: parseFloat(dsr.longitude) || 0.0,
             activity_type: dsr.activity_type || (dsr.visited_for === 'Others' ? 'OTHERS' : (dsr.visited_for === 'New Client' ? 'NEW_CLIENT' : 'DSR_UPDATE')),
-            checkout_timestamp: dsr.checkout_timestamp || '',
+            checkin_timestamp: checkinTs,
+            checkout_timestamp: checkoutTs,
             leadno: dsr.leadno || '',
             sync_status: dsr.sync_status || 'Pending',
-            created_timestamp: dsr.created_timestamp || new Date().toISOString()
+            created_timestamp: dsr.created_timestamp || nowIso
         };
 
         if (self.useFallback) {
@@ -113,9 +120,9 @@ const DsrDb = {
         self.db.transaction(tx => {
             tx.executeSql(`
                 INSERT INTO dsrs 
-                    (id, client_id, client_name, customer_name, office_address, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, activity_type, checkout_timestamp, leadno, sync_status, created_timestamp)
+                    (id, client_id, client_name, customer_name, office_address, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, activity_type, checkin_timestamp, checkout_timestamp, leadno, sync_status, created_timestamp)
                 VALUES 
-                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(id) DO UPDATE SET
                     client_name = excluded.client_name,
                     customer_name = excluded.customer_name,
@@ -129,6 +136,7 @@ const DsrDb = {
                     latitude = excluded.latitude,
                     longitude = excluded.longitude,
                     activity_type = excluded.activity_type,
+                    checkin_timestamp = excluded.checkin_timestamp,
                     checkout_timestamp = excluded.checkout_timestamp,
                     leadno = excluded.leadno,
                     sync_status = excluded.sync_status
@@ -136,7 +144,7 @@ const DsrDb = {
                 record.id, record.client_id, record.client_name, record.customer_name,
                 record.office_address, record.site_name, record.contact_person, record.contact_no,
                 record.last_remark, record.visited_for, record.followup, record.latitude, record.longitude,
-                record.activity_type, record.checkout_timestamp, record.leadno,
+                record.activity_type, record.checkin_timestamp, record.checkout_timestamp, record.leadno,
                 record.sync_status, record.created_timestamp
             ], () => {
                 if (callback) callback(record);
@@ -144,14 +152,14 @@ const DsrDb = {
                 tx.executeSql(`DELETE FROM dsrs WHERE id = ?`, [record.id], () => {
                     tx.executeSql(`
                         INSERT INTO dsrs 
-                            (id, client_id, client_name, customer_name, office_address, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, activity_type, checkout_timestamp, leadno, sync_status, created_timestamp)
+                            (id, client_id, client_name, customer_name, office_address, site_name, contact_person, contact_no, last_remark, visited_for, followup, latitude, longitude, activity_type, checkin_timestamp, checkout_timestamp, leadno, sync_status, created_timestamp)
                         VALUES 
-                            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     `, [
                         record.id, record.client_id, record.client_name, record.customer_name,
                         record.office_address, record.site_name, record.contact_person, record.contact_no,
                         record.last_remark, record.visited_for, record.followup, record.latitude, record.longitude,
-                        record.activity_type, record.checkout_timestamp, record.leadno,
+                        record.activity_type, record.checkin_timestamp, record.checkout_timestamp, record.leadno,
                         record.sync_status, record.created_timestamp
                     ], () => {
                         if (callback) callback(record);
