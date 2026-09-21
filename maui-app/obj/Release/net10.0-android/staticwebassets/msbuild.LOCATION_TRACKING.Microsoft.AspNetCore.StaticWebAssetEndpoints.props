@@ -111,14 +111,14 @@
     <StaticWebAssetEndpoint Include="js/client.js">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\client.js'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-9qh2f6AqFUhWsB\u002BAJE/QCTCXJFl5VSu7VGtGKGQ\u002BmtE="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"245675"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u00229qh2f6AqFUhWsB\u002BAJE/QCTCXJFl5VSu7VGtGKGQ\u002BmtE=\u0022"},{"Name":"Last-Modified","Value":"Thu, 17 Sep 2026 06:16:33 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-zR5QSa6HsgCtgHHpS\u002BIDvDX0Pl3DGpFeQL216\u002BExwB4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"245946"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022zR5QSa6HsgCtgHHpS\u002BIDvDX0Pl3DGpFeQL216\u002BExwB4=\u0022"},{"Name":"Last-Modified","Value":"Thu, 17 Sep 2026 06:59:41 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="js/client.q37cub9yo5.js">
+    <StaticWebAssetEndpoint Include="js/client.ripouryokl.js">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\client.js'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"q37cub9yo5"},{"Name":"integrity","Value":"sha256-9qh2f6AqFUhWsB\u002BAJE/QCTCXJFl5VSu7VGtGKGQ\u002BmtE="},{"Name":"label","Value":"js/client.js"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"245675"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u00229qh2f6AqFUhWsB\u002BAJE/QCTCXJFl5VSu7VGtGKGQ\u002BmtE=\u0022"},{"Name":"Last-Modified","Value":"Thu, 17 Sep 2026 06:16:33 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ripouryokl"},{"Name":"integrity","Value":"sha256-zR5QSa6HsgCtgHHpS\u002BIDvDX0Pl3DGpFeQL216\u002BExwB4="},{"Name":"label","Value":"js/client.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"245946"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022zR5QSa6HsgCtgHHpS\u002BIDvDX0Pl3DGpFeQL216\u002BExwB4=\u0022"},{"Name":"Last-Modified","Value":"Thu, 17 Sep 2026 06:59:41 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="js/dsrDb.js">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\dsrDb.js'))</AssetFile>
