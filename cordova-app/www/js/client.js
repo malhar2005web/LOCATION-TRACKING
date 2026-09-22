@@ -65,6 +65,21 @@ function updateThemeToggleUI() {
     }
 }
 
+// Master Local / Indian Standard Time (IST) Formatter (YYYY-MM-DD HH:mm or YYYY-MM-DD HH:mm:ss)
+function getFormattedLocalTimestamp(dateObj = new Date(), includeSeconds = false) {
+    const d = (dateObj instanceof Date && !isNaN(dateObj.getTime())) ? dateObj : new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const h = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    if (includeSeconds) {
+        const s = String(d.getSeconds()).padStart(2, '0');
+        return `${y}-${m}-${day} ${h}:${min}:${s}`;
+    }
+    return `${y}-${m}-${day} ${h}:${min}`;
+}
+
 /**
  * Get normalized gemptype for API requests
  * Valid types: "admin", "agent", "superuser", "grouphead", "emp"
@@ -626,7 +641,7 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
                 gpsLongitude: coords.longitude.toString(),
                 gpsAccuracy: coords.accuracy.toString(),
                 gpsSpeed: (coords.speed || 0).toString(),
-                gpsTimestamp: new Date().toISOString().replace('T', ' ').slice(0, 16),
+                gpsTimestamp: getFormattedLocalTimestamp(new Date(), false),
                 calbaering: Math.round(coords.heading || coords.bearing || 0)
             })
         });
@@ -870,7 +885,7 @@ async function syncPendingLocations() {
                         gpsLongitude: loc.longitude.toString(),
                         gpsAccuracy: (loc.accuracy || 0).toString(),
                         gpsSpeed: (loc.speed || 0).toString(),
-                        gpsTimestamp: new Date(loc.timestamp).toISOString().replace('T', ' ').slice(0, 16),
+                        gpsTimestamp: getFormattedLocalTimestamp(loc.timestamp ? new Date(loc.timestamp) : new Date(), false),
                         calbaering: Math.round(loc.bearing || 0)
                     })
                 });

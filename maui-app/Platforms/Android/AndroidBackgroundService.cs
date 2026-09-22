@@ -263,7 +263,7 @@ namespace LocationTracker.Platforms.Android
                             var deviceId = global::Android.Provider.Settings.Secure.GetString(context.ContentResolver, global::Android.Provider.Settings.Secure.AndroidId) ?? "Unknown";
 
                             int.TryParse(clientId, out int numericUserId);
-                            var timestampStr = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm");
+                            var timestampStr = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
                             // Update coordinates for local UI consumption
                             LastLatitude = location.Latitude;
