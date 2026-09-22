@@ -66,8 +66,25 @@ function updateThemeToggleUI() {
 }
 
 // Master Local / Indian Standard Time (IST) Formatter (YYYY-MM-DD HH:mm or YYYY-MM-DD HH:mm:ss)
-function getFormattedLocalTimestamp(dateObj = new Date(), includeSeconds = false) {
-    const d = (dateObj instanceof Date && !isNaN(dateObj.getTime())) ? dateObj : new Date();
+function getFormattedLocalTimestamp(dateInput = new Date(), includeSeconds = false) {
+    let d;
+    if (dateInput instanceof Date && !isNaN(dateInput.getTime())) {
+        d = dateInput;
+    } else if (typeof dateInput === 'string' || typeof dateInput === 'number') {
+        if (typeof dateInput === 'string' && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(:\d{2})?$/.test(dateInput.trim())) {
+            const parts = dateInput.trim().split(' ');
+            const datePart = parts[0];
+            const timePart = parts[1];
+            if (includeSeconds) {
+                return timePart.length === 5 ? `${datePart} ${timePart}:00` : `${datePart} ${timePart}`;
+            }
+            return `${datePart} ${timePart.substring(0, 5)}`;
+        }
+        d = new Date(dateInput);
+        if (isNaN(d.getTime())) d = new Date();
+    } else {
+        d = new Date();
+    }
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
@@ -1331,7 +1348,7 @@ async function handleDayStart() {
 
     // Call Skyway APIs if online
     if (navigator.onLine) {
-        const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+        const currentDate = getFormattedLocalTimestamp(new Date(), true);
         const empid = (session.userData.name) || 'demo admin2';
         const imeino = session.userData.deviceId || '';
 
@@ -1402,7 +1419,7 @@ function handleCheckIn() {
         // Call iamatevent CHECKIN if online with robust GPS coordinates
         if (navigator.onLine && session && session.userData) {
             (async () => {
-                const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+                const currentDate = getFormattedLocalTimestamp(new Date(), true);
                 const empid = (session.userData.name) || 'demo group';
                 const imeino = session.userData.deviceId || '';
                 const userid = session.userData.clientId || imeino;
@@ -1651,7 +1668,7 @@ async function submitOthers() {
     const userid = (session && session.userData && session.userData.clientId) || '';
     const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
-    const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    const currentDateTime = getFormattedLocalTimestamp(new Date(), true);
 
     const dsrBody = {
         userid: userid,
@@ -3739,7 +3756,7 @@ async function submitDSR() {
     const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
 
-    const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    const currentDateTime = getFormattedLocalTimestamp(new Date(), true);
 
     let latNum = 18.4748182;
     let lngNum = 73.8119225;
@@ -4045,11 +4062,11 @@ async function onDsrSuccessOkClick() {
     const now = new Date();
     let checkinIso = (pendingCheckoutData && pendingCheckoutData.checkinTimestamp) ? pendingCheckoutData.checkinTimestamp : '';
     if (!checkinIso) {
-        checkinIso = new Date(now.getTime() - 15000).toISOString();
+        checkinIso = getFormattedLocalTimestamp(new Date(now.getTime() - 15000), true);
     }
-    const checkinDate = checkinIso.replace('T', ' ').slice(0, 19);
-    const actDate = now.toISOString().replace('T', ' ').slice(0, 19);
-    const checkoutDate = new Date(now.getTime() + 2000).toISOString().replace('T', ' ').slice(0, 19);
+    const checkinDate = getFormattedLocalTimestamp(checkinIso, true);
+    const actDate = getFormattedLocalTimestamp(now, true);
+    const checkoutDate = getFormattedLocalTimestamp(new Date(now.getTime() + 2000), true);
 
     if (navigator.onLine) {
         try {
@@ -4224,7 +4241,7 @@ async function submitBooking() {
     const session = getSession();
     if (navigator.onLine && session) {
         try {
-            const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+            const currentDateTime = getFormattedLocalTimestamp(new Date(), true);
             const userid = session.userData.clientId || '';
             const gempname = session.userData.name || '';
             const curLatEl = document.getElementById('current-lat');
@@ -4328,7 +4345,7 @@ async function syncDSRs() {
         const defaultGempName = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
         const defaultUserid = (session && session.userData && session.userData.clientId) || defaultDeviceId;
         const defaultGempType = typeof getGempType === 'function' ? getGempType() : 'group';
-        const nowIso = new Date().toISOString().replace('T', ' ').slice(0, 19);
+        const nowIso = getFormattedLocalTimestamp(new Date(), true);
 
         let successIds = [];
         for (const dsr of pendingList) {
@@ -4340,21 +4357,20 @@ async function syncDSRs() {
                 const clientNameText = dsr.client_name || defaultGempName;
                 const useridVal = dsr.client_id || defaultUserid;
                 const activityType = dsr.activity_type || (dsr.visited_for === 'Others' ? 'OTHERS' : (dsr.visited_for === 'New Registration' || dsr.visited_for === 'New Client' ? 'NEW_CLIENT' : 'DSR_UPDATE'));
-                const createdDateStr = dsr.created_timestamp ? dsr.created_timestamp.replace('T', ' ').slice(0, 19) : nowIso;
+                const createdDateStr = dsr.created_timestamp ? getFormattedLocalTimestamp(dsr.created_timestamp, true) : nowIso;
                 
                 // 1. Calculate visit check-in timestamp (15-20s prior to form create timestamp if not specified)
-                let checkinIso = dsr.checkin_timestamp;
-                if (!checkinIso) {
+                let checkinDateStr = dsr.checkin_timestamp ? getFormattedLocalTimestamp(dsr.checkin_timestamp, true) : '';
+                if (!checkinDateStr) {
                     const parsedCreated = new Date(dsr.created_timestamp || Date.now());
-                    checkinIso = new Date(parsedCreated.getTime() - 20000).toISOString();
+                    checkinDateStr = getFormattedLocalTimestamp(new Date(parsedCreated.getTime() - 20000), true);
                 }
-                const checkinDateStr = checkinIso.replace('T', ' ').slice(0, 19);
 
                 // 2. Calculate visit checkout timestamp (2 seconds after create timestamp if not specified)
-                let checkoutDateStr = dsr.checkout_timestamp ? dsr.checkout_timestamp.replace('T', ' ').slice(0, 19) : '';
+                let checkoutDateStr = dsr.checkout_timestamp ? getFormattedLocalTimestamp(dsr.checkout_timestamp, true) : '';
                 if (!checkoutDateStr) {
                     const parsedCreated = new Date(dsr.created_timestamp || Date.now());
-                    checkoutDateStr = new Date(parsedCreated.getTime() + 2000).toISOString().replace('T', ' ').slice(0, 19);
+                    checkoutDateStr = getFormattedLocalTimestamp(new Date(parsedCreated.getTime() + 2000), true);
                 }
 
                 const latVal = parseFloat(dsr.latitude) || 18.4748182;
@@ -4884,7 +4900,7 @@ async function handleDayEnd() {
     }
 
     if (navigator.onLine && session && session.userData) {
-        const currentDate = new Date().toISOString().replace('T', ' ').slice(0, 19);
+        const currentDate = getFormattedLocalTimestamp(new Date(), true);
         const empid = (session.userData.name) || 'demo admin2';
         const imeino = session.userData.deviceId || '';
 
@@ -5681,7 +5697,7 @@ async function submitNewClient() {
     const gemptype = getGempType();
     const gempname = (session && session.userData && session.userData.name) || '';
 
-    const currentDateTime = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    const currentDateTime = getFormattedLocalTimestamp(new Date(), true);
 
     let hours = '00';
     let minutes = '00';

@@ -65,6 +65,21 @@ function updateThemeToggleUI() {
     }
 }
 
+// Master Local / Indian Standard Time (IST) Formatter (YYYY-MM-DD HH:mm or YYYY-MM-DD HH:mm:ss)
+function getFormattedLocalTimestamp(dateObj = new Date(), includeSeconds = false) {
+    const d = (dateObj instanceof Date && !isNaN(dateObj.getTime())) ? dateObj : new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const h = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    if (includeSeconds) {
+        const s = String(d.getSeconds()).padStart(2, '0');
+        return `${y}-${m}-${day} ${h}:${min}:${s}`;
+    }
+    return `${y}-${m}-${day} ${h}:${min}`;
+}
+
 /**
  * Get normalized gemptype for API requests
  * Valid types: "admin", "agent", "superuser", "grouphead", "emp"
@@ -626,7 +641,7 @@ async function handleCapturedLocation(clientId, deviceId, coords, battery) {
                 gpsLongitude: coords.longitude.toString(),
                 gpsAccuracy: coords.accuracy.toString(),
                 gpsSpeed: (coords.speed || 0).toString(),
-                gpsTimestamp: new Date().toISOString().replace('T', ' ').slice(0, 16),
+                gpsTimestamp: getFormattedLocalTimestamp(new Date(), false),
                 calbaering: Math.round(coords.heading || coords.bearing || 0)
             })
         });
@@ -870,7 +885,7 @@ async function syncPendingLocations() {
                         gpsLongitude: loc.longitude.toString(),
                         gpsAccuracy: (loc.accuracy || 0).toString(),
                         gpsSpeed: (loc.speed || 0).toString(),
-                        gpsTimestamp: new Date(loc.timestamp).toISOString().replace('T', ' ').slice(0, 16),
+                        gpsTimestamp: getFormattedLocalTimestamp(loc.timestamp ? new Date(loc.timestamp) : new Date(), false),
                         calbaering: Math.round(loc.bearing || 0)
                     })
                 });
@@ -4372,29 +4387,50 @@ async function syncDSRs() {
 
                 // Step 2: Sync form details to updateleaddeatils_sky or generatenewlead
                 if (activityType === 'NEW_CLIENT') {
+                    const followupTimeParts = followupTime ? followupTime.split(':') : ['00', '00'];
+                    const followHours = followupTimeParts[0] || '00';
+                    const followMinutes = followupTimeParts[1] || '00';
+
                     const newLeadBody = {
                         userid: useridVal,
                         gemptype: defaultGempType,
-                        currentdatetime: createdDateStr,
-                        intime: "00:00:00",
-                        outtime: "00:00:00",
+                        assignedemp: "All",
+                        CustomerName: dsr.customer_name || '',
+                        CustomerType: "New Client",
+                        PANNumber: "",
+                        GSTNumber: "",
+                        officeaddress: dsr.office_address || '',
+                        MobileNumber: dsr.contact_no || '',
+                        landlinenumber: "",
+                        EmailAddress: "",
+                        FullName1: dsr.contact_person || '',
+                        FullName2: "",
+                        FullName3: "",
+                        FullName4: "",
                         outletname: dsr.customer_name || '',
                         nleadname: dsr.customer_name || '',
                         ncontact: dsr.contact_no || '',
+                        nlanddine: "",
+                        BankAccount: "",
+                        BankName: "",
+                        BankAddress: "",
+                        ifsccode: "",
+                        onereference1: "",
+                        onereference2: "",
+                        currentdatetime: createdDateStr,
+                        intime_h: "00",
+                        intime_m: "00",
+                        outtime_h: "00",
+                        outtime_m: "00",
+                        ocos: "",
+                        ncns: "",
                         nremark: dsr.last_remark || '',
-                        nfollowup: followupDate,
-                        nfollowuptime: followupTime,
-                        assignedemp: "All",
+                        nfollowup: followupDate || '',
+                        nfollowuptime_h: followHours,
+                        nfollowuptime_m: followMinutes,
+                        c_assignedto: "",
                         gpsLatitude: String(latVal),
-                        gpsLongitude: String(lngVal),
-                        l_nremark: dsr.last_remark || '',
-                        n_nremark: dsr.last_remark || '',
-                        leaddatetime: createdDateStr,
-                        officeaddres: dsr.office_address || '',
-                        contactperson: dsr.contact_person || '',
-                        gempname: clientNameText,
-                        follow_rem: dsr.last_remark || '',
-                        lleadno: dsr.leadno || ''
+                        gpsLongitude: String(lngVal)
                     };
                     try {
                         console.log('[SyncDsr] 2/4 Posting generatenewlead:', newLeadBody);
