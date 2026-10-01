@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LOCATION_TRACKING")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.9.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.9+f6a66763b5b7ccd5155c2de856d0497bc35410c0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.9+4418696d06094ad756dc8aaa0602c7d3b87e8ced")]
 [assembly: System.Reflection.AssemblyProductAttribute("LOCATION_TRACKING")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LOCATION_TRACKING")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.1.9.0")]

@@ -2658,23 +2658,22 @@ async function fetchReportData(reportType) {
         const empid = (session && session.userData && session.userData.name) || localStorage.getItem('user_name') || 'demo group';
 
         const payload = {
-            startdatep: selectedFromDate,
-            enddatep: selectedTillDate,
-            userv: selectedUserId || 'All',
-            clientv: 'All',
-            gempname: empid
+            aim: 'aim',
+            gempname: 'All',
+            gemptype: 'grouphead',
+            gempcluster: ''
         };
 
         if (navigator.onLine) {
             try {
                 console.log('[Reports] Fetching DSR Client Report from Skyway API...', payload);
-                const res = await fetch(`${API_BASE_URL}/getdsrleadreport_v1`, {
+                const res = await fetch(`${API_BASE_URL}/getdsrleadreport_vo1`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
                 const data = await res.json();
-                console.log('[Reports] getdsrleadreport_v1 response:', data);
+                console.log('[Reports] getdsrleadreport_vo1 response:', data);
 
                 let records = [];
                 if (data && Array.isArray(data.trackerid)) {
@@ -2685,10 +2684,34 @@ async function fetchReportData(reportType) {
                     records = data.output || data.records || [];
                 }
 
-                config.render(tbody, records);
+                // Filter by Date Range, User, and Client
+                const sDate = selectedFromDate ? selectedFromDate.split(' ')[0].replaceAll('/', '-') : '';
+                const eDate = selectedTillDate ? selectedTillDate.split(' ')[0].replaceAll('/', '-') : '';
+
+                const filtered = records.filter(row => {
+                    if (sDate || eDate) {
+                        const rawDate = row.leaddatetime || row.currentdatetime || '';
+                        let rowDate = '';
+                        if (rawDate) {
+                            const dt = new Date(rawDate);
+                            if (!isNaN(dt.getTime())) {
+                                rowDate = dt.toISOString().split('T')[0];
+                            }
+                        }
+                        if (sDate && rowDate && rowDate < sDate) return false;
+                        if (eDate && rowDate && rowDate > eDate) return false;
+                    }
+                    if (selectedUserId && selectedUserId !== 'All' && selectedUserId !== 'All Users') {
+                        const rowUser = (row.assignedemp || row.gempname || row.userid || '').toLowerCase();
+                        if (!rowUser.includes(selectedUserId.toLowerCase()) && row.assignedemp !== 'All') return false;
+                    }
+                    return true;
+                });
+
+                config.render(tbody, filtered);
                 return;
             } catch (err) {
-                console.error('[Reports] Failed to fetch getdsrleadreport_v1:', err);
+                console.error('[Reports] Failed to fetch getdsrleadreport_vo1:', err);
             }
         }
 
@@ -3050,7 +3073,7 @@ function getReportConfig(reportType) {
         'dsr-client': {
             prefix: 'dsr-client',
             tableId: 'dsr-client-report-table',
-            endpoint: `${API_BASE_URL}/getdsrleadreport_v1`,
+            endpoint: `${API_BASE_URL}/getdsrleadreport_vo1`,
             colspan: 10,
             render: renderDsrClientReportRows
         }
@@ -3169,13 +3192,13 @@ function renderDsrClientReportRows(tbody, records) {
             <td>${index + 1}</td>
             <td>${reportEscape(row.assignedemp || row.assigned_emp || row.gempname || row.visited_by || '--')}</td>
             <td>${reportEscape(formatReportDateTime(row.leaddatetime || row.created_timestamp || row.registered_on || row.currentdatetime))}</td>
-            <td>${reportEscape(row.leadname || row.outletname || row.client || row.client_name || row.customer_name || '--')}</td>
-            <td>${reportEscape(row.leadsitename || row.site_name || row.sitename || '--')}</td>
+            <td>${reportEscape(row.nleadname || row.leadname || row.outletname || row.client || row.client_name || row.customer_name || '--')}</td>
+            <td>${reportEscape(row.leadsitename || row.site_name || row.sitename || row.nleadname || '--')}</td>
             <td>${reportEscape(row.officeaddres || row.office_address || row.address || '--')}</td>
             <td>${reportEscape(row.contactperson || row.contact_person || '--')}</td>
-            <td>${reportEscape(row.contactno || row.contact_no || row.ncontact || '--')}</td>
-            <td>${reportEscape(row.remark || row.nremark || row.last_remark || '--')}</td>
-            <td>${reportEscape(row.nextfollowup || row.nfollowup || row.followup || '--')}</td>
+            <td>${reportEscape(row.ncontact || row.contactno || row.contact_no || '--')}</td>
+            <td>${reportEscape(row.n_nremark || row.l_nremark || row.remark || row.nremark || row.last_remark || '--')}</td>
+            <td>${reportEscape(row.nfollowup ? (formatReportDateTime(row.nfollowup) + (row.nfollowuptime ? ' ' + row.nfollowuptime.slice(0, 5) : '')) : (row.nextfollowup || row.followup || '--'))}</td>
         </tr>
     `).join('');
 }

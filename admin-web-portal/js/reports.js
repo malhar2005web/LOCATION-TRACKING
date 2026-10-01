@@ -438,50 +438,101 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
 
 /* ── API 2: Fetch DSR Lead & Client Report ── */
 async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
-    const sDateFormatted = formatDateForApi(fromDate);
-    const eDateFormatted = formatDateForApi(toDate);
-    const groupUser = (user === 'All Users' || !user) ? 'demo group' : user;
-
     const payload = {
-        startdatep: `${sDateFormatted} 00:00`,
-        enddatep: `${eDateFormatted} 23:59`,
-        userv: (user === 'All Users' || !user) ? 'All' : user,
-        clientv: (client && client !== 'All') ? client : 'All',
-        gempname: groupUser
+        aim: 'aim',
+        gempname: 'All',
+        gemptype: 'grouphead',
+        gempcluster: ''
     };
 
-    console.log('[Reports] Fetching getdsrleadreport_v1:', payload);
-    const res = await fetch(`${API_BASE_URL}/getdsrleadreport_v1`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+    console.log('[Reports] Fetching getdsrleadreport_vo1:', payload);
+    let records = [];
+    try {
+        const res = await fetch(`${API_BASE_URL}/getdsrleadreport_vo1`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        console.log('[Reports] getdsrleadreport_vo1 response:', data);
+        records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+    } catch (e) {
+        console.error('[Reports] Error fetching getdsrleadreport_vo1:', e);
+    }
+
+    // Normalize date input (supports DD-MM-YYYY, YYYY-MM-DD, etc.)
+    function normalizeDateInput(dStr) {
+        if (!dStr) return '';
+        const trimmed = dStr.trim();
+        if (trimmed.match(/^(\d{2})[-/](\d{2})[-/](\d{4})/)) {
+            const parts = trimmed.split(/[-/]/);
+            return `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+        if (trimmed.match(/^(\d{4})[-/](\d{2})[-/](\d{2})/)) {
+            const parts = trimmed.split(/[-/]/);
+            return `${parts[0]}-${parts[1]}-${parts[2]}`;
+        }
+        return trimmed;
+    }
+
+    const sDate = normalizeDateInput(fromDate);
+    const eDate = normalizeDateInput(toDate);
+
+    const filtered = records.filter(row => {
+        // Date filter
+        if (sDate || eDate) {
+            const rawDate = row.leaddatetime || row.currentdatetime || '';
+            let rowDate = '';
+            if (rawDate) {
+                const dt = new Date(rawDate);
+                if (!isNaN(dt.getTime())) {
+                    rowDate = dt.toISOString().split('T')[0];
+                } else {
+                    rowDate = normalizeDateInput(rawDate.split(' ')[0]);
+                }
+            }
+            if (sDate && rowDate && rowDate < sDate) return false;
+            if (eDate && rowDate && rowDate > eDate) return false;
+        }
+
+        // User filter
+        if (user && user !== 'All Users' && user !== 'All' && user !== 'demo group') {
+            const rowUser = (row.assignedemp || row.gempname || row.userid || '').toLowerCase();
+            const targetUser = user.toLowerCase();
+            if (!rowUser.includes(targetUser) && row.assignedemp !== 'All') return false;
+        }
+
+        // Client filter
+        if (client && client !== 'All' && client !== 'Select Party Name') {
+            const rowClient = (row.nleadname || row.customername || row.outletname || '').toLowerCase();
+            const targetClient = client.toLowerCase();
+            if (!rowClient.includes(targetClient)) return false;
+        }
+
+        return true;
     });
 
-    const data = await res.json();
-    console.log('[Reports] getdsrleadreport_v1 response:', data);
-    const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
-
     if (tabId === 'dsr-client') {
-        return records.map((row, i) => [
+        return filtered.map((row, i) => [
             String(i + 1),
-            row.assignedemp || row.assigned_emp || row.gempname || groupUser,
-            formatCellDateIST(row.leaddatetime || row.created_timestamp || row.currentdatetime || '--'),
-            row.customername || row.nleadname || row.leadname || row.outletname || row.client || '--',
+            row.assignedemp || row.assigned_emp || row.gempname || 'All',
+            formatCellDateIST(row.leaddatetime || row.currentdatetime || '--'),
+            row.nleadname || row.customername || row.outletname || row.client || '--',
             row.leadsitename || row.sitename || row.site_name || row.nleadname || '--',
-            row.officeaddres || row.office_address || '--',
+            row.officeaddres || row.office_address || row.address || '--',
             row.contactperson || row.contact_person || '--',
             row.ncontact || row.contactno || row.contact_no || '--',
-            row.n_nremark || row.remark || row.nremark || '--',
-            formatCellDateIST(row.nfollowup || row.nextfollowup || '--')
+            row.n_nremark || row.l_nremark || row.remark || row.nremark || '--',
+            row.nfollowup ? (formatCellDateIST(row.nfollowup) + (row.nfollowuptime ? ' ' + row.nfollowuptime.slice(0, 5) : '')) : (formatCellDateIST(row.nextfollowup) || '--')
         ]);
     }
 
     if (tabId === 'booking-report') {
-        return records.map((row, i) => [
+        return filtered.map((row, i) => [
             String(i + 1),
             row.lleadno || row.bookingno || `BK-${i + 101}`,
             formatCellDateIST(row.leaddatetime || row.currentdatetime || '--'),
-            row.customername || row.leadname || row.outletname || '--',
+            row.nleadname || row.customername || row.outletname || '--',
             row.leadsitename || row.sitename || '--',
             row.quantity || '1',
             row.rate || '--',
