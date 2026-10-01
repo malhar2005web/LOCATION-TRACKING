@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\LOCATION_TRACKING.props" />
-</Project>
