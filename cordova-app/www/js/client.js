@@ -1692,7 +1692,7 @@ async function submitOthers() {
         contactperson: contactPerson,
         gempname: gempname,
         follow_rem: remark,
-        lleadno: ""
+        lleadno: "0"
     };
 
     const curLatEl = document.getElementById('current-lat');
@@ -1746,7 +1746,7 @@ async function submitOthers() {
                 activity_type: 'OTHERS',
                 checkin_timestamp: visitCheckinTs,
                 checkout_timestamp: visitCheckoutTs,
-                leadno: '',
+                leadno: '0',
                 sync_status: navigator.onLine ? 'Synced' : 'Pending',
                 created_timestamp: new Date().toISOString()
             };
@@ -4503,7 +4503,7 @@ async function syncDSRs() {
                         gpsLatitude: String(latVal),
                         gpsLongitude: String(lngVal),
                         outletname: dsr.customer_name || '',
-                        lleadno: dsr.leadno || '',
+                        lleadno: (dsr.leadno && String(dsr.leadno).trim() !== '') ? dsr.leadno : '0',
                         l_nremark: dsr.last_remark || '',
                         gempname: clientNameText
                     };

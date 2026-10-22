@@ -437,6 +437,7 @@ async function fetchDayEndSummary(fromDate, toDate, user, client, tabId) {
 }
 
 /* ── API 2: Fetch DSR Lead & Client Report ── */
+/* ── API 2: Fetch DSR Lead & Client Report ── */
 async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
     const payload = {
         aim: 'aim',
@@ -458,6 +459,60 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
         records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
     } catch (e) {
         console.error('[Reports] Error fetching getdsrleadreport_vo1:', e);
+    }
+
+    // Merge any OTHERS visits from getiamatsummaryrtp_2 if not already in records
+    try {
+        const sDateApi = formatDateForApi(fromDate);
+        const eDateApi = formatDateForApi(toDate);
+        const groupUser = (user === 'All Users' || !user) ? 'demo group' : user;
+        const othersRes = await fetch(`${API_BASE_URL}/getiamatsummaryrtp_2`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                startdate: sDateApi,
+                enddate: `${eDateApi} 23:59`,
+                gempname: groupUser,
+                username: 'All'
+            })
+        });
+        const othersData = await othersRes.json();
+        const othersList = (othersData && othersData.trackerid) 
+            ? othersData.trackerid.filter(r => (r.activity || '').toUpperCase() === 'OTHERS') 
+            : [];
+
+        for (const oth of othersList) {
+            const othTime = new Date(oth.datetimeis).getTime();
+            const exists = records.some(r => {
+                const rTime = new Date(r.leaddatetime || r.currentdatetime).getTime();
+                return Math.abs(rTime - othTime) < 60000;
+            });
+            if (!exists) {
+                records.push({
+                    userid: oth.empid || '6',
+                    gemptype: 'grouphead',
+                    leaddatetime: oth.datetimeis,
+                    officeaddres: oth.gpsaddress || '--',
+                    nleadname: oth.clientname && oth.clientname !== 'Others' ? oth.clientname : 'Others Visit',
+                    contactperson: oth.clientname && oth.clientname !== 'Others' ? oth.clientname : '--',
+                    ncontact: '--',
+                    currentdatetime: oth.datetimeis,
+                    intime: '00:00:00',
+                    outtime: '00:00:00',
+                    l_nremark: 'Others Client Visit',
+                    n_nremark: 'Others Client Visit',
+                    nremark: 'Others Client Visit',
+                    nfollowup: '',
+                    nfollowuptime: '',
+                    assignedemp: oth.empname || user || 'All',
+                    gpslatitude: oth.glatitude,
+                    gpslongitude: oth.glongitude,
+                    customername: oth.clientname && oth.clientname !== 'Others' ? oth.clientname : 'Others Visit'
+                });
+            }
+        }
+    } catch (e) {
+        console.warn('[Reports] Could not merge getiamatsummaryrtp_2 OTHERS records:', e);
     }
 
     // Normalize date input (supports DD-MM-YYYY, YYYY-MM-DD, etc.)
@@ -546,39 +601,70 @@ async function fetchDsrLeadReport(fromDate, toDate, user, client, tabId) {
 
 /* ── API 3: Fetch DSR Summary Report ── */
 async function fetchDsrSummaryReport(fromDate, toDate, user, client) {
-    const sDate = fromDate || new Date().toISOString().split('T')[0];
-    const tDate = toDate || sDate;
+    function parseDateToYMD(dStr) {
+        if (!dStr) {
+            const now = new Date();
+            return `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}`;
+        }
+        const trimmed = dStr.trim();
+        if (trimmed.match(/^(\d{2})[-/](\d{2})[-/](\d{4})/)) {
+            const parts = trimmed.split(/[-/]/);
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        if (trimmed.match(/^(\d{4})[-/](\d{2})[-/](\d{2})/)) {
+            const parts = trimmed.split(/[-/]/);
+            return `${parts[0]}/${parts[1]}/${parts[2]}`;
+        }
+        return trimmed.replaceAll('-', '/');
+    }
+
+    const sDate = parseDateToYMD(fromDate);
+    const tDate = parseDateToYMD(toDate);
     
     // Increment sum_till by 1 day so SQL query `date < sum_till` includes the full end date
-    const dTill = new Date(tDate);
-    dTill.setDate(dTill.getDate() + 1);
-    const sumTill = dTill.toISOString().split('T')[0];
+    const parts = tDate.split('/');
+    const dTill = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10) + 1);
+    const sumTill = `${dTill.getFullYear()}/${String(dTill.getMonth()+1).padStart(2,'0')}/${String(dTill.getDate()).padStart(2,'0')}`;
 
     const groupUser = (user === 'All Users' || !user) ? 'demo group' : user;
 
+    // Passing gempname: 'All' ensures the stored procedure returns all visits for that date
     const payload = {
         gemptype: 'admin',
-        gempname: groupUser,
+        gempname: 'All',
         sum_from: sDate,
         sum_till: sumTill,
-        dsruser: (client && client !== 'All') ? client : 'All'
+        dsruser: (client && client !== 'All' && client !== 'Select Party Name') ? client : 'All'
     };
 
     console.log('[Reports] Fetching dailyreportformatsummary_v3:', payload);
-    const res = await fetch(`${API_BASE_URL}/dailyreportformatsummary_v3`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    console.log('[Reports] dailyreportformatsummary_v3 response:', data);
-    const records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+    let records = [];
+    try {
+        const res = await fetch(`${API_BASE_URL}/dailyreportformatsummary_v3`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        console.log('[Reports] dailyreportformatsummary_v3 response:', data);
+        records = (data && data.trackerid) ? data.trackerid : (Array.isArray(data) ? data : []);
+    } catch (e) {
+        console.error('[Reports] dailyreportformatsummary_v3 error:', e);
+    }
 
-    return records.map((row, i) => [
+    // Filter by selected user if specified and not 'All' / 'All Users'
+    const filtered = (user && user !== 'All Users' && user !== 'All' && user !== 'demo group')
+        ? records.filter(row => {
+            const rowEmp = (row.assignedto || row.assignedemp || '').toLowerCase();
+            return rowEmp === 'all' || rowEmp.includes(user.toLowerCase());
+        })
+        : records;
+
+    return filtered.map((row, i) => [
         String(i + 1),
         row.vendorname || row.clientname || row.client || '--',
-        row.sitename || row.site_name || '--',
-        row.gonefor || row.visitedfor || row.visited_for || 'DSR Update',
+        row.sitename || row.site_name || row.vendorname || '--',
+        row.gonefor || row.visitedfor || row.visited_for || 'Visit Done',
         row.assignedto || row.assignedemp || groupUser,
         String(row.noofvisite || row.visitcount || 1)
     ]);
